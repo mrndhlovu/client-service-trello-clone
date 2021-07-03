@@ -197,7 +197,6 @@ const typography = css`
   input,
   select,
   button {
-    height: ${props => props.theme.variables.inputButtonHeight};
     padding: 0 15px;
 
     @media ${props => props.theme.device.mobileLg} {
