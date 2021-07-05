@@ -1,7 +1,16 @@
-import React from "react";
+import React from "react"
+import { useHomeContext } from "../../helpers/hooks/context"
 
 const CardsList = () => {
-  return <div>CardsList</div>;
-};
+  const { cards } = useHomeContext()
+  return (
+    <div>
+      <h1>CardsList</h1>
+      {cards?.map((card, index) => (
+        <p key={index}>{card.name}</p>
+      ))}
+    </div>
+  )
+}
 
-export default CardsList;
+export default CardsList

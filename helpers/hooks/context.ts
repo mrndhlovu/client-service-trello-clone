@@ -1,10 +1,11 @@
 import { createContext, useContext } from "react"
+import { HomeContextValueTypes } from "../../pages"
 import {
   DefaultGlobalContextTypes,
   notificationsInitialState,
 } from "../providers/GlobalContextProvider"
 
-const GlobalContext = createContext<DefaultGlobalContextTypes>({
+export const GlobalContext = createContext<DefaultGlobalContextTypes>({
   lightMode: false,
   handleModeChange: () => {},
   dismissNotification: () => {},
@@ -12,7 +13,8 @@ const GlobalContext = createContext<DefaultGlobalContextTypes>({
   notifications: notificationsInitialState,
 })
 
-const ThemeContext = createContext(null)
-const useGlobalContext = () => useContext(GlobalContext)
+export const ThemeContext = createContext(null)
+export const HomeContext = createContext<HomeContextValueTypes>({ cards: [] })
 
-export { useGlobalContext, GlobalContext, ThemeContext }
+export const useGlobalContext = () => useContext(GlobalContext)
+export const useHomeContext = () => useContext(HomeContext)
