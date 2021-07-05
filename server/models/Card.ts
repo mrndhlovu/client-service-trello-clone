@@ -23,12 +23,7 @@ const CardSchema = new mongoose.Schema(
       required: true,
     },
     comments: {
-      type: Array,
-      default: [],
-      required: true,
-    },
-    activities: {
-      type: Array,
+      type: [mongoose.Schema.Types.ObjectId],
       default: [],
       required: true,
     },

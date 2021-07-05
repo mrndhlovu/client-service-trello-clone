@@ -1,8 +1,29 @@
-import mongoose from "mongoose"
+import { Condition, ObjectId } from "mongodb"
+import mongoose, { model, Schema, Model, Document } from "mongoose"
 
 const DEFAULT_BOARD_BG_COLOR = "#0079be"
 
-const BoardSchema = new mongoose.Schema(
+export interface IBoard {
+  title: string
+  lists: string[]
+  date: string
+  category: string[]
+  styles: { color: string } | {}
+  accessLevel: {
+    private: boolean
+    public: boolean
+    team: boolean
+  }
+  admin: string
+  archived: boolean
+  comments: string[]
+  activities: string[]
+  owners: string[]
+  description: string
+  isTemplate: string
+}
+
+const BoardSchema = new Schema(
   {
     title: {
       type: String,
@@ -15,12 +36,12 @@ const BoardSchema = new mongoose.Schema(
       default: Date.now(),
     },
     lists: {
-      type: Array,
+      type: [String],
       required: true,
       default: [],
     },
     category: {
-      type: Array,
+      type: [String],
       required: true,
       default: ["default"],
     },
@@ -34,7 +55,7 @@ const BoardSchema = new mongoose.Schema(
       default: { private: true, public: false, team: false },
     },
     admin: {
-      type: mongoose.Schema.Types.ObjectId,
+      type: Schema.Types.ObjectId,
       required: false,
       ref: "User",
     },
@@ -44,17 +65,17 @@ const BoardSchema = new mongoose.Schema(
       default: false,
     },
     comments: {
-      type: Array,
+      type: [Schema.Types.ObjectId],
       required: true,
       default: [],
     },
     activities: {
-      type: Array,
+      type: [Schema.Types.ObjectId],
       required: true,
       default: [],
     },
     owners: {
-      type: Array,
+      type: [Schema.Types.ObjectId],
       default: [],
     },
     description: {
@@ -72,11 +93,15 @@ const BoardSchema = new mongoose.Schema(
   }
 )
 
+export interface BoardDocument extends IBoard, Document {
+  _id: Condition<ObjectId>
+}
+
 BoardSchema.pre("save", async function (next) {
   // this.updateAt = Date.now()
   next()
 })
 
-const Board = mongoose.model("Board", BoardSchema)
+const Board: Model<BoardDocument> = model<BoardDocument>("Board", BoardSchema)
 
 export default Board
