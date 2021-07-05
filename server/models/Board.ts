@@ -1,5 +1,5 @@
 import { Condition, ObjectId } from "mongodb"
-import mongoose, { model, Schema, Model, Document } from "mongoose"
+import { model, Schema, Model, Document } from "mongoose"
 
 const DEFAULT_BOARD_BG_COLOR = "#0079be"
 

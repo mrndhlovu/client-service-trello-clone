@@ -1,11 +1,29 @@
-import mongoose from "mongoose"
+import { Condition, ObjectId } from "mongodb"
+import { model, Schema, Model, Document } from "mongoose"
 
-const CardSchema = new mongoose.Schema(
+export interface ICard {
+  title: string
+  attachments: string[]
+  labels: string[]
+  dueDate: string
+  shortDesc: string
+  checklists: string[]
+  comments: string[]
+  activities: string[]
+  owners: string[]
+  description: string
+  cover: string
+  assignees: string[]
+  archived: boolean
+}
+
+const CardSchema = new Schema(
   {
     title: {
       type: String,
       required: true,
       trim: true,
+      unique: true,
     },
     attachments: {
       type: Array,
@@ -23,7 +41,7 @@ const CardSchema = new mongoose.Schema(
       required: true,
     },
     comments: {
-      type: [mongoose.Schema.Types.ObjectId],
+      type: [Schema.Types.ObjectId],
       default: [],
       required: true,
     },
@@ -62,6 +80,10 @@ const CardSchema = new mongoose.Schema(
   }
 )
 
-const Card = mongoose.model("Card", CardSchema)
+export interface CardDocument extends ICard, Document {
+  _id: Condition<ObjectId>
+}
+
+const Card: Model<CardDocument> = model<CardDocument>("Card", CardSchema)
 
 export default Card
