@@ -1,15 +1,13 @@
-import chalk from "chalk"
-
 const closeOnExit = server => {
   const handleClose = async () => {
     await server
       .close()
       .then(() => {
-        chalk.green("Server closed successfully")
+        console.log("Server closed successfully")
         process.exit()
       })
       .catch(() => {
-        chalk.red("Fail to close server process")
+        console.log("Fail to close server process")
       })
   }
 

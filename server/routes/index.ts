@@ -1,10 +1,12 @@
 import { Router } from "express"
 
-import { cardRoutes } from "../controllers/cards"
+import { boardRoutes, cardRoutes } from "../controllers"
 
 const getRoutes = () => {
   const router = Router()
-  router.use("/cards", cardRoutes())
+
+  router.use("/board", boardRoutes())
+  router.use("/card", cardRoutes())
 
   return router
 }
