@@ -8,6 +8,7 @@ const BoardSchema = new mongoose.Schema(
       type: String,
       required: true,
       trim: true,
+      unique: true,
     },
     date: {
       type: Date,
@@ -72,6 +73,7 @@ const BoardSchema = new mongoose.Schema(
 )
 
 BoardSchema.pre("save", async function (next) {
+  // this.updateAt = Date.now()
   next()
 })
 

@@ -1,4 +1,4 @@
-export const allowedBoardUpdateFields = [
+export const allowedBoardUpdateFields: string[] = [
   "accessLevel",
   "activities",
   "archived",

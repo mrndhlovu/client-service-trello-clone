@@ -1,8 +1,7 @@
 import { Router, Request, Response } from "express"
 
-import { allowedBoardUpdateFields } from "../../helpers"
-
-import Board from "../../models/Board"
+import { allowedBoardUpdateFields } from "../helpers"
+import Board from "../models/Board"
 
 const router = Router()
 
@@ -19,20 +18,21 @@ const boardRoutes = () => {
 
       res.send(boards)
     } catch (error) {
-      return error
+      res.status(400).send({ message: error.message })
     }
   })
 
-  router.get("/:boardId", async (req, res) => {
+  router.get("/:boardId", async (req: Request, res: Response) => {
     const _id = req.params.boardId
 
     let board
     try {
       board = await Board.findOne({ _id })
+      if (!board) throw new Error("Board with that id was not found")
 
       res.send(board)
     } catch (error) {
-      return error
+      res.status(400).send({ message: error.message })
     }
   })
 
@@ -46,12 +46,12 @@ const boardRoutes = () => {
       res.status(201)
       res.send(savedBoard)
     } catch (error) {
-      return error
+      res.status(400).send({ message: error.message })
     }
   })
 
-  router.patch("/update/:boardId", async (req, res) => {
-    const _id = req.params.boardId
+  router.patch("/update/:boardId", async (req: Request, res: Response) => {
+    const _id = req?.params?.boardId
 
     let board
     const updates = Object.keys(req.body)
@@ -64,37 +64,31 @@ const boardRoutes = () => {
       return res.status(400).send({ message: "Invalid update field" })
     try {
       board = await Board.findOne({ _id })
-
-      if (!board) {
-        try {
-          board = await Board.findOne({ _id })
-        } catch (error) {
-          return res.status(400).send({ message: error.message })
-        }
-      }
+      if (!board) throw new Error("Board with that id was not found")
 
       updates.forEach(update => (board[update] = req.body[update]))
 
       board.save()
       res.send(board)
     } catch (error) {
-      return error
+      res.status(400).send({ message: error.message })
     }
   })
 
-  router.delete("/delete/:boardId", async (req, res) => {
+  router.delete("/delete/:boardId", async (req: Request, res: Response) => {
     const _id = req.params.boardId
 
     try {
-      await Board.findById({ _id })
-        .then(board => {
-          return board.delete()
-        })
+      const board = await Board.findById({ _id })
+        .then(boardObj => boardObj)
         .catch(err => err)
+
+      if (!board?._id) throw new Error("Board with that id was not found")
+      board.delete()
 
       res.send({ message: "Board deleted" })
     } catch (error) {
-      return error
+      res.status(400).send({ message: error.message })
     }
   })
 

@@ -1,8 +1,7 @@
 import { Router, Request, Response } from "express"
 
-import { allowedBoardUpdateFields } from "../../helpers"
-
-import Board from "../../models/Board"
+import { allowedBoardUpdateFields } from "../helpers"
+import Board from "../models/Board"
 
 const router = Router()
 

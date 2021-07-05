@@ -2,13 +2,14 @@ import express from "express"
 import { promisify } from "util"
 
 import { NextHandlerType } from ".."
-import { getRoutes } from "../controllers"
+import { getRoutes } from "../routes"
 import { closeOnExit } from "./closeOnExit"
 import { errorHandler } from "./error"
 
 const startServer = async (handle: NextHandlerType, port: number) => {
   const app = express()
 
+  app.use(express.json())
   app.disable("x-powered-by")
   app.use("/api", getRoutes())
   app.use(errorHandler)
