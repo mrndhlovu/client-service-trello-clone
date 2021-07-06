@@ -1,5 +1,6 @@
 import express from "express"
 import { promisify } from "util"
+import cookieParser from "cookie-parser"
 
 import { NextHandlerType } from ".."
 import { getRoutes } from "../routes"
@@ -8,7 +9,7 @@ import { errorHandler } from "./error"
 
 const startServer = async (handle: NextHandlerType, port: number) => {
   const app = express()
-
+  app.use(cookieParser())
   app.use(express.json())
   app.disable("x-powered-by")
   app.use("/api", getRoutes())

@@ -1,30 +1,13 @@
-import { Condition, ObjectId } from "mongodb"
+import jwt from "jsonwebtoken"
+import isEmail from "validator/lib/isEmail"
+import bcrypt from "bcrypt"
+
+import { ObjectId } from "mongodb"
 import { model, Schema, Model, Document } from "mongoose"
 
 import Board from "./Board"
-import isEmail from "validator/lib/isEmail"
 
-interface IUser {
-  username: string
-  firstname: string
-  lastname: string
-  email: string
-  password: string
-  starred: string[]
-  viewedRecent: string[]
-  avatar: string
-  bio: string
-  templates: string[]
-  socialAuth: {
-    provider: string
-    id: string
-  }
-  tokens: string[]
-  resetPasswordToken: string
-  resetPasswordExpires: string
-}
-
-const UserSchema = new Schema(
+const UserSchema: Schema<IUserDocument> = new Schema(
   {
     username: {
       type: String,
@@ -80,16 +63,10 @@ const UserSchema = new Schema(
     },
     socialAuth: {
       type: Object,
-      required: true,
       default: {
         provider: "",
         id: "",
       },
-    },
-    boards: {
-      type: [{ type: Schema.Types.ObjectId, ref: "Board" }],
-      required: true,
-      default: [],
     },
     avatar: {
       type: Array,
@@ -106,7 +83,7 @@ const UserSchema = new Schema(
       required: true,
       default: [],
     },
-    tokens: [{ type: String, required: true }],
+    tokens: [{ token: { type: String, required: true } }],
     resetPasswordToken: {
       type: String,
     },
@@ -150,16 +127,93 @@ UserSchema.methods.toJSON = function () {
   return userObject
 }
 
+UserSchema.methods.getAuthToken = async function () {
+  const { TOKEN_SIGNATURE } = process.env
+  const user = this
+  const token = jwt.sign(
+    { _id: user._id.toString(), expiresIn: 3600 },
+    TOKEN_SIGNATURE
+  )
+  user.tokens = user.tokens.concat({ token })
+  user.username = user.email.split("@")[0]
+
+  await user.save()
+  return token
+}
+
+UserSchema.statics.findByCredentials = async (email, password) => {
+  const user = await User.findOne({ email })
+  let isMatch
+  if (!user) throw new Error("Login error: check your email or password.")
+
+  isMatch = await bcrypt.compare(password, user.password)
+  if (!isMatch) throw new Error("Login error: check your email or password.")
+
+  return user
+}
+
+UserSchema.pre("save", function (next) {
+  const user = this
+  const SALT_FACTOR = 12
+
+  if (!user.isModified("password")) return next()
+
+  bcrypt.genSalt(SALT_FACTOR, function (err, salt) {
+    if (err) return next(err)
+
+    bcrypt.hash(user.password, salt, function (err, hash) {
+      if (err) return next(err)
+      user.password = hash
+      next()
+    })
+  })
+})
+
 UserSchema.pre("remove", async function (next) {
   const user = this
-  await Board.deleteMany({ owner: user._id })
+  const id = user._id as any
+
+  await Board.deleteMany({ admin: id })
   next()
 })
 
-export interface UserDocument extends IUser, Document {
-  _id: Condition<ObjectId>
+export interface IToken {
+  token: string
 }
 
-const User: Model<UserDocument> = model<UserDocument>("User", UserSchema)
+interface IUser {
+  username: string
+  firstname: string
+  lastname: string
+  email: string
+  password: string
+  starred: string[]
+  viewedRecent: string[]
+  avatar: string
+  bio: string
+  templates: string[]
+  socialAuth: {
+    provider: string
+    id: string
+  }
+  tokens: IToken[]
+  resetPasswordToken: string
+  resetPasswordExpires: string
+}
 
-module.exports = User
+export interface IUserModel extends Model<IUserDocument> {
+  findByCredentials: (
+    email?: string,
+    password?: string,
+    token?: string
+  ) => Promise<IUserDocument>
+}
+
+export interface IUserDocument extends IUser, Document {
+  _id: ObjectId
+  getAuthToken: () => Promise<string>
+}
+
+const User = model<IUserDocument, IUserModel>("User", UserSchema)
+
+export default User

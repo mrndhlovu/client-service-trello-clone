@@ -15,7 +15,7 @@ export interface IBoard {
     public: boolean
     team: boolean
   }
-  admin: string
+  admin: ObjectId
   archived: boolean
   comments: string[]
   activities: string[]
@@ -56,7 +56,7 @@ const BoardSchema = new Schema(
     },
     admin: {
       type: Schema.Types.ObjectId,
-      required: false,
+      required: true,
       ref: "User",
     },
     archived: {
@@ -89,7 +89,7 @@ const BoardSchema = new Schema(
 )
 
 export interface BoardDocument extends IBoard, Document {
-  _id: Condition<ObjectId>
+  _id: ObjectId
 }
 
 BoardSchema.pre("save", async function (next) {
