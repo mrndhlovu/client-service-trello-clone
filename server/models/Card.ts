@@ -38,7 +38,6 @@ const CardSchema = new Schema(
     cover: {
       type: String,
       default: "",
-      required: true,
     },
     comments: {
       type: [Schema.Types.ObjectId],
@@ -58,12 +57,10 @@ const CardSchema = new Schema(
     shortDesc: {
       type: String,
       default: "",
-      required: true,
     },
     description: {
       type: String,
       default: "",
-      required: true,
     },
     assignees: {
       type: Array,

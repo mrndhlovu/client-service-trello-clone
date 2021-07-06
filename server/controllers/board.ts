@@ -130,7 +130,7 @@ const boardRoutes = () => {
 
       const list = await List.findById({ _id: listId })
 
-      res.status(200).send({ list })
+      res.status(200).send(list)
     } catch (error) {
       res.status(400).send({ message: error.message })
     }

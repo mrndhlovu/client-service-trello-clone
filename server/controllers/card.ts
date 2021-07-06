@@ -1,99 +1,109 @@
 import { Router, Request, Response } from "express"
 
-import { allowedBoardUpdateFields } from "../helpers"
-import Board from "../models/Board"
+import Card from "../models/Card"
+import List from "../models/List"
 
 const router = Router()
 
 const cardRoutes = () => {
   router.get("/list", async (req: Request, res: Response) => {
+    const _id = req.params.listId
+
     try {
-      let boards = []
+      let cards = await Card.find()
 
-      const getBoards = async () => {
-        boards = await Board.find()
-      }
-
-      await getBoards()
-
-      res.send(boards)
+      res.send(cards)
     } catch (error) {
-      return error
+      res.status(400).send({ message: error.message })
     }
   })
 
-  router.get("/:boardId", async (req, res) => {
-    const _id = req.params.boardId
+  router.get("/:cardId", async (req: Request, res: Response) => {
+    const _id = req.params.cardId
 
-    let board
     try {
-      board = await Board.findOne({ _id })
+      const card = await Card.findOne({ _id })
+      if (!card) throw new Error("Card with that id was not found")
 
-      res.send(board)
+      res.send(card)
     } catch (error) {
-      return error
+      res.status(400).send({ message: error.message })
     }
   })
 
-  router.post("/create", async (req: Request, res: Response) => {
-    try {
-      const board = new Board({
-        ...req.body,
-      })
+  router.post("/create/:listId", async (req: Request, res: Response) => {
+    const _id = req.params.listId
+    const { title } = req?.body
 
-      const savedBoard = await board.save()
-      res.status(201)
-      res.send(savedBoard)
+    try {
+      const card = new Card({ title })
+      if (!card) throw new Error("Card with that id was not found")
+
+      await card.save()
+
+      await List.updateOne({ _id }, { $push: { cards: card?.id } })
+
+      res.status(201).send(card)
     } catch (error) {
-      return error
+      res.status(400).send({ message: error.message })
     }
   })
 
-  router.patch("/update/:boardId", async (req, res) => {
-    const _id = req.params.boardId
-
-    let board
-    const updates = Object.keys(req.body)
-
-    const isValidField = updates.every(update =>
-      allowedBoardUpdateFields.includes(update)
-    )
-
-    if (!isValidField)
-      return res.status(400).send({ message: "Invalid update field" })
-    try {
-      board = await Board.findOne({ _id })
-
-      if (!board) {
-        try {
-          board = await Board.findOne({ _id })
-        } catch (error) {
-          return res.status(400).send({ message: error.message })
-        }
-      }
-
-      updates.forEach(update => (board[update] = req.body[update]))
-
-      board.save()
-      res.send(board)
-    } catch (error) {
-      return error
-    }
-  })
-
-  router.delete("/delete/:boardId", async (req, res) => {
-    const _id = req.params.boardId
+  router.delete("/delete", async (req: Request, res: Response) => {
+    const { listId, cardId } = req.body
+    const { deleteall = "false" } = req?.query
 
     try {
-      await Board.findById({ _id })
-        .then(board => {
-          return board.delete()
+      const shouldDeleteAll = deleteall === "true"
+
+      let list = await List.findOne({ _id: listId })
+
+      if (shouldDeleteAll) {
+        list?.cards?.map(async (id: string) => {
+          const card = await Card.findById(id)
+          return card.delete()
         })
-        .catch(err => err)
 
-      res.send({ message: "Board deleted" })
+        await List.updateOne({ _id: listId }, { $set: { cards: [] } })
+      } else {
+        const card = await Card.findById(cardId)
+        if (!card) throw new Error("Card with that id was not found")
+
+        await List.updateOne({ _id: listId }, { $pull: { cards: cardId } })
+
+        await card.delete()
+      }
+
+      list = await List.findOne({ _id: listId })
+
+      res.status(200).send(list)
     } catch (error) {
-      return error
+      res.status(400).send({ message: error.message })
+    }
+  })
+
+  router.patch("/update", async (req: Request, res: Response) => {
+    const { cardId, key, newValue } = req.body
+
+    try {
+      if (!cardId) throw new Error("Card id required.")
+
+      switch (key) {
+        case "description":
+        case "shortDesc":
+        case "title":
+          await Card.updateOne({ _id: cardId }, { $set: { [key]: newValue } })
+          break
+
+        default:
+          throw new Error("Field is not editable.")
+      }
+
+      const card = await Card.findById({ _id: cardId })
+
+      res.status(200).send(card)
+    } catch (error) {
+      res.status(400).send({ message: error.message })
     }
   })
 
