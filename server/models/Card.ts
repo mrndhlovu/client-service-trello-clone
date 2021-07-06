@@ -15,6 +15,7 @@ export interface ICard {
   cover: string
   assignees: string[]
   archived: boolean
+  listId: string
 }
 
 const CardSchema = new Schema(
@@ -39,8 +40,14 @@ const CardSchema = new Schema(
       type: String,
       default: "",
     },
+    listId: {
+      type: Schema.Types.ObjectId,
+      ref: "List",
+      default: "",
+      required: true,
+    },
     comments: {
-      type: [Schema.Types.ObjectId],
+      type: [{ type: Schema.Types.ObjectId, ref: "Comments" }],
       default: [],
       required: true,
     },
@@ -50,7 +57,7 @@ const CardSchema = new Schema(
       required: true,
     },
     checklists: {
-      type: Array,
+      type: [{ type: Schema.Types.ObjectId, ref: "Checklist" }],
       default: [],
       required: true,
     },
@@ -63,7 +70,7 @@ const CardSchema = new Schema(
       default: "",
     },
     assignees: {
-      type: Array,
+      type: [{ type: Schema.Types.ObjectId, ref: "User" }],
       default: [],
       required: true,
     },

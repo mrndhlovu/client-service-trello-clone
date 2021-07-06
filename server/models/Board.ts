@@ -1,5 +1,6 @@
 import { Condition, ObjectId } from "mongodb"
 import { model, Schema, Model, Document } from "mongoose"
+import List from "./List"
 
 const DEFAULT_BOARD_BG_COLOR = "#0079be"
 
@@ -20,7 +21,6 @@ export interface IBoard {
   activities: string[]
   owners: string[]
   description: string
-  isTemplate: string
 }
 
 const BoardSchema = new Schema(
@@ -36,7 +36,7 @@ const BoardSchema = new Schema(
       default: Date.now(),
     },
     lists: {
-      type: [String],
+      type: [{ type: Schema.Types.ObjectId, ref: "List" }],
       required: true,
       default: [],
     },
@@ -65,27 +65,22 @@ const BoardSchema = new Schema(
       default: false,
     },
     comments: {
-      type: [Schema.Types.ObjectId],
+      type: [{ type: Schema.Types.ObjectId, ref: "Comments" }],
       required: true,
       default: [],
     },
     activities: {
-      type: [Schema.Types.ObjectId],
+      type: [{ type: Schema.Types.ObjectId, ref: "Activities" }],
       required: true,
       default: [],
     },
     owners: {
-      type: [Schema.Types.ObjectId],
+      type: [{ type: Schema.Types.ObjectId, ref: "User" }],
       default: [],
     },
     description: {
       type: String,
       default: "",
-    },
-    isTemplate: {
-      type: Boolean,
-      required: true,
-      default: false,
     },
   },
   {
@@ -98,7 +93,22 @@ export interface BoardDocument extends IBoard, Document {
 }
 
 BoardSchema.pre("save", async function (next) {
-  // this.updateAt = Date.now()
+  // const board = this as BoardDocument
+
+  // board.updateAt = Date.now()
+  next()
+})
+
+BoardSchema.pre("remove", async function (next) {
+  const board = this as BoardDocument
+  if (!board.admin) {
+    throw new Error("Only admin of this board can delete it.")
+  }
+
+  if (board.accessLevel.private) {
+    await List.deleteMany({ boardId: this._id })
+  }
+
   next()
 })
 
