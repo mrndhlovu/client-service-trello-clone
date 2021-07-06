@@ -49,38 +49,41 @@ const cardRoutes = () => {
     }
   })
 
-  router.delete("/delete", async (req: Request, res: Response) => {
-    const { listId, cardId } = req.body
-    const { deleteall = "false" } = req?.query
+  router.delete(
+    "/delete/:listId/:cardId",
+    async (req: Request, res: Response) => {
+      const { listId, cardId } = req.params
+      const { all = "false" } = req?.query
 
-    try {
-      const shouldDeleteAll = deleteall === "true"
+      try {
+        const shouldDeleteAll = all === "true" && !cardId
 
-      let list = await List.findOne({ _id: listId })
+        let list = await List.findOne({ _id: listId })
 
-      if (shouldDeleteAll) {
-        list?.cards?.map(async (id: string) => {
-          const card = await Card.findById(id)
-          return card.delete()
-        })
+        if (shouldDeleteAll) {
+          list?.cards?.map(async (id: string) => {
+            const card = await Card.findById(id)
+            return card.delete()
+          })
 
-        await List.updateOne({ _id: listId }, { $set: { cards: [] } })
-      } else {
-        const card = await Card.findById(cardId)
-        if (!card) throw new Error("Card with that id was not found")
+          await List.updateOne({ _id: listId }, { $set: { cards: [] } })
+        } else {
+          const card = await Card.findById(cardId)
+          if (!card) throw new Error("Card with that id was not found")
 
-        await List.updateOne({ _id: listId }, { $pull: { cards: cardId } })
+          await List.updateOne({ _id: listId }, { $pull: { cards: cardId } })
 
-        await card.delete()
+          await card.delete()
+        }
+
+        list = await List.findOne({ _id: listId })
+
+        res.status(200).send(list)
+      } catch (error) {
+        res.status(400).send({ message: error.message })
       }
-
-      list = await List.findOne({ _id: listId })
-
-      res.status(200).send(list)
-    } catch (error) {
-      res.status(400).send({ message: error.message })
     }
-  })
+  )
 
   router.patch("/update", async (req: Request, res: Response) => {
     const { cardId, key, newValue } = req.body
