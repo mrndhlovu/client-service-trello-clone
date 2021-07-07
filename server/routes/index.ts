@@ -1,6 +1,9 @@
 import { Router } from "express"
 
-import { boardRoutes, cardRoutes, listRoutes, authRoutes } from "../controllers"
+import authRoutes from "./auth"
+import boardRoutes from "./board"
+import cardRoutes from "./card"
+import listRoutes from "./list"
 
 const getRoutes = () => {
   const router = Router()
