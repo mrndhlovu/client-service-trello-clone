@@ -2,11 +2,12 @@ import { Router, Request, Response } from "express"
 
 import Board from "../models/Board"
 import List from "../models/List"
+import checkAuth from "../middleware/auth"
 
 const router = Router()
 
 const listRoutes = () => {
-  router.get("/all", async (req: Request, res: Response) => {
+  router.get("/all", checkAuth, async (req: Request, res: Response) => {
     try {
       const lists = await List.find()
 
@@ -16,9 +17,9 @@ const listRoutes = () => {
     }
   })
 
-  router.get("/list/:listId", async (req: Request, res: Response) => {
+  router.get("/:listId", checkAuth, async (req: Request, res: Response) => {
     try {
-      const listIem = await List.findById(req.params.listId)
+      const listIem = await List.findById(req.params.listId).populate("cards")
 
       if (!listIem) throw new Error("List with that id was not found")
 
@@ -28,10 +29,10 @@ const listRoutes = () => {
     }
   })
 
-  router.post("/create", async (req: Request, res: Response) => {
+  router.post("/create", checkAuth, async (req: Request, res: Response) => {
     const { boardId, title } = req.body
     try {
-      const list = new List({ title })
+      const list = new List({ title, boardId })
 
       await list.save()
 
@@ -48,6 +49,7 @@ const listRoutes = () => {
 
   router.delete(
     "/delete/:boardId/:listId",
+    checkAuth,
     async (req: Request, res: Response) => {
       const { boardId, listId } = req.params
       const { all = "false" } = req?.query
@@ -72,7 +74,7 @@ const listRoutes = () => {
     }
   )
 
-  router.patch("/update", async (req: Request, res: Response) => {
+  router.patch("/update", checkAuth, async (req: Request, res: Response) => {
     const { listId, key, newValue } = req.body
 
     try {

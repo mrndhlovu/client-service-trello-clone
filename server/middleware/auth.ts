@@ -1,7 +1,7 @@
 import { Response, NextFunction } from "express"
-import jwt from "jsonwebtoken"
-import { IGetUserAuthInfoRequest } from "../helpers/types"
+import jwt, { TokenExpiredError, JwtPayload } from "jsonwebtoken"
 
+import { IGetUserAuthInfoRequest } from "../utils/types"
 import User from "../models/User"
 
 const auth = async (
@@ -10,15 +10,29 @@ const auth = async (
   next: NextFunction
 ) => {
   const { TOKEN_SIGNATURE } = process.env
-  try {
-    const token = req.cookies?.accesstoken
 
-    const decoded = <any>jwt.verify(token, TOKEN_SIGNATURE)
+  try {
+    const authHeader = req.headers?.authorization
+    if (!authHeader) throw new Error("Authorization credentials are missing.")
+
+    const token = authHeader.split(" ")?.[1]
+
+    const decoded = <any>jwt.verify(
+      token,
+      TOKEN_SIGNATURE,
+      (err: TokenExpiredError, payload: JwtPayload): JwtPayload => {
+        if (err) throw new Error("Authorization credentials have expired.")
+
+        return payload
+      }
+    )
+
     const user = await User.findOne({
       _id: decoded._id,
-      "tokens.token": token,
+      "tokens.access": token,
     })
-    if (!user) throw new Error()
+    if (!user)
+      throw new Error("Authorization credentials are wrong or have expired.")
 
     req.token = token
     req.user = user

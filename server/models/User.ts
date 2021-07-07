@@ -1,4 +1,3 @@
-import jwt from "jsonwebtoken"
 import isEmail from "validator/lib/isEmail"
 import bcrypt from "bcrypt"
 
@@ -6,6 +5,8 @@ import { ObjectId } from "mongodb"
 import { model, Schema, Model, Document } from "mongoose"
 
 import Board from "./Board"
+import Token from "./Token"
+import { generateTokens } from "../helpers"
 
 const UserSchema: Schema<IUserDocument> = new Schema(
   {
@@ -83,7 +84,18 @@ const UserSchema: Schema<IUserDocument> = new Schema(
       required: true,
       default: [],
     },
-    tokens: [{ token: { type: String, required: true } }],
+    refreshToken: {
+      type: Schema.Types.ObjectId,
+      ref: "Token",
+      required: true,
+    },
+    tokens: [
+      {
+        access: { type: String, required: true },
+        deviceId: { type: String },
+      },
+    ],
+
     resetPasswordToken: {
       type: String,
     },
@@ -95,6 +107,15 @@ const UserSchema: Schema<IUserDocument> = new Schema(
     timestamps: true,
   }
 )
+
+UserSchema.path("tokens").validate(function (value) {
+  console.log(value.length)
+  if (value.length > 2) {
+    throw new Error(
+      "You can only have 2 active sessions, logout from one of your devices"
+    )
+  }
+})
 
 UserSchema.virtual("boards", {
   ref: "Board",
@@ -127,23 +148,33 @@ UserSchema.methods.toJSON = function () {
   return userObject
 }
 
-UserSchema.methods.getAuthToken = async function () {
-  const { TOKEN_SIGNATURE } = process.env
+UserSchema.methods.getAuthTokens = async function (action?: string) {
   const user = this
-  const token = jwt.sign(
-    { _id: user._id.toString(), expiresIn: 3600 },
-    TOKEN_SIGNATURE
-  )
-  user.tokens = user.tokens.concat({ token })
+  const { accessToken, refreshToken } = generateTokens(user._id)
+
+  user.tokens = user.tokens.concat({ access: accessToken })
   user.username = user.email.split("@")[0]
 
+  if (action === "signup") {
+    var dbRefreshToken = new Token({ token: refreshToken, owner: user._id })
+    if (!dbRefreshToken) throw new Error("Fail to create user")
+
+    await dbRefreshToken.save()
+
+    user.refreshToken = dbRefreshToken?._id
+  }
+
   await user.save()
-  return token
+
+  return { accessToken, refreshToken }
 }
 
-UserSchema.statics.findByCredentials = async (email, password) => {
+UserSchema.statics.findByCredentials = async (
+  email: string,
+  password: string
+) => {
   const user = await User.findOne({ email })
-  let isMatch
+  let isMatch: boolean
   if (!user) throw new Error("Login error: check your email or password.")
 
   isMatch = await bcrypt.compare(password, user.password)
@@ -170,15 +201,21 @@ UserSchema.pre("save", function (next) {
 })
 
 UserSchema.pre("remove", async function (next) {
-  const user = this
-  const id = user._id as any
+  await Board.deleteMany({ admin: this._id })
 
-  await Board.deleteMany({ admin: id })
+  await Token.deleteMany({ owner: this._id })
+
   next()
 })
 
 export interface IToken {
-  token: string
+  access: string
+  deviceId?: string
+}
+
+export interface IAccessTokens {
+  accessToken: string
+  refreshToken: string
 }
 
 interface IUser {
@@ -197,6 +234,7 @@ interface IUser {
     id: string
   }
   tokens: IToken[]
+  refreshToken: ObjectId
   resetPasswordToken: string
   resetPasswordExpires: string
 }
@@ -211,7 +249,9 @@ export interface IUserModel extends Model<IUserDocument> {
 
 export interface IUserDocument extends IUser, Document {
   _id: ObjectId
-  getAuthToken: () => Promise<string>
+  getAuthTokens: (
+    actionType?: "signup" | "login" | "refreshToken"
+  ) => Promise<IAccessTokens>
 }
 
 const User = model<IUserDocument, IUserModel>("User", UserSchema)

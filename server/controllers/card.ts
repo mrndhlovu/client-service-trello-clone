@@ -2,11 +2,12 @@ import { Router, Request, Response } from "express"
 
 import Card from "../models/Card"
 import List from "../models/List"
+import checkAuth from "../middleware/auth"
 
 const router = Router()
 
 const cardRoutes = () => {
-  router.get("/list", async (req: Request, res: Response) => {
+  router.get("/list", checkAuth, async (req: Request, res: Response) => {
     const _id = req.params.listId
 
     try {
@@ -18,7 +19,7 @@ const cardRoutes = () => {
     }
   })
 
-  router.get("/:cardId", async (req: Request, res: Response) => {
+  router.get("/:cardId", checkAuth, async (req: Request, res: Response) => {
     const _id = req.params.cardId
 
     try {
@@ -31,26 +32,31 @@ const cardRoutes = () => {
     }
   })
 
-  router.post("/create/:listId", async (req: Request, res: Response) => {
-    const _id = req.params.listId
-    const { title } = req?.body
+  router.post(
+    "/create/:listId",
+    checkAuth,
+    async (req: Request, res: Response) => {
+      const _id = req.params.listId
+      const { title } = req?.body
 
-    try {
-      const card = new Card({ title })
-      if (!card) throw new Error("Card with that id was not found")
+      try {
+        const card = new Card({ title, listId: _id })
+        if (!card) throw new Error("Card with that id was not found")
 
-      await card.save()
+        await card.save()
 
-      await List.updateOne({ _id }, { $push: { cards: card?.id } })
+        await List.updateOne({ _id }, { $push: { cards: card?.id } })
 
-      res.status(201).send(card)
-    } catch (error) {
-      res.status(400).send({ message: error.message })
+        res.status(201).send(card)
+      } catch (error) {
+        res.status(400).send({ message: error.message })
+      }
     }
-  })
+  )
 
   router.delete(
     "/delete/:listId/:cardId",
+    checkAuth,
     async (req: Request, res: Response) => {
       const { listId, cardId } = req.params
       const { all = "false" } = req?.query
@@ -85,7 +91,7 @@ const cardRoutes = () => {
     }
   )
 
-  router.patch("/update", async (req: Request, res: Response) => {
+  router.patch("/update", checkAuth, async (req: Request, res: Response) => {
     const { cardId, key, newValue } = req.body
 
     try {
