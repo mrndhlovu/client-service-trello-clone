@@ -1,4 +1,5 @@
 import { Request, Response } from "express"
+import { populatedBoard, populatedList } from "../helpers"
 
 import Board from "../models/Board"
 import List from "../models/List"
@@ -15,7 +16,7 @@ const getLists = async (req: Request, res: Response) => {
 
 const getListById = async (req: Request, res: Response) => {
   try {
-    const listIem = await List.findById(req.params.listId).populate("cards")
+    const listIem = await populatedList(req.params.listId)
 
     if (!listIem) throw new Error("List with that id was not found")
 
@@ -57,7 +58,7 @@ const deleteList = async (req: Request, res: Response) => {
       { _id: boardId },
       { $pull: { lists: shouldDeleteAll ? [] : listId } }
     )
-    const board = await Board.findOne({ _id: boardId })
+    const board = await populatedBoard(boardId)
     await list.delete()
 
     res.status(200).send(board)

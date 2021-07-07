@@ -2,6 +2,7 @@ import { Router } from "express"
 import { controller } from "../controllers"
 
 import checkAuth from "../middleware/auth"
+import roles from "../middleware/roles"
 
 const router = Router()
 const boardRoutes = () => {
@@ -13,7 +14,12 @@ const boardRoutes = () => {
 
   router.patch("/update/:boardId", checkAuth, controller.board.updateBoard)
 
-  router.delete("/delete/:boardId", checkAuth, controller.board.deleteBoard)
+  router.delete(
+    "/delete/:boardId",
+    checkAuth,
+    roles.board.admin,
+    controller.board.deleteBoard
+  )
 
   return router
 }

@@ -59,6 +59,7 @@ declare module "styled-components" {
       steam: string
       stumbleupon: string
       tumblr: string
+      trello: string
       twitter: string
       vimeo: string
       vine: string

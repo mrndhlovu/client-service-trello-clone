@@ -1,5 +1,5 @@
 import { ObjectId } from "mongodb"
-import { model, Schema, Document } from "mongoose"
+import { Schema, Document } from "mongoose"
 import { dbAuth } from "../config/dbConnect"
 
 interface IToken {

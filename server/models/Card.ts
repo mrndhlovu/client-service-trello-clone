@@ -1,5 +1,6 @@
 import { Condition, ObjectId } from "mongodb"
 import { Schema, Document } from "mongoose"
+
 import { dbTusks } from "../config/dbConnect"
 
 export interface ICard {
@@ -48,7 +49,7 @@ const CardSchema = new Schema(
       required: true,
     },
     comments: {
-      type: [{ type: Schema.Types.ObjectId, ref: "Comments" }],
+      type: [{ type: Schema.Types.ObjectId, ref: "Comment" }],
       default: [],
       required: true,
     },

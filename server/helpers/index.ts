@@ -1,8 +1,12 @@
-import { NextFunction, Response } from "express"
+import { Response } from "express"
 import jwt from "jsonwebtoken"
 import bcrypt from "bcrypt"
 
 import { IUserDocument, IAccessTokens } from "../models/User"
+import { RolesType } from "../utils/types"
+import { ObjectID, ObjectId } from "mongodb"
+import Board, { BoardDocument } from "../models/Board"
+import List from "../models/List"
 
 export const generateAccessCookie = async (
   res: Response,
@@ -58,3 +62,40 @@ export const encryptUserPassword = async (
     })
   })
 }
+
+export const assignBoardRole = async (
+  role: RolesType,
+  user: IUserDocument,
+  boardId: ObjectId
+) => {
+  await user.update({ $push: { roles: { [role]: boardId } } })
+
+  await user.save()
+
+  return
+}
+
+export const handleError = (status: number, res: Response, error: Error) => {
+  res.status(status).send({ message: error.message })
+}
+
+export const validateEditableFields = <T>(allowedFields: T[], updates: T[]) => {
+  return updates.every((update: T) => allowedFields.includes(update))
+}
+
+export const populatedBoard = async (boardId: ObjectId | string) => {
+  const board = await Board.findById(boardId).populate({
+    path: "lists",
+    populate: [{ path: "cards", model: "Card" }],
+  })
+  return board
+}
+
+export const populatedList = async (listId: ObjectId | string) => {
+  const list = await List.findById(listId).populate({
+    path: "cards",
+  })
+  return list
+}
+
+export const toObjectId = (id: string) => new ObjectID(id)

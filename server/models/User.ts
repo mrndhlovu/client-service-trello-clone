@@ -2,16 +2,11 @@ import isEmail from "validator/lib/isEmail"
 import bcrypt from "bcrypt"
 
 import { ObjectId } from "mongodb"
-import { model, Schema, Model, Document } from "mongoose"
+import { Schema, Model, Document } from "mongoose"
 
 import Board from "./Board"
 import Token from "./Token"
-import {
-  EncryptCallbackError,
-  EncryptCallbackPayload,
-  encryptUserPassword,
-  generateTokens,
-} from "../helpers"
+import { encryptUserPassword, generateTokens } from "../helpers"
 import { dbAuth } from "../config/dbConnect"
 
 const UserSchema: Schema<IUserDocument> = new Schema(
@@ -63,11 +58,6 @@ const UserSchema: Schema<IUserDocument> = new Schema(
       required: true,
       default: [],
     },
-    notifications: {
-      type: [{ type: Schema.Types.ObjectId, ref: "Notification" }],
-      required: true,
-      default: [],
-    },
     socialAuth: {
       type: Object,
       default: {
@@ -85,20 +75,33 @@ const UserSchema: Schema<IUserDocument> = new Schema(
       trim: true,
       minlength: 4,
     },
-    templates: {
-      type: [{ type: Schema.Types.ObjectId, ref: "Template" }],
-      required: true,
-      default: [],
-    },
     refreshToken: {
       type: Schema.Types.ObjectId,
       ref: "Token",
       required: true,
     },
+
     tokens: [
       {
         access: { type: String, required: true },
         deviceId: { type: String },
+      },
+    ],
+
+    roles: [
+      {
+        admin: {
+          type: [{ type: Schema.Types.ObjectId, ref: "Board" }],
+          required: true,
+        },
+        basic: {
+          type: [{ type: Schema.Types.ObjectId, ref: "Board" }],
+          required: true,
+        },
+        guest: {
+          type: [{ type: Schema.Types.ObjectId, ref: "Board" }],
+          required: true,
+        },
       },
     ],
 
@@ -116,7 +119,7 @@ const UserSchema: Schema<IUserDocument> = new Schema(
 
 UserSchema.path("tokens").validate(function (value) {
   console.log(value.length)
-  if (value.length > 2) {
+  if (value.length > 3) {
     throw new Error(
       "You can only have 2 active sessions, logout from one of your devices"
     )
@@ -130,7 +133,7 @@ UserSchema.virtual("boards", {
 })
 
 UserSchema.virtual("template", {
-  ref: "Templates",
+  ref: "Template",
   localField: "_id",
   foreignField: "owner",
 })
@@ -141,10 +144,10 @@ UserSchema.virtual("comment", {
   foreignField: "owner",
 })
 
-UserSchema.virtual("InvitedBoards", {
+UserSchema.virtual("boardInvites", {
   ref: "Board",
   localField: "_id",
-  foreignField: "owners",
+  foreignField: "owner",
 })
 
 UserSchema.methods.toJSON = function () {
@@ -203,7 +206,7 @@ UserSchema.pre("save", function (next) {
 })
 
 UserSchema.pre("remove", async function (next) {
-  await Board.deleteMany({ admin: this._id })
+  await Board.deleteMany({ owner: this._id })
 
   await Token.deleteMany({ owner: this._id })
 
@@ -220,6 +223,10 @@ export interface IAccessTokens {
   refreshToken: string
 }
 
+interface IUseBoardRoles {
+  [key: string]: ObjectId[]
+}
+
 interface IUser {
   username: string
   firstname: string
@@ -230,11 +237,11 @@ interface IUser {
   viewedRecent: string[]
   avatar: string
   bio: string
-  templates: string[]
   socialAuth: {
     provider: string
     id: string
   }
+  roles: IUseBoardRoles[]
   tokens: IToken[]
   refreshToken: ObjectId
   resetPasswordToken: string

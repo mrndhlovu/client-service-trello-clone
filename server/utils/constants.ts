@@ -1,3 +1,5 @@
+import { IRoleOptions } from "./types"
+
 export const allowedBoardUpdateFields: string[] = [
   "accessLevel",
   "activities",
@@ -23,3 +25,9 @@ export const editableUserFields = [
   "viewedRecent",
   "notifications",
 ]
+
+export const ROLES: IRoleOptions = {
+  ADMIN: "admin",
+  BASIC: "basic",
+  GUEST: "guest",
+}
