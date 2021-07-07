@@ -1,5 +1,6 @@
-import { Condition, ObjectId } from "mongodb"
-import { model, Schema, Model, Document } from "mongoose"
+import { ObjectId } from "mongodb"
+import { Schema, Document } from "mongoose"
+import { dbTusks } from "../config/dbConnect"
 import List from "./List"
 
 const DEFAULT_BOARD_BG_COLOR = "#0079be"
@@ -19,7 +20,7 @@ export interface IBoard {
   archived: boolean
   comments: string[]
   activities: string[]
-  owners: string[]
+  members: string[]
   description: string
 }
 
@@ -43,7 +44,7 @@ const BoardSchema = new Schema(
     category: {
       type: [String],
       required: true,
-      default: ["default"],
+      default: [],
     },
     styles: {
       type: Object,
@@ -74,7 +75,7 @@ const BoardSchema = new Schema(
       required: true,
       default: [],
     },
-    owners: {
+    members: {
       type: [{ type: Schema.Types.ObjectId, ref: "User" }],
       default: [],
     },
@@ -112,6 +113,6 @@ BoardSchema.pre("remove", async function (next) {
   next()
 })
 
-const Board: Model<BoardDocument> = model<BoardDocument>("Board", BoardSchema)
+const Board = dbTusks.model<BoardDocument>("Board", BoardSchema)
 
 export default Board

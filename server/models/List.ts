@@ -1,5 +1,6 @@
 import { Condition, ObjectId } from "mongodb"
-import { model, Schema, Model, Document } from "mongoose"
+import { Schema, Document } from "mongoose"
+import { dbTusks } from "../config/dbConnect"
 import Card from "./Card"
 
 interface IList {
@@ -40,6 +41,6 @@ export interface ListDocument extends IList, Document {
   _id: Condition<ObjectId>
 }
 
-const List: Model<IList> = model<IList>("List", ListSchema)
+const List = dbTusks.model<ListDocument>("List", ListSchema)
 
 export default List

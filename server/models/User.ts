@@ -6,7 +6,13 @@ import { model, Schema, Model, Document } from "mongoose"
 
 import Board from "./Board"
 import Token from "./Token"
-import { generateTokens } from "../helpers"
+import {
+  EncryptCallbackError,
+  EncryptCallbackPayload,
+  encryptUserPassword,
+  generateTokens,
+} from "../helpers"
+import { dbAuth } from "../config/dbConnect"
 
 const UserSchema: Schema<IUserDocument> = new Schema(
   {
@@ -185,18 +191,14 @@ UserSchema.statics.findByCredentials = async (
 
 UserSchema.pre("save", function (next) {
   const user = this
-  const SALT_FACTOR = 12
+  const saltRounds = 12
 
   if (!user.isModified("password")) return next()
 
-  bcrypt.genSalt(SALT_FACTOR, function (err, salt) {
-    if (err) return next(err)
-
-    bcrypt.hash(user.password, salt, function (err, hash) {
-      if (err) return next(err)
-      user.password = hash
-      next()
-    })
+  encryptUserPassword(user.password, saltRounds, (err, hash) => {
+    if (err) throw new Error("Failed to encrypt password")
+    user.password = hash
+    next()
   })
 })
 
@@ -254,6 +256,6 @@ export interface IUserDocument extends IUser, Document {
   ) => Promise<IAccessTokens>
 }
 
-const User = model<IUserDocument, IUserModel>("User", UserSchema)
+const User = dbAuth.model<IUserDocument, IUserModel>("User", UserSchema)
 
 export default User

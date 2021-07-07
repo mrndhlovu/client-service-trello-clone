@@ -1,5 +1,6 @@
 import { Condition, ObjectId } from "mongodb"
-import { model, Schema, Model, Document } from "mongoose"
+import { Schema, Document } from "mongoose"
+import { dbTusks } from "../config/dbConnect"
 
 export interface ICard {
   title: string
@@ -88,6 +89,6 @@ export interface CardDocument extends ICard, Document {
   _id: Condition<ObjectId>
 }
 
-const Card: Model<CardDocument> = model<CardDocument>("Card", CardSchema)
+const Card = dbTusks.model<CardDocument>("Card", CardSchema)
 
 export default Card

@@ -1,5 +1,6 @@
-import { Response } from "express"
+import { NextFunction, Response } from "express"
 import jwt from "jsonwebtoken"
+import bcrypt from "bcrypt"
 
 import { IUserDocument, IAccessTokens } from "../models/User"
 
@@ -33,4 +34,27 @@ export const generateTokens = (userId: IUserDocument["_id"]) => {
   )
 
   return { accessToken, refreshToken }
+}
+
+export type EncryptCallbackError = Error | undefined
+export type EncryptCallbackPayload = string
+export type EncryptCallback = (
+  err?: EncryptCallbackError,
+  payload?: EncryptCallbackPayload
+) => EncryptCallbackPayload | EncryptCallbackError | void
+
+export const encryptUserPassword = async (
+  password: string,
+  salt: number,
+  callback: EncryptCallback
+) => {
+  bcrypt.genSalt(salt, function (err, salt) {
+    if (err) return callback(err)
+
+    bcrypt.hash(password, salt, function (err, hash) {
+      if (err) return callback(err, hash)
+
+      callback(err, hash)
+    })
+  })
 }

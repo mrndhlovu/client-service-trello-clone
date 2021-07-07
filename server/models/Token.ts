@@ -1,5 +1,6 @@
 import { ObjectId } from "mongodb"
 import { model, Schema, Document } from "mongoose"
+import { dbAuth } from "../config/dbConnect"
 
 interface IToken {
   token: string
@@ -29,6 +30,6 @@ export interface ITokenDocument extends IToken, Document {
   _id: ObjectId
 }
 
-const Token = model<ITokenDocument>("Token", TokenSchema)
+const Token = dbAuth.model<ITokenDocument>("Token", TokenSchema)
 
 export default Token

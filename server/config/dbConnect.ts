@@ -1,15 +1,19 @@
-import mongoose from "mongoose"
+import mongoose, { ConnectOptions } from "mongoose"
 
-const connectMongodb = async () => {
-  return await mongoose
-    .connect(process.env.MONGODB_URI, {
-      useNewUrlParser: true,
-      useUnifiedTopology: true,
-      useFindAndModify: false,
-      useCreateIndex: true,
-    })
-    .then(() => console.log("Connected to DB"))
-    .catch(err => console.log(err, "Error connecting to DB"))
+type IDatabaseUri = string
+
+const options: ConnectOptions = {
+  useNewUrlParser: true,
+  useUnifiedTopology: true,
+  useFindAndModify: false,
+  useCreateIndex: true,
 }
 
-export { connectMongodb }
+const dbStart = (uri: IDatabaseUri) => {
+  return mongoose.createConnection(uri, options)
+}
+
+const dbAuth = dbStart("mongodb://localhost:27017/tusks-ui-auth-dev")
+const dbTusks = dbStart("mongodb://localhost:27017/tusks-ui-dev")
+
+export { dbAuth, dbTusks }

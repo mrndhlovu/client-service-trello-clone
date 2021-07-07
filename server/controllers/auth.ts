@@ -104,7 +104,7 @@ const deleteUser = async (req: IGetUserAuthInfoRequest, res: Response) => {
 
     await user.delete()
 
-    res.status(204).send({ message: "Account deleted", success: true })
+    res.status(200).send({ message: "Account deleted", success: true })
   } catch (error) {
     res.status(400).send({ message: error.message })
   }
