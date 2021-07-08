@@ -3,7 +3,7 @@
   "version": "0.1.0",
   "private": true,
   "scripts": {
-    "dev": "NODE_ENV=development nodemon --watch",
+    "dev": "NODE_ENV=development nodemon --quiet",
     "build:server": "tsc --project tsconfig.server.json",
     "build:next": "next build",
     "build": "yarn run build:next && yarn run build:server",

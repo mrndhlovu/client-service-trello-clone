@@ -2,7 +2,6 @@ import styled from "styled-components"
 
 import CardsList from "./CardsList"
 import HomeSidebar from "./HomeSidebar"
-import Layout from "../layout"
 
 const Container = styled.div`
   margin: 0 10px;
@@ -12,12 +11,10 @@ const Container = styled.div`
 
 const HomePage = () => {
   return (
-    <Layout>
-      <Container>
-        <HomeSidebar />
-        <CardsList />
-      </Container>
-    </Layout>
+    <Container>
+      <HomeSidebar />
+      <CardsList />
+    </Container>
   )
 }
 
