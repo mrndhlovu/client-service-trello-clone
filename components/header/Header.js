@@ -1,30 +1,21 @@
-import { useEffect } from "react"
-import router from "next/router"
 import Link from "next/link"
 
 import { AiOutlineHome } from "react-icons/ai"
 
 import { ROUTES } from "../../util/constants"
-import { useAuth } from "../../helpers/hooks/context"
 import HeaderAppListDropdown from "./leftsection/HeaderAppListDropdown"
 import HeaderAuthDropdown from "./rightsection/HeaderAuthDropdown"
 import HeaderBoardsDropdown from "./leftsection/HeaderBoardsDropdown"
-import HeaderButton from "./HeaderButton"
 import HeaderCreateOptionsDropdown from "./rightsection/HeaderCreateOptionsDropdown"
 import HeaderInformationDropdown from "./rightsection/HeaderInformationDropdown"
 import HeaderNotificationsDropdown from "./rightsection/HeaderNotificationsDropdown"
+import HeaderButton from "./HeaderButton"
 import HeaderSearchDropdown from "./leftsection/HeaderSearchDropdown"
 import HeaderStyles from "./Styles"
 import Logo from "./centersection/Logo"
 
 const Header = () => {
   let activeBoardColor
-
-  const { isAuthenticated } = useAuth()
-
-  useEffect(() => {
-    if (!isAuthenticated) return router.push({ path: ROUTES.login })
-  }, [isAuthenticated])
 
   return (
     <HeaderStyles activeBoardColor={activeBoardColor}>

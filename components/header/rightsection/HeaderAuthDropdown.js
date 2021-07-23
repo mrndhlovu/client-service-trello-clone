@@ -3,9 +3,11 @@ import { FaRegUser } from "react-icons/fa"
 
 import { UIDropdown } from "../../shared"
 import { useAuth } from "../../../helpers/hooks/context"
+import { useEffect, useState } from "react"
 
 const HeaderAuthDropdown = () => {
   const { user, logout } = useAuth()
+  const [userInitial, setUserInitials] = useState("")
 
   const handleLogout = () => {
     logout()
@@ -15,13 +17,17 @@ const HeaderAuthDropdown = () => {
     { handleClick: handleLogout, key: "logout", title: "Log out" },
   ]
 
+  useEffect(() => {
+    setUserInitials(user?.initials)
+  }, [user])
+
   return (
     <UIDropdown
       className="header-auth-dropdown"
       heading="Account"
       toggle={
-        user?.initials ? (
-          <span className="header-button-text">{user?.initials}</span>
+        userInitial ? (
+          <span className="header-button-text">{userInitial}</span>
         ) : (
           <FaRegUser className="header-auth-user-icon" />
         )

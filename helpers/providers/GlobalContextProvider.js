@@ -3,12 +3,17 @@ import { uniqueId } from "lodash"
 
 import { GlobalContext } from "../hooks/context"
 import { getAlertString } from "../../util"
+import { useLocalStorage } from "../hooks"
 
 const GlobalContextProvider = ({ children }) => {
-  const [lightMode, setLightMode] = useState(false)
+  const [theme, setTheme] = useLocalStorage("theme", { darkMode: false })
   const [notifications, setNotifications] = useState()
 
-  const handleModeChange = () => setLightMode(prev => !prev)
+  const handleModeChange = () => {
+    return setTheme(prev => {
+      return { ...prev, darkMode: !prev?.darkMode }
+    })
+  }
 
   const dismissNotification = useCallback(id => {
     const shouldClearAllNotifications = id < 1
@@ -53,7 +58,7 @@ const GlobalContextProvider = ({ children }) => {
       value={{
         dismissNotification,
         handleModeChange,
-        lightMode,
+        lightMode: !theme?.darkMode,
         notifications,
         notify,
       }}

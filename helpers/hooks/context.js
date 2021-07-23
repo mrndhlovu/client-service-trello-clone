@@ -1,5 +1,4 @@
 import { createContext, useContext } from "react"
-import { HomeContextValueTypes } from "../../pages"
 
 export const GlobalContext = createContext({})
 

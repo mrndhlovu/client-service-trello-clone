@@ -1,5 +1,6 @@
 import { HomeContext, useAuth } from "../helpers/hooks/context"
 import HomePage from "../components/home/HomePage"
+
 const LandingPage = ({ boards }) => {
   return (
     <HomeContext.Provider value={{ boards }}>

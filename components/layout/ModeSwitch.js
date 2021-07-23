@@ -1,11 +1,12 @@
 import React from "react"
 import styled from "styled-components"
 
-import { FiSun, FiMoon } from "react-icons/fi"
+import { BsMoon } from "react-icons/bs"
+import { FiSun } from "react-icons/fi"
+
 import { useGlobalContext } from "../../helpers/hooks/context"
 
 const Container = styled.div`
-  background: transparent !important;
   z-index: 999;
   display: flex;
   align-items: center;
@@ -19,12 +20,11 @@ const Container = styled.div`
     vertical-align: middle;
     line-height: 1;
     margin-right: 5px;
-
     svg {
-      fill: #fff;
+      fill: ${props => props.theme.colors.amazon};
 
       & > * {
-        fill: #fff;
+        fill: ${props => props.theme.colors.amazon};
       }
     }
   }
@@ -33,7 +33,7 @@ const Container = styled.div`
     display: inline-block;
     height: 20px;
     width: 40px;
-    background: #6c757d;
+    background: #fff;
     border-radius: 100px;
     position: relative;
     vertical-align: middle;
@@ -47,7 +47,7 @@ const Container = styled.div`
       height: 16px;
       width: 16px;
       border-radius: 100px;
-      background: #ffffff;
+      background: ${props => props.theme.colors.amazon};
       transition: ${props => props.theme.variables.transition};
     }
 
@@ -65,7 +65,9 @@ const ModeSwitch = () => {
 
   return (
     <Container className="light-mode">
-      <span className="icon">{lightMode ? <FiMoon /> : <FiSun />}</span>
+      <span className={`icon icon-${lightMode ? "light" : "dark"}`}>
+        {lightMode ? <BsMoon /> : <FiSun />}
+      </span>
       <button
         className={lightMode ? "light-mode-switch active" : "light-mode-switch"}
         onClick={handleModeChange}

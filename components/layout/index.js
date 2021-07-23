@@ -1,13 +1,15 @@
 import { useEffect } from "react"
 import { isEmpty } from "lodash"
+import router from "next/router"
 import styled from "styled-components"
 
 import { Notifications } from "../shared"
+import { ROUTES } from "../../util/constants"
 import { ThemeProvider } from "../../helpers/providers"
 import { useAuth, useGlobalContext } from "../../helpers/hooks/context"
 import Head from "./Head"
-import ModeSwitch from "./ModeSwitch"
 import Header from "../header/Header"
+import ModeSwitch from "./ModeSwitch"
 
 export const siteTitle = "Trello clone"
 
@@ -43,6 +45,10 @@ const Layout = ({ children }) => {
       ? document.body.classList.add("light")
       : document.body.classList.remove("light")
   }, [lightMode])
+
+  useEffect(() => {
+    if (!isAuthenticated) return router.push(`/${ROUTES.login}`)
+  }, [isAuthenticated])
 
   return (
     <ThemeProvider>

@@ -82,7 +82,7 @@ const AuthFormWrapper = (
   const hasFormFeedback = !isEmpty(formFeedback)
 
   useEffect(() => {
-    if (isAuthenticated) return router.push({ pathname: ROUTES.home })
+    if (isAuthenticated) return router.push(ROUTES.home)
   }, [isAuthenticated])
 
   return (
