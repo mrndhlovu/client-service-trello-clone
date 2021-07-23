@@ -4,10 +4,11 @@ import router from "next/router"
 import styled from "styled-components"
 
 import { ROUTES } from "../../util/constants"
-import { UIForm, UIButton } from "../shared"
+import { UIForm } from "../shared"
 import { useAuth } from "../../helpers/hooks/context"
 import AuthOptionLink from "./AuthOptionLink"
 import FormFeedback from "./FormFeedback"
+import AuthFormButton from "./AuthFormButton"
 
 const Container = styled.div`
   ${props => props.theme.mixins.flex("column")};
@@ -50,6 +51,15 @@ const Container = styled.div`
     position: relative;
   }
 
+  .auth-form-button {
+    position: relative;
+
+    &-spinner {
+      color: white;
+      margin-top: 3px;
+    }
+  }
+
   .auth-form-header {
     display: flex;
     -webkit-box-align: center;
@@ -77,7 +87,7 @@ const AuthFormWrapper = (
   },
   ref
 ) => {
-  const { isAuthenticated } = useAuth()
+  const { isAuthenticated, loading } = useAuth()
 
   const hasFormFeedback = !isEmpty(formFeedback)
 
@@ -100,10 +110,13 @@ const AuthFormWrapper = (
           {children}
 
           <UIForm.Group className="d-grid gap-2">
-            <UIButton
+            <AuthFormButton
               formId={formId}
               onClick={handleSubmit}
               buttonText={buttonText}
+              disabled={loading}
+              loading={loading}
+              spinner
             />
           </UIForm.Group>
         </UIForm>

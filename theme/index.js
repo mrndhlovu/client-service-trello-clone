@@ -1,7 +1,4 @@
-import { DefaultTheme } from "styled-components"
-
 import colors from "./colors"
-import componentStyles from "./components"
 import device from "./device"
 import fonts from "./fonts"
 import keyframes from "./keyframes"
@@ -11,7 +8,6 @@ import variables from "./variables"
 
 const theme = {
   colors,
-  componentStyles,
   device,
   fonts,
   keyframes,

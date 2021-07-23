@@ -8,11 +8,11 @@ import {
   GlobalContextProvider,
 } from "../helpers/providers"
 
-const AppComponent = ({ Component, pageProps, authData }) => {
+const AppComponent = ({ Component, pageProps, userData }) => {
   return (
-    <AuthContextProvider ssrAuthData={authData}>
+    <AuthContextProvider ssrAuthData={userData}>
       <GlobalContextProvider>
-        <Layout authData={authData}>
+        <Layout>
           <Component {...pageProps} />
         </Layout>
       </GlobalContextProvider>
@@ -21,17 +21,26 @@ const AppComponent = ({ Component, pageProps, authData }) => {
 }
 
 AppComponent.getInitialProps = async appContext => {
-  const authData = await getCurrentUser(appContext?.ctx?.req?.headers)
-    .then(res => ({
-      isAuthenticated: true,
-      user: res?.data,
-    }))
+  const authData = {
+    isAuthenticated: false,
+    error: "",
+    user: undefined,
+  }
+  const userData = await getCurrentUser(appContext?.ctx?.req?.headers)
+    .then(res => {
+      return {
+        ...authData,
+        isAuthenticated: true,
+        user: res?.data,
+      }
+    })
     .catch(err => {
       const errRes = JSON.stringify(err)
 
       return {
+        ...authData,
         isAuthenticated: false,
-        reason: JSON.parse(errRes)?.message,
+        error: JSON.parse(errRes)?.message,
       }
     })
   let pageProps = {}
@@ -40,7 +49,7 @@ AppComponent.getInitialProps = async appContext => {
   //   pageProps = await appContext.Component.getInitialProps(appContext?.ctx)
   // }
 
-  return { pageProps, authData }
+  return { pageProps, userData }
 }
 
 export default AppComponent

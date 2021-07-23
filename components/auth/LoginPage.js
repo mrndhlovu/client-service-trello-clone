@@ -12,7 +12,11 @@ const initialState = {
 }
 
 const LoginPage = () => {
-  const { login } = useAuth()
+  const { login, loading } = useAuth()
+  console.log(
+    "🚀 ~ file: LoginPage.js ~ line 16 ~ LoginPage ~ loading",
+    loading
+  )
   const formRef = useRef()
   const [formFeedback, setFormFeedback] = useState()
 
