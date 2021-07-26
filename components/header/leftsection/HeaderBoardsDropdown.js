@@ -8,12 +8,12 @@ const HeaderBoardsDropdown = () => {
       className="header-board-dropdown-button"
       heading="Boards"
       toggle={
-        <button className="header-board-button">
+        <div href="#" className="header-board-button">
           <span>
             <CgBoard />
           </span>
           <span className="header-board-text">Boards</span>
-        </button>
+        </div>
       }
     ></UIDropdown>
   )

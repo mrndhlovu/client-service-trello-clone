@@ -47,7 +47,10 @@ const StyledDropdown = styled(Dropdown)`
     border: none;
     padding: 0;
     margin: 0;
-    background-color: transparent;
+    background-color: transparent !important;
+    color: transparent !important;
+    border-color: transparent !important;
+    box-shadow: none !important;
 
     &::after {
       display: none;

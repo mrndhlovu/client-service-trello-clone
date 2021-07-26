@@ -33,6 +33,7 @@ const Header = () => {
             <HeaderSearchDropdown />
           </div>
         </div>
+
         <Logo />
 
         <div className="header-right-content">

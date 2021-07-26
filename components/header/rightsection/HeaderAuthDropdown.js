@@ -8,6 +8,10 @@ import { useEffect, useState } from "react"
 const HeaderAuthDropdown = () => {
   const { user, logout } = useAuth()
   const [userInitial, setUserInitials] = useState("")
+  console.log(
+    "🚀 ~ file: HeaderAuthDropdown.js ~ line 11 ~ HeaderAuthDropdown ~ userInitial",
+    userInitial
+  )
 
   const handleLogout = () => {
     logout()
@@ -26,11 +30,13 @@ const HeaderAuthDropdown = () => {
       className="header-auth-dropdown"
       heading="Account"
       toggle={
-        userInitial ? (
-          <span className="header-button-text">{userInitial}</span>
-        ) : (
-          <FaRegUser className="header-auth-user-icon" />
-        )
+        <div className="header-auth-button">
+          {userInitial ? (
+            <span className="header-button-text">{userInitial}</span>
+          ) : (
+            <FaRegUser className="header-auth-user-icon" />
+          )}
+        </div>
       }
     >
       {HEADER_AUTH_MENU_OPTIONS.map((option, index) => (

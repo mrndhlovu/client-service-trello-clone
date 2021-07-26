@@ -140,8 +140,7 @@ export default styled.header`
       place-items: center;
     }
 
-    &-auth-user-icon,
-    &-auth-dropdown-toggle {
+    &-auth-button {
       background-color: ${props => props.theme.colors.whatsapp};
       border-radius: 50%;
       position: relative;
@@ -153,7 +152,7 @@ export default styled.header`
 
     &-auth-user-icon {
       ${props => props.theme.styles.absoluteCenter};
-      padding: 3px;
+      color: #ffffff;
     }
 
     &-button-text {

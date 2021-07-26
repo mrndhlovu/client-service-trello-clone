@@ -1,8 +1,8 @@
 const HeaderButton = ({ children, className = "header-button" }) => {
   return (
-    <span className={className}>
+    <div className={className}>
       <span>{children}</span>
-    </span>
+    </div>
   )
 }
 
