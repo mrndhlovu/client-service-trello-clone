@@ -1,26 +1,26 @@
-import { HomeContext, useAuth } from "../helpers/hooks/context"
+import { getBoards } from "../api"
+import { HomeContext } from "../lib/hooks/context"
 import HomePage from "../components/home/HomePage"
+import { withAuthServerSideProps } from "../lib/hocs/withAuthSsp"
+import { withAuthComponent } from "../lib/hocs/withAuthComponent"
 
-const LandingPage = ({ boards }) => {
+const LandingPage = ({ data }) => {
   return (
-    <HomeContext.Provider value={{ boards }}>
+    <HomeContext.Provider value={{ boards: data }}>
       <HomePage />
     </HomeContext.Provider>
   )
 }
 
-LandingPage.getInitialProps = async ({ req }) => {
-  // const boards = await getBoards()
-  //   .then(res => ({
-  //     boards: res.data,
-  //   }))
-  //   .catch(err => {
-  //     return {
-  //       error: err.response,
-  //     }
-  //   })
+export const getServerSideProps = withAuthServerSideProps(
+  async context => {
+    return await getBoards(context)
+      .then(res => res?.data)
+      .catch(err => err?.response)
+  },
+  {
+    auth: true,
+  }
+)
 
-  return { boards: {} }
-}
-
-export default LandingPage
+export default withAuthComponent(LandingPage)

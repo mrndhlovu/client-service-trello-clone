@@ -3,7 +3,7 @@ import { useRef, useState } from "react"
 import { FORM_VALIDATION } from "../../util/formhelpers"
 import { ROUTES } from "../../util/constants"
 import { UIForm } from "../shared"
-import { useAuth } from "../../helpers/hooks/context"
+import { useAuth } from "../../lib/hooks/context"
 import AuthFormWrapper from "./AuthFormWrapper"
 
 const initialState = {
@@ -12,11 +12,8 @@ const initialState = {
 }
 
 const LoginPage = () => {
-  const { login, loading } = useAuth()
-  console.log(
-    "🚀 ~ file: LoginPage.js ~ line 16 ~ LoginPage ~ loading",
-    loading
-  )
+  const { login } = useAuth()
+
   const formRef = useRef()
   const [formFeedback, setFormFeedback] = useState()
 
@@ -47,6 +44,7 @@ const LoginPage = () => {
       redirect={ROUTES.signup}
       ref={formRef}
       validationSchema={FORM_VALIDATION.LOGIN}
+      redirectTo={ROUTES.home}
     >
       <UIForm.Group className="mb-3">
         <UIForm.Input

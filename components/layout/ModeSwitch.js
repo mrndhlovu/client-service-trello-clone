@@ -1,10 +1,10 @@
 import React from "react"
 import styled from "styled-components"
 
-import { BsMoon } from "react-icons/bs"
-import { FiSun } from "react-icons/fi"
+import { BsMoon, BsSun } from "react-icons/bs"
 
-import { useGlobalContext } from "../../helpers/hooks/context"
+import { useGlobalContext } from "../../lib/hooks/context"
+import { isBrowser } from "../../util"
 
 const Container = styled.div`
   z-index: 999;
@@ -66,12 +66,12 @@ const ModeSwitch = () => {
   return (
     <Container className="light-mode">
       <span className={`icon icon-${lightMode ? "light" : "dark"}`}>
-        {lightMode ? <BsMoon /> : <FiSun />}
+        <span>{lightMode ? <BsMoon /> : <BsSun />}</span>
       </span>
       <button
         className={lightMode ? "light-mode-switch active" : "light-mode-switch"}
         onClick={handleModeChange}
-      ></button>
+      />
     </Container>
   )
 }

@@ -28,10 +28,6 @@ export default styled.header`
       width: 100%;
       display: flex;
       place-items: center;
-
-      a {
-        cursor: pointer;
-      }
     }
 
     &-logo-text {
@@ -40,6 +36,8 @@ export default styled.header`
       left: 50%;
       top: 50%;
       transform: translate(-50%, -50%);
+      text-decoration: none;
+      color: #ffffff;
     }
 
     &-right-content {

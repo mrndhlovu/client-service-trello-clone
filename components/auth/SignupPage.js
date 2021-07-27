@@ -3,7 +3,7 @@ import { useRef, useState } from "react"
 import { FORM_VALIDATION } from "../../util/formhelpers"
 import { ROUTES } from "../../util/constants"
 import { UIForm } from "../shared"
-import { useAuth } from "../../helpers/hooks/context"
+import { useAuth } from "../../lib/hooks/context"
 import AuthFormWrapper from "./AuthFormWrapper"
 
 const initialState = {

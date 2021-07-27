@@ -5,7 +5,7 @@ import styled from "styled-components"
 
 import { ROUTES } from "../../util/constants"
 import { UIForm } from "../shared"
-import { useAuth } from "../../helpers/hooks/context"
+import { useAuth } from "../../lib/hooks/context"
 import AuthOptionLink from "./AuthOptionLink"
 import FormFeedback from "./FormFeedback"
 import AuthFormButton from "./AuthFormButton"
@@ -88,7 +88,6 @@ const AuthFormWrapper = (
   ref
 ) => {
   const { isAuthenticated, loading } = useAuth()
-
   const hasFormFeedback = !isEmpty(formFeedback)
 
   useEffect(() => {

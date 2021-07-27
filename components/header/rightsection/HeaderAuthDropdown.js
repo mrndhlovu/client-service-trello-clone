@@ -2,16 +2,12 @@ import { Dropdown } from "react-bootstrap"
 import { FaRegUser } from "react-icons/fa"
 
 import { UIDropdown } from "../../shared"
-import { useAuth } from "../../../helpers/hooks/context"
+import { useAuth } from "../../../lib/hooks/context"
 import { useEffect, useState } from "react"
 
 const HeaderAuthDropdown = () => {
   const { user, logout } = useAuth()
   const [userInitial, setUserInitials] = useState("")
-  console.log(
-    "🚀 ~ file: HeaderAuthDropdown.js ~ line 11 ~ HeaderAuthDropdown ~ userInitial",
-    userInitial
-  )
 
   const handleLogout = () => {
     logout()

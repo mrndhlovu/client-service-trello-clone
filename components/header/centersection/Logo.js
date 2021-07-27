@@ -7,13 +7,13 @@ import { ROUTES, APP_NAME } from "../../../util/constants"
 const Logo = () => {
   return (
     <div className="header-logo-content">
-      <Link href={`/${ROUTES.home}`}>
-        <span className="header-logo-text">
+      <Link href={ROUTES.home}>
+        <a className="header-logo-text">
           <span>
             <BsFileCheck />
           </span>
           {APP_NAME}
-        </span>
+        </a>
       </Link>
     </div>
   )

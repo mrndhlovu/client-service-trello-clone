@@ -2,7 +2,7 @@ import React from "react"
 import styled from "styled-components"
 
 import { FiX } from "react-icons/fi"
-import { useGlobalContext } from "../../../helpers/hooks/context"
+import { useGlobalContext } from "../../../lib/hooks/context"
 
 const Container = styled.div`
   min-width: 20vw;

@@ -9,7 +9,7 @@ const CLUSTER_SERVICE_NAME =
 
 const axiosInstance = axios.create({
   baseURL: isBrowser ? "/api" : `${CLUSTER_SERVICE_NAME}/api`,
-  headers: {},
+  headers: isBrowser ? {} : { Host: "tusks.dev" },
 })
 
 export const signupUser = async data =>
@@ -28,4 +28,10 @@ export const getCurrentUser = async ssrHeaders => {
   return await axiosInstance.get(endpoints.currentUser)
 }
 
-export const getBoards = async () => await axiosInstance.get(endpoints.boards)
+export const getBoards = async ssrHeaders => {
+  if (ssrHeaders) {
+    axiosInstance.defaults["headers"] = ssrHeaders
+  }
+
+  return await axiosInstance.get(endpoints.boards)
+}

@@ -1,5 +1,5 @@
 import React from "react"
-import { useHomeContext } from "../../helpers/hooks/context"
+import { useHomeContext } from "../../lib/hooks/context"
 
 const CardsList = () => {
   const { cards } = useHomeContext()
