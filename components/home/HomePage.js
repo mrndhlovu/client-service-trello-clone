@@ -1,16 +1,13 @@
-import styled from "styled-components"
+import { Container, Row } from "react-bootstrap"
 
-import CardsList from "./CardsList"
-import HomeSidebar from "./HomeSidebar"
-
-const Container = styled.div``
+import BoardList from "./BoardList"
+import HomeStyles from "./HomeStyles"
 
 const HomePage = () => {
   return (
-    <Container>
-      <HomeSidebar />
-      <CardsList />
-    </Container>
+    <HomeStyles className="home">
+      <BoardList />
+    </HomeStyles>
   )
 }
 

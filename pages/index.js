@@ -1,20 +1,20 @@
 import { getBoards } from "../api"
-import { HomeContext } from "../lib/hooks/context"
+import { withAuthComponent, withAuthServerSideProps } from "../lib/hocs"
+
 import HomePage from "../components/home/HomePage"
-import { withAuthServerSideProps } from "../lib/hocs/withAuthSsp"
-import { withAuthComponent } from "../lib/hocs/withAuthComponent"
+import { BoardContextProvider } from "../lib/providers"
 
 const LandingPage = ({ data }) => {
   return (
-    <HomeContext.Provider value={{ boards: data }}>
+    <BoardContextProvider boardList={data}>
       <HomePage />
-    </HomeContext.Provider>
+    </BoardContextProvider>
   )
 }
 
 export const getServerSideProps = withAuthServerSideProps(
   async context => {
-    return await getBoards(context)
+    return await getBoards(context?.req?.headers)
       .then(res => res?.data)
       .catch(err => err?.response)
   },

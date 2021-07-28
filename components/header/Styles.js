@@ -26,8 +26,7 @@ export default styled.header`
 
     &-logo-content {
       width: 100%;
-      display: flex;
-      place-items: center;
+      justify-content: baseline;
     }
 
     &-logo-text {
@@ -35,9 +34,13 @@ export default styled.header`
       font-weight: 700;
       left: 50%;
       top: 50%;
-      transform: translate(-50%, -50%);
+      transform: translate(-50%, -45%);
       text-decoration: none;
       color: #ffffff;
+      span {
+        padding-top: 2px;
+        margin-left: 5px;
+      }
     }
 
     &-right-content {

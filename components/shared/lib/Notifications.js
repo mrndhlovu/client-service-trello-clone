@@ -2,7 +2,7 @@ import React from "react"
 import styled from "styled-components"
 
 import { FiX } from "react-icons/fi"
-import { useGlobalContext } from "../../../lib/hooks/context"
+import { useGlobalState } from "../../../lib/hooks/context"
 
 const Container = styled.div`
   min-width: 20vw;
@@ -84,7 +84,7 @@ const AlertBox = styled.div`
 `
 
 const Notifications = () => {
-  const { notifications, dismissNotification } = useGlobalContext()
+  const { notifications, dismissNotification } = useGlobalState()
 
   return (
     <Container className={`mi-alert-container ${notifications?.placement}`}>

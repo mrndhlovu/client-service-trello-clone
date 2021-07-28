@@ -3,7 +3,7 @@ import styled from "styled-components"
 
 import { BsMoon, BsSun } from "react-icons/bs"
 
-import { useGlobalContext } from "../../lib/hooks/context"
+import { useGlobalState } from "../../lib/hooks/context"
 import { isBrowser } from "../../util"
 
 const Container = styled.div`
@@ -61,7 +61,7 @@ const Container = styled.div`
 `
 
 const ModeSwitch = () => {
-  const { lightMode, handleModeChange } = useGlobalContext()
+  const { lightMode, handleModeChange } = useGlobalState()
 
   return (
     <Container className="light-mode">

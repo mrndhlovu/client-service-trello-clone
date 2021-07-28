@@ -56,4 +56,18 @@ const fadeInRight = keyframes`
   }
 `
 
-export default { fadeInDown, fadeInUp, fadeInLeft, fadeInRight }
+const slideInStar = keyframes`
+  from {
+    opacity: 0;
+    -webkit-transform: translateX(30px);
+    transform: translateX(30px);
+  }
+
+  to {
+    opacity: 1;
+    -webkit-transform: translateX(0);
+    transform: translateX(0);
+  }
+`
+
+export default { fadeInDown, fadeInUp, fadeInLeft, fadeInRight, slideInStar }

@@ -1,6 +1,6 @@
 import Link from "next/link"
 
-import { BsFileCheck } from "react-icons/bs"
+import { ImTrello } from "react-icons/im"
 
 import { ROUTES, APP_NAME } from "../../../util/constants"
 
@@ -9,10 +9,12 @@ const Logo = () => {
     <div className="header-logo-content">
       <Link href={ROUTES.home}>
         <a className="header-logo-text">
-          <span>
-            <BsFileCheck />
-          </span>
-          {APP_NAME}
+          <div className="d-flex">
+            <div>
+              <ImTrello />
+            </div>
+            <span>{APP_NAME}</span>
+          </div>
         </a>
       </Link>
     </div>

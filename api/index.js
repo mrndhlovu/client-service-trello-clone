@@ -35,3 +35,15 @@ export const getBoards = async ssrHeaders => {
 
   return await axiosInstance.get(endpoints.boards)
 }
+
+export const getBoardById = async (ssrHeaders, boardId) => {
+  if (ssrHeaders) {
+    axiosInstance.defaults["headers"] = ssrHeaders
+  }
+
+  return await axiosInstance.get(`${endpoints.boards}/${boardId}`)
+}
+
+export const updateBoard = async (data, boardId) => {
+  return await axiosInstance.patch(`${endpoints.boards}/${boardId}`, data)
+}

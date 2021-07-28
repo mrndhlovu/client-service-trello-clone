@@ -1,29 +1,37 @@
+import Link from "next/link"
+
 import { AiOutlineHome } from "react-icons/ai"
 
+import { ROUTES } from "../../util/constants"
+import { useGlobalState } from "../../lib/hooks/context"
 import HeaderAppListDropdown from "./leftsection/HeaderAppListDropdown"
 import HeaderAuthDropdown from "./rightsection/HeaderAuthDropdown"
 import HeaderBoardsDropdown from "./leftsection/HeaderBoardsDropdown"
+import HeaderButton from "./HeaderButton"
 import HeaderCreateOptionsDropdown from "./rightsection/HeaderCreateOptionsDropdown"
 import HeaderInformationDropdown from "./rightsection/HeaderInformationDropdown"
 import HeaderNotificationsDropdown from "./rightsection/HeaderNotificationsDropdown"
-import HeaderButton from "./HeaderButton"
 import HeaderSearchDropdown from "./leftsection/HeaderSearchDropdown"
 import HeaderStyles from "./Styles"
 import Logo from "./centersection/Logo"
 
 const Header = () => {
-  let activeBoardColor
+  const { activeBoard } = useGlobalState()
 
   return (
-    <HeaderStyles activeBoardColor={activeBoardColor}>
+    <HeaderStyles activeBoardColor={activeBoard?.bgColor}>
       <div className="header">
         <div className="header-left-content">
           <div className="header-left-icon-wrapper">
             <HeaderAppListDropdown />
 
-            <HeaderButton>
-              <AiOutlineHome />
-            </HeaderButton>
+            <Link href={ROUTES.home}>
+              <a>
+                <HeaderButton>
+                  <AiOutlineHome />
+                </HeaderButton>
+              </a>
+            </Link>
 
             <HeaderBoardsDropdown />
             <HeaderSearchDropdown />

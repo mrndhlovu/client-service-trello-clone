@@ -1,7 +1,8 @@
 export default {
-  signup: "/auth/signup",
-  login: "/auth/login",
+  board: "/board",
   boards: "/boards",
   currentUser: "/auth/me",
+  login: "/auth/login",
   logout: "/auth/logout",
+  signup: "/auth/signup",
 }
