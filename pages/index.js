@@ -1,14 +1,17 @@
 import { getBoards } from "../api"
 import { withAuthComponent, withAuthServerSideProps } from "../lib/hocs"
 
-import HomePage from "../components/home/HomePage"
 import { BoardContextProvider } from "../lib/providers"
+import HomePage from "../components/home/HomePage"
+import Layout from "../components/layout"
 
 const LandingPage = ({ data }) => {
   return (
-    <BoardContextProvider boardList={data}>
-      <HomePage />
-    </BoardContextProvider>
+    <Layout>
+      <BoardContextProvider boardList={data}>
+        <HomePage />
+      </BoardContextProvider>
+    </Layout>
   )
 }
 

@@ -18,6 +18,13 @@ const BoardList = () => {
         icon={<AiOutlineClockCircle size={22} />}
         boards={boards}
       />
+
+      <BoardsGroup
+        heading="YOUR WORKSPACES"
+        icon={<AiOutlineClockCircle size={22} />}
+        boards={boards}
+        category="workspaces"
+      />
     </Col>
   )
 }

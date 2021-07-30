@@ -4,6 +4,7 @@ import styled, { css } from "styled-components"
 import { AiOutlineStar } from "react-icons/ai"
 import { useBoard } from "../../lib/hooks/context"
 import { useRouter } from "next/router"
+import CreateBoard from "./CreateBoard"
 
 const Tile = styled.li`
   list-style: none;
@@ -58,8 +59,8 @@ const Tile = styled.li`
     }
 
     .home-tile-star {
-      visibility: ${props => (props?.starred ? "visible" : "hidden")};
-      color: ${props => (props.starred ? props.theme.colors.amazon : "#fff")};
+      visibility: hidden;
+      color: #fff;
       z-index: 10;
 
       &:hover {
@@ -74,20 +75,18 @@ const Tile = styled.li`
 
     &:hover {
       opacity: 0.8;
+
+      .home-tile-star {
+        visibility: visible;
+        animation: ${props => props.theme.keyframes.slideInStar};
+        animation-duration: 300ms;
+      }
     }
 
-    ${props =>
-      !props.starred
-        ? css`
-            &:hover {
-              .home-tile-star {
-                visibility: visible;
-                animation: ${props => props.theme.keyframes.slideInStar};
-                animation-duration: 300ms;
-              }
-            }
-          `
-        : ""};
+    .home-tile-star.active {
+      visibility: visible;
+      color: ${props => props.theme.colors.amazon};
+    }
   }
 
   a {
@@ -106,7 +105,7 @@ const Tile = styled.li`
   }
 `
 
-const BoardsGroup = ({ heading, icon, boards }) => {
+const BoardsGroup = ({ heading, icon, boards, category }) => {
   const router = useRouter()
   const { handleStarBoard } = useBoard()
 
@@ -123,35 +122,41 @@ const BoardsGroup = ({ heading, icon, boards }) => {
       </div>
 
       <ul className="home-boards-group-list">
-        {boards?.map(board => (
-          <Tile
-            starred={board?.prefs?.starred === "true"}
-            key={board?.id}
-            color={board?.prefs?.color}
-            image={board?.prefs?.image}
-          >
-            <Link href="/">
-              <a onClick={ev => handleClick(ev, `/board/${board?.id}`)}>
-                <div className="home-boards-tile-details">
-                  <div className="home-boards-tile-title">{board?.title}</div>
-                  <div className="spacer" />
-                  <div className="home-boards-tile-detail">
-                    <h6>{board?.title}</h6>
-                    <div>
-                      {
-                        <AiOutlineStar
-                          className="home-tile-star"
-                          size={15}
-                          onClick={ev => handleStarBoard(ev, board)}
-                        />
-                      }
+        {boards?.map(board => {
+          const starred = board?.prefs?.starred === "true"
+          return (
+            <Tile
+              key={board?.id}
+              color={board?.prefs?.color}
+              image={board?.prefs?.image}
+            >
+              <Link href="/">
+                <a onClick={ev => handleClick(ev, `/board/${board?.id}`)}>
+                  <div className="home-boards-tile-details">
+                    <div className="home-boards-tile-title">{board?.title}</div>
+                    <div className="spacer" />
+                    <div className="home-boards-tile-detail">
+                      <h6>{board?.title}</h6>
+                      <div>
+                        {
+                          <AiOutlineStar
+                            className={`home-tile-star ${
+                              starred ? "active" : ""
+                            }`}
+                            size={15}
+                            onClick={ev => handleStarBoard(ev, board)}
+                          />
+                        }
+                      </div>
                     </div>
                   </div>
-                </div>
-              </a>
-            </Link>
-          </Tile>
-        ))}
+                </a>
+              </Link>
+            </Tile>
+          )
+        })}
+
+        {category === "workspaces" && <CreateBoard />}
       </ul>
     </div>
   )

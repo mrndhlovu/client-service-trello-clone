@@ -15,6 +15,7 @@ const Container = styled.div`
   justify-content: left;
   height: 100vh;
   width: 100vw;
+  background-color: #fff;
 
   section {
     ${props => props.theme.styles.absoluteCenter};

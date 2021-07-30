@@ -17,7 +17,6 @@ const Main = styled.div`
   width: 100vw;
   height: 96vh;
   z-index: -1;
-  overflow-y: scroll;
 
   .layout-content {
     margin-top: 4vh;
@@ -40,6 +39,7 @@ const Main = styled.div`
   }
 
   @media ${props => props.theme.device.mobileLg} {
+    overflow-y: scroll;
     .content {
       width: 100%;
     }
@@ -79,16 +79,19 @@ const Layout = ({ children }) => {
       <Head siteTitle={siteTitle} />
       {hasNotification && <Notifications />}
       {isAuthenticated && <Header />}
+
       <Container fluid className="layout-content">
         <Row md="8" xs="12" className="main-content">
           <Col className="sidebar" sm="2">
             <NavSidebar />
           </Col>
+
           <Col className="content" xs="12" sm="7">
             {children}
           </Col>
         </Row>
       </Container>
+
       {mounted && <ModeSwitch />}
     </Main>
   )

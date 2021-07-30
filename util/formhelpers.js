@@ -27,6 +27,10 @@ const USERNAME_VALIDATION = yup.string().min(4).required("Required field")
 
 export const CUSTOM_DONATION_VALIDATION = yup.number().min(5)
 
+export const CREATE_BOARD_VALIDATION = yup.object({
+  title: yup.string().min(1).required("Board title should have character 1"),
+})
+
 const NAME_VALIDATION = yup
   .string()
   .min(2, "Too Short!")

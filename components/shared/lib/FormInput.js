@@ -5,10 +5,10 @@ import { Form } from "react-bootstrap"
 
 import FormFeedback from "./FormFeedback"
 
-const FormInput = forwardRef((props, ref) => {
+const FormInput = forwardRef(({ hideError, ...props }, ref) => {
   const [field, meta] = useField(props?.name)
 
-  const hasError = meta.touched && meta.error
+  const hasError = meta.touched && meta.error && !hideError
 
   return useMemo(
     () => (

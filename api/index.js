@@ -28,6 +28,14 @@ export const getCurrentUser = async ssrHeaders => {
   return await axiosInstance.get(endpoints.currentUser)
 }
 
+export const refreshAuthToken = async () => {
+  return await axiosInstance.get(endpoints.refreshToken)
+}
+
+export const createNewBoard = async data => {
+  return await axiosInstance.post(endpoints.createBoard, data)
+}
+
 export const getBoards = async ssrHeaders => {
   if (ssrHeaders) {
     axiosInstance.defaults["headers"] = ssrHeaders

@@ -15,7 +15,7 @@ const typography = css`
   }
 
   *::-webkit-scrollbar {
-    width: 8px;
+    width: 5px;
     background-color: #383838;
   }
 

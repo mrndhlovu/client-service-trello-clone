@@ -54,7 +54,7 @@ const NavSidebar = () => {
             {HOME_SIDEBAR_PRIMARY.map(option => (
               <li
                 className={`sb-link-item  ${
-                  active === option.link ? "active" : ""
+                  active === option.key ? "active" : ""
                 }`}
                 key={option.key}
               >

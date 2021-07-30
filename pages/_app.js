@@ -12,9 +12,7 @@ const AppComponent = ({ Component, pageProps }) => {
     <AuthContextProvider>
       <GlobalContextProvider>
         <ThemeProvider>
-          <Layout>
-            <Component {...pageProps} />
-          </Layout>
+          <Component {...pageProps} />
         </ThemeProvider>
       </GlobalContextProvider>
     </AuthContextProvider>
