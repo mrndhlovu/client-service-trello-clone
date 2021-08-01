@@ -1,10 +1,7 @@
+import { Col } from "react-bootstrap"
 import styled from "styled-components"
 
-export default styled.div`
-  .home-all-boards {
-    margin: 0 16px 0;
-  }
-
+export default styled(Col)`
   .home {
     &-group-header {
       ${props => props.theme.mixins.flex(undefined, "start", "end")};
@@ -18,13 +15,6 @@ export default styled.div`
       .home-group-header-icon {
         margin-right: 15px;
       }
-    }
-
-    &-boards-group-list {
-      ${props => props.theme.mixins.flex(undefined, "flex-start")};
-      flex-wrap: wrap;
-      width: 100%;
-      padding-left: 0;
     }
   }
 `

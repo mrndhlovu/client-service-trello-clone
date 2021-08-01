@@ -1,13 +1,15 @@
-import { Container, Row } from "react-bootstrap"
+import SidebarLayout from "../layout/sidebar/SidebarLayout"
 
 import BoardList from "./BoardList"
 import HomeStyles from "./HomeStyles"
 
 const HomePage = () => {
   return (
-    <HomeStyles className="home">
-      <BoardList />
-    </HomeStyles>
+    <SidebarLayout>
+      <HomeStyles>
+        <BoardList />
+      </HomeStyles>
+    </SidebarLayout>
   )
 }
 

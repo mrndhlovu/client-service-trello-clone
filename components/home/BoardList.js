@@ -7,7 +7,7 @@ const BoardList = () => {
   const { boards } = useBoard()
 
   return (
-    <Col xs="12" md="12" className="home-all-boards">
+    <>
       <BoardsGroup
         heading="Starred boards"
         icon={<AiOutlineStar size={22} />}
@@ -25,7 +25,7 @@ const BoardList = () => {
         boards={boards}
         category="workspaces"
       />
-    </Col>
+    </>
   )
 }
 

@@ -6,9 +6,15 @@ import { useBoard } from "../../lib/hooks/context"
 import { useRouter } from "next/router"
 import CreateBoard from "./CreateBoard"
 
-const Tile = styled.li`
+const ListWrapper = styled.ul`
+  flex-wrap: wrap;
+  width: 100%;
+  padding-left: 0;
+`
+
+export const Tile = styled.li`
   list-style: none;
-  width: 32%;
+  width: 23.5%;
   max-width: 190px;
   min-width: 172px;
   margin: 0 2% 2% 0;
@@ -26,11 +32,11 @@ const Tile = styled.li`
     justify-content: space-between;
     border-radius: 2px;
     padding: 0 8px;
+    height: 100px;
 
     .home-boards-tile-detail {
       ${props =>
         props.theme.mixins.flex(undefined, "space-between", "flex-end")};
-      height: 100%;
       font-size: 12px;
       color: #fff;
       width: 100%;
@@ -46,16 +52,10 @@ const Tile = styled.li`
     .home-boards-tile-title {
       overflow: hidden;
       text-overflow: ellipsis;
-      -webkit-box-orient: vertical;
-      display: -webkit-box;
-      -webkit-line-clamp: 2;
+      ${props => props.theme.mixins.lineClamp(2)};
       font-size: 14px;
       font-weight: 700;
       color: #fff;
-    }
-
-    .spacer {
-      height: 42px;
     }
 
     .home-tile-star {
@@ -121,7 +121,7 @@ const BoardsGroup = ({ heading, icon, boards, category }) => {
         <h5 className="home-boards-group-text">{heading}</h5>
       </div>
 
-      <ul className="home-boards-group-list">
+      <ListWrapper className="d-flex justify-content-flex-start">
         {boards?.map(board => {
           const starred = board?.prefs?.starred === "true"
           return (
@@ -134,7 +134,6 @@ const BoardsGroup = ({ heading, icon, boards, category }) => {
                 <a onClick={ev => handleClick(ev, `/board/${board?.id}`)}>
                   <div className="home-boards-tile-details">
                     <div className="home-boards-tile-title">{board?.title}</div>
-                    <div className="spacer" />
                     <div className="home-boards-tile-detail">
                       <h6>{board?.title}</h6>
                       <div>
@@ -157,7 +156,7 @@ const BoardsGroup = ({ heading, icon, boards, category }) => {
         })}
 
         {category === "workspaces" && <CreateBoard />}
-      </ul>
+      </ListWrapper>
     </div>
   )
 }
