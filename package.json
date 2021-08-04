@@ -5,10 +5,16 @@
   "scripts": {
     "dev": "next",
     "build": "next build",
-    "start": "NODE_ENV=production node build/index.js"
+    "start": "next start",
+    "ts:check": "tsc"
   },
   "dependencies": {
+    "@chakra-ui/react": "^1.6.5",
+    "@emotion/react": "^11",
+    "@emotion/styled": "^11",
     "@popperjs/core": "^2.9.2",
+    "@types/react-bootstrap": "^0.32.26",
+    "@types/styled-components": "^5.1.11",
     "axios": "^0.21.1",
     "bootstrap": "^5.0.2",
     "compression": "^1.7.4",
@@ -16,12 +22,12 @@
     "cross-env": "^7.0.3",
     "date-fns": "^2.11.1",
     "formik": "^2.2.9",
+    "framer-motion": "^4",
     "gray-matter": "^4.0.2",
     "lodash": "^4.17.21",
     "next": "^11.0.1",
     "prop-types": "^15.7.2",
     "react": "^17.0.2",
-    "react-bootstrap": "^1.6.1",
     "react-dom": "^17.0.2",
     "react-icons": "^4.2.0",
     "react-is": "^17.0.2",
@@ -31,6 +37,7 @@
     "yup": "^0.32.9"
   },
   "devDependencies": {
-    "babel-plugin-styled-components": "^1.13.2"
+    "babel-plugin-styled-components": "^1.13.2",
+    "typescript": "^4.3.5"
   }
 }
