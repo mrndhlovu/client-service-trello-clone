@@ -18,7 +18,7 @@ const FormInput = forwardRef<HTMLInputElement, IProps>(
 
     return useMemo(
       () => (
-        <FormControl className="mb-3 form-input">
+        <FormControl className="mb-3 input-container">
           {props?.label && <FormLabel> {props?.label}*</FormLabel>}
           <input ref={ref} {...props} {...field} />
 

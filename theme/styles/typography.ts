@@ -134,6 +134,45 @@ const typography = css`
     }
   }
 
+  .input-container {
+  }
+
+  .input-container {
+    position: relative;
+    margin: 5px 0 15px;
+    cursor: text;
+    max-width: 100%;
+    transition: background-color 0.2s ease-in-out 0s,
+      border-color 0.2s ease-in-out 0s;
+    overflow-wrap: break-word;
+
+    input {
+      background-color: transparent;
+      border-radius: 3px;
+      border-width: 2px;
+      border-style: solid;
+      box-sizing: border-box;
+      color: inherit;
+      cursor: inherit;
+      font-size: 14px;
+      min-width: 0px;
+      outline: none;
+      width: 100%;
+      line-height: 1.42857;
+      height: 39px;
+    }
+
+    .input-feedback {
+      position: absolute;
+      bottom: -10px;
+      left: 0;
+      font-size: 10px;
+      margin-top: 0;
+      font-weight: 700;
+      color: ${props => props.theme.colors.error};
+    }
+  }
+
   ::-moz-selection {
     background: ${props => props.theme.colors.primary};
     color: #ffffff;
@@ -174,9 +213,9 @@ const typography = css`
   select,
   textarea {
     background: transparent;
-    border: 1px solid ${props => props.theme.colors.border};
+    border: 1px solid ${props => props.theme.colors.borderLight};
     font-family: ${props => props.theme.fonts.primary};
-    color: ${props => props.theme.colors.body};
+    color: ${props => props.theme.colors.border};
     ${props => props.theme.mixins.placeholderColor(props.theme.colors.body)};
 
     &:focus,

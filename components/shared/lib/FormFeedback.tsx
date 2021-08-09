@@ -6,7 +6,7 @@ interface IProps {
 
 const FormFeedback = ({ errorMsg }: IProps) => {
   return (
-    <FormHelperText type="invalid" className="field-feedback-text">
+    <FormHelperText type="invalid" className="input-feedback">
       {errorMsg}
     </FormHelperText>
   )

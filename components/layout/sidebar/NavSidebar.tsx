@@ -24,7 +24,7 @@ import {
 import SideBarStyles from "./SideBarStyles"
 
 const NavSidebar = () => {
-  const { lightMode } = useGlobalState()
+  const { darkMode } = useGlobalState()
   const [active, setActive] = useState("boards")
   const [activeKey, setActiveKey] = useState("0")
 
@@ -53,7 +53,7 @@ const NavSidebar = () => {
 
   return (
     <SideBarStyles>
-      <nav className={`sb ${lightMode ? "sb-dark" : ""}`}>
+      <nav className={`sb ${darkMode ? "sb-dark" : ""}`}>
         <div className="sb-primary">
           <ul>
             {HOME_SIDEBAR_PRIMARY.map(option => (
@@ -76,13 +76,12 @@ const NavSidebar = () => {
           </ul>
         </div>
         <div className="sb-secondary">
-          <Accordion defaultActiveKey="0">
+          <Accordion>
             <AccordionItem>
               <AccordionButton
                 onClick={handleClick}
                 className="toggle"
                 variant="link"
-                eventKey="0"
               >
                 <div className="toggle-content d-flex justify-content-between">
                   <div className="d-flex">

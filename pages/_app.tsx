@@ -5,6 +5,7 @@ import {
   GlobalContextProvider,
   ThemeProvider,
 } from "../lib/providers"
+import Layout from "../components/layout"
 
 const AppComponent = ({ Component, pageProps }: AppProps) => {
   return (
@@ -12,7 +13,9 @@ const AppComponent = ({ Component, pageProps }: AppProps) => {
       <AuthContextProvider>
         <GlobalContextProvider>
           <ThemeProvider>
-            <Component {...pageProps} />
+            <Layout>
+              <Component {...pageProps} />
+            </Layout>
           </ThemeProvider>
         </GlobalContextProvider>
       </AuthContextProvider>

@@ -6,11 +6,11 @@ interface IOptions {
   auth: boolean
 }
 export const withAuthServerSideProps = (
-  getServerSideProps: (
+  getServerSideProps?: (
     context: GetServerSidePropsContext,
     currentUser?: { [key: string]: any }
   ) => Promise<any>,
-  options: IOptions
+  options?: IOptions
 ) => {
   return async (context: GetServerSidePropsContext) => {
     const currentUser = await getCurrentUser(context?.req?.headers)

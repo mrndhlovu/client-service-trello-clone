@@ -9,8 +9,10 @@ const endPoints: IEndpoints = {
   currentUser: "/auth/me",
   login: "/auth/login",
   logout: "/auth/logout",
+  payments: "/payments/subscription",
   refreshToken: "/auth/refresh-token",
   signup: "/auth/signup",
+  verify: "/accounts/verify",
 }
 
 export default endPoints

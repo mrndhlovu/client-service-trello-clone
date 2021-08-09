@@ -17,7 +17,7 @@ const LoginPage = () => {
   const formRef = useRef<any>()
   const [formFeedback, setFormFeedback] = useState()
 
-  const handleSubmit = async (ev: MouseEvent) => {
+  const handleSubmit = (ev: MouseEvent) => {
     ev.preventDefault()
 
     const formData = {
@@ -25,18 +25,13 @@ const LoginPage = () => {
       password: formRef.current?.values?.password,
     }
 
-    await login(formData, err => {
-      if (err) {
-        return setFormFeedback(err?.errors)
-      }
-    })
+    login(formData)
   }
 
   return (
     <AuthFormWrapper
       buttonText="Login"
       footerRedirectText="Sign up for an account"
-      formFeedback={formFeedback}
       formId="login-form"
       handleSubmit={handleSubmit}
       heading="Login to your account"

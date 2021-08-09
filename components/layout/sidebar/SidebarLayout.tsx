@@ -55,7 +55,7 @@ const Main = styled.main`
 const SidebarLayout = ({ children }) => {
   return (
     <Main>
-      <Box fluid className="layout-content">
+      <Box className="layout-content">
         <Grid md="12" className="main-content">
           <GridItem className="sidebar">
             <NavSidebar />

@@ -2,7 +2,10 @@ import { useEffect, useState } from "react"
 
 import { isBrowser } from "../../util"
 
-export const useLocalStorage = (key: string, defaultValue: any) => {
+export const useLocalStorage = <T extends string, Y>(
+  key: T,
+  defaultValue: Y
+) => {
   const [storageValue, setStorageValue] = useState(() => {
     if (!isBrowser) return defaultValue
 

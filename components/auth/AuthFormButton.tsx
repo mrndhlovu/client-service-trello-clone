@@ -26,7 +26,7 @@ const AuthFormButton = ({
     className={`auth-form-button ${className || ""}`}
     form={formId}
     onClick={onClick}
-    variant={variant}
+    colorScheme={variant}
     isLoading={loading}
     disabled={disabled}
   >

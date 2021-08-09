@@ -1,7 +1,7 @@
 import { css } from "styled-components"
 
-const lightStyles = css`
-  .light {
+const darkStyles = css`
+  .dark-mode {
     *::-webkit-scrollbar-track {
       background-color: #383838;
     }
@@ -14,9 +14,8 @@ const lightStyles = css`
       background-color: #6b6b6b;
     }
 
-    & {
-      color: ${props => props.theme.colors.body};
-      background: ${props => props.theme.colors.lightBgBody};
+    .layout {
+      background-color: ${props => props.theme.colors.bgDark};
     }
 
     ${props => props.theme.mixins.placeholderColor(props.theme.colors.body)};
@@ -26,28 +25,37 @@ const lightStyles = css`
     h3,
     h4,
     h5,
-    h6 {
-      color: ${props => props.theme.colors.lightHeading};
+    h6,
+    button,
+    input,
+    select,
+    textarea,
+    span {
+      color: ${props => props.theme.colors.bgLight}!important;
+    }
+
+    a {
+      color: ${props => props.theme.colors.twitter}!important;
     }
 
     ::-moz-selection {
       background: ${props => props.theme.colors.primary};
-      color: #ffffff;
+      color: ${props => props.theme.colors.bgLight};
     }
 
     ::-ms-selection {
       background: ${props => props.theme.colors.primary};
-      color: #ffffff;
+      color: ${props => props.theme.colors.bgLight};
     }
 
     ::-o-selection {
       background: ${props => props.theme.colors.primary};
-      color: #ffffff;
+      color: ${props => props.theme.colors.bgLight};
     }
 
     ::selection {
       background: ${props => props.theme.colors.primary};
-      color: #ffffff;
+      color: ${props => props.theme.colors.bgLight};
     }
 
     input,
@@ -55,19 +63,19 @@ const lightStyles = css`
     select,
     textarea {
       border-color: ${props => props.theme.colors.lightBorder};
-      color: ${props => props.theme.colors.body};
-      ${props =>
-        props.theme.mixins.placeholderColor(props.theme.colors.lightBody)};
 
-      &:focus,
+      ${props =>
+        props.theme.mixins.placeholderColor(props.theme.colors.borderLight)};
+
+      /* &:focus,
       &:active {
         border-color: ${props => props.theme.colors.primary};
-      }
+      } */
     }
 
     blockquote {
       border-color: ${props => props.theme.colors.primary};
-      background: darken(${props => props.theme.colors.lightBody}, 5);
+      background: darken(${props => props.theme.colors.border}, 5);
 
       footer {
         a {
@@ -101,36 +109,33 @@ const lightStyles = css`
       }
     }
 
-    .color-theme {
-      color: ${props => props.theme.colors.primary};
-    }
-
-    .light-mode {
+    .mode-switch {
       .icon {
+        display: inline-block;
+        vertical-align: middle;
+        line-height: 1;
+        margin-right: 5px;
         svg {
-          fill: ${props => props.theme.colors.lightBody};
+          fill: ${props => props.theme.colors.amazon};
 
           & > * {
-            fill: ${props => props.theme.colors.lightBody};
+            fill: ${props => props.theme.colors.amazon};
           }
         }
       }
 
-      .light-mode-switch {
-        background: ${props => props.theme.colors.lightBody};
+      .mode-switch-button {
+        background: ${props => props.theme.colors.border};
+      }
+    }
 
-        &::after {
-          background: #ffffff;
-        }
-
-        &.active {
-          &::after {
-            background: ${props => props.theme.colors.primary};
-          }
-        }
+    .auth-form-wrapper {
+      section {
+        background-color: ${props => props.theme.colors.bgDark};
+        box-shadow: ${props => props.theme.colors.lightBoxShadowBorder};
       }
     }
   }
 `
 
-export default lightStyles
+export default darkStyles

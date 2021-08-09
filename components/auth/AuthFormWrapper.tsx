@@ -1,25 +1,19 @@
 import { isEmpty } from "lodash"
-import {
-  forwardRef,
-  ReactChild,
-  ReactElement,
-  RefObject,
-  useEffect,
-} from "react"
+import { forwardRef, ReactChild, ReactElement, useEffect } from "react"
 import router from "next/router"
 import styled from "styled-components"
 
+import { ROUTES } from "../../util/constants"
 import { UIForm } from "../shared"
 import { useAuth } from "../../lib/hooks/context"
+import AuthFormButton from "./AuthFormButton"
 import AuthOptionLink from "./AuthOptionLink"
 import FormFeedback from "./FormFeedback"
-import AuthFormButton from "./AuthFormButton"
 
 interface IProps {
   buttonText: string
   children: ReactChild
   footerRedirectText: string
-  formFeedback: any
   handleSubmit: (data: any) => void
   heading: string
   initialState: { [key: string]: any }
@@ -34,50 +28,41 @@ const Container = styled.div`
   justify-content: left;
   height: 100vh;
   width: 100vw;
-  background-color: #fff;
 
   section {
     ${props => props.theme.styles.absoluteCenter};
     margin: 0px auto 24px;
     width: 400px;
     padding: 32px 40px;
-    background: rgb(255, 255, 255);
+    background-color: ${props => props.theme.colors.bgLight};
     border-radius: 3px;
-    box-shadow: rgb(0 0 0 / 10%) 0px 0px 10px;
-    box-sizing: border-box;
-    color: rgb(94, 108, 132);
+    box-shadow: ${props => props.theme.colors.darkBoxShadowBorder};
+    color: ${props => props.theme.colors.border};
+    display: flex;
+    flex-direction: column;
   }
 
   h5 {
-    color: ${props => props.theme.colors.bgDark};
+    color: ${props => props.theme.colors.border};
+  }
+
+  li {
+    list-style: none;
   }
 
   .auth-form-link-option {
-    color: rgb(107, 119, 140);
+    color: ${props => props.theme.colors.border};
     padding-top: 16px;
     margin-top: 32px;
-    border-top: 1px solid rgb(213, 216, 222);
+    border-top: 1px solid ${props => props.theme.colors.border};
     font-size: 14px;
     text-align: center;
     line-height: 20px;
   }
 
-  .field-feedback-text {
-    font-size: 0.7rem;
-    font-weight: 600;
-  }
-
-  .form-input {
-    position: relative;
-  }
-
   .auth-form-button {
     position: relative;
-
-    &-spinner {
-      color: white;
-      margin-top: 3px;
-    }
+    width: 100%;
   }
 
   .auth-form-header {
@@ -87,62 +72,67 @@ const Container = styled.div`
     flex-direction: column;
     text-align: center;
     margin-bottom: 16px;
-    color: rgb(94, 108, 132);
+    color: ${props => props.theme.colors.border};
     font-size: 16px;
   }
 `
 
-const AuthFormWrapper = (
-  {
-    buttonText,
-    children,
-    footerRedirectText,
-    formFeedback,
-    handleSubmit,
-    heading,
-    initialState,
-    redirect,
-    validationSchema,
-    formId,
-  }: IProps,
-  ref
-): ReactElement => {
-  const { isAuthenticated, loading } = useAuth()
-  const hasFormFeedback = !isEmpty(formFeedback)
+const AuthFormWrapper = forwardRef<HTMLInputElement, IProps>(
+  (
+    {
+      buttonText,
+      children,
+      footerRedirectText,
+      handleSubmit,
+      heading,
+      initialState,
+      redirect,
+      validationSchema,
+      formId,
+    },
+    ref
+  ): ReactElement => {
+    const { isAuthenticated, authError, loading } = useAuth()
 
-  useEffect(() => {
-    // if (isAuthenticated) return router.push(ROUTES.home)
-  }, [])
+    const hasFormFeedback = !isEmpty(authError?.errors)
 
-  return (
-    <Container>
-      <section>
-        <div className="auth-form-header">
-          <h5>{heading}</h5>
-        </div>
-        <UIForm
-          id={formId}
-          ref={ref}
-          initialState={initialState}
-          validationSchema={validationSchema}
-        >
-          {children}
+    useEffect(() => {
+      if (isAuthenticated) {
+        router.push(ROUTES.home)
+      }
+    }, [isAuthenticated])
 
-          <div className="d-grid gap-2">
-            <AuthFormButton
-              formId={formId}
-              onClick={handleSubmit}
-              buttonText={buttonText}
-              disabled={loading}
-              loading={loading}
-            />
+    return (
+      <Container className="auth-form-wrapper">
+        <section>
+          <div className="auth-form-header">
+            <h5>{heading}</h5>
           </div>
-        </UIForm>
-        <AuthOptionLink linkText={footerRedirectText} href={redirect} />
-        {hasFormFeedback && <FormFeedback feedback={formFeedback} />}
-      </section>
-    </Container>
-  )
-}
+          <UIForm
+            id={formId}
+            ref={ref}
+            initialState={initialState}
+            validationSchema={validationSchema}
+          >
+            {children}
 
-export default forwardRef<HTMLInputElement, IProps>(AuthFormWrapper)
+            <div className="d-grid gap-2">
+              <AuthFormButton
+                formId={formId}
+                onClick={handleSubmit}
+                buttonText={buttonText}
+                disabled={loading}
+                loading={loading}
+                variant="twitter"
+              />
+            </div>
+          </UIForm>
+          <AuthOptionLink linkText={footerRedirectText} href={redirect} />
+          {hasFormFeedback && <FormFeedback feedback={authError.errors} />}
+        </section>
+      </Container>
+    )
+  }
+)
+
+export default AuthFormWrapper

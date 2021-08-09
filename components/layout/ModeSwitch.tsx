@@ -15,24 +15,20 @@ const Container = styled.div`
   right: 10px;
 
   .icon {
-    display: inline-block;
-    vertical-align: middle;
-    line-height: 1;
-    margin-right: 5px;
     svg {
-      fill: ${props => props.theme.colors.amazon};
+      fill: ${props => props.theme.colors.border};
 
       & > * {
-        fill: ${props => props.theme.colors.amazon};
+        fill: ${props => props.theme.colors.border};
       }
     }
   }
 
-  .light-mode-switch {
+  .mode-switch-button {
     display: inline-block;
     height: 20px;
     width: 40px;
-    background: #fff;
+    background: ${props => props.theme.colors.border};
     border-radius: 100px;
     position: relative;
     vertical-align: middle;
@@ -46,29 +42,29 @@ const Container = styled.div`
       height: 16px;
       width: 16px;
       border-radius: 100px;
-      background: ${props => props.theme.colors.amazon};
+      background: ${props => props.theme.colors.primary};
       transition: ${props => props.theme.variables.transition};
     }
 
-    &.active {
+    &.dark {
       &::after {
+        background: ${props => props.theme.colors.amazon};
         left: 22px;
-        background: ${props => props.theme.colors.primary};
       }
     }
   }
 `
 
 const ModeSwitch = () => {
-  const { lightMode, handleModeChange } = useGlobalState()
+  const { darkMode, handleModeChange } = useGlobalState()
 
   return (
-    <Container className="light-mode">
-      <span className={`icon icon-${lightMode ? "light" : "dark"}`}>
-        <span>{lightMode ? <BsMoon /> : <BsSun />}</span>
+    <Container className="mode-switch">
+      <span className={`icon icon-${darkMode ? "light" : "dark"}`}>
+        <span>{darkMode ? <BsSun /> : <BsMoon />}</span>
       </span>
       <button
-        className={lightMode ? "light-mode-switch active" : "light-mode-switch"}
+        className={darkMode ? "mode-switch-button dark" : "mode-switch-button"}
         onClick={handleModeChange}
       />
     </Container>

@@ -1,20 +1,24 @@
+import { useEffect, useState } from "react"
+import { useRouter } from "next/router"
 import { MenuItem } from "@chakra-ui/react"
 import { FaRegUser } from "react-icons/fa"
 
 import { UIDropdown } from "../../shared"
 import { useAuth } from "../../../lib/hooks/context"
-import { useEffect, useState } from "react"
+import { ROUTES } from "../../../util/constants"
 
 const HeaderAuthDropdown = () => {
   const { user, logout } = useAuth()
+  const router = useRouter()
   const [userInitial, setUserInitials] = useState("")
 
-  const handleLogout = () => {
-    logout()
-  }
-
   const HEADER_AUTH_MENU_OPTIONS = [
-    { handleClick: handleLogout, key: "logout", title: "Log out" },
+    {
+      handleClick: () => router.push(`/${ROUTES.billing}`),
+      key: "billing",
+      title: "Billing",
+    },
+    { handleClick: logout, key: "logout", title: "Log out" },
   ]
 
   useEffect(() => {

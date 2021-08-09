@@ -1,5 +1,5 @@
 import SignupPage from "../../components/auth/SignupPage"
 
-const signup = () => <SignupPage />
+const index = () => <SignupPage />
 
-export default signup
+export default index

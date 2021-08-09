@@ -1,7 +1,7 @@
 import { IUIRequestError } from "../../lib/providers/GlobalContextProvider"
 
 interface IProps {
-  feedback: IUIRequestError[]
+  feedback: IUIRequestError["errors"]
 }
 
 const FormFeedback = ({ feedback }: IProps) => {

@@ -3,7 +3,7 @@ import Link from "next/link"
 import { AiOutlineHome } from "react-icons/ai"
 
 import { ROUTES } from "../../util/constants"
-import { useBoard, useGlobalState } from "../../lib/hooks/context"
+import { useBoard } from "../../lib/hooks/context"
 import HeaderAppListDropdown from "./leftsection/HeaderAppListDropdown"
 import HeaderAuthDropdown from "./rightsection/HeaderAuthDropdown"
 import HeaderBoardsDropdown from "./leftsection/HeaderBoardsDropdown"

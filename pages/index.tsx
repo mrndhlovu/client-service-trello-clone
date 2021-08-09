@@ -3,7 +3,6 @@ import { withAuthComponent, withAuthServerSideProps } from "../lib/hocs"
 
 import { BoardContextProvider, IBoard } from "../lib/providers"
 import HomePage from "../components/home/HomePage"
-import Layout from "../components/layout"
 
 interface IProps {
   data?: IBoard[]
@@ -11,11 +10,9 @@ interface IProps {
 
 const LandingPage = ({ data }: IProps) => {
   return (
-    <Layout>
-      <BoardContextProvider boardList={data}>
-        <HomePage />
-      </BoardContextProvider>
-    </Layout>
+    <BoardContextProvider boardList={data}>
+      <HomePage />
+    </BoardContextProvider>
   )
 }
 

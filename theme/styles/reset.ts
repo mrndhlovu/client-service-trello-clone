@@ -32,6 +32,18 @@ const reset = css`
     vertical-align: middle;
   }
 
+  .layout {
+    height: 100vh;
+    width: 100vw;
+    background-color: ${props => props.theme.colors.bgLight};
+
+    &-children {
+      padding-top: 37px;
+      height: 100%;
+      width: 100%;
+    }
+  }
+
   fieldset {
     border: 0;
     margin: 0;

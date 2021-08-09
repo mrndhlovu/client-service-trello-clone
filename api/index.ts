@@ -1,4 +1,5 @@
 import axios from "axios"
+import { ICardDetails } from "../lib/hooks/context"
 
 import { isBrowser } from "../util"
 
@@ -82,4 +83,16 @@ export const getBoardById = async (
 
 export const updateBoard = async (data: IUpdateBoardData, boardId: string) => {
   return await axiosInstance.patch(`${endpoints.boards}/${boardId}`, data)
+}
+
+export const createCustomerSubscription = async (data: ICardDetails) => {
+  return await axiosInstance.post(endpoints.payments, data)
+}
+
+export const verifyAccount = async (ssrHeaders: ISsrHeaders, token: string) => {
+  if (ssrHeaders) {
+    axiosInstance.defaults["headers"] = ssrHeaders
+  }
+
+  return await axiosInstance.get(`${endpoints.verify}/${token}`)
 }

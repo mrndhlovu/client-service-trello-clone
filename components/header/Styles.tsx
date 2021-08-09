@@ -15,6 +15,16 @@ export default styled.header<IHeaderStyles>`
   right: 0;
   padding: 0px 4px;
 
+  .dropdown {
+    border: none;
+    padding: 0;
+    margin: 0;
+    background-color: transparent !important;
+    color: transparent !important;
+    border-color: transparent !important;
+    box-shadow: none !important;
+  }
+
   .header {
     width: 100%;
     height: 100%;

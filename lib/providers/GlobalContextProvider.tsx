@@ -4,7 +4,6 @@ import { uniqueId } from "lodash"
 import { GlobalContext } from "../hooks/context"
 import { getAlertString } from "../../util"
 import { useLocalStorage } from "../hooks"
-import { IBoard } from "./BoardContextProvider"
 
 export interface IUIRequestError {
   errors: [
@@ -38,14 +37,20 @@ export const notificationsInitialState: NotificationProps = {
   placement: "top-left",
 }
 
+export interface IThemeMode {
+  darkMode: boolean
+}
+
 const GlobalContextProvider = ({ children }) => {
-  const [theme, setTheme] = useLocalStorage("theme", { darkMode: false })
+  const [theme, setTheme] = useLocalStorage<string, IThemeMode>("theme", {
+    darkMode: false,
+  })
   const [notifications, setNotifications] = useState<NotificationProps>(
     notificationsInitialState
   )
 
   const handleModeChange = () => {
-    return setTheme(prev => {
+    return setTheme((prev: IThemeMode) => {
       return { ...prev, darkMode: !prev?.darkMode }
     })
   }
@@ -97,7 +102,7 @@ const GlobalContextProvider = ({ children }) => {
       value={{
         dismissNotification,
         handleModeChange,
-        lightMode: !theme?.darkMode,
+        darkMode: theme?.darkMode,
         notifications,
         notify,
       }}
