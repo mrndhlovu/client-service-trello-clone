@@ -1,9 +1,11 @@
-import { GetServerSidePropsContext } from "next"
+import { GetServerSidePropsContext, Redirect } from "next"
 import { getCurrentUser } from "../../api"
 import { ROUTES } from "../../util/constants"
 
 interface IOptions {
   auth: boolean
+  redirect?: Redirect
+  replacePath?: string
 }
 export const withAuthServerSideProps = (
   getServerSideProps?: (
@@ -20,7 +22,7 @@ export const withAuthServerSideProps = (
     if (!currentUser && options?.auth) {
       return {
         redirect: {
-          destination: ROUTES.login,
+          destination: `/${ROUTES.login}`,
           permanent: false,
         },
       }
@@ -28,6 +30,10 @@ export const withAuthServerSideProps = (
 
     if (getServerSideProps && getServerSideProps instanceof Function) {
       const data = await getServerSideProps(context, currentUser)
+
+      if (options.redirect && !data) {
+        return { redirect: options.redirect }
+      }
 
       return { props: { currentUser, data } }
     }

@@ -61,7 +61,7 @@ const typography = css`
   h5,
   h6 {
     font-family: ${props => props.theme.fonts.primary};
-    color: ${props => props.theme.colors.heading};
+    color: ${props => props.theme.colors.border};
   }
 
   h1 {
@@ -135,9 +135,6 @@ const typography = css`
   }
 
   .input-container {
-  }
-
-  .input-container {
     position: relative;
     margin: 5px 0 15px;
     cursor: text;
@@ -164,7 +161,7 @@ const typography = css`
 
     .input-feedback {
       position: absolute;
-      bottom: -10px;
+      bottom: -12px;
       left: 0;
       font-size: 10px;
       margin-top: 0;
@@ -236,7 +233,7 @@ const typography = css`
   input,
   select,
   button {
-    padding: 0 15px;
+    padding: 0 5px;
 
     @media ${props => props.theme.device.mobileLg} {
       height: 44px;

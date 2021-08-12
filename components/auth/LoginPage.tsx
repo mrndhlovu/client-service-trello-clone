@@ -15,7 +15,6 @@ const LoginPage = () => {
   const { login } = useAuth()
 
   const formRef = useRef<any>()
-  const [formFeedback, setFormFeedback] = useState()
 
   const handleSubmit = (ev: MouseEvent) => {
     ev.preventDefault()

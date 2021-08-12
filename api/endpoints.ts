@@ -13,6 +13,7 @@ const endPoints: IEndpoints = {
   refreshToken: "/auth/refresh-token",
   signup: "/auth/signup",
   verify: "/accounts/verify",
+  verifyLogin: "/auth/mfa/validate",
 }
 
 export default endPoints

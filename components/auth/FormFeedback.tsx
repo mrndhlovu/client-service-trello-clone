@@ -6,7 +6,7 @@ interface IProps {
 
 const FormFeedback = ({ feedback }: IProps) => {
   return (
-    <div className="auth-form-link-option">
+    <div className="auth-form-feedback">
       <ul>
         {feedback?.map((error, index) => {
           return <li key={index}>{error?.message}</li>

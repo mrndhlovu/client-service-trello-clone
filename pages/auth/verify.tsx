@@ -2,10 +2,16 @@ import { GetServerSidePropsContext } from "next"
 
 import { verifyAccount } from "../../api"
 import { withAuthServerSideProps } from "../../lib/hocs"
-import AccountVerificationPage from "../../components/auth/AccountVerificationPage"
+import AccountVerification from "../../components/auth/AccountVerification"
 
-const index = ({ data }) => {
-  return <AccountVerificationPage isVerified={data?.isVerified} />
+interface IProps {
+  data: {
+    isVerified?: boolean
+  }
+}
+
+const index = ({ data }: IProps) => {
+  return <AccountVerification isVerified={data?.isVerified} />
 }
 
 export const getServerSideProps = withAuthServerSideProps(
@@ -14,10 +20,10 @@ export const getServerSideProps = withAuthServerSideProps(
 
     return await verifyAccount(context?.req?.headers, token)
       .then(res => JSON.parse(JSON.stringify(res?.data)))
-      .catch(err => JSON.parse(JSON.stringify(err)))
+      .catch(() => null)
   },
   {
-    auth: true,
+    auth: false,
   }
 )
 

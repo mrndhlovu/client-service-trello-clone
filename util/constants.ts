@@ -8,15 +8,13 @@ interface IWorkspaceLink {
   link: string
 }
 
-export const STRIPE_PUBLISHABLE_KEY =
-  "pk_test_51JLsJjCuWRJTIKQP3KXte7Um6Fv3iq0Z3f7fBy7DS3Cc9Ob9nmwauXrJzXu8WrM0MpLfBiDSSK7Zmol9a7QEriNa00IKhvxygM"
-
 export const ROUTES: IRoutes = {
   home: "/",
   board: "board",
   signup: "auth/signup",
   login: "auth/login",
   billing: "profile/billing",
+  mfa: "auth/mfa",
 }
 
 export const APP_NAME = "Trello Clone"

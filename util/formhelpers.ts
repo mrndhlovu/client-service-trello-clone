@@ -5,7 +5,7 @@ const phoneRegExp =
 
 export const PASSWORD_VALIDATION = yup
   .string()
-  .required("Required field")
+  .required("Password required")
   .min(6)
 
 export const NUMBER_VALIDATION = yup.number().min(1)
@@ -15,15 +15,18 @@ export const BOOLEAN_VALIDATION = yup.bool()
 export const EMAIL_VALIDATION = yup
   .string()
   .email("Invalid email")
-  .required("Required field")
+  .required("Email required")
 
 const PHONE_VALIDATION = yup
   .string()
   .matches(phoneRegExp, "Phone number is not valid")
   .min(7)
 
-const USERNAME_VALIDATION = yup.string().min(4).required("Required field")
-// const TEXT_VALIDATION_NOT_REQUIRED = yup.string().min(2)
+const USERNAME_VALIDATION = yup.string().min(4).required("Username required")
+const IDENTIFIER_VALIDATION = yup
+  .string()
+  .required("Email or username with more than 4 characters required.")
+  .min(2)
 
 export const CUSTOM_DONATION_VALIDATION = yup.number().min(5)
 
@@ -61,8 +64,11 @@ export const FORM_VALIDATION = {
     password: PASSWORD_VALIDATION,
   }),
   LOGIN: yup.object({
-    identifier: EMAIL_VALIDATION | USERNAME_VALIDATION,
+    identifier: IDENTIFIER_VALIDATION,
     password: PASSWORD_VALIDATION,
+  }),
+  VERIFY_LOGIN: yup.object({
+    token: yup.string().max(6).required("Validation pin is required"),
   }),
 }
 

@@ -1,9 +1,16 @@
 import router from "next/router"
-import { ReactChildren, useCallback, useState } from "react"
+import { useCallback, useState, useRef } from "react"
 
 import { AuthContext } from "../hooks/context"
 import { ROUTES } from "../../util/constants"
-import { signupUser, loginUser, logoutUser, refreshAuthToken } from "../../api"
+import {
+  signupUser,
+  verifyUserLogin,
+  loginUser,
+  logoutUser,
+  refreshAuthToken,
+  ILoginCredentials,
+} from "../../api"
 import { IUIRequestError } from "./GlobalContextProvider"
 
 export interface IUser {
@@ -14,6 +21,8 @@ const AuthContextProvider = ({ children }) => {
   const [isAuthenticated, setIsAuthenticated] = useState(false)
   const [loading, setLoading] = useState(false)
   const [user, setUser] = useState<IUser>()
+  const pendingLoginDataRef = useRef<ILoginCredentials>({} as ILoginCredentials)
+
   const [authError, setAuthError] = useState<IUIRequestError | undefined>()
 
   const rehydrateUser = useCallback((newUser?: IUser) => {
@@ -48,9 +57,34 @@ const AuthContextProvider = ({ children }) => {
 
       await loginUser(formData)
         .then(res => {
+          setLoading(false)
+          if (res.data.multiFactorAuth) {
+            pendingLoginDataRef.current = formData
+            return router.push(`/${ROUTES.mfa}`)
+          }
+
           router.push(ROUTES.home)
           rehydrateUser(res?.data)
+        })
+        .catch(error => {
+          setAuthError(error?.response?.data)
           setLoading(false)
+        })
+    },
+    [rehydrateUser]
+  )
+
+  const verifyLogin = useCallback(
+    async formData => {
+      setLoading(true)
+      const body = { ...formData, ...pendingLoginDataRef.current }
+
+      await verifyUserLogin(body)
+        .then(res => {
+          setLoading(false)
+
+          router.push(ROUTES.home)
+          rehydrateUser(res?.data)
         })
         .catch(error => {
           setAuthError(error?.response?.data)
@@ -75,10 +109,6 @@ const AuthContextProvider = ({ children }) => {
         setLoading(false)
       })
       .catch(error => {
-        console.log(
-          "🚀 ~ file: AuthContextProvider.tsx ~ line 80 ~ logout ~ error",
-          error.response?.data
-        )
         setAuthError(error?.response?.data)
         rehydrateUser()
         setLoading(false)
@@ -96,6 +126,7 @@ const AuthContextProvider = ({ children }) => {
         signup,
         loading,
         refreshToken,
+        verifyLogin,
         authError,
       }}
     >

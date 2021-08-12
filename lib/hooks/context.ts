@@ -37,6 +37,7 @@ interface IDefaultAuthContext {
   signup: (formData: ISignupCredentials) => IUIRequestError | IUser
   refreshToken: () => {} | void | null
   authError: undefined | IUIRequestError
+  verifyLogin: (formData: { token: string }) => IUIRequestError | IUser
 }
 
 export interface ICardDetails {

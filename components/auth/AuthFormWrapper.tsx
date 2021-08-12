@@ -46,17 +46,31 @@ const Container = styled.div`
     color: ${props => props.theme.colors.border};
   }
 
-  li {
-    list-style: none;
-  }
-
   .auth-form-link-option {
-    color: ${props => props.theme.colors.border};
+    color: ${props => props.theme.colors.twitter};
     padding-top: 16px;
-    margin-top: 32px;
+    margin-top: 15px;
     border-top: 1px solid ${props => props.theme.colors.border};
     font-size: 14px;
     text-align: center;
+    line-height: 20px;
+
+    li {
+      list-style: none;
+    }
+  }
+
+  .auth-form-button-wrapper {
+    margin-top: 36px;
+  }
+
+  .auth-form-feedback {
+    color: ${props => props.theme.colors.error};
+    padding-top: 16px;
+    margin-top: 16px;
+    border-top: 1px solid ${props => props.theme.colors.border};
+    font-size: 14px;
+    text-align: left;
     line-height: 20px;
   }
 
@@ -116,7 +130,7 @@ const AuthFormWrapper = forwardRef<HTMLInputElement, IProps>(
           >
             {children}
 
-            <div className="d-grid gap-2">
+            <div className="auth-form-button-wrapper">
               <AuthFormButton
                 formId={formId}
                 onClick={handleSubmit}

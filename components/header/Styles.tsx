@@ -40,7 +40,9 @@ export default styled.header<IHeaderStyles>`
 
     &-logo-content {
       width: 100%;
-      justify-content: baseline;
+      .logo {
+        ${props => props.theme.mixins.flex()};
+      }
     }
 
     &-logo-text {
@@ -104,7 +106,6 @@ export default styled.header<IHeaderStyles>`
         border: none;
         box-shadow: none;
         box-sizing: border-box;
-        color: rgba(255, 255, 255, 0.5);
         float: left;
         font-size: 14px;
         height: 32px;

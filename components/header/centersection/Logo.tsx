@@ -9,7 +9,7 @@ const Logo = () => {
     <div className="header-logo-content">
       <Link href={ROUTES.home}>
         <a className="header-logo-text">
-          <div className="d-flex">
+          <div className="logo">
             <div>
               <ImTrello />
             </div>

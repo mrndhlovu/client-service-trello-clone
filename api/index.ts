@@ -5,12 +5,9 @@ import { isBrowser } from "../util"
 
 import endpoints from "./endpoints"
 
-const CLUSTER_SERVICE_NAME =
-  "http://ingress-nginx-controller.ingress-nginx.svc.cluster.local"
-
 const axiosInstance = axios.create({
-  baseURL: isBrowser ? "/api" : `${CLUSTER_SERVICE_NAME}/api`,
-  headers: isBrowser ? {} : { Host: "tusks.dev" },
+  baseURL: isBrowser ? "/api" : `${process.env.NEXT_PUBLIC_NGINX_BASE_URL}/api`,
+  headers: isBrowser ? {} : { Host: process.env.NEXT_PUBLIC_HOST },
 })
 
 export interface ISignupCredentials {
@@ -22,6 +19,10 @@ export interface ISignupCredentials {
 export interface ILoginCredentials {
   identifier: string
   password: string
+}
+
+export interface ILoginCredentialsWithToken extends ILoginCredentials {
+  token: string
 }
 
 export interface INewBoardData {
@@ -52,6 +53,10 @@ export const getCurrentUser = async (ssrHeaders: ISsrHeaders) => {
 
 export const refreshAuthToken = async () => {
   return await axiosInstance.get(endpoints.refreshToken)
+}
+
+export const verifyUserLogin = async (data: ILoginCredentialsWithToken) => {
+  return await axiosInstance.post(endpoints.verifyLogin, data)
 }
 
 export const createNewBoard = async (data: INewBoardData) => {
