@@ -9,11 +9,17 @@ const endPoints: IEndpoints = {
   currentUser: "/auth/me",
   login: "/auth/login",
   logout: "/auth/logout",
+  deleteUser: "/auth/delete",
   payments: "/payments/subscription",
   refreshToken: "/auth/refresh-token",
   signup: "/auth/signup",
   verify: "/accounts/verify",
-  verifyLogin: "/auth/mfa/validate",
+  updateUser: "/auth/update",
+  verifyMfaCode: "/auth/mfa/validate",
+  enableMfa: "/auth/mfa/enable",
+  connectMfa: "/auth/mfa/connect",
+  verifyCredentials: "/auth/login-verify",
+  getQrCodeImage: "/auth/mfa/qr-code",
 }
 
 export default endPoints

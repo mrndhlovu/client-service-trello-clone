@@ -18,6 +18,11 @@ const HeaderAuthDropdown = () => {
       key: "billing",
       title: "Billing",
     },
+    {
+      handleClick: () => router.push(`/${ROUTES.settings}`),
+      key: "settings",
+      title: "Settings",
+    },
     { handleClick: logout, key: "logout", title: "Log out" },
   ]
 

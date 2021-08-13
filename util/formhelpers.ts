@@ -6,7 +6,7 @@ const phoneRegExp =
 export const PASSWORD_VALIDATION = yup
   .string()
   .required("Password required")
-  .min(6)
+  .min(8)
 
 export const NUMBER_VALIDATION = yup.number().min(1)
 
@@ -68,7 +68,7 @@ export const FORM_VALIDATION = {
     password: PASSWORD_VALIDATION,
   }),
   VERIFY_LOGIN: yup.object({
-    token: yup.string().max(6).required("Validation pin is required"),
+    code: yup.string().max(6).required("Validation pin is required"),
   }),
 }
 
@@ -79,4 +79,9 @@ export const CONFIRM_PASSWORD_VALIDATION = yup.object({
 
 export const CHANGE_PASSWORD_VALIDATION = yup.object({
   password: PASSWORD_VALIDATION,
+})
+
+export const TWO_STEP_AUTH_OPTION = yup.object({
+  email: BOOLEAN_VALIDATION,
+  sms: BOOLEAN_VALIDATION,
 })

@@ -7,7 +7,7 @@ import { useAuth } from "../../lib/hooks/context"
 import AuthFormWrapper from "./AuthFormWrapper"
 
 const validationInitialState = {
-  token: "",
+  code: "",
 }
 
 const VerificationPage = () => {
@@ -38,7 +38,7 @@ const VerificationPage = () => {
         <UIFormInput
           required
           placeholder="Enter the six digit pin sent to your email here."
-          name="token"
+          name="code"
         />
       </div>
     </AuthFormWrapper>

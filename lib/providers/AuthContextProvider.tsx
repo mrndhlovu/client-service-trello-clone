@@ -1,15 +1,16 @@
 import router from "next/router"
-import { useCallback, useState, useRef } from "react"
+import { useCallback, useState } from "react"
 
 import { AuthContext } from "../hooks/context"
 import { ROUTES } from "../../util/constants"
 import {
   signupUser,
-  verifyUserLogin,
+  verifyMfaCode,
   loginUser,
   logoutUser,
   refreshAuthToken,
-  ILoginCredentials,
+  verifyUserCredentials,
+  IPasswordConfirmation,
 } from "../../api"
 import { IUIRequestError } from "./GlobalContextProvider"
 
@@ -21,7 +22,6 @@ const AuthContextProvider = ({ children }) => {
   const [isAuthenticated, setIsAuthenticated] = useState(false)
   const [loading, setLoading] = useState(false)
   const [user, setUser] = useState<IUser>()
-  const pendingLoginDataRef = useRef<ILoginCredentials>({} as ILoginCredentials)
 
   const [authError, setAuthError] = useState<IUIRequestError | undefined>()
 
@@ -51,6 +51,16 @@ const AuthContextProvider = ({ children }) => {
     [rehydrateUser]
   )
 
+  const verifyUserPassword = async (formData: IPasswordConfirmation) => {
+    const body = {
+      ...formData,
+      identifier: user.email,
+    }
+    return (await verifyUserCredentials(body)
+      .then(res => res.status)
+      .catch(() => null)) as number | null
+  }
+
   const login = useCallback(
     async formData => {
       setLoading(true)
@@ -59,7 +69,6 @@ const AuthContextProvider = ({ children }) => {
         .then(res => {
           setLoading(false)
           if (res.data.multiFactorAuth) {
-            pendingLoginDataRef.current = formData
             return router.push(`/${ROUTES.mfa}`)
           }
 
@@ -77,9 +86,8 @@ const AuthContextProvider = ({ children }) => {
   const verifyLogin = useCallback(
     async formData => {
       setLoading(true)
-      const body = { ...formData, ...pendingLoginDataRef.current }
 
-      await verifyUserLogin(body)
+      await verifyMfaCode(formData)
         .then(res => {
           setLoading(false)
 
@@ -128,6 +136,7 @@ const AuthContextProvider = ({ children }) => {
         refreshToken,
         verifyLogin,
         authError,
+        verifyUserPassword,
       }}
     >
       {children}

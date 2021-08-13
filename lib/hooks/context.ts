@@ -1,5 +1,9 @@
 import { createContext, useContext } from "react"
-import { ILoginCredentials, ISignupCredentials } from "../../api"
+import {
+  ILoginCredentials,
+  IPasswordConfirmation,
+  ISignupCredentials,
+} from "../../api"
 import { IBoard, IUIRequestError, IUser, NotificationProps } from "../providers"
 
 interface IDefaultGlobalState {
@@ -38,6 +42,7 @@ interface IDefaultAuthContext {
   refreshToken: () => {} | void | null
   authError: undefined | IUIRequestError
   verifyLogin: (formData: { token: string }) => IUIRequestError | IUser
+  verifyUserPassword: (data: IPasswordConfirmation) => Promise<number | null>
 }
 
 export interface ICardDetails {
@@ -51,6 +56,10 @@ export interface ICardDetails {
   plan?: string
 }
 
+export interface IProfileContext {
+  activeIndex: number
+  handleIndexChange: (index: number) => void
+}
 interface IStripeContext {
   createSubscription: (cardData: ICardDetails) => any
 }
@@ -65,6 +74,7 @@ export const StripeContext = createContext<IStripeContext>({} as IStripeContext)
 export const AuthContext = createContext<IDefaultAuthContext>(
   {} as IDefaultAuthContext
 )
+export const ProfileContext = createContext({} as IProfileContext)
 
 export const BoardContext = createContext<IDefaultBoardContext>(
   {} as IDefaultBoardContext
@@ -75,3 +85,4 @@ export const useHomeContext = () => useContext(HomeContext)
 export const useAuth = () => useContext(AuthContext)
 export const useBoard = () => useContext(BoardContext)
 export const useStripeContext = () => useContext(StripeContext)
+export const useProfile = () => useContext(ProfileContext)

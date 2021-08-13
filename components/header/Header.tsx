@@ -38,7 +38,7 @@ const Header = () => {
           </div>
         </div>
 
-        <Logo />
+        {/* <Logo /> */}
 
         <div className="header-right-content">
           <div className="header-right-icon-wrapper">

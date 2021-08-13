@@ -13,7 +13,8 @@ export const ROUTES: IRoutes = {
   board: "board",
   signup: "auth/signup",
   login: "auth/login",
-  billing: "profile/billing",
+  billing: "profile?active=billing",
+  settings: "profile?active=settings",
   mfa: "auth/mfa",
 }
 
@@ -73,4 +74,30 @@ export const BOARD_COLOR_OPTIONS = [
   { key: 5, color: "rgb(210, 144, 52)" },
   { key: 6, color: "rgb(81, 152, 57)" },
   { key: 7, color: "rgb(176, 70, 50)" },
+]
+
+export const PROFILE_TAB_OPTIONS = [
+  { key: "profile", title: "Profile and visibility", path: "" },
+  { key: "activity", title: "Activity", path: "activity" },
+  { key: "cards", title: "Cards", path: "cards" },
+  { key: "settings", title: "Settings", path: "cards" },
+  { key: "plans", title: "Upgrade Plans", path: "plans" },
+]
+
+export const PROFILE_SETTINGS_OPTIONS = [
+  { key: "two-step-auth", title: "Two-step verification" },
+  { key: "delete-account", title: "Delete account" },
+]
+
+export const MFA_TAB_OPTIONS = [
+  { key: "verify", title: "Verify Password", id: 0 },
+  { key: "install", title: "Install", id: 1 },
+  { key: "connect", title: "Connect phone", id: 2 },
+  { key: "setup", title: "Setup recovery", id: 3 },
+]
+
+export const AUTHENTICATOR_OPTIONS = [
+  { key: "google", title: "Google Authenticator" },
+  { key: "authy", title: "Authy" },
+  { key: "duo", title: "Duo Mobile" },
 ]
