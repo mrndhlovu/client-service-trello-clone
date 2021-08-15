@@ -1,48 +1,40 @@
-import { useEffect, useState } from "react"
 import { useRouter } from "next/router"
 import { MenuItem } from "@chakra-ui/react"
-import { FaRegUser } from "react-icons/fa"
 
 import { UIDropdown } from "../../shared"
 import { useAuth } from "../../../lib/hooks/context"
 import { ROUTES } from "../../../util/constants"
+import UserAvatar from "../../shared/lib/UserAvatar"
 
 const HeaderAuthDropdown = () => {
   const { user, logout } = useAuth()
   const router = useRouter()
-  const [userInitial, setUserInitials] = useState("")
+  const username = user?.username
 
   const HEADER_AUTH_MENU_OPTIONS = [
     {
-      handleClick: () => router.push(`/${ROUTES.billing}`),
+      handleClick: () => router.push(`/${username}/profile`),
+      key: "profile",
+      title: "Profile",
+    },
+    {
+      handleClick: () => router.push(`/${username}/${ROUTES.billing}`),
       key: "billing",
       title: "Billing",
     },
     {
-      handleClick: () => router.push(`/${ROUTES.settings}`),
+      handleClick: () => router.push(`/${username}/${ROUTES.settings}`),
       key: "settings",
       title: "Settings",
     },
     { handleClick: logout, key: "logout", title: "Log out" },
   ]
 
-  useEffect(() => {
-    setUserInitials(user?.initials)
-  }, [user])
-
   return (
     <UIDropdown
       className="header-auth-dropdown"
       heading="Account"
-      toggle={
-        <div className="header-auth-button">
-          {userInitial ? (
-            <span className="header-button-text">{userInitial}</span>
-          ) : (
-            <FaRegUser className="header-auth-user-icon" />
-          )}
-        </div>
-      }
+      toggle={<UserAvatar />}
     >
       {HEADER_AUTH_MENU_OPTIONS.map((option, index) => (
         <MenuItem

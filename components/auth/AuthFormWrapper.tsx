@@ -1,14 +1,24 @@
 import { isEmpty } from "lodash"
-import { forwardRef, ReactChild, ReactElement, useEffect } from "react"
+import {
+  forwardRef,
+  ReactChild,
+  ReactElement,
+  useEffect,
+  useLayoutEffect,
+  useState,
+  useRef,
+} from "react"
 import router from "next/router"
 import styled from "styled-components"
 
+import { LoadingSpinner, UIForm } from "../shared"
+import { refreshAuthToken } from "../../api"
 import { ROUTES } from "../../util/constants"
-import { UIForm } from "../shared"
 import { useAuth } from "../../lib/hooks/context"
 import AuthFormButton from "./AuthFormButton"
 import AuthOptionLink from "./AuthOptionLink"
 import FormFeedback from "./FormFeedback"
+import { isBrowser } from "../../util"
 
 interface IProps {
   buttonText: string
@@ -106,7 +116,11 @@ const AuthFormWrapper = forwardRef<HTMLInputElement, IProps>(
     },
     ref
   ): ReactElement => {
-    const { isAuthenticated, authError, loading } = useAuth()
+    if (!isBrowser) return null
+    const { isAuthenticated, authError, loading, user } = useAuth()
+
+    const attemptedRefresh = useRef<boolean>(false)
+    const [isRefreshing, setIsRefreshing] = useState<boolean>(false)
 
     const hasFormFeedback = !isEmpty(authError?.errors)
 
@@ -116,7 +130,36 @@ const AuthFormWrapper = forwardRef<HTMLInputElement, IProps>(
       }
     }, [isAuthenticated])
 
-    return (
+    useLayoutEffect(() => {
+      if (!isAuthenticated && !attemptedRefresh.current && user?.isVerified) {
+        attemptedRefresh.current === true
+        setIsRefreshing(true)
+        const refreshToken = async () => {
+          const response = await refreshAuthToken()
+            .then(res => res.status)
+            .catch(() => {
+              setIsRefreshing(false)
+              return null
+            })
+
+          setTimeout(() => {
+            if (response === 200) {
+              router.push(ROUTES.home)
+            }
+          }, 2000)
+        }
+
+        refreshToken()
+      }
+
+      return () => {
+        setIsRefreshing(false)
+      }
+    }, [])
+
+    return isRefreshing ? (
+      <LoadingSpinner />
+    ) : (
       <Container className="auth-form-wrapper">
         <section>
           <div className="auth-form-header">

@@ -3,8 +3,8 @@ import { useEffect, ComponentType } from "react"
 import { useAuth } from "../hooks/context"
 
 interface IProps {
-  data: any
-  currentUser: any
+  data?: any
+  currentUser?: any
 }
 
 export const withAuthComponent = <T extends IProps>(

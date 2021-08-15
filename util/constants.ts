@@ -9,13 +9,13 @@ interface IWorkspaceLink {
 }
 
 export const ROUTES: IRoutes = {
-  home: "/",
+  billing: "billing",
   board: "board",
-  signup: "auth/signup",
+  home: "/",
   login: "auth/login",
-  billing: "profile?active=billing",
-  settings: "profile?active=settings",
   mfa: "auth/mfa",
+  settings: "settings",
+  signup: "auth/signup",
 }
 
 export const APP_NAME = "Trello Clone"
@@ -77,11 +77,11 @@ export const BOARD_COLOR_OPTIONS = [
 ]
 
 export const PROFILE_TAB_OPTIONS = [
-  { key: "profile", title: "Profile and visibility", path: "" },
-  { key: "activity", title: "Activity", path: "activity" },
-  { key: "cards", title: "Cards", path: "cards" },
-  { key: "settings", title: "Settings", path: "cards" },
-  { key: "plans", title: "Upgrade Plans", path: "plans" },
+  { key: "profile", title: "Profile and visibility", id: 0 },
+  { key: "activity", title: "Activity", id: 1 },
+  { key: "cards", title: "Cards", id: 2 },
+  { key: "settings", title: "Settings", id: 3 },
+  { key: "billing", title: "Upgrade Plans", id: 4 },
 ]
 
 export const PROFILE_SETTINGS_OPTIONS = [

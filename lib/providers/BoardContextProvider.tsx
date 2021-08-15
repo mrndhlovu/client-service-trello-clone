@@ -28,14 +28,14 @@ const BoardContextProvider = ({ children, boardList }) => {
   const updateBoardWithRetry = async (boardId: string, update: IBoard) => {
     await updateBoard(update, boardId)
       .then(res => rehydrateBoardList(res?.data))
-      .catch(async err => {
+      .catch(err => {
         if (
           checkStringIncludes(err?.response?.data?.errors?.[0]?.message, [
             "expired",
             "Authorization",
           ])
         ) {
-          const response = await refreshToken()
+          const response = refreshToken()
 
           if (response) {
             return updateBoardWithRetry(boardId, update)

@@ -41,6 +41,8 @@ const reset = css`
       padding-top: 37px;
       height: 100%;
       width: 100%;
+      overflow-y: scroll;
+}
     }
   }
 

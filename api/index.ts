@@ -59,7 +59,7 @@ export const loginUser = async (data: ILoginCredentials) =>
 export const deleteUser = async () =>
   await axiosInstance.delete(endpoints.deleteUser)
 
-export const getCurrentUser = async (ssrHeaders: ISsrHeaders) => {
+export const getCurrentUser = async (ssrHeaders?: ISsrHeaders) => {
   if (ssrHeaders) {
     axiosInstance.defaults["headers"] = ssrHeaders
   }
@@ -99,7 +99,7 @@ interface IUpdateBoardData {
   [key: string]: any
 }
 
-export const getBoards = async (ssrHeaders: ISsrHeaders) => {
+export const getBoards = async (ssrHeaders?: ISsrHeaders) => {
   if (ssrHeaders) {
     axiosInstance.defaults["headers"] = ssrHeaders
   }
@@ -132,4 +132,20 @@ export const verifyAccount = async (ssrHeaders: ISsrHeaders, token: string) => {
   }
 
   return await axiosInstance.get(`${endpoints.verify}/${token}`)
+}
+
+export const getBillingOptions = async (ssrHeaders?: ISsrHeaders) => {
+  if (ssrHeaders) {
+    axiosInstance.defaults["headers"] = ssrHeaders
+  }
+
+  return await axiosInstance.get(endpoints.getBillingOptions)
+}
+
+export const getBillingHistory = async (ssrHeaders?: ISsrHeaders) => {
+  if (ssrHeaders) {
+    axiosInstance.defaults["headers"] = ssrHeaders
+  }
+
+  return await axiosInstance.get(endpoints.getBillingHistory)
 }

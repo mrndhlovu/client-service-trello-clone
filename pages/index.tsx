@@ -20,7 +20,7 @@ export const getServerSideProps = withAuthServerSideProps(
   async context => {
     return await getBoards(context?.req?.headers)
       .then(res => res?.data)
-      .catch(err => err?.response)
+      .catch(() => null)
   },
   {
     auth: true,

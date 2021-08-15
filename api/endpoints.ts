@@ -20,6 +20,8 @@ const endPoints: IEndpoints = {
   connectMfa: "/auth/mfa/connect",
   verifyCredentials: "/auth/login-verify",
   getQrCodeImage: "/auth/mfa/qr-code",
+  getBillingOptions: "/payments/products",
+  getBillingHistory: "/payments",
 }
 
 export default endPoints

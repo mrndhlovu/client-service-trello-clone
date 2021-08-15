@@ -1,6 +1,8 @@
 import { GetServerSidePropsContext, Redirect } from "next"
-import { getCurrentUser } from "../../api"
+import { getCurrentUser, refreshAuthToken } from "../../api"
+import { checkStringIncludes } from "../../util"
 import { ROUTES } from "../../util/constants"
+import { IUser } from "../providers"
 
 interface IOptions {
   auth: boolean
@@ -15,9 +17,13 @@ export const withAuthServerSideProps = (
   options?: IOptions
 ) => {
   return async (context: GetServerSidePropsContext) => {
-    const currentUser = await getCurrentUser(context?.req?.headers)
-      .then(res => JSON.parse(JSON.stringify(res?.data)))
-      .catch(() => null)
+    let currentUser: IUser
+
+    await getCurrentUser(context?.req?.headers)
+      .then(res => (currentUser = res?.data))
+      .catch(() => {
+        return (currentUser = {})
+      })
 
     if (!currentUser && options?.auth) {
       return {
@@ -38,6 +44,6 @@ export const withAuthServerSideProps = (
       return { props: { currentUser, data } }
     }
 
-    return { props: { currentUser, data: { props: { currentUser } } } }
+    return { props: { currentUser } }
   }
 }

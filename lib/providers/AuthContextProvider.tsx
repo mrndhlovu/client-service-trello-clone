@@ -11,6 +11,7 @@ import {
   refreshAuthToken,
   verifyUserCredentials,
   IPasswordConfirmation,
+  getCurrentUser,
 } from "../../api"
 import { IUIRequestError } from "./GlobalContextProvider"
 
@@ -83,6 +84,12 @@ const AuthContextProvider = ({ children }) => {
     [rehydrateUser]
   )
 
+  const fetchUser = useCallback(async () => {
+    await getCurrentUser()
+      .then(res => rehydrateUser(res.data))
+      .catch(() => null)
+  }, [rehydrateUser])
+
   const verifyLogin = useCallback(
     async formData => {
       setLoading(true)
@@ -137,6 +144,7 @@ const AuthContextProvider = ({ children }) => {
         verifyLogin,
         authError,
         verifyUserPassword,
+        fetchUser,
       }}
     >
       {children}
