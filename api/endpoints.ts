@@ -1,27 +1,26 @@
-interface IEndpoints {
-  [key: string]: string
-}
-
-const endPoints: IEndpoints = {
+const END_POINTS = {
   board: "/board",
   boards: "/boards",
   createBoard: "/boards/create",
+
+  connectMfa: "/auth/mfa/connect",
   currentUser: "/auth/me",
+  deleteUser: "/auth/delete",
+  enableMfa: "/auth/mfa/enable",
+  getQrCodeImage: "/auth/mfa/qr-code",
   login: "/auth/login",
   logout: "/auth/logout",
-  deleteUser: "/auth/delete",
-  payments: "/payments/subscription",
   refreshToken: "/auth/refresh-token",
+  requestLink: "/auth/get-verification-link",
   signup: "/auth/signup",
-  verify: "/accounts/verify",
   updateUser: "/auth/update",
-  verifyMfaCode: "/auth/mfa/validate",
-  enableMfa: "/auth/mfa/enable",
-  connectMfa: "/auth/mfa/connect",
+  verify: "/accounts/verify",
   verifyCredentials: "/auth/login-verify",
-  getQrCodeImage: "/auth/mfa/qr-code",
+  verifyMfaCode: "/auth/mfa/validate",
+
+  payments: "/payments/subscription",
   getBillingOptions: "/payments/products",
   getBillingHistory: "/payments",
 }
 
-export default endPoints
+export default END_POINTS

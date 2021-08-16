@@ -1,7 +1,7 @@
 import { GetServerSidePropsContext } from "next"
 
 import { verifyAccount } from "../../api"
-import { withAuthServerSideProps } from "../../lib/hocs"
+import { withAuthSsp } from "../../lib/hocs"
 import AccountVerification from "../../components/auth/AccountVerification"
 import VerificationPage from "../../components/auth/VerificationPage"
 
@@ -15,7 +15,7 @@ const index = () => {
   return <VerificationPage />
 }
 
-// export const getServerSideProps = withAuthServerSideProps(
+// export const getServerSideProps = withAuthSsp(
 //   async (context: GetServerSidePropsContext) => {
 //     const token = context.query.token as string
 

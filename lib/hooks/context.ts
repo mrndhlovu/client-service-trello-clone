@@ -42,14 +42,14 @@ interface IDefaultAuthContext {
   loading: boolean
   user?: IUser
   isAuthenticated: boolean
-  rehydrateUser: (newUser?: IUser) => void | IUser
+  rehydrateUser: (newUser?: IUser) => void
   logout: () => {} | void | null
-  login: (formData: ILoginCredentials) => IUIRequestError | IUser
-  signup: (formData: ISignupCredentials) => IUIRequestError | IUser
+  login: (formData: ILoginCredentials) => Promise<void>
+  signup: (formData: ISignupCredentials) => Promise<void>
   refreshToken: () => {} | void | null
-  fetchUser: () => void | IUser
+  fetchUser: () => Promise<void>
   authError: undefined | IUIRequestError
-  verifyLogin: (formData: { token: string }) => IUIRequestError | IUser
+  verifyLogin: (formData: { token: string }) => Promise<void>
   verifyUserPassword: (data: IPasswordConfirmation) => Promise<number | null>
 }
 

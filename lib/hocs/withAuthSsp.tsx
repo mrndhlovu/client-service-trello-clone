@@ -1,31 +1,40 @@
 import { GetServerSidePropsContext, Redirect } from "next"
-import { getCurrentUser, refreshAuthToken } from "../../api"
-import { checkStringIncludes } from "../../util"
+import { getCurrentUser } from "../../api"
 import { ROUTES } from "../../util/constants"
 import { IUser } from "../providers"
 
 interface IOptions {
-  auth: boolean
+  protected: boolean
   redirect?: Redirect
   replacePath?: string
 }
-export const withAuthServerSideProps = (
+
+export const withAuthSsp = (
   getServerSideProps?: (
     context: GetServerSidePropsContext,
-    currentUser?: { [key: string]: any }
+    user?: IUser
   ) => Promise<any>,
   options?: IOptions
 ) => {
   return async (context: GetServerSidePropsContext) => {
-    let currentUser: IUser
+    let currentUser: IUser | null
 
     await getCurrentUser(context?.req?.headers)
-      .then(res => (currentUser = res?.data))
+      .then(res => (currentUser = res?.data || null))
       .catch(() => {
-        return (currentUser = {})
+        return (currentUser = null)
       })
 
-    if (!currentUser && options?.auth) {
+    if (currentUser?.id && !currentUser?.account.isVerified) {
+      return {
+        redirect: {
+          destination: `/${ROUTES.verify}`,
+          permanent: false,
+        },
+      }
+    }
+
+    if (!currentUser && options?.protected) {
       return {
         redirect: {
           destination: `/${ROUTES.login}`,
@@ -35,13 +44,17 @@ export const withAuthServerSideProps = (
     }
 
     if (getServerSideProps && getServerSideProps instanceof Function) {
-      const data = await getServerSideProps(context, currentUser)
+      const response = await getServerSideProps(context, currentUser)
 
-      if (options.redirect && !data) {
+      if (response?.redirect) {
+        return response
+      }
+
+      if (options?.redirect && !response) {
         return { redirect: options.redirect }
       }
 
-      return { props: { currentUser, data } }
+      return { props: { currentUser, data: response } }
     }
 
     return { props: { currentUser } }

@@ -38,11 +38,11 @@ const reset = css`
     background-color: ${props => props.theme.colors.bgLight};
 
     &-children {
-      padding-top: 37px;
       height: 100%;
       width: 100%;
       overflow-y: scroll;
-}
+      overflow-x: hidden;
+      position: relative;
     }
   }
 

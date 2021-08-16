@@ -4,7 +4,7 @@ import { TabPanel, TabPanels } from "@chakra-ui/react"
 import { getBillingHistory, getBillingOptions } from "../../api"
 import { IUser, StripeContextProvider } from "../../lib/providers"
 import { ROUTES } from "../../util/constants"
-import { withAuthComponent, withAuthServerSideProps } from "../../lib/hocs"
+import { withAuthComponent, withAuthSsp } from "../../lib/hocs"
 import Billing from "../../components/profile/billing/Billing"
 import ProfileLayout from "../../components/layout/ProfileLayout"
 import UserProfileSettings from "../../components/profile/UserProfileSettings"
@@ -39,11 +39,18 @@ const index = ({ data }) => {
   )
 }
 
-export const getServerSideProps = withAuthServerSideProps(
+export const getServerSideProps = withAuthSsp(
   async (context: GetServerSidePropsContext, currentUser: IUser) => {
     const { username, path } = context.params
     let data: {}
-    if (!username || username !== currentUser.username) return null
+    if (!username || username !== currentUser?.username) {
+      return {
+        redirect: {
+          destination: `/${ROUTES.login}`,
+          permanent: false,
+        },
+      }
+    }
 
     if (path === "billing") {
       const products = await getBillingOptions(context.req.headers)
@@ -55,11 +62,7 @@ export const getServerSideProps = withAuthServerSideProps(
     return data || {}
   },
   {
-    auth: true,
-    redirect: {
-      destination: `/${ROUTES.login}`,
-      permanent: false,
-    },
+    protected: true,
   }
 )
 

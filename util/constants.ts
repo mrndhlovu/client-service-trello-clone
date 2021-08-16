@@ -1,14 +1,10 @@
-interface IRoutes {
-  [key: string]: string
-}
-
 interface IWorkspaceLink {
   key: string
   title: string
   link: string
 }
 
-export const ROUTES: IRoutes = {
+export const ROUTES = {
   billing: "billing",
   board: "board",
   home: "/",
@@ -16,6 +12,7 @@ export const ROUTES: IRoutes = {
   mfa: "auth/mfa",
   settings: "settings",
   signup: "auth/signup",
+  verify: "auth/verify",
 }
 
 export const APP_NAME = "Trello Clone"

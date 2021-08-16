@@ -3,7 +3,7 @@ import { ICardDetails } from "../lib/hooks/context"
 
 import { isBrowser } from "../util"
 
-import endpoints from "./endpoints"
+import END_POINTS from "./endpoints"
 
 const axiosInstance = axios.create({
   baseURL: isBrowser ? "/api" : `${process.env.NEXT_PUBLIC_NGINX_BASE_URL}/api`,
@@ -49,50 +49,50 @@ export interface IPasswordConfirmation {
 export interface ISsrHeaders {}
 
 export const signupUser = async (userData: ISignupCredentials) =>
-  await axiosInstance.post(endpoints.signup, userData)
+  await axiosInstance.post(END_POINTS.signup, userData)
 
-export const logoutUser = async () => await axiosInstance.get(endpoints.logout)
+export const logoutUser = async () => await axiosInstance.get(END_POINTS.logout)
 
 export const loginUser = async (data: ILoginCredentials) =>
-  await axiosInstance.post(endpoints.login, data)
+  await axiosInstance.post(END_POINTS.login, data)
 
 export const deleteUser = async () =>
-  await axiosInstance.delete(endpoints.deleteUser)
+  await axiosInstance.delete(END_POINTS.deleteUser)
 
 export const getCurrentUser = async (ssrHeaders?: ISsrHeaders) => {
   if (ssrHeaders) {
     axiosInstance.defaults["headers"] = ssrHeaders
   }
 
-  return await axiosInstance.get(endpoints.currentUser)
+  return await axiosInstance.get(END_POINTS.currentUser)
 }
 
 export const handleUpdateUser = async (data: { [key: string]: any }) => {
-  return await axiosInstance.patch(endpoints.updateUser, data)
+  return await axiosInstance.patch(END_POINTS.updateUser, data)
 }
 
 export const refreshAuthToken = async () => {
-  return await axiosInstance.get(endpoints.refreshToken)
+  return await axiosInstance.get(END_POINTS.refreshToken)
 }
 
 export const verifyMfaCode = async (data: ICodeVerification) => {
-  return await axiosInstance.post(endpoints.verifyMfaCode, data)
+  return await axiosInstance.post(END_POINTS.verifyMfaCode, data)
 }
 
 export const createNewBoard = async (data: INewBoardData) => {
-  return await axiosInstance.post(endpoints.createBoard, data)
+  return await axiosInstance.post(END_POINTS.createBoard, data)
 }
 
 export const connectMultiFactorAuth = async (data: INewMfaData) => {
-  return await axiosInstance.post(endpoints.connectMfa, data)
+  return await axiosInstance.post(END_POINTS.connectMfa, data)
 }
 
 export const generateQrCode = async () => {
-  return await axiosInstance.get(endpoints.getQrCodeImage)
+  return await axiosInstance.get(END_POINTS.getQrCodeImage)
 }
 
 export const verifyUserCredentials = async (data: ILoginCredentials) => {
-  return await axiosInstance.post(endpoints.verifyCredentials, data)
+  return await axiosInstance.post(END_POINTS.verifyCredentials, data)
 }
 
 interface IUpdateBoardData {
@@ -104,7 +104,7 @@ export const getBoards = async (ssrHeaders?: ISsrHeaders) => {
     axiosInstance.defaults["headers"] = ssrHeaders
   }
 
-  return await axiosInstance.get(endpoints.boards)
+  return await axiosInstance.get(END_POINTS.boards)
 }
 
 export const getBoardById = async (
@@ -115,15 +115,15 @@ export const getBoardById = async (
     axiosInstance.defaults["headers"] = ssrHeaders
   }
 
-  return await axiosInstance.get(`${endpoints.boards}/${boardId}`)
+  return await axiosInstance.get(`${END_POINTS.boards}/${boardId}`)
 }
 
 export const updateBoard = async (data: IUpdateBoardData, boardId: string) => {
-  return await axiosInstance.patch(`${endpoints.boards}/${boardId}`, data)
+  return await axiosInstance.patch(`${END_POINTS.boards}/${boardId}`, data)
 }
 
 export const createCustomerSubscription = async (data: ICardDetails) => {
-  return await axiosInstance.post(endpoints.payments, data)
+  return await axiosInstance.post(END_POINTS.payments, data)
 }
 
 export const verifyAccount = async (ssrHeaders: ISsrHeaders, token: string) => {
@@ -131,7 +131,7 @@ export const verifyAccount = async (ssrHeaders: ISsrHeaders, token: string) => {
     axiosInstance.defaults["headers"] = ssrHeaders
   }
 
-  return await axiosInstance.get(`${endpoints.verify}/${token}`)
+  return await axiosInstance.get(`${END_POINTS.verify}/${token}`)
 }
 
 export const getBillingOptions = async (ssrHeaders?: ISsrHeaders) => {
@@ -139,7 +139,7 @@ export const getBillingOptions = async (ssrHeaders?: ISsrHeaders) => {
     axiosInstance.defaults["headers"] = ssrHeaders
   }
 
-  return await axiosInstance.get(endpoints.getBillingOptions)
+  return await axiosInstance.get(END_POINTS.getBillingOptions)
 }
 
 export const getBillingHistory = async (ssrHeaders?: ISsrHeaders) => {
@@ -147,5 +147,9 @@ export const getBillingHistory = async (ssrHeaders?: ISsrHeaders) => {
     axiosInstance.defaults["headers"] = ssrHeaders
   }
 
-  return await axiosInstance.get(endpoints.getBillingHistory)
+  return await axiosInstance.get(END_POINTS.getBillingHistory)
+}
+
+export const requestNewVerificationLink = async data => {
+  return await axiosInstance.post(`${END_POINTS.requestLink}`, data)
 }

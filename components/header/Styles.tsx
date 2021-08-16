@@ -9,7 +9,7 @@ export default styled.header<IHeaderStyles>`
     activeBoardColor || theme.colors.trello};
   z-index: 100;
   height: 37px;
-  position: absolute;
+  position: sticky;
   top: 0;
   left: 0;
   right: 0;
@@ -248,7 +248,7 @@ export default styled.header<IHeaderStyles>`
       }
 
       svg {
-        padding: 0.5px;
+        font-size: calc(1rem + 3px);
       }
     }
 

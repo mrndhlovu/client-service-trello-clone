@@ -30,22 +30,22 @@ const typography = css`
   }
 
   body {
-    overflow: hidden !important;
+    overflow: hidden;
     -webkit-font-smoothing: antialiased;
     -moz-osx-font-smoothing: grayscale;
     font-size: ${props => props.theme.variables.body};
-    line-height: 1.8rem;
-    font-family: ${props => props.theme.fonts.primary};
+    line-height: 1.29rem;
+    font-family: ${props => props.theme.fonts.secondary};
     color: ${props => props.theme.colors.body};
     font-weight: 400;
     background: ${props => props.theme.colors.bgBody};
 
     @media ${props => props.theme.device.tablet} {
-      font-size: calc(${props => props.theme.variables.body} - 2);
+      font-size: calc(${props => props.theme.variables.body} + 2);
     }
 
     @media ${props => props.theme.device.mobileLg} {
-      font-size: calc(${props => props.theme.variables.body} - 3);
+      font-size: calc(${props => props.theme.variables.body} + 1);
     }
   }
 

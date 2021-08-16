@@ -1,44 +1,52 @@
-import { useRouter } from "next/router"
-import { useEffect } from "react"
-import { Button } from "@chakra-ui/react"
-import Link from "next/link"
+import styled from "styled-components"
 
-import { ROUTES } from "../../util/constants"
+import VerifiedConfirmation from "./VerifiedConfirmation"
+import VerifyAccount from "./VerifyAccount"
 
 interface IProps {
   isVerified: boolean | undefined
 }
 
+const Container = styled.div`
+  width: 100vw;
+  height: 100vh;
+
+  ${props => props.theme.styles.absoluteCenter};
+
+  .verification-alert {
+    width: 95%;
+    margin: 0 auto;
+    border-radius: 3px;
+    margin-top: 20px;
+    color: ${props => props.theme.colors.border};
+    .title {
+      font-weight: 600;
+      font-size: 23px;
+    }
+
+    .desc {
+      font-size: 13px;
+    }
+
+    label {
+      margin: 0;
+      font-size: 13px;
+      font-weight: 600;
+    }
+
+    input {
+      background-color: #e8f4f9;
+      width: 260px;
+    }
+  }
+`
+
 const AccountVerification = ({ isVerified }: IProps) => {
-  const router = useRouter()
-  const { token } = router.query
-
-  useEffect(() => {
-    if (!token) return
-    router.push({ pathname: router.pathname, query: {} }, router.pathname, {
-      shallow: true,
-    })
-  }, [])
-
   return (
-    <div>
-      <p>
-        {
-          <h1>{`Account verification ${
-            isVerified ? "successful" : "failed"
-          }`}</h1>
-        }
-        {isVerified && (
-          <Link href={`/${ROUTES.login}`}>
-            <a>
-              <Button size="sm" colorScheme="twitter">
-                Go to login
-              </Button>
-            </a>
-          </Link>
-        )}
-      </p>
-    </div>
+    <Container>
+      {!isVerified && <VerifyAccount />}
+      {isVerified && <VerifiedConfirmation />}
+    </Container>
   )
 }
 

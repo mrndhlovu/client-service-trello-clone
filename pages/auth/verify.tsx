@@ -1,7 +1,7 @@
 import { GetServerSidePropsContext } from "next"
 
 import { verifyAccount } from "../../api"
-import { withAuthServerSideProps } from "../../lib/hocs"
+import { withAuthSsp } from "../../lib/hocs"
 import AccountVerification from "../../components/auth/AccountVerification"
 
 interface IProps {
@@ -14,9 +14,11 @@ const index = ({ data }: IProps) => {
   return <AccountVerification isVerified={data?.isVerified} />
 }
 
-export const getServerSideProps = withAuthServerSideProps(
+export const getServerSideProps = withAuthSsp(
   async (context: GetServerSidePropsContext) => {
-    const token = context.query.token as string
+    const token = context?.query?.token as string
+
+    if (!token) return null
 
     return await verifyAccount(context?.req?.headers, token)
       .then(res => JSON.parse(JSON.stringify(res?.data)))

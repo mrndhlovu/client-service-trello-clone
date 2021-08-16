@@ -3,7 +3,6 @@ import {
   forwardRef,
   ReactChild,
   ReactElement,
-  useEffect,
   useLayoutEffect,
   useState,
   useRef,
@@ -11,6 +10,7 @@ import {
 import router from "next/router"
 import styled from "styled-components"
 
+import { isBrowser } from "../../util"
 import { LoadingSpinner, UIForm } from "../shared"
 import { refreshAuthToken } from "../../api"
 import { ROUTES } from "../../util/constants"
@@ -18,7 +18,6 @@ import { useAuth } from "../../lib/hooks/context"
 import AuthFormButton from "./AuthFormButton"
 import AuthOptionLink from "./AuthOptionLink"
 import FormFeedback from "./FormFeedback"
-import { isBrowser } from "../../util"
 
 interface IProps {
   buttonText: string
@@ -117,39 +116,32 @@ const AuthFormWrapper = forwardRef<HTMLInputElement, IProps>(
     ref
   ): ReactElement => {
     if (!isBrowser) return null
-    const { isAuthenticated, authError, loading, user } = useAuth()
+    const { isAuthenticated, authError, loading } = useAuth()
 
     const attemptedRefresh = useRef<boolean>(false)
     const [isRefreshing, setIsRefreshing] = useState<boolean>(false)
-
     const hasFormFeedback = !isEmpty(authError?.errors)
 
-    useEffect(() => {
-      if (isAuthenticated) {
-        router.push(ROUTES.home)
-      }
-    }, [isAuthenticated])
-
     useLayoutEffect(() => {
-      if (!isAuthenticated && !attemptedRefresh.current && user?.isVerified) {
+      if (!isAuthenticated && !attemptedRefresh.current) {
         attemptedRefresh.current === true
-        setIsRefreshing(true)
         const refreshToken = async () => {
+          setIsRefreshing(true)
           const response = await refreshAuthToken()
-            .then(res => res.status)
+            .then(res => res)
             .catch(() => {
               setIsRefreshing(false)
               return null
             })
 
           setTimeout(() => {
-            if (response === 200) {
+            if (response?.status === 200) {
               router.push(ROUTES.home)
             }
           }, 2000)
         }
 
-        refreshToken()
+        // refreshToken()
       }
 
       return () => {

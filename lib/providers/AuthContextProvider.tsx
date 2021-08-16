@@ -1,5 +1,5 @@
 import router from "next/router"
-import { useCallback, useState } from "react"
+import { useCallback, useEffect, useState } from "react"
 
 import { AuthContext } from "../hooks/context"
 import { ROUTES } from "../../util/constants"
@@ -15,8 +15,38 @@ import {
 } from "../../api"
 import { IUIRequestError } from "./GlobalContextProvider"
 
+export interface IAccountFields {
+  expired?: boolean
+  expiresAt?: string
+  id: string
+  isTrial: boolean
+  isVerified: boolean
+  plan: string
+  status: string
+  email?: string
+}
+
+interface IUserBoardRoles {
+  [key: string]: string[]
+}
+
 export interface IUser {
-  [key: string]: any
+  avatar?: string
+  bio?: string
+  email: string
+  firstname?: string
+  initials?: string
+  lastname?: string
+  loginTypes?: "email" | "username"
+  account: IAccountFields
+  boardIds: string[]
+  roles: IUserBoardRoles[]
+  starred?: string[]
+  username: string
+  viewedRecent?: string[]
+  multiFactorAuth: boolean
+  permissionFlag: number
+  id: string
 }
 
 const AuthContextProvider = ({ children }) => {
@@ -35,22 +65,16 @@ const AuthContextProvider = ({ children }) => {
     if (!authenticated) return router.push(ROUTES.login)
   }, [])
 
-  const signup = useCallback(
-    async formData => {
-      setLoading(true)
+  const signup = useCallback(async formData => {
+    setLoading(true)
 
-      await signupUser(formData)
-        .then(res => {
-          rehydrateUser(res?.data)
-          setLoading(false)
-        })
-        .catch(error => {
-          setAuthError(error?.response?.data)
-          setLoading(false)
-        })
-    },
-    [rehydrateUser]
-  )
+    await signupUser(formData)
+      .then(() => router.push(`/${ROUTES.verify}?new=true`))
+      .catch(error => {
+        setAuthError(error?.response?.data)
+        setLoading(false)
+      })
+  }, [])
 
   const verifyUserPassword = async (formData: IPasswordConfirmation) => {
     const body = {
@@ -62,27 +86,21 @@ const AuthContextProvider = ({ children }) => {
       .catch(() => null)) as number | null
   }
 
-  const login = useCallback(
-    async formData => {
-      setLoading(true)
+  const login = useCallback(async formData => {
+    setLoading(true)
 
-      await loginUser(formData)
-        .then(res => {
-          setLoading(false)
-          if (res.data.multiFactorAuth) {
-            return router.push(`/${ROUTES.mfa}`)
-          }
-
-          router.push(ROUTES.home)
-          rehydrateUser(res?.data)
-        })
-        .catch(error => {
-          setAuthError(error?.response?.data)
-          setLoading(false)
-        })
-    },
-    [rehydrateUser]
-  )
+    await loginUser(formData)
+      .then(res => {
+        if (res.data.multiFactorAuth) {
+          return router.push(`/${ROUTES.mfa}`)
+        }
+        router.push(ROUTES.home)
+      })
+      .catch(error => {
+        setAuthError(error?.response?.data)
+        setLoading(false)
+      })
+  }, [])
 
   const fetchUser = useCallback(async () => {
     await getCurrentUser()
@@ -90,24 +108,18 @@ const AuthContextProvider = ({ children }) => {
       .catch(() => null)
   }, [rehydrateUser])
 
-  const verifyLogin = useCallback(
-    async formData => {
-      setLoading(true)
+  const verifyLogin = useCallback(async formData => {
+    setLoading(true)
 
-      await verifyMfaCode(formData)
-        .then(res => {
-          setLoading(false)
-
-          router.push(ROUTES.home)
-          rehydrateUser(res?.data)
-        })
-        .catch(error => {
-          setAuthError(error?.response?.data)
-          setLoading(false)
-        })
-    },
-    [rehydrateUser]
-  )
+    await verifyMfaCode(formData)
+      .then(() => {
+        return router.push(ROUTES.home)
+      })
+      .catch(error => {
+        setAuthError(error?.response?.data)
+        setLoading(false)
+      })
+  }, [])
 
   const refreshToken = useCallback(async () => {
     await refreshAuthToken()
@@ -121,7 +133,7 @@ const AuthContextProvider = ({ children }) => {
     await logoutUser()
       .then(() => {
         rehydrateUser()
-        setLoading(false)
+        return router.push(`/${ROUTES.login}`)
       })
       .catch(error => {
         setAuthError(error?.response?.data)
@@ -129,6 +141,12 @@ const AuthContextProvider = ({ children }) => {
         setLoading(false)
       })
   }, [rehydrateUser])
+
+  useEffect(() => {
+    return () => {
+      return setLoading(false)
+    }
+  }, [])
 
   return (
     <AuthContext.Provider
