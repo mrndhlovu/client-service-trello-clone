@@ -1,13 +1,23 @@
 import { IPlan } from "../components/profile/billing/BillingPlans"
+import { IRequestError } from "../api"
+import { isArray } from "lodash"
+import { AxiosError } from "axios"
 
-export const getAlertString = msg => {
-  const message =
-    msg?.errorMessage ??
-    msg?.data?.message ??
-    msg?.response?.data.message ??
-    msg?.message ??
-    msg?.msg ??
-    msg
+export const getErrorMessage = (data: IRequestError | AxiosError) => {
+  let message: string | string[]
+  const isArrayList = isArray(data.errors)
+
+  if (isArrayList) {
+    return (message = data.errors.map(error => error.message))
+  }
+
+  message =
+    data?.errorMessage ??
+    data?.data?.message ??
+    data?.response?.data.message ??
+    data?.message ??
+    data?.data ??
+    data
 
   return message
 }

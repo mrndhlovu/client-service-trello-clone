@@ -6,13 +6,14 @@ import {
   useLayoutEffect,
   useState,
   useRef,
+  useEffect,
 } from "react"
 import router from "next/router"
 import styled from "styled-components"
 
+import { clientRequest } from "../../api"
 import { isBrowser } from "../../util"
 import { LoadingSpinner, UIForm } from "../shared"
-import { refreshAuthToken } from "../../api"
 import { ROUTES } from "../../util/constants"
 import { useAuth } from "../../lib/hooks/context"
 import AuthFormButton from "./AuthFormButton"
@@ -116,38 +117,18 @@ const AuthFormWrapper = forwardRef<HTMLInputElement, IProps>(
     ref
   ): ReactElement => {
     if (!isBrowser) return null
-    const { isAuthenticated, authError, loading } = useAuth()
+    const { authError, loading, dismissAuthError } = useAuth()
 
-    const attemptedRefresh = useRef<boolean>(false)
     const [isRefreshing, setIsRefreshing] = useState<boolean>(false)
     const hasFormFeedback = !isEmpty(authError?.errors)
 
-    useLayoutEffect(() => {
-      if (!isAuthenticated && !attemptedRefresh.current) {
-        attemptedRefresh.current === true
-        const refreshToken = async () => {
-          setIsRefreshing(true)
-          const response = await refreshAuthToken()
-            .then(res => res)
-            .catch(() => {
-              setIsRefreshing(false)
-              return null
-            })
-
-          setTimeout(() => {
-            if (response?.status === 200) {
-              router.push(ROUTES.home)
-            }
-          }, 2000)
-        }
-
-        // refreshToken()
+    useEffect(() => {
+      if (hasFormFeedback) {
+        setTimeout(() => {
+          dismissAuthError()
+        }, 6000)
       }
-
-      return () => {
-        setIsRefreshing(false)
-      }
-    }, [])
+    }, [hasFormFeedback, dismissAuthError])
 
     return isRefreshing ? (
       <LoadingSpinner />

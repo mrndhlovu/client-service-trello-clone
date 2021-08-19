@@ -1,12 +1,11 @@
-import { useCallback, useState } from "react"
-import { uniqueId } from "lodash"
+import { useToast } from "@chakra-ui/react"
+import { useCallback } from "react"
 
 import { GlobalContext } from "../hooks/context"
-import { getAlertString } from "../../util"
 import { useLocalStorage } from "../hooks"
 
 export interface IUIRequestError {
-  errors: [
+  errors?: [
     {
       [key: string]: {
         message: string
@@ -15,26 +14,17 @@ export interface IUIRequestError {
   ]
 }
 
-export interface NotificationMessage {
-  id: number
-  severity: string
-  text: string
-}
-
-export type NotificationProps = {
-  list: NotificationMessage[]
-  placement:
+export interface IToastProps {
+  title?: string
+  description: string
+  status?: "info" | "warning" | "success" | "error"
+  placement?:
     | "top-right"
-    | "top-center"
+    | "top"
     | "top-left"
     | "bottom-left"
     | "bottom-right"
-    | "bottom-center"
-}
-
-export const notificationsInitialState: NotificationProps = {
-  list: [],
-  placement: "top-left",
+    | "bottom"
 }
 
 export interface IThemeMode {
@@ -42,12 +32,10 @@ export interface IThemeMode {
 }
 
 const GlobalContextProvider = ({ children }) => {
+  const toast = useToast()
   const [theme, setTheme] = useLocalStorage<string, IThemeMode>("theme", {
     darkMode: false,
   })
-  const [notifications, setNotifications] = useState<NotificationProps>(
-    notificationsInitialState
-  )
 
   const handleModeChange = () => {
     return setTheme((prev: IThemeMode) => {
@@ -55,55 +43,24 @@ const GlobalContextProvider = ({ children }) => {
     })
   }
 
-  const dismissNotification = useCallback(id => {
-    const shouldClearAllNotifications = id < 1
-    if (shouldClearAllNotifications) {
-      return setNotifications(notificationsInitialState)
-    }
-    setNotifications(prev => ({
-      ...prev,
-      list: [
-        ...prev.list.filter(
-          (message: NotificationMessage) => message?.id !== id
-        ),
-      ],
-    }))
-  }, [])
-
-  const handleAlert = useCallback((newState, placement) => {
-    setNotifications(prevState => ({
-      ...prevState,
-      placement: placement ? placement : prevState?.placement,
-      list: [
-        ...prevState.list,
-        {
-          ...newState,
-          text: getAlertString(newState.text),
-          id: parseInt(uniqueId(), 10),
-        },
-      ],
-    }))
-  }, [])
-
   const notify = useCallback(
-    (text, severity, placement = "top-center") =>
-      handleAlert(
-        {
-          severity,
-          text,
-        },
-        placement
-      ),
-    [handleAlert]
+    (msg: IToastProps) =>
+      toast({
+        title: msg.title,
+        description: msg.description,
+        status: msg.status || "success",
+        duration: 9000,
+        isClosable: true,
+        position: msg.placement || "bottom",
+      }),
+    []
   )
 
   return (
     <GlobalContext.Provider
       value={{
-        dismissNotification,
         handleModeChange,
         darkMode: theme?.darkMode,
-        notifications,
         notify,
       }}
     >

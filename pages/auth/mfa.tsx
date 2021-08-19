@@ -1,31 +1,27 @@
 import { GetServerSidePropsContext } from "next"
 
-import { verifyAccount } from "../../api"
 import { withAuthSsp } from "../../lib/hocs"
-import AccountVerification from "../../components/auth/AccountVerification"
 import VerificationPage from "../../components/auth/VerificationPage"
-
-interface IProps {
-  data: {
-    isVerified?: boolean
-  }
-}
+import ApiRequest from "../../api"
 
 const index = () => {
   return <VerificationPage />
 }
 
-// export const getServerSideProps = withAuthSsp(
-//   async (context: GetServerSidePropsContext) => {
-//     const token = context.query.token as string
+export const getServerSideProps = withAuthSsp(
+  async (context: GetServerSidePropsContext) => {
+    const ssrRequest = new ApiRequest(context?.req?.headers)
 
-//     return await verifyAccount(context?.req?.headers, token)
-//       .then(res => JSON.parse(JSON.stringify(res?.data)))
-//       .catch(() => null)
-//   },
-//   {
-//     auth: false,
-//   }
-// )
+    const token = context.query.token as string
+
+    return await ssrRequest
+      .verifyAccount(token)
+      .then(res => JSON.parse(JSON.stringify(res?.data)))
+      .catch(() => null)
+  },
+  {
+    protected: false,
+  }
+)
 
 export default index

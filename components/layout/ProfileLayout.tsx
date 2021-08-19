@@ -9,15 +9,16 @@ import { useAuth } from "../../lib/hooks/context"
 import UserAvatar from "../shared/lib/UserAvatar"
 
 const StyledContainer = styled(Container)`
-  .profile-header {
-    transform: translateY(-38px);
+  .profile-content-wrapper {
+    border-top: 0.1px solid #bbbbc266;
+    width: 100%;
   }
 `
 
-const Header = styled.div`
-  width: 100%;
+const LayoutHeader = styled(Container)`
+  max-width: 100%;
   background-color: #f4f5f7;
-  height: 175px;
+  height: 190px;
   padding: 32px;
   position: relative;
 
@@ -37,6 +38,7 @@ const Header = styled.div`
 const StyledTabList = styled(TabList)`
   ${props => props.theme.mixins.flex()};
   background-color: transparent;
+  transform: translateY(-40px);
 
   a {
     font-size: 13px;
@@ -44,6 +46,8 @@ const StyledTabList = styled(TabList)`
     white-space: nowrap;
     background-color: #ddd;
     color: ${props => props.theme.colors.border};
+    min-height: 40px;
+    border-radius: 2px;
   }
 
   & > li a[aria-selected="true"] {
@@ -72,17 +76,23 @@ const ProfileLayout = ({ children }) => {
   }, [])
 
   return (
-    <>
-      <Header className="header">
+    <Container>
+      <LayoutHeader>
         <p>
           <UserAvatar />
           {user?.fullName || user?.email}
           <span>@{user?.username}</span>
         </p>
-      </Header>
-      <StyledContainer>
-        <div className="profile-header">
-          <Tabs index={activeTab?.id} isFitted variant="enclosed" size="sm">
+      </LayoutHeader>
+      <div className="profile-content-wrapper">
+        <StyledContainer maxW="container.md">
+          <Tabs
+            className="profile-content"
+            index={activeTab?.id}
+            isFitted
+            variant="enclosed"
+            size="sm"
+          >
             <StyledTabList as="ul">
               {PROFILE_TAB_OPTIONS.map(option => (
                 <li key={option.key}>
@@ -94,9 +104,9 @@ const ProfileLayout = ({ children }) => {
             </StyledTabList>
             {children}
           </Tabs>
-        </div>
-      </StyledContainer>
-    </>
+        </StyledContainer>
+      </div>
+    </Container>
   )
 }
 

@@ -157,6 +157,7 @@ const typography = css`
       width: 100%;
       line-height: 1.42857;
       height: 39px;
+      padding-left: 10px;
     }
 
     .input-feedback {
@@ -278,39 +279,6 @@ const typography = css`
       line-height: 25px;
       padding: 20px;
       margin-left: 0;
-    }
-  }
-
-  [class^="flaticon-"],
-  [class*=" flaticon-"],
-  [class^="flaticon-"],
-  [class*=" flaticon-"] {
-    line-height: 1;
-
-    &::before,
-    &::after {
-      margin-left: 0;
-      font-size: inherit;
-      vertical-align: middle;
-    }
-  }
-
-  .stylish-list {
-    padding-left: 0;
-
-    li {
-      list-style: none;
-      line-height: 30px;
-      position: relative;
-      padding-left: 35px;
-    }
-
-    i {
-      position: absolute;
-      left: 0;
-      top: 7px;
-      font-size: 16px;
-      color: ${props => props.theme.colors.primary};
     }
   }
 

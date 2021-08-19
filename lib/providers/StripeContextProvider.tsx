@@ -1,11 +1,14 @@
 import { Elements } from "@stripe/react-stripe-js"
 import { loadStripe } from "@stripe/stripe-js"
-import { reject } from "lodash"
-import { resolveHref } from "next/dist/next-server/lib/router/router"
 import { ReactNode } from "react"
 
-import { createCustomerSubscription } from "../../api"
-import { ICardDetails, StripeContext, useAuth } from "../hooks/context"
+import {
+  ICardDetails,
+  StripeContext,
+  useAuth,
+  useGlobalState,
+} from "../hooks/context"
+import { clientRequest } from "../../api"
 
 const stripePromise = loadStripe(process.env.NEXT_PUBLIC_STRIPE_PUBLISHABLE_KEY)
 
@@ -33,15 +36,19 @@ interface IProps {
 
 const StripeContextProvider = ({ children, data }: IProps) => {
   const { fetchUser } = useAuth()
+  const { notify } = useGlobalState()
 
   const createSubscription = async (data: ICardDetails) => {
     return new Promise(async (resolve, reject) => {
-      await createCustomerSubscription(data)
+      await clientRequest
+        .createCustomerSubscription(data)
         .then(res => {
           fetchUser()
-          return resolve(res.data)
+          return resolve(res)
         })
-        .catch(err => reject("Subscription failed"))
+        .catch(() => {
+          notify({ description: "Subscription failed", status: "error" })
+        })
     })
   }
 

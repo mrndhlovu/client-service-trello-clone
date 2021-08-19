@@ -1,7 +1,6 @@
 import { useEffect, useState } from "react"
 import { isEmpty } from "lodash"
 
-import { Notifications } from "../shared"
 import { useAuth, useGlobalState } from "../../lib/hooks/context"
 import Header from "../header/Header"
 import ModeSwitch from "./ModeSwitch"
@@ -9,11 +8,9 @@ import ModeSwitch from "./ModeSwitch"
 export const siteTitle = "Trello clone"
 
 const Layout = ({ children }) => {
-  const { darkMode, notifications } = useGlobalState()
+  const { darkMode } = useGlobalState()
   const { isAuthenticated } = useAuth()
   const [mounted, setMounted] = useState(false)
-
-  const hasNotification = !isEmpty(notifications?.list)
 
   useEffect(() => {
     darkMode
@@ -27,7 +24,6 @@ const Layout = ({ children }) => {
 
   return (
     <div className="layout">
-      {hasNotification && <Notifications />}
       {isAuthenticated && <Header />}
       <div className="layout-children">{children}</div>
       {mounted && <ModeSwitch />}

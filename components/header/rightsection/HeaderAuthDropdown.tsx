@@ -17,6 +17,7 @@ const HeaderAuthDropdown = () => {
       key: "profile",
       title: "Profile",
     },
+
     {
       handleClick: () => router.push(`/${username}/${ROUTES.billing}`),
       key: "billing",

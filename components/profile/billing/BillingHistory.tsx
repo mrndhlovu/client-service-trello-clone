@@ -1,4 +1,4 @@
-import { Fragment, useEffect } from "react"
+import { useEffect } from "react"
 import styled from "styled-components"
 import { isEmpty } from "lodash"
 
@@ -16,7 +16,7 @@ import {
 
 import { useState } from "react"
 import { IStripeInvoice } from "../../../lib/providers"
-import { getBillingHistory } from "../../../api"
+import { clientRequest } from "../../../api"
 
 const Container = styled.div`
   td {
@@ -36,7 +36,8 @@ const BillingHistory = ({ userPlan }: IProps) => {
   useEffect(() => {
     if (!userPlan) return
     const fetchInvoices = async () => {
-      await getBillingHistory()
+      await clientRequest
+        .getBillingHistory()
         .then(res => setInvoices(res.data))
         .catch(() => null)
     }

@@ -16,7 +16,11 @@ import {
   FormHelperText,
 } from "@chakra-ui/react"
 
-import { useAuth, useStripeContext } from "../../../lib/hooks/context"
+import {
+  useAuth,
+  useGlobalState,
+  useStripeContext,
+} from "../../../lib/hooks/context"
 import { getActivePlans, getFilteredPlans, getPendingPlan } from "../../../util"
 import BillingPlans, { IPlan } from "./BillingPlans"
 import FormFeedback from "../../shared/lib/FormFeedback"
@@ -104,6 +108,7 @@ const StyledContainer = styled(Container)`
 const Checkout = () => {
   const { createSubscription, products } = useStripeContext()
   const { user } = useAuth()
+  const { notify } = useGlobalState()
   const stripe = useStripe()
   const elements = useElements()
 
@@ -159,6 +164,13 @@ const Checkout = () => {
     })
 
     if (response) setCompleted(true)
+
+    notify({
+      title: "Transaction complete,",
+      description: "You can download your invoice.",
+      placement: "bottom",
+      status: "success",
+    })
 
     setIsLoading(false)
 

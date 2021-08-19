@@ -1,12 +1,10 @@
-import { GetServerSidePropsContext, Redirect } from "next"
-import { getCurrentUser } from "../../api"
+import { GetServerSidePropsContext } from "next"
+import { serverRequest } from "../../api"
 import { ROUTES } from "../../util/constants"
 import { IUser } from "../providers"
 
 interface IOptions {
   protected: boolean
-  redirect?: Redirect
-  replacePath?: string
 }
 
 export const withAuthSsp = (
@@ -17,10 +15,19 @@ export const withAuthSsp = (
   options?: IOptions
 ) => {
   return async (context: GetServerSidePropsContext) => {
+    const api = serverRequest(context.req.headers)
+
     let currentUser: IUser | null
 
-    await getCurrentUser(context?.req?.headers)
-      .then(res => (currentUser = res?.data || null))
+    await api
+      .getCurrentUser()
+      .then(res => {
+        console.log(
+          "🚀 ~ file: withAuthSsp.tsx ~ line 25 ~ return ~ res",
+          res.data
+        )
+        return (currentUser = res?.data || null)
+      })
       .catch(() => {
         return (currentUser = null)
       })
@@ -48,10 +55,6 @@ export const withAuthSsp = (
 
       if (response?.redirect) {
         return response
-      }
-
-      if (options?.redirect && !response) {
-        return { redirect: options.redirect }
       }
 
       return { props: { currentUser, data: response } }

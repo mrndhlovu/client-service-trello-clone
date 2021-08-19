@@ -8,27 +8,15 @@ import {
   IBoard,
   IStripeInvoice,
   IStripeProduct,
+  IToastProps,
   IUIRequestError,
   IUser,
-  NotificationProps,
 } from "../providers"
 
 interface IDefaultGlobalState {
   darkMode: boolean
   handleModeChange: () => void
-  notifications: NotificationProps
-  dismissNotification: (messageId: number) => void
-  notify: (
-    notificationStringOrObject: string | object,
-    severity?: "success" | "primary" | "danger",
-    notificationPlacement?:
-      | "top-right"
-      | "top-center"
-      | "top-left"
-      | "bottom-left"
-      | "bottom-right"
-      | "bottom-center"
-  ) => void
+  notify: (option: IToastProps) => void
 }
 
 interface IDefaultBoardContext {
@@ -45,6 +33,7 @@ interface IDefaultAuthContext {
   rehydrateUser: (newUser?: IUser) => void
   logout: () => {} | void | null
   login: (formData: ILoginCredentials) => Promise<void>
+  dismissAuthError: () => void
   signup: (formData: ISignupCredentials) => Promise<void>
   refreshToken: () => {} | void | null
   fetchUser: () => Promise<void>

@@ -1,5 +1,5 @@
 import { GetServerSidePropsContext } from "next"
-import { getBoardById } from "../../api"
+import ApiRequest from "../../api"
 import { withAuthComponent, withAuthSsp } from "../../lib/hocs"
 import { IBoard } from "../../lib/providers"
 
@@ -13,7 +13,10 @@ const Board = ({ data }: IProps) => {
 
 export const getServerSideProps = withAuthSsp(
   async (ctx: GetServerSidePropsContext) => {
-    return await getBoardById(ctx.req?.headers, ctx?.params?.id as string)
+    const ssrRequest = new ApiRequest(ctx.req?.headers)
+
+    return await ssrRequest
+      .getBoardById(ctx?.params?.id as string)
       .then(res => res?.data)
       .catch(err => err?.response)
   },

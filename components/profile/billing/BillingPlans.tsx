@@ -64,6 +64,7 @@ const StyledCard = styled.div<ICardProps>`
     padding-left: 20px;
     background: ${props => (props.active ? "#0079bf" : "#F4F5F7")};
     color: ${props => (props.active ? "#fff" : props.theme.colors.border)};
+    padding-bottom: 10px;
 
     span.chakra-radio__label {
       width: 100%;

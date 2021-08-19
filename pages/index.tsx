@@ -1,7 +1,6 @@
-import { getBoards } from "../api"
-import { withAuthComponent, withAuthSsp } from "../lib/hocs"
-
 import { BoardContextProvider, IBoard } from "../lib/providers"
+import { withAuthComponent, withAuthSsp } from "../lib/hocs"
+import ApiRequest from "../api"
 import HomePage from "../components/home/HomePage"
 
 interface IProps {
@@ -18,7 +17,9 @@ const LandingPage = ({ data }: IProps) => {
 
 export const getServerSideProps = withAuthSsp(
   async context => {
-    return await getBoards(context?.req?.headers)
+    const ssRequest = new ApiRequest(context?.req?.headers)
+    return await ssRequest
+      .getBoards()
       .then(res => res?.data)
       .catch(() => null)
   },

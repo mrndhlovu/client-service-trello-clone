@@ -1,11 +1,11 @@
 import { useState } from "react"
+import router from "next/router"
 
 import { Button } from "@chakra-ui/react"
 
 import { deleteUser, IPasswordConfirmation } from "../../api"
 import { useAuth } from "../../lib/hooks/context"
 import PasswordConfirmation from "../auth/PasswordConfirmation"
-import router from "next/router"
 import { ROUTES } from "../../util/constants"
 
 const DeleteUser = () => {

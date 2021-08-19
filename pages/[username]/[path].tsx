@@ -1,7 +1,7 @@
 import { GetServerSidePropsContext } from "next"
 import { TabPanel, TabPanels } from "@chakra-ui/react"
 
-import { getBillingHistory, getBillingOptions } from "../../api"
+import { getBillingOptions } from "../../api"
 import { IUser, StripeContextProvider } from "../../lib/providers"
 import { ROUTES } from "../../util/constants"
 import { withAuthComponent, withAuthSsp } from "../../lib/hocs"
@@ -44,12 +44,7 @@ export const getServerSideProps = withAuthSsp(
     const { username, path } = context.params
     let data: {}
     if (!username || username !== currentUser?.username) {
-      return {
-        redirect: {
-          destination: `/${ROUTES.login}`,
-          permanent: false,
-        },
-      }
+      return null
     }
 
     if (path === "billing") {

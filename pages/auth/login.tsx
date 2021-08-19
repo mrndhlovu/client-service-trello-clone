@@ -1,4 +1,4 @@
-import { refreshAuthToken } from "../../api"
+import ApiRequest, { serverRequest } from "../../api"
 import { ROUTES } from "../../util/constants"
 import { withAuthSsp } from "../../lib/hocs"
 import LoginPage from "../../components/auth/LoginPage"
@@ -7,6 +7,11 @@ const login = () => <LoginPage />
 
 export const getServerSideProps = withAuthSsp(
   async (ctx, currentUser) => {
+    const from = ctx.req.headers.referer
+    const cookie = ctx.req.cookies?.["express:sess"]
+    const ssRequest = serverRequest(ctx.req.headers)
+    const referredFromAuthRoute = Boolean(from) && from?.indexOf("auth") !== -1
+
     if (currentUser?.id && !currentUser.account.isVerified) {
       return {
         redirect: {
@@ -19,21 +24,22 @@ export const getServerSideProps = withAuthSsp(
     if (currentUser?.account?.isVerified) {
       return {
         redirect: {
-          destination: ROUTES.home,
+          destination: referredFromAuthRoute ? ROUTES.home : from,
           permanent: false,
         },
       }
     }
 
-    if (ctx.req.cookies?.["express:sess"]) {
-      const response = await refreshAuthToken()
+    if (cookie) {
+      const response = await ssRequest
+        .refreshAuthToken()
         .then(res => res)
         .catch(() => null)
 
       if (response?.status === 200) {
         return {
           redirect: {
-            destination: ROUTES.home,
+            destination: referredFromAuthRoute ? ROUTES.home : from,
             permanent: false,
           },
         }

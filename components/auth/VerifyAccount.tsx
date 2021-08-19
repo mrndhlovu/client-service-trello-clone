@@ -1,51 +1,34 @@
 import { useState } from "react"
 import { useRouter } from "next/router"
+import Link from "next/link"
 
-import { Alert, AlertDescription, AlertTitle } from "@chakra-ui/react"
+import { AlertDescription, AlertTitle, Button } from "@chakra-ui/react"
 
 import { requestNewVerificationLink } from "../../api"
+import { ROUTES } from "../../util/constants"
+import { useGlobalState } from "../../lib/hooks/context"
 import EmailConfirmation from "./EmailConfirmation"
 
 const VerifyAccount = () => {
-  const [submitted, setSubmitted] = useState<boolean>(false)
   const router = useRouter()
-  const isNew = Boolean(router.query?.new === "true")
-  console.log(
-    "🚀 ~ file: VerifyAccount.tsx ~ line 12 ~ VerifyAccount ~ isNew",
-    isNew
-  )
+  const { notify } = useGlobalState()
+  const [submitted, setSubmitted] = useState<boolean>(false)
+
+  const isNew = Boolean(router.query?.isNew === "true")
 
   const handleClick = async (formData: { email: string }) => {
     await requestNewVerificationLink(formData)
-      .then(res => {
-        setSubmitted(true)
-      })
-      .catch(err => {
-        console.log(
-          "🚀 ~ file: VerifyAccount.tsx ~ line 16 ~ awaitrequestNewVerificationLink ~ err",
-          err
-        )
-      })
+      .then(() => notify({ description: "Verification link sent." }))
+      .catch(() =>
+        notify({ description: "Failed to send link to email provided." })
+      )
   }
 
   return (
-    <Alert
-      status="info"
-      flexDirection="column"
-      alignItems="center"
-      justifyContent="center"
-      textAlign="center"
-      height="350px"
-      className="verification-alert"
-    >
+    <>
       <AlertTitle className="title" mt={4} mb={1} fontSize="lg">
         Please verify your account with link sent to your email.
       </AlertTitle>
-      {submitted && (
-        <AlertDescription className="desc" maxWidth="sm">
-          Verification link sent.
-        </AlertDescription>
-      )}
 
       {!isNew && (
         <AlertDescription className="desc" maxWidth="sm">
@@ -57,7 +40,17 @@ const VerifyAccount = () => {
           />
         </AlertDescription>
       )}
-    </Alert>
+
+      {submitted && (
+        <Link href={`/${ROUTES.login}`}>
+          <a>
+            <Button variant="outline" size="sm" colorScheme="twitter">
+              Go to login
+            </Button>
+          </a>
+        </Link>
+      )}
+    </>
   )
 }
 
