@@ -1,15 +1,15 @@
-import axios, { AxiosInstance, AxiosRequestConfig } from "axios"
+import axios, {
+  AxiosInstance,
+  AxiosPromise,
+  AxiosRequestConfig,
+  AxiosResponse,
+} from "axios"
 import { GetServerSidePropsContext } from "next"
 import { ICardDetails } from "../lib/hooks/context"
 
 import { isBrowser } from "../util"
 
 import END_POINTS from "./endpoints"
-
-const instance = axios.create({
-  baseURL: isBrowser ? "/api" : `${process.env.NEXT_PUBLIC_NGINX_BASE_URL}/api`,
-  headers: isBrowser ? {} : { Host: process.env.NEXT_PUBLIC_HOST },
-})
 
 export interface ISignupCredentials {
   username: string
@@ -60,26 +60,45 @@ interface IUpdateBoardData {
 }
 
 class AxiosConfig {
-  protected http: AxiosInstance
+  private instance = axios.create({
+    baseURL: isBrowser
+      ? "/api"
+      : `${process.env.NEXT_PUBLIC_NGINX_BASE_URL}/api`,
+    headers: isBrowser ? {} : { Host: process.env.NEXT_PUBLIC_HOST },
+  })
 
+  http: AxiosInstance
   constructor(public ssHeaders?: ISsHeaders) {
-    this.http = instance
-    this.http.interceptors.request.use(this.interceptor())
+    this.http = this.instance
+
+    this.http.interceptors.request.use(
+      request => this.requestHandler(request),
+      error => this.errorHandler(error)
+    )
+
+    this.http.interceptors.response.use(
+      request => this.responseHandler(request),
+      error => this.errorHandler(error)
+    )
   }
 
-  protected interceptor() {
-    if (this.ssHeaders) {
-      instance.defaults = this.ssHeaders
-    }
+  protected responseHandler = (response: AxiosResponse) => {
+    return response
+  }
 
-    return instance.request
+  protected errorHandler = (error: Error) => {
+    return Promise.reject(error)
+  }
+
+  protected requestHandler = (request: AxiosRequestConfig) => {
+    request.headers = this.ssHeaders
+    return request
   }
 }
 
 class ApiRequest extends AxiosConfig {
   constructor(ssHeaders?: ISsHeaders) {
     super(ssHeaders)
-    console.log("🚀 ~ file: index.ts ~  ~ ssHeaders", this.http.defaults)
   }
 
   signupUser = async (userData: ISignupCredentials) =>

@@ -1,9 +1,8 @@
 import { GetServerSidePropsContext } from "next"
 import { TabPanel, TabPanels } from "@chakra-ui/react"
 
-import { getBillingOptions } from "../../api"
 import { IUser, StripeContextProvider } from "../../lib/providers"
-import { ROUTES } from "../../util/constants"
+import { serverRequest } from "../../api"
 import { withAuthComponent, withAuthSsp } from "../../lib/hocs"
 import Billing from "../../components/profile/billing/Billing"
 import ProfileLayout from "../../components/layout/ProfileLayout"
@@ -41,6 +40,8 @@ const index = ({ data }) => {
 
 export const getServerSideProps = withAuthSsp(
   async (context: GetServerSidePropsContext, currentUser: IUser) => {
+    const ssRequest = serverRequest(context?.req?.headers)
+
     const { username, path } = context.params
     let data: {}
     if (!username || username !== currentUser?.username) {
@@ -48,7 +49,8 @@ export const getServerSideProps = withAuthSsp(
     }
 
     if (path === "billing") {
-      const products = await getBillingOptions(context.req.headers)
+      const products = await ssRequest
+        .getBillingOptions()
         .then(res => res.data.data)
         .catch(() => null)
 
