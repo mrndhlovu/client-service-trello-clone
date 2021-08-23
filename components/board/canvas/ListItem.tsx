@@ -1,18 +1,20 @@
 import { Button, MenuItem } from "@chakra-ui/react"
 import { isEmpty } from "lodash"
+import { CSSProperties, useCallback, useMemo } from "react"
+import { useDrag, DragSourceMonitor, useDrop } from "react-dnd"
 import { AiOutlineEllipsis } from "react-icons/ai"
 
 import { clientRequest } from "../../../api"
-import { useBoard, useGlobalState } from "../../../lib/hooks/context"
-import { getErrorMessage } from "../../../util"
+import { useBoard, useListContext } from "../../../lib/hooks/context"
 import { UIDropdown } from "../../shared"
+import DraggableList from "../dnd/DraggableList"
 import EditableTitle from "../EditableTitle"
 import AddCard from "./AddCard"
 import ListCards from "./ListCards"
 
 interface IProps {
   listItem: IListItem
-  updateBoardLists: (newListItem: IListItem) => void
+  listIndex: number
 }
 
 export interface IListItem {
@@ -21,33 +23,27 @@ export interface IListItem {
 
 export interface ICardItem {
   [key: string]: any
+  cardIndex: number
 }
 
-const ListItem = ({ listItem, updateBoardLists }: IProps) => {
-  const { notify } = useGlobalState()
+const ListItem = ({ listItem, listIndex }: IProps) => {
   const { board } = useBoard()
+  const { handleUpdateList, onMoveList } = useListContext()
   const hasCards = !isEmpty(board?.cards)
 
-  const handleUpdate = async (update: { [key: string]: any }) => {
-    await clientRequest
-      .updateList(update, { listId: listItem.id, boardId: board.id })
-      .then(res => updateBoardLists(res.data))
-      .catch(err => notify({ description: getErrorMessage(err.response.data) }))
-  }
-
   const handleUpdateTitle = (title: string) => {
-    handleUpdate({ title })
+    handleUpdateList(listItem.id, { title })
   }
 
   const handleArchiveList = () => {
-    handleUpdate({ archived: true })
+    handleUpdateList(listItem.id, { archived: true })
   }
 
   const listActions = [{ title: "Archive list", onClick: handleArchiveList }]
 
   return (
-    <div className="list-wrapper ">
-      <div className="list-item">
+    <div className="list-wrapper">
+      <DraggableList id={listItem.id} onMoveItem={onMoveList} index={listIndex}>
         <div className="editable-header">
           <EditableTitle
             handleUpdate={handleUpdateTitle}
@@ -71,7 +67,7 @@ const ListItem = ({ listItem, updateBoardLists }: IProps) => {
         </div>
         {hasCards && <ListCards listId={listItem.id} />}
         <AddCard listId={listItem.id} />
-      </div>
+      </DraggableList>
     </div>
   )
 }

@@ -20,17 +20,26 @@ export default styled.div`
       vertical-align: top;
       white-space: nowrap;
       width: 272px;
+      position: relative;
     }
 
     .editable-header {
       ${props => props.theme.mixins.flex("row", "space-between")};
       flex: 1 1 auto;
-      margin: 0 4px;
+      margin: 0 4px 4px;
       min-height: 0;
       overflow-x: hidden;
       overflow-y: auto;
       padding: 2px 4px 0;
       z-index: 1;
+
+      & button {
+        justify-content: end;
+      }
+
+      .edit-title-button {
+        background-color: transparent;
+      }
 
       button:last-child {
         &:hover {
@@ -42,22 +51,41 @@ export default styled.div`
     .list-item {
       background-color: #ebecf0;
       border-radius: 3px;
-      box-sizing: border-box;
       display: flex;
       flex-direction: column;
-      max-height: 100%;
+      height: max-content;
       position: relative;
       white-space: normal;
-      width: inherit;
+      width: 272px;
 
       button {
         border: none;
       }
     }
 
+    .card-drag-placeholder,
+    .drag-placeholder {
+      background-color: #6b6b6b6b;
+      border-radius: 3px;
+      display: flex;
+      flex-direction: column;
+      height: max-content;
+      position: relative;
+      white-space: normal;
+      width: 272px;
+
+      div {
+        opacity: 0;
+      }
+    }
+
+    .card-drag-placeholder {
+      background-color: #a9a9a94d;
+      margin: 2px;
+    }
+
     .create-card,
     .create-list {
-      box-sizing: border-box;
       display: inline-block;
       margin: 0 4px 0 8px;
       vertical-align: top;
@@ -78,10 +106,15 @@ export default styled.div`
     .create-card {
       min-width: 256px;
       max-width: 256px;
+      margin: 0 4px 4px 8px;
 
       textarea {
         background-color: #fff;
         ${props => props.theme.styles.cardBoxShadow};
+      }
+
+      .add-card-button {
+        background-color: transparent;
       }
     }
 

@@ -26,7 +26,12 @@ const EditableTitle = ({ handleUpdate, title }: IProps) => {
   return (
     <>
       {!editing ? (
-        <Button size="sm" onClick={toggleEditTitle}>
+        <Button
+          className="edit-title-button"
+          isFullWidth
+          size="sm"
+          onClick={toggleEditTitle}
+        >
           {title}
         </Button>
       ) : (

@@ -5,6 +5,7 @@ import axios, {
   AxiosResponse,
 } from "axios"
 import { GetServerSidePropsContext } from "next"
+import { IDraggingProps } from "../components/board/canvas/BoardCanvas"
 import { ICardDetails } from "../lib/hooks/context"
 
 import { isBrowser } from "../util"
@@ -188,6 +189,14 @@ class ApiRequest extends AxiosConfig {
       `${END_POINTS.cards}/${options.listId}/${options.boardId}`,
       data
     )
+  }
+
+  async moveList(data: IDraggingProps) {
+    return await this.http.patch(`${END_POINTS.lists}/move`, data)
+  }
+
+  async moveCard(data: IDraggingProps) {
+    return await this.http.patch(`${END_POINTS.cards}/move`, data)
   }
 
   createCustomerSubscription = async (data: ICardDetails) => {

@@ -1,4 +1,5 @@
 import { ChangeEvent, useEffect, useState } from "react"
+import { isEmpty } from "lodash"
 import { Button, Input } from "@chakra-ui/react"
 import { AiOutlineClose, AiOutlinePlus } from "react-icons/ai"
 
@@ -23,8 +24,13 @@ const AddList = ({ isFirst }: IProps) => {
 
   const handleSave = async () => {
     if (!title) return
+    const hasLists = !isEmpty(board.lists)
+    const newListPosition = hasLists
+      ? board.lists[board.lists.length - 1].position + 1
+      : 0
+
     await clientRequest
-      .createList({ title }, board.id)
+      .createList({ title, position: newListPosition }, board.id)
       .then(res => {
         const boardLists = [...board.lists]
         boardLists.push(res.data)

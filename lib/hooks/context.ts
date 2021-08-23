@@ -4,6 +4,8 @@ import {
   IPasswordConfirmation,
   ISignupCredentials,
 } from "../../api"
+import { IListItem } from "../../components/board/canvas/ListItem"
+import { IDndItem } from "../../components/board/dnd/DraggableList"
 import {
   IBoard,
   IStripeInvoice,
@@ -63,6 +65,27 @@ export interface ICardDetails {
   plan?: string
 }
 
+export interface IListContextProps {
+  updateBoardLists: (newListItem: IListItem) => void
+  sourceIndex?: number
+
+  onMoveList: (
+    dragIndex: number,
+    hoverIndex: number,
+    isActive?: boolean
+  ) => void
+  saveChanges: (dragItem: IDndItem) => void
+  handleUpdateList: (listId: string, update: { [key: string]: any }) => void
+}
+
+export interface ICardContextProps {
+  // updateBoardLists: (newListItem: IListItem) => void
+
+  onMoveCard: (dragIndex: number, hoverIndex: number) => void
+  saveCardChanges: (dragItem: IDndItem) => void
+  // handleUpdateList: (listId: string, update: { [key: string]: any }) => void
+}
+
 interface IStripeContext {
   createSubscription: (cardData: ICardDetails) => any
   products?: IStripeProduct[]
@@ -79,7 +102,8 @@ export const StripeContext = createContext<IStripeContext>({} as IStripeContext)
 export const AuthContext = createContext<IDefaultAuthContext>(
   {} as IDefaultAuthContext
 )
-
+export const ListContext = createContext({} as IListContextProps)
+export const CardContext = createContext({} as ICardContextProps)
 export const BoardContext = createContext<IDefaultBoardContext>(
   {} as IDefaultBoardContext
 )
@@ -88,4 +112,6 @@ export const useGlobalState = () => useContext(GlobalContext)
 export const useHomeContext = () => useContext(HomeContext)
 export const useAuth = () => useContext(AuthContext)
 export const useBoard = () => useContext(BoardContext)
+export const useListContext = () => useContext(ListContext)
+export const useCardContext = () => useContext(CardContext)
 export const useStripeContext = () => useContext(StripeContext)
