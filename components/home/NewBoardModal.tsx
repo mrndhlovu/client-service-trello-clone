@@ -1,9 +1,11 @@
-import { RefObject, useRef, useState } from "react"
+import { useRef, useState } from "react"
 import router from "next/router"
 import styled from "styled-components"
+import { FormikValues } from "formik"
 import Link from "next/link"
 import { FiCheck, FiX } from "react-icons/fi"
 import {
+  Button,
   Modal,
   ModalBody,
   ModalContent,
@@ -13,11 +15,9 @@ import {
 
 import { BOARD_COLOR_OPTIONS, ROUTES } from "../../util/constants"
 import { CREATE_BOARD_VALIDATION } from "../../util/formhelpers"
-import { createNewBoard } from "../../api"
+import { clientRequest } from "../../api"
 import { UIForm, UIFormInput } from "../shared"
 import { useAuth } from "../../lib/hooks/context"
-import AuthFormButton from "../auth/AuthFormButton"
-import { FormikValues } from "formik"
 
 interface IStyledModalProps {
   image?: string
@@ -41,18 +41,6 @@ const StyledModal = styled(Modal)`
     z-index: 10000;
   }
 
-  .board-bg-options {
-    max-width: 120px;
-  }
-
-  ul {
-    padding-left: 10px;
-  }
-
-  li {
-    list-style: none;
-  }
-
   .modal-footer {
     justify-content: start;
     border-top: none;
@@ -68,6 +56,26 @@ const StyledModal = styled(Modal)`
 const FormWrapper = styled.div<IStyledModalProps>`
   height: 105px;
   position: relative;
+  ${props => props?.theme.mixins.flex("row", "space-between")};
+
+  .board-bg-options {
+    max-width: 120px;
+    display: flex;
+
+    .board-bg-colors {
+      display: flex;
+      flex-wrap: wrap;
+      width: 126px;
+    }
+  }
+
+  ul {
+    padding-left: 10px;
+  }
+
+  li {
+    list-style: none;
+  }
 
   .form-wrap {
     position: relative;
@@ -79,14 +87,32 @@ const FormWrapper = styled.div<IStyledModalProps>`
     padding: 10px;
     border-radius: 3px;
     min-width: 295px;
+    position: relative;
+
+    input {
+      border: none !important;
+      box-shadow: none;
+      box-sizing: border-box;
+      color: #fff;
+      font-size: 16px;
+      font-weight: 700;
+      left: -8px;
+      line-height: 24px;
+      margin-bottom: 4px;
+      padding: 2px 8px;
+      position: relative;
+      margin: 0 !important;
+      background-color: #ffffff26;
+    }
 
     form {
       width: 90%;
     }
 
     .icon-wrapper {
-      position: relative;
-      width: 10%;
+      position: absolute;
+      right: 0px;
+      top: 1px;
     }
 
     &::before {
@@ -109,22 +135,6 @@ const FormWrapper = styled.div<IStyledModalProps>`
       right: 5px;
       top: 5px;
       z-index: 100;
-    }
-
-    input {
-      border: none !important;
-      box-shadow: none;
-      box-sizing: border-box;
-      color: #fff;
-      font-size: 16px;
-      font-weight: 700;
-      left: -8px;
-      line-height: 24px;
-      margin-bottom: 4px;
-      padding: 2px 8px;
-      position: relative;
-      margin: 0 !important;
-      background-color: #ffffff26;
     }
   }
 `
@@ -153,8 +163,6 @@ interface FormValues {
 const initialState: FormValues = { title: "" }
 
 const NewBoardModal = ({ toggleModal, openModal }) => {
-  const { user } = useAuth()
-
   const [activeBgOption, setActiveBgOption] = useState(BOARD_COLOR_OPTIONS[0])
   const [disabled, setDisabled] = useState(true)
   const [loading, setLoading] = useState(false)
@@ -168,10 +176,11 @@ const NewBoardModal = ({ toggleModal, openModal }) => {
     setLoading(true)
     const formData = formRef.current
 
-    await createNewBoard({
-      ...formData?.values,
-      prefs: { image: activeBgOption.image, color: activeBgOption.color },
-    })
+    await clientRequest
+      .createNewBoard({
+        ...formData?.values,
+        prefs: { image: activeBgOption.image, color: activeBgOption.color },
+      })
       .then(res => {
         formData.isSubmitting! = false
 
@@ -180,7 +189,6 @@ const NewBoardModal = ({ toggleModal, openModal }) => {
       .catch(err => {
         formData.isSubmitting! = false
       })
-    setLoading(false)
   }
 
   const handleSelectedColor = (newOption: any) => setActiveBgOption(newOption)
@@ -188,14 +196,14 @@ const NewBoardModal = ({ toggleModal, openModal }) => {
   return (
     <StyledModal onClose={toggleModal} isOpen={openModal}>
       <ModalOverlay />
-      <ModalContent>
+      <ModalContent className="modal-content">
         <ModalBody>
           <FormWrapper
             image={activeBgOption.image}
             color={activeBgOption.color}
             className="board-bg-wrapper d-flex justify-content-between"
           >
-            <div className="d-flex form-wrap flex-grow-1">
+            <div className="form-wrap">
               <UIForm
                 id="create-board"
                 validationSchema={CREATE_BOARD_VALIDATION}
@@ -212,11 +220,11 @@ const NewBoardModal = ({ toggleModal, openModal }) => {
                 />
               </UIForm>
               <div className="icon-wrapper">
-                <FiX cursor="pointer" onClick={toggleModal} />
+                <FiX size={22} cursor="pointer" onClick={toggleModal} />
               </div>
             </div>
             <div className="board-bg-options flex-grow-1">
-              <ul className="d-flex flex-wrap gap">
+              <ul className="board-bg-colors gap">
                 {BOARD_COLOR_OPTIONS.map(option => (
                   <li key={option.key}>
                     <Link href="/">
@@ -239,14 +247,17 @@ const NewBoardModal = ({ toggleModal, openModal }) => {
           </FormWrapper>
         </ModalBody>
 
-        <ModalFooter>
-          <AuthFormButton
-            formId="create-board"
+        <ModalFooter className="modal-footer" justifyContent="end">
+          <Button
+            id="create-board"
             onClick={handleCreateBoard}
-            buttonText="Create board"
             disabled={loading && disabled}
-            loading={loading}
-          />
+            isLoading={loading}
+            size="sm"
+            colorScheme="blue"
+          >
+            Create board
+          </Button>
         </ModalFooter>
       </ModalContent>
     </StyledModal>

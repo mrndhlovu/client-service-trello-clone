@@ -16,13 +16,11 @@ const CreateBoardTile = styled.li`
   position: relative;
   cursor: pointer;
   list-style: none;
-  max-width: 190px;
-  min-width: 172px;
+  max-width: 195px;
+  min-width: 195px;
 
   .create-board {
-    padding: 4px 8px;
     background-color: rgba(9, 30, 66, 0.04);
-    box-shadow: none;
     border: none;
     color: #172b4d;
     display: table-cell;
@@ -38,7 +36,6 @@ const CreateBoardTile = styled.li`
     background-size: cover;
     background-position: 50%;
     line-height: 20px;
-    padding: 8px;
     position: relative;
     text-decoration: none;
 
@@ -62,6 +59,11 @@ const CreateBoardTile = styled.li`
       right: 8px;
     }
   }
+
+  @media ${props => props.theme.device.mobileXs} {
+    margin: 0 8px 10px 0;
+    min-width: 100%;
+  }
 `
 
 const StyledTooltip = styled(Tooltip)`
@@ -84,12 +86,15 @@ const CreateBoard = () => {
             <span className="create-board-remaining">{`2 remaining`}</span>
           </p>
 
-          <StyledTooltip
-            placement="auto-start"
-            label={<AiOutlineQuestionCircle size={15} />}
+          <Tooltip
+            hasArrow
+            bg="gray.300"
+            placement="top"
+            color="black"
+            label={upgradeToolTipText(8)}
           >
-            {upgradeToolTipText(8)}
-          </StyledTooltip>
+            <AiOutlineQuestionCircle size={15} />
+          </Tooltip>
         </div>
       </CreateBoardTile>
       {openModal && (

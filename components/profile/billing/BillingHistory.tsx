@@ -19,6 +19,8 @@ import { IStripeInvoice } from "../../../lib/providers"
 import { clientRequest } from "../../../api"
 
 const Container = styled.div`
+  min-height: 150px;
+
   td {
     font-size: 13px;
   }

@@ -20,6 +20,7 @@ interface IProps {
 }
 
 const ListWrapper = styled.ul`
+  display: flex;
   flex-wrap: wrap;
   width: 100%;
   padding-left: 0;
@@ -28,10 +29,11 @@ const ListWrapper = styled.ul`
 export const Tile = styled.li<ITileProps>`
   list-style: none;
   width: 23.5%;
-  max-width: 190px;
+  max-width: 195px;
   min-width: 172px;
   margin: 0 2% 2% 0;
   overflow: hidden;
+  width: 100%;
 
   .home-boards-tile-details {
     background-color: ${props => props?.color};
@@ -44,8 +46,9 @@ export const Tile = styled.li<ITileProps>`
     flex-direction: column;
     justify-content: space-between;
     border-radius: 2px;
-    padding: 0 8px;
     height: 100px;
+    width: 100%;
+    padding: 6px 8px;
 
     .home-boards-tile-detail {
       ${props =>
@@ -112,8 +115,7 @@ export const Tile = styled.li<ITileProps>`
   }
 
   @media ${props => props.theme.device.mobileXs} {
-    margin: 0 0 10px 0;
-    width: 100%;
+    margin: 0 8px 10px 0;
     min-width: 100%;
   }
 `
@@ -157,7 +159,7 @@ const BoardsGroup = ({ heading, icon, boards, category }: IProps) => {
                       <AiOutlineStar
                         className={`home-tile-star ${starred ? "active" : ""}`}
                         size={15}
-                        onClick={ev => handleStarBoard(ev, board)}
+                        onClick={() => handleStarBoard(board)}
                       />
                     }
                   </div>

@@ -135,6 +135,14 @@ const darkStyles = css`
         box-shadow: ${props => props.theme.colors.lightBoxShadowBorder};
       }
     }
+
+    .create-board {
+      box-shadow: ${props => props.theme.colors.lightBoxShadowBorder};
+
+      svg {
+        color: #fff;
+      }
+    }
   }
 `
 

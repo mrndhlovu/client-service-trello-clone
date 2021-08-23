@@ -1,9 +1,9 @@
 import Link from "next/link"
+import { useRouter } from "next/router"
 
 import { AiOutlineHome } from "react-icons/ai"
 
 import { ROUTES } from "../../util/constants"
-import { useBoard } from "../../lib/hooks/context"
 import HeaderAppListDropdown from "./leftsection/HeaderAppListDropdown"
 import HeaderAuthDropdown from "./rightsection/HeaderAuthDropdown"
 import HeaderBoardsDropdown from "./leftsection/HeaderBoardsDropdown"
@@ -13,13 +13,13 @@ import HeaderInformationDropdown from "./rightsection/HeaderInformationDropdown"
 import HeaderNotificationsDropdown from "./rightsection/HeaderNotificationsDropdown"
 import HeaderSearchDropdown from "./leftsection/HeaderSearchDropdown"
 import HeaderStyles from "./Styles"
-import Logo from "./centersection/Logo"
 
 const Header = () => {
-  const { activeBoard } = useBoard()
+  const router = useRouter()
+  const isTransParent = Boolean(router.asPath.indexOf("board") !== -1)
 
   return (
-    <HeaderStyles activeBoardColor={activeBoard?.bgColor}>
+    <HeaderStyles isTransParent={isTransParent}>
       <div className="header">
         <div className="header-left-content">
           <div className="header-left-icon-wrapper">

@@ -148,7 +148,7 @@ const AuthContextProvider = ({ children }) => {
     await clientRequest
       .logoutUser()
       .then(() => {
-        return router.push(`/${ROUTES.login}`)
+        return router.replace(router.pathname, `/${ROUTES.login}`)
       })
       .catch(error => {
         setAuthError(error?.response?.data)

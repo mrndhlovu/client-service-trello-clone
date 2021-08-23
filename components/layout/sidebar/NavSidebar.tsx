@@ -76,7 +76,7 @@ const NavSidebar = () => {
           </ul>
         </div>
         <div className="sb-secondary">
-          <Accordion>
+          <Accordion allowToggle>
             <AccordionItem>
               <AccordionButton
                 onClick={handleClick}
@@ -105,7 +105,7 @@ const NavSidebar = () => {
                       <Link href={option?.link}>
                         <a>
                           <div className="toggle-content d-flex justify-content-between">
-                            <div className="d-flex">
+                            <div className="button-text">
                               <span className="sb-link-item-icon">
                                 <Icon icon={option.key} />
                               </span>

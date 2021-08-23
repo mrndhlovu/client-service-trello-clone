@@ -3,6 +3,10 @@ const END_POINTS = {
   boards: "/boards",
   createBoard: "/boards/create",
 
+  lists: "/lists",
+
+  cards: "/cards",
+
   connectMfa: "/auth/mfa/connect",
   currentUser: "/auth/me",
   deleteUser: "/auth/delete",

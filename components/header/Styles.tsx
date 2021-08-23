@@ -1,15 +1,15 @@
 import styled from "styled-components"
 
 interface IHeaderStyles {
-  activeBoardColor?: string
+  isTransParent?: boolean
 }
 
 export default styled.header<IHeaderStyles>`
-  background-color: ${({ activeBoardColor, theme }) =>
-    activeBoardColor || theme.colors.trello};
+  background-color: ${({ isTransParent, theme }) =>
+    isTransParent ? "#00000036" : theme.colors.trello};
   z-index: 100;
   height: 37px;
-  position: sticky;
+  position: absolute;
   top: 0;
   left: 0;
   right: 0;

@@ -8,8 +8,12 @@ export default styled.div`
   line-height: 20px;
   font-weight: 400;
   height: 100%;
+  max-width: 240px;
+  width: 100%;
 
   .sb {
+    position: sticky;
+    top: 0;
     transform: translateY(+8px);
 
     .sb-primary {
@@ -39,17 +43,17 @@ export default styled.div`
         margin: 0;
         min-height: 20px;
         overflow: hidden;
-        padding: 6px 8px 6px 0;
+        padding: 6px 8px;
         text-decoration: none;
         transition-property: background-color, border-color, box-shadow;
         transition-duration: 85ms;
         transition-timing-function: ease;
         color: ${props => props.theme.colors.bgDark};
         font-size: 13.5px;
+      }
 
-        &:hover {
-          background-color: ${props => props.theme.colors.lightBorder};
-        }
+      &:hover {
+        background-color: #dbdee27a;
       }
 
       &-icon {
@@ -109,8 +113,13 @@ export default styled.div`
       }
 
       .toggle-content {
+        ${props => props.theme.mixins.flex(undefined, "space-between")};
         color: #172b4d;
         width: 100%;
+
+        & > div:first-child {
+          display: flex;
+        }
 
         .toggle-button-icon {
           width: 15px;
@@ -148,21 +157,18 @@ export default styled.div`
         transition-property: background-color, border-color, box-shadow;
         transition-duration: 85ms;
         transition-timing-function: ease;
-        a {
-          font-weight: lighter;
-          font-size: 12.5px;
+        color: ${props => props.theme.colors.border};
+
+        &:hover {
+          background-color: #dbdee27a;
         }
       }
 
-      .sb-link-item.active {
-        a {
-          background-color: #dbdee2;
-          color: #0079bf;
-
-          &:hover {
-            background-color: #dbdee2;
-          }
-        }
+      .button-text {
+        display: flex;
+        align-items: center;
+        font-size: 12.5px;
+        font-weight: 300;
       }
     }
   }

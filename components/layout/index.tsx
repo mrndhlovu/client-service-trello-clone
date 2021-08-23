@@ -24,8 +24,11 @@ const Layout = ({ children }) => {
 
   return (
     <div className="layout">
-      {isAuthenticated && <Header />}
-      <div className="layout-children">{children}</div>
+      <div className="layout-children">
+        {isAuthenticated && <Header />}
+
+        {children}
+      </div>
       {mounted && <ModeSwitch />}
     </div>
   )

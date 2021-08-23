@@ -16,7 +16,7 @@ export interface IUIRequestError {
 
 export interface IToastProps {
   title?: string
-  description: string
+  description: string | string[]
   status?: "info" | "warning" | "success" | "error"
   placement?:
     | "top-right"

@@ -163,6 +163,33 @@ class ApiRequest extends AxiosConfig {
     return await this.http.patch(`${END_POINTS.boards}/${boardId}`, data)
   }
 
+  async deleteBoard(boardId: string) {
+    return await this.http.delete(`${END_POINTS.boards}/${boardId}`)
+  }
+  async updateList(
+    data: { [key: string]: any },
+    options: { listId: string; boardId: string }
+  ) {
+    return await this.http.patch(
+      `${END_POINTS.lists}/${options.boardId}/${options.listId}`,
+      data
+    )
+  }
+
+  async createList(data: { [key: string]: any }, boardId: string) {
+    return await this.http.post(`${END_POINTS.lists}/create/${boardId}`, data)
+  }
+
+  async createCard(
+    data: { [key: string]: any },
+    options: { listId: string; boardId: string }
+  ) {
+    return await this.http.post(
+      `${END_POINTS.cards}/${options.listId}/${options.boardId}`,
+      data
+    )
+  }
+
   createCustomerSubscription = async (data: ICardDetails) => {
     return await this.http.post(END_POINTS.payments, data)
   }

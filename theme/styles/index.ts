@@ -12,4 +12,15 @@ const absoluteCenter = css`
   transform: translate(-50%, -50%);
 `
 
-export default { darkMode, typography, reset, utilities, absoluteCenter }
+const cardBoxShadow = css`
+  box-shadow: 0 1px 0 #091e4240;
+`
+
+export default {
+  darkMode,
+  typography,
+  reset,
+  utilities,
+  absoluteCenter,
+  cardBoxShadow,
+}

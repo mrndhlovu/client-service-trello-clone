@@ -36,6 +36,7 @@ declare module "styled-components" {
       typography: FlattenInterpolation<ThemeProps<DefaultTheme>>
       utilities: FlattenInterpolation<ThemeProps<DefaultTheme>>
       absoluteCenter: FlattenInterpolation<ThemeProps<DefaultTheme>>
+      cardBoxShadow: FlattenInterpolation<ThemeProps<DefaultTheme>>
     }
     keyframes: {
       fadeInDown: Interpolation<ThemeProps<DefaultTheme>>

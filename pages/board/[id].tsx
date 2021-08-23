@@ -1,14 +1,20 @@
 import { GetServerSidePropsContext } from "next"
+
 import ApiRequest from "../../api"
+import Board from "../../components/board/Board"
 import { withAuthComponent, withAuthSsp } from "../../lib/hocs"
-import { IBoard } from "../../lib/providers"
+import { BoardContextProvider, IBoard } from "../../lib/providers"
 
 interface IProps {
   data: IBoard
 }
 
-const Board = ({ data }: IProps) => {
-  return <div>Board: {data?.title}</div>
+const index = ({ data }: IProps) => {
+  return (
+    <BoardContextProvider board={data}>
+      <Board board={data} />
+    </BoardContextProvider>
+  )
 }
 
 export const getServerSideProps = withAuthSsp(
@@ -22,4 +28,4 @@ export const getServerSideProps = withAuthSsp(
   },
   { protected: true }
 )
-export default withAuthComponent(Board)
+export default withAuthComponent(index)

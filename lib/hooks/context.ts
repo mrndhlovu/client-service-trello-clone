@@ -1,4 +1,4 @@
-import { createContext, useContext } from "react"
+import { createContext, useContext, MouseEvent } from "react"
 import {
   ILoginCredentials,
   IPasswordConfirmation,
@@ -21,9 +21,19 @@ interface IDefaultGlobalState {
 
 interface IDefaultBoardContext {
   handleCreateBoard: () => void
-  handleStarBoard: (ev: any, board: IBoard) => void
-  boards: IBoard[]
-  activeBoard: IBoard | undefined | null
+  handleStarBoard: (board?: IBoard) => void
+  boards?: IBoard[]
+  board?: IBoard
+  handleDeleteBoard: () => void
+  drawerOpen: boolean
+  isStarred: boolean
+  toggleDrawerMenu: () => void
+  closeBoard: () => void
+  setActiveBoard: (board?: IBoard) => void
+  handleUpdateBoard: (
+    boardUpdate: { [key: string]: any },
+    boardId?: string
+  ) => void
 }
 
 interface IDefaultAuthContext {

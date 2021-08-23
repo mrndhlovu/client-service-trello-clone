@@ -9,6 +9,8 @@ import { useAuth } from "../../lib/hooks/context"
 import UserAvatar from "../shared/lib/UserAvatar"
 
 const StyledContainer = styled(Container)`
+  max-width: 76ch;
+
   .profile-content-wrapper {
     border-top: 0.1px solid #bbbbc266;
     width: 100%;
@@ -76,7 +78,7 @@ const ProfileLayout = ({ children }) => {
   }, [])
 
   return (
-    <Container>
+    <>
       <LayoutHeader>
         <p>
           <UserAvatar />
@@ -84,29 +86,28 @@ const ProfileLayout = ({ children }) => {
           <span>@{user?.username}</span>
         </p>
       </LayoutHeader>
-      <div className="profile-content-wrapper">
-        <StyledContainer maxW="container.md">
-          <Tabs
-            className="profile-content"
-            index={activeTab?.id}
-            isFitted
-            variant="enclosed"
-            size="sm"
-          >
-            <StyledTabList as="ul">
-              {PROFILE_TAB_OPTIONS.map(option => (
-                <li key={option.key}>
-                  <Link href={`/${user?.username}/${option?.key}`}>
-                    <Tab as="a">{option.title}</Tab>
-                  </Link>
-                </li>
-              ))}
-            </StyledTabList>
-            {children}
-          </Tabs>
-        </StyledContainer>
-      </div>
-    </Container>
+
+      <StyledContainer>
+        <Tabs
+          className="profile-content"
+          index={activeTab?.id}
+          isFitted
+          variant="enclosed"
+          size="sm"
+        >
+          <StyledTabList as="ul">
+            {PROFILE_TAB_OPTIONS.map(option => (
+              <li key={option.key}>
+                <Link href={`/${user?.username}/${option?.key}`}>
+                  <Tab as="a">{option.title}</Tab>
+                </Link>
+              </li>
+            ))}
+          </StyledTabList>
+          {children}
+        </Tabs>
+      </StyledContainer>
+    </>
   )
 }
 
