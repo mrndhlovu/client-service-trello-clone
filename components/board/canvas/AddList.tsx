@@ -1,11 +1,10 @@
 import { ChangeEvent, useEffect, useState } from "react"
-import { isEmpty } from "lodash"
 import { Button, Input } from "@chakra-ui/react"
 import { AiOutlineClose, AiOutlinePlus } from "react-icons/ai"
 
 import { clientRequest } from "../../../api"
-import { getErrorMessage } from "../../../util"
-import { useBoard, useGlobalState } from "../../../lib/hooks/context"
+import { useGlobalState } from "../../../lib/hooks/context"
+import { useBoard } from "../../../lib/providers"
 
 interface IProps {
   isFirst: boolean
@@ -24,35 +23,26 @@ const AddList = ({ isFirst }: IProps) => {
 
   const handleSave = async () => {
     if (!title) return
-    const hasLists = !isEmpty(board.lists)
-    const newListPosition = hasLists
-      ? board.lists[board.lists.length - 1].position + 1
-      : 0
 
     await clientRequest
-      .createList({ title, position: newListPosition }, board.id)
+      .createList({ title }, board.id)
       .then(res => {
         const boardLists = [...board.lists]
         boardLists.push(res.data)
 
         setActiveBoard({ ...board, lists: boardLists })
+        setTitle("")
         toggleAddInput()
       })
       .catch(err =>
         notify({
-          description: getErrorMessage(err.response.data),
+          description: err.message,
           placement: "top",
         })
       )
   }
 
   const toggleAddInput = () => setEditing(prev => !prev)
-
-  useEffect(() => {
-    return () => {
-      setTitle("")
-    }
-  }, [])
 
   return (
     <div className="create-list">

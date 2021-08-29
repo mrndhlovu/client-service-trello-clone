@@ -21,6 +21,15 @@ export default styled.div`
       white-space: nowrap;
       width: 272px;
       position: relative;
+
+      .foreign-card-dnd-zone {
+        height: 100%;
+        width: 100%;
+      }
+    }
+
+    .list-content {
+      position: relative;
     }
 
     .editable-header {
@@ -48,6 +57,7 @@ export default styled.div`
       }
     }
 
+    .drag-placeholder,
     .list-item {
       background-color: #ebecf0;
       border-radius: 3px;
@@ -57,6 +67,7 @@ export default styled.div`
       position: relative;
       white-space: normal;
       width: 272px;
+      /* transform: rotate(-2deg); */
 
       button {
         border: none;
@@ -66,28 +77,16 @@ export default styled.div`
     .card-drag-placeholder,
     .drag-placeholder {
       background-color: #6b6b6b6b;
-      border-radius: 3px;
-      display: flex;
-      flex-direction: column;
-      height: max-content;
-      position: relative;
-      white-space: normal;
-      width: 272px;
 
       div {
         opacity: 0;
       }
     }
 
-    .card-drag-placeholder {
-      background-color: #a9a9a94d;
-      margin: 2px;
-    }
-
     .create-card,
     .create-list {
       display: inline-block;
-      margin: 0 4px 0 8px;
+      margin: 0 4px 0 4px;
       vertical-align: top;
       white-space: nowrap;
       max-width: 272px;
@@ -183,6 +182,7 @@ export default styled.div`
       padding: 0 4px;
       z-index: 1;
 
+      .card-drag-placeholder,
       .list-card {
         ${props => props.theme.styles.cardBoxShadow};
         background-color: #fff;
@@ -202,6 +202,11 @@ export default styled.div`
             visibility: visible;
           }
         }
+      }
+
+      .card-drag-placeholder {
+        background-color: #cccccc50;
+        box-shadow: none;
       }
 
       .list-card-title {

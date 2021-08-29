@@ -10,8 +10,8 @@ import {
   DrawerHeader,
   Input,
 } from "@chakra-ui/react"
-import { useBoard } from "../../../lib/hooks/context"
 import { UIDropdown } from "../../shared"
+import { useBoard } from "../../../lib/providers"
 
 const Container = styled.div``
 

@@ -1,20 +1,9 @@
 import { isEmpty } from "lodash"
-import {
-  forwardRef,
-  ReactChild,
-  ReactElement,
-  useLayoutEffect,
-  useState,
-  useRef,
-  useEffect,
-} from "react"
-import router from "next/router"
+import { forwardRef, ReactChild, ReactElement, useEffect } from "react"
 import styled from "styled-components"
 
-import { clientRequest } from "../../api"
 import { isBrowser } from "../../util"
-import { LoadingSpinner, UIForm } from "../shared"
-import { ROUTES } from "../../util/constants"
+import { UIForm } from "../shared"
 import { useAuth } from "../../lib/hooks/context"
 import AuthFormButton from "./AuthFormButton"
 import AuthOptionLink from "./AuthOptionLink"
@@ -119,8 +108,7 @@ const AuthFormWrapper = forwardRef<HTMLInputElement, IProps>(
     if (!isBrowser) return null
     const { authError, loading, dismissAuthError } = useAuth()
 
-    const [isRefreshing, setIsRefreshing] = useState<boolean>(false)
-    const hasFormFeedback = !isEmpty(authError?.errors)
+    const hasFormFeedback = !isEmpty(authError)
 
     useEffect(() => {
       if (hasFormFeedback) {
@@ -130,9 +118,7 @@ const AuthFormWrapper = forwardRef<HTMLInputElement, IProps>(
       }
     }, [hasFormFeedback, dismissAuthError])
 
-    return isRefreshing ? (
-      <LoadingSpinner />
-    ) : (
+    return (
       <Container className="auth-form-wrapper">
         <section>
           <div className="auth-form-header">
@@ -158,7 +144,7 @@ const AuthFormWrapper = forwardRef<HTMLInputElement, IProps>(
             </div>
           </UIForm>
           <AuthOptionLink linkText={footerRedirectText} href={redirect} />
-          {hasFormFeedback && <FormFeedback feedback={authError.errors} />}
+          {hasFormFeedback && <FormFeedback feedback={authError} />}
         </section>
       </Container>
     )

@@ -67,7 +67,7 @@ const AuthContextProvider = ({ children }) => {
         router.push(`/${ROUTES.verify}?isNew=true`)
       })
       .catch(error => {
-        setAuthError(error?.response?.data)
+        setAuthError(error.message)
       })
       .finally(() => {
         return setLoading(false)
@@ -100,7 +100,7 @@ const AuthContextProvider = ({ children }) => {
         return router.push(ROUTES.home)
       })
       .catch(error => {
-        setAuthError(error?.response?.data)
+        setAuthError(error.message)
       })
       .finally(() => {
         return setLoading(false)
@@ -123,7 +123,7 @@ const AuthContextProvider = ({ children }) => {
         return router.push(ROUTES.home)
       })
       .catch(error => {
-        setAuthError(error?.response?.data)
+        setAuthError(error.message)
       })
       .finally(() => {
         return setLoading(false)
@@ -151,7 +151,7 @@ const AuthContextProvider = ({ children }) => {
         return router.replace(router.pathname, `/${ROUTES.login}`)
       })
       .catch(error => {
-        setAuthError(error?.response?.data)
+        setAuthError(error.message)
         rehydrateUser()
       })
       .finally(() => {

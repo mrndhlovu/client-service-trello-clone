@@ -4,8 +4,8 @@ import { AiOutlineEllipsis } from "react-icons/ai"
 import { FiStar } from "react-icons/fi"
 import styled from "styled-components"
 
-import { useBoard } from "../../lib/hooks/context"
 import { UIDropdown } from "../shared"
+import { useBoard } from "../../lib/providers"
 
 interface IStyleProps {
   starred: boolean

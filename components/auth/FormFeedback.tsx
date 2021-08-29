@@ -1,15 +1,13 @@
-import { IUIRequestError } from "../../lib/providers/GlobalContextProvider"
-
 interface IProps {
-  feedback: IUIRequestError["errors"]
+  feedback: string[]
 }
 
 const FormFeedback = ({ feedback }: IProps) => {
   return (
     <div className="auth-form-feedback">
       <ul>
-        {feedback?.map((error, index) => {
-          return <li key={index}>{error?.message}</li>
+        {feedback?.map((message, index) => {
+          return <li key={index}>{message}</li>
         })}
       </ul>
     </div>

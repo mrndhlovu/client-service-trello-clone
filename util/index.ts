@@ -4,13 +4,13 @@ import { isArray } from "lodash"
 
 export const getErrorMessage = (data: IRequestError) => {
   let message: string | string[]
-  const isArrayList = isArray(data.errors)
+  const isArrayList = isArray(data?.errors)
 
   if (isArrayList) {
-    return (message = data.errors.map(error => error.message))
+    return (message = data?.errors.map(error => error.message))
   }
 
-  return message
+  return message || "Something went wrong"
 }
 
 export const isBrowser = typeof window !== "undefined"

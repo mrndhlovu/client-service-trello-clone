@@ -2,11 +2,10 @@ import Link from "next/link"
 import styled, { css } from "styled-components"
 
 import { AiOutlineStar } from "react-icons/ai"
-import { useBoard } from "../../lib/hooks/context"
 import { useRouter } from "next/router"
 import CreateBoard from "./CreateBoard"
 import { ReactNode } from "react"
-import { IBoard } from "../../lib/providers"
+import { IBoard, useHomeContext } from "../../lib/providers"
 
 interface ITileProps {
   image?: string
@@ -122,7 +121,7 @@ export const Tile = styled.li<ITileProps>`
 
 const BoardsGroup = ({ heading, icon, boards, category }: IProps) => {
   const router = useRouter()
-  const { handleStarBoard } = useBoard()
+  const { handleStarBoard } = useHomeContext()
 
   const handleClick = ev => {
     ev.preventDefault()

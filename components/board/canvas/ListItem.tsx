@@ -1,15 +1,15 @@
 import { Button, MenuItem } from "@chakra-ui/react"
-import { isEmpty } from "lodash"
-import { CSSProperties, useCallback, useMemo } from "react"
-import { useDrag, DragSourceMonitor, useDrop } from "react-dnd"
 import { AiOutlineEllipsis } from "react-icons/ai"
 
-import { clientRequest } from "../../../api"
-import { useBoard, useListContext } from "../../../lib/hooks/context"
+import {
+  ListCardsContextProvider,
+  useListContext,
+} from "../../../lib/providers"
 import { UIDropdown } from "../../shared"
+import AddCard from "./AddCard"
 import DraggableList from "../dnd/DraggableList"
 import EditableTitle from "../EditableTitle"
-import AddCard from "./AddCard"
+import ForeignCardDropZone from "../dnd/ForeignCardDropZone"
 import ListCards from "./ListCards"
 
 interface IProps {
@@ -27,9 +27,7 @@ export interface ICardItem {
 }
 
 const ListItem = ({ listItem, listIndex }: IProps) => {
-  const { board } = useBoard()
-  const { handleUpdateList, onMoveList } = useListContext()
-  const hasCards = !isEmpty(board?.cards)
+  const { handleUpdateList } = useListContext()
 
   const handleUpdateTitle = (title: string) => {
     handleUpdateList(listItem.id, { title })
@@ -43,31 +41,35 @@ const ListItem = ({ listItem, listIndex }: IProps) => {
 
   return (
     <div className="list-wrapper">
-      <DraggableList id={listItem.id} onMoveItem={onMoveList} index={listIndex}>
-        <div className="editable-header">
-          <EditableTitle
-            handleUpdate={handleUpdateTitle}
-            title={listItem.title}
-          />
+      <ForeignCardDropZone listId={listItem.id} listIndex={listIndex}>
+        <DraggableList listId={listItem.id} listIndex={listIndex}>
+          <ListCardsContextProvider listId={listItem.id} listIndex={listIndex}>
+            <div className="editable-header">
+              <EditableTitle
+                handleUpdate={handleUpdateTitle}
+                title={`${listItem.title} ${listItem?.id}`}
+              />
 
-          <UIDropdown
-            heading="List actions"
-            toggle={
-              <Button size="xs">
-                <AiOutlineEllipsis size={18} />
-              </Button>
-            }
-          >
-            {listActions.map((action, index) => (
-              <MenuItem key={index} onClick={action.onClick}>
-                {action.title}
-              </MenuItem>
-            ))}
-          </UIDropdown>
-        </div>
-        {hasCards && <ListCards listId={listItem.id} />}
-        <AddCard listId={listItem.id} />
-      </DraggableList>
+              <UIDropdown
+                heading="List actions"
+                toggle={
+                  <Button size="xs">
+                    <AiOutlineEllipsis size={18} />
+                  </Button>
+                }
+              >
+                {listActions.map((action, index) => (
+                  <MenuItem key={index} onClick={action.onClick}>
+                    {action.title}
+                  </MenuItem>
+                ))}
+              </UIDropdown>
+            </div>
+            <ListCards listId={listItem.id} listIndex={listIndex} />
+            <AddCard />
+          </ListCardsContextProvider>
+        </DraggableList>
+      </ForeignCardDropZone>
     </div>
   )
 }

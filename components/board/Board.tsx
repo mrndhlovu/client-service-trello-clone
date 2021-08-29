@@ -1,8 +1,10 @@
-import { useState } from "react"
 import styled from "styled-components"
+
+import { ListContextProvider } from "../../lib/providers"
 
 import BoardHeader from "./BoardHeader"
 import BoardCanvas from "./canvas/BoardCanvas"
+import { ICardItem, IListItem } from "./canvas/ListItem"
 import BoardDrawer from "./sidebar/BoardSidebar"
 
 interface IBoardStyles {
@@ -11,7 +13,9 @@ interface IBoardStyles {
 }
 
 interface IBoardProps {
-  board: { [key: string]: any }
+  board: {
+    [key: string]: any
+  }
 }
 
 const Container = styled.div<IBoardStyles>`
@@ -38,7 +42,9 @@ const Board = ({ board }: IBoardProps) => {
       <Container image={board?.prefs?.image} bgColor={board?.prefs?.color}>
         <Content>
           <BoardHeader />
-          <BoardCanvas />
+          <ListContextProvider>
+            <BoardCanvas />
+          </ListContextProvider>
         </Content>
 
         <BoardDrawer />

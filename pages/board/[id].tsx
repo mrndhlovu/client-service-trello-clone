@@ -4,6 +4,7 @@ import ApiRequest from "../../api"
 import Board from "../../components/board/Board"
 import { withAuthComponent, withAuthSsp } from "../../lib/hocs"
 import { BoardContextProvider, IBoard } from "../../lib/providers"
+import { ROUTES } from "../../util/constants"
 
 interface IProps {
   data: IBoard
@@ -24,7 +25,14 @@ export const getServerSideProps = withAuthSsp(
     return await ssrRequest
       .getBoardById(ctx?.params?.id as string)
       .then(res => res?.data)
-      .catch(err => err?.response)
+      .catch(err => {
+        return {
+          redirect: {
+            destination: ROUTES.home,
+            permanent: false,
+          },
+        }
+      })
   },
   { protected: true }
 )

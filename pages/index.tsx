@@ -1,4 +1,4 @@
-import { BoardContextProvider, IBoard } from "../lib/providers"
+import { HomeContextProvider, IBoard } from "../lib/providers"
 import { withAuthComponent, withAuthSsp } from "../lib/hocs"
 import ApiRequest from "../api"
 import HomePage from "../components/home/HomePage"
@@ -9,9 +9,9 @@ interface IProps {
 
 const LandingPage = ({ data }: IProps) => {
   return (
-    <BoardContextProvider boardList={data}>
+    <HomeContextProvider boardList={data}>
       <HomePage />
-    </BoardContextProvider>
+    </HomeContextProvider>
   )
 }
 

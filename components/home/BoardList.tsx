@@ -1,10 +1,10 @@
 import { AiOutlineStar, AiOutlineClockCircle } from "react-icons/ai"
+import { useHomeContext } from "../../lib/providers"
 
-import { useBoard } from "../../lib/hooks/context"
 import BoardsGroup from "./BoardsGroup"
 
 const BoardList = () => {
-  const { boards } = useBoard()
+  const { boards } = useHomeContext()
 
   return (
     <>

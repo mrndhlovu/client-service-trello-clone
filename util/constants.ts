@@ -98,3 +98,9 @@ export const AUTHENTICATOR_OPTIONS = [
   { key: "authy", title: "Authy" },
   { key: "duo", title: "Duo Mobile" },
 ]
+
+export enum DRAG_TYPES {
+  CARD = "CARD",
+  LIST = "LIST",
+  FOREIGN_CARD = "FOREIGN_CARD",
+}

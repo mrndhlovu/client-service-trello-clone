@@ -1,19 +1,14 @@
-import { ChangeEvent, useEffect, useState } from "react"
+import { ChangeEvent, useState } from "react"
 import { Button, Textarea } from "@chakra-ui/react"
 import { AiOutlineClose, AiOutlinePlus } from "react-icons/ai"
 
 import { clientRequest } from "../../../api"
-import { getErrorMessage } from "../../../util"
-import { useBoard, useGlobalState } from "../../../lib/hooks/context"
-import { IListItem } from "./ListItem"
-import { isEmpty } from "lodash"
+import { useGlobalState } from "../../../lib/hooks/context"
+import { useBoard, useListCardsContext } from "../../../lib/providers"
 
-interface IProps {
-  listId: string
-}
-
-const AddCard = ({ listId }: IProps) => {
+const AddCard = () => {
   const { board, setActiveBoard } = useBoard()
+  const { listId } = useListCardsContext()
   const { notify } = useGlobalState()
 
   const [editing, setEditing] = useState<boolean>(false)
@@ -25,25 +20,17 @@ const AddCard = ({ listId }: IProps) => {
 
   const handleSave = async () => {
     if (!title) return
-    const cards = board.cards.filter(
-      (card: IListItem) => card.listId === listId
-    )
-
-    const hasCards = !isEmpty(cards)
-    const newCardPosition = hasCards ? cards[cards.length - 1].position + 1 : 0
 
     await clientRequest
-      .createCard(
-        { title, position: newCardPosition },
-        { boardId: board.id, listId }
-      )
+      .createCard({ title }, { boardId: board.id, listId })
       .then(res => {
         setActiveBoard(res.data)
+        setTitle("")
         toggleAddInput()
       })
       .catch(err => {
         notify({
-          description: getErrorMessage(err.response.data),
+          description: err.message,
           placement: "top",
           status: "error",
         })
@@ -51,12 +38,6 @@ const AddCard = ({ listId }: IProps) => {
   }
 
   const toggleAddInput = () => setEditing(prev => !prev)
-
-  useEffect(() => {
-    return () => {
-      setTitle("")
-    }
-  }, [])
 
   return (
     <div className="create-card">
@@ -68,6 +49,7 @@ const AddCard = ({ listId }: IProps) => {
               defaultValue={title}
               onChange={handleChange}
               size="sm"
+              autoFocus
             />
             <div className="c-flex card">
               <Button size="sm" colorScheme="blue" onClick={handleSave}>

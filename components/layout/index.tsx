@@ -1,5 +1,4 @@
 import { useEffect, useState } from "react"
-import { isEmpty } from "lodash"
 
 import { useAuth, useGlobalState } from "../../lib/hooks/context"
 import Header from "../header/Header"

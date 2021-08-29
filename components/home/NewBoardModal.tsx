@@ -17,7 +17,6 @@ import { BOARD_COLOR_OPTIONS, ROUTES } from "../../util/constants"
 import { CREATE_BOARD_VALIDATION } from "../../util/formhelpers"
 import { clientRequest } from "../../api"
 import { UIForm, UIFormInput } from "../shared"
-import { useAuth } from "../../lib/hooks/context"
 
 interface IStyledModalProps {
   image?: string

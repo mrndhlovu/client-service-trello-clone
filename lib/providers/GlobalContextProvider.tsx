@@ -4,15 +4,7 @@ import { useCallback } from "react"
 import { GlobalContext } from "../hooks/context"
 import { useLocalStorage } from "../hooks"
 
-export interface IUIRequestError {
-  errors?: [
-    {
-      [key: string]: {
-        message: string
-      }
-    }
-  ]
-}
+export type IUIRequestError = string[]
 
 export interface IToastProps {
   title?: string

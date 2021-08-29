@@ -1,13 +1,10 @@
-import { createContext, useContext, MouseEvent } from "react"
+import { createContext, useContext } from "react"
 import {
   ILoginCredentials,
   IPasswordConfirmation,
   ISignupCredentials,
 } from "../../api"
-import { IListItem } from "../../components/board/canvas/ListItem"
-import { IDndItem } from "../../components/board/dnd/DraggableList"
 import {
-  IBoard,
   IStripeInvoice,
   IStripeProduct,
   IToastProps,
@@ -19,23 +16,6 @@ interface IDefaultGlobalState {
   darkMode: boolean
   handleModeChange: () => void
   notify: (option: IToastProps) => void
-}
-
-interface IDefaultBoardContext {
-  handleCreateBoard: () => void
-  handleStarBoard: (board?: IBoard) => void
-  boards?: IBoard[]
-  board?: IBoard
-  handleDeleteBoard: () => void
-  drawerOpen: boolean
-  isStarred: boolean
-  toggleDrawerMenu: () => void
-  closeBoard: () => void
-  setActiveBoard: (board?: IBoard) => void
-  handleUpdateBoard: (
-    boardUpdate: { [key: string]: any },
-    boardId?: string
-  ) => void
 }
 
 interface IDefaultAuthContext {
@@ -65,27 +45,6 @@ export interface ICardDetails {
   plan?: string
 }
 
-export interface IListContextProps {
-  updateBoardLists: (newListItem: IListItem) => void
-  sourceIndex?: number
-
-  onMoveList: (
-    dragIndex: number,
-    hoverIndex: number,
-    isActive?: boolean
-  ) => void
-  saveChanges: (dragItem: IDndItem) => void
-  handleUpdateList: (listId: string, update: { [key: string]: any }) => void
-}
-
-export interface ICardContextProps {
-  // updateBoardLists: (newListItem: IListItem) => void
-
-  onMoveCard: (dragIndex: number, hoverIndex: number) => void
-  saveCardChanges: (dragItem: IDndItem) => void
-  // handleUpdateList: (listId: string, update: { [key: string]: any }) => void
-}
-
 interface IStripeContext {
   createSubscription: (cardData: ICardDetails) => any
   products?: IStripeProduct[]
@@ -97,21 +56,11 @@ export const GlobalContext = createContext<IDefaultGlobalState>(
 )
 
 export const ThemeContext = createContext(null)
-export const HomeContext = createContext({})
 export const StripeContext = createContext<IStripeContext>({} as IStripeContext)
 export const AuthContext = createContext<IDefaultAuthContext>(
   {} as IDefaultAuthContext
 )
-export const ListContext = createContext({} as IListContextProps)
-export const CardContext = createContext({} as ICardContextProps)
-export const BoardContext = createContext<IDefaultBoardContext>(
-  {} as IDefaultBoardContext
-)
 
 export const useGlobalState = () => useContext(GlobalContext)
-export const useHomeContext = () => useContext(HomeContext)
 export const useAuth = () => useContext(AuthContext)
-export const useBoard = () => useContext(BoardContext)
-export const useListContext = () => useContext(ListContext)
-export const useCardContext = () => useContext(CardContext)
 export const useStripeContext = () => useContext(StripeContext)

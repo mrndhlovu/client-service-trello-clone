@@ -1,14 +1,14 @@
 import axios, {
+  AxiosError,
   AxiosInstance,
-  AxiosPromise,
   AxiosRequestConfig,
   AxiosResponse,
 } from "axios"
-import { GetServerSidePropsContext } from "next"
-import { IDraggingProps } from "../components/board/canvas/BoardCanvas"
-import { ICardDetails } from "../lib/hooks/context"
 
-import { isBrowser } from "../util"
+import { ICardDetails } from "../lib/hooks/context"
+import { ICardDraggingProps, IListDraggingProps } from "../lib/providers"
+
+import { getErrorMessage, isBrowser } from "../util"
 
 import END_POINTS from "./endpoints"
 
@@ -39,6 +39,11 @@ export interface IRequestError {
   errors: [{ message: string; [key: string]: any }]
 }
 
+export interface InterceptorErrorData {
+  status: AxiosError["response"]["status"]
+  message: string[] | string
+}
+
 export interface INewMfaData {
   preference?: {
     email?: boolean
@@ -63,7 +68,7 @@ interface IUpdateBoardData {
 class AxiosConfig {
   private instance = axios.create({
     baseURL: isBrowser
-      ? "/api"
+      ? `/api`
       : `${process.env.NEXT_PUBLIC_NGINX_BASE_URL}/api`,
     headers: isBrowser ? {} : { Host: process.env.NEXT_PUBLIC_HOST },
   })
@@ -87,12 +92,19 @@ class AxiosConfig {
     return response
   }
 
-  protected errorHandler = (error: Error) => {
-    return Promise.reject(error)
+  protected errorHandler = (error: AxiosError) => {
+    const data: InterceptorErrorData = {
+      status: error?.response?.status || 500,
+      message: getErrorMessage(error?.response?.data),
+    }
+
+    return Promise.reject(data)
   }
 
   protected requestHandler = (request: AxiosRequestConfig) => {
-    request.headers = this.ssHeaders
+    if (this.ssHeaders) {
+      request.headers = this.ssHeaders
+    }
     return request
   }
 }
@@ -191,11 +203,11 @@ class ApiRequest extends AxiosConfig {
     )
   }
 
-  async moveList(data: IDraggingProps) {
+  async moveList(data: IListDraggingProps) {
     return await this.http.patch(`${END_POINTS.lists}/move`, data)
   }
 
-  async moveCard(data: IDraggingProps) {
+  async moveCard(data: ICardDraggingProps) {
     return await this.http.patch(`${END_POINTS.cards}/move`, data)
   }
 

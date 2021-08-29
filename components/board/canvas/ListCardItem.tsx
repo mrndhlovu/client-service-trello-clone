@@ -3,17 +3,29 @@ import styled from "styled-components"
 import { AiOutlineEdit } from "react-icons/ai"
 import { Button } from "@chakra-ui/react"
 
-import DraggableCard from "../dnd/DraggablECard"
+import DraggableCard from "../dnd/DraggableCard"
 
 interface ICardStyles {
   cover: string
 }
 
+interface IProps {
+  card: ICardItem
+  cardIndex: number
+  listId: string
+  listIndex: number
+}
+
 const Container = styled.div<ICardStyles>``
 
-const ListCardItem = ({ card, cardIndex }: ICardItem) => {
+const ListCardItem = ({ card, cardIndex, listIndex, listId }: IProps) => {
   return (
-    <DraggableCard id={card.id} index={cardIndex}>
+    <DraggableCard
+      cardId={card?.id}
+      index={cardIndex}
+      listId={listId}
+      listIndex={listIndex}
+    >
       <Container cover={card?.cover} className="list-card">
         <div className="list-card-cover" />
         <Button className="edit-button" size="xs">
@@ -26,7 +38,7 @@ const ListCardItem = ({ card, cardIndex }: ICardItem) => {
         </div>
 
         <div className="list-card-details">
-          <span className="list-card-title">{card.title}</span>
+          <span className="list-card-title">{card?.title}</span>
         </div>
       </Container>
     </DraggableCard>

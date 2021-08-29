@@ -2,60 +2,68 @@ import { memo, ReactNode, useRef, CSSProperties, useMemo } from "react"
 import { DropTargetMonitor, useDrag, useDrop } from "react-dnd"
 import { XYCoord } from "dnd-core"
 
-import { useListContext } from "../../../lib/hooks/context"
+import { DRAG_TYPES } from "../../../util/constants"
+import { IListDraggingProps, useListContext } from "../../../lib/providers"
 
 export interface DragItemProps {
-  id: string
+  listId: string
   onMoveItem?: (hoverId: string, id: string) => void
   children: ReactNode
   index: number
 }
 
-export interface IDndItem {
-  index: number
-  sourceIndex?: number
-  id: string
-  type: string
+export interface IListDndItem {
+  sourceIndex: number
+  sourceId: string
+
+  hoveIndex: number
+  hoverId: string
 }
 
 const style: CSSProperties = {}
 
 const typedMemo: <T>(Component: T) => T = memo
 
-const DraggableList = typedMemo(({ children, id, index, onMoveItem }) => {
-  const { saveChanges } = useListContext()
+const DraggableList = typedMemo(({ children, listId, listIndex }) => {
+  const { saveListDndChanges, onMoveList } = useListContext()
   const ref = useRef<HTMLDivElement>(null)
 
   const [{ isDragging }, drag] = useDrag({
     item: () => {
-      return { id, index }
+      return { sourceIndex: listIndex, sourceId: listId, hoveIndex: listIndex }
     },
-    type: "LIST",
+    type: DRAG_TYPES.LIST,
     collect: (monitor: any) => ({
       isDragging: monitor.isDragging(),
     }),
   })
 
   const [{ handlerId }, drop] = useDrop({
-    accept: "LIST",
+    accept: DRAG_TYPES.LIST,
     collect(monitor) {
       return {
         handlerId: monitor.getHandlerId(),
-        isActive: monitor.canDrop() && monitor.isOver(),
+        isOver: monitor.isOver(),
+        canDrop: monitor.canDrop(),
       }
     },
-    drop(item: IDndItem) {
-      saveChanges(item)
+    drop(item: IListDndItem) {
+      const data: IListDraggingProps = {
+        source: item.sourceId,
+        target: item.hoverId,
+      }
+      saveListDndChanges(data)
 
       return {}
     },
-    hover(item: IDndItem, monitor: DropTargetMonitor) {
+
+    hover(item: IListDndItem, monitor: DropTargetMonitor) {
       if (!ref.current) {
         return
       }
 
-      const dragIndex = item.index
-      const hoverIndex = index
+      const dragIndex = item.hoveIndex
+      const hoverIndex = listIndex
 
       if (dragIndex === hoverIndex) {
         return
@@ -78,9 +86,10 @@ const DraggableList = typedMemo(({ children, id, index, onMoveItem }) => {
         return
       }
 
-      onMoveItem(dragIndex, hoverIndex)
+      onMoveList(dragIndex, hoverIndex)
 
-      item.index = hoverIndex
+      item.hoveIndex = hoverIndex
+      item.hoverId = listId
     },
   })
 
@@ -88,8 +97,10 @@ const DraggableList = typedMemo(({ children, id, index, onMoveItem }) => {
     () => ({
       ...style,
       cursor: "pointer",
+      borderRadius: "3px",
+      transform: "none",
     }),
-    []
+    [isDragging]
   )
 
   drag(drop(ref))
@@ -100,10 +111,11 @@ const DraggableList = typedMemo(({ children, id, index, onMoveItem }) => {
       style={{
         ...containerStyle,
       }}
-      className={`${isDragging ? "drag-placeholder" : "list-item"}`}
       data-handler-id={handlerId}
     >
-      {children}
+      <div className={`${isDragging ? "drag-placeholder" : "list-item"}`}>
+        {children}
+      </div>
     </div>
   )
 })

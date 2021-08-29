@@ -1,6 +1,5 @@
 import { GetServerSidePropsContext } from "next"
 import { serverRequest } from "../../api"
-import { getErrorMessage } from "../../util"
 import { ROUTES } from "../../util/constants"
 import { IUser } from "../providers"
 
@@ -50,9 +49,7 @@ export const withAuthSsp = (
         return (currentUser = res?.data || null)
       })
       .catch(err => {
-        const errorMessage = getErrorMessage(err.response.data) as string
-
-        if (errorMessage?.includes("jwt expired") && cookie) {
+        if (err.message?.includes("jwt expired") && cookie) {
           return getTokenSilently()
         }
         return (currentUser = null)
