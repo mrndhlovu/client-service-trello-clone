@@ -4,10 +4,15 @@ import { AiOutlineClose, AiOutlinePlus } from "react-icons/ai"
 
 import { clientRequest } from "../../../api"
 import { useGlobalState } from "../../../lib/hooks/context"
-import { useBoard, useListCardsContext } from "../../../lib/providers"
+import {
+  useBoard,
+  useListCardsContext,
+  useListContext,
+} from "../../../lib/providers"
 
 const AddCard = () => {
-  const { board, setActiveBoard } = useBoard()
+  const { boardId, findCardsByListId } = useBoard()
+  const { updateCardsState } = useListContext()
   const { listId } = useListCardsContext()
   const { notify } = useGlobalState()
 
@@ -20,11 +25,13 @@ const AddCard = () => {
 
   const handleSave = async () => {
     if (!title) return
+    const [currentListCards] = findCardsByListId(listId)
+    const nextCardPosition = currentListCards.length
 
     await clientRequest
-      .createCard({ title }, { boardId: board.id, listId })
+      .createCard({ title, position: nextCardPosition }, { boardId, listId })
       .then(res => {
-        setActiveBoard(res.data)
+        updateCardsState(res.data, { isNew: true })
         setTitle("")
         toggleAddInput()
       })

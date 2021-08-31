@@ -39,7 +39,7 @@ export interface IRequestError {
   errors: [{ message: string; [key: string]: any }]
 }
 
-export interface InterceptorErrorData {
+export interface IAxiosInterceptorError {
   status: AxiosError["response"]["status"]
   message: string[] | string
 }
@@ -93,7 +93,7 @@ class AxiosConfig {
   }
 
   protected errorHandler = (error: AxiosError) => {
-    const data: InterceptorErrorData = {
+    const data: IAxiosInterceptorError = {
       status: error?.response?.status || 500,
       message: getErrorMessage(error?.response?.data),
     }

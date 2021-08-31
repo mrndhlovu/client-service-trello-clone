@@ -75,7 +75,6 @@ const HomeContextProvider = ({ children, boardList }: IProps) => {
       value={{
         boards,
         handleStarBoard,
-        handleUpdateBoard: updateBoardWithRetry,
       }}
     >
       {children}
@@ -86,10 +85,6 @@ const HomeContextProvider = ({ children, boardList }: IProps) => {
 interface IHomeContext {
   handleStarBoard: (board?: IBoard) => void
   boards?: IBoard[]
-  handleUpdateBoard: (
-    boardUpdate: { [key: string]: any },
-    boardId?: string
-  ) => void
 }
 
 export const HomeContext = createContext<IHomeContext>({} as IHomeContext)

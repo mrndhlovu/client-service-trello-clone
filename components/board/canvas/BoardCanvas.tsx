@@ -1,20 +1,21 @@
 import { HTML5Backend } from "react-dnd-html5-backend"
 import { DndProvider } from "react-dnd"
 
-import { ListContextProvider, useListContext } from "../../../lib/providers"
+import { useBoard, useListContext } from "../../../lib/providers"
 import AddList from "./AddList"
 import BoardCanvasStyles from "./BoardCanvasStyles"
-import ListItem, { IListItem } from "./ListItem"
+import ListItem from "./ListItem"
 
 const BoardCanvas = () => {
-  const { lists, hasBoardList } = useListContext()
+  const { hasBoardList } = useListContext()
+  const { board } = useBoard()
 
   return (
     <DndProvider backend={HTML5Backend}>
       <BoardCanvasStyles>
         <div className="content">
-          {lists?.map(
-            (listItem: IListItem, index: number) =>
+          {board?.lists?.map(
+            (listItem, index) =>
               !listItem.archived && (
                 <ListItem
                   key={listItem.id}
@@ -23,7 +24,10 @@ const BoardCanvas = () => {
                 />
               )
           )}
-          <AddList isFirst={hasBoardList} />
+          <AddList
+            isFirst={hasBoardList}
+            newListPosition={board?.lists.length}
+          />
         </div>
       </BoardCanvasStyles>
     </DndProvider>

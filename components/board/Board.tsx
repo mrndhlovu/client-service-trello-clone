@@ -4,7 +4,6 @@ import { ListContextProvider } from "../../lib/providers"
 
 import BoardHeader from "./BoardHeader"
 import BoardCanvas from "./canvas/BoardCanvas"
-import { ICardItem, IListItem } from "./canvas/ListItem"
 import BoardDrawer from "./sidebar/BoardSidebar"
 
 interface IBoardStyles {
@@ -37,6 +36,7 @@ const Content = styled.div`
 `
 
 const Board = ({ board }: IBoardProps) => {
+  if (!board) return null
   return (
     <>
       <Container image={board?.prefs?.image} bgColor={board?.prefs?.color}>

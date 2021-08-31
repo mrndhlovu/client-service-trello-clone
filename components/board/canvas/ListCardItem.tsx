@@ -1,9 +1,10 @@
 import { ICardItem } from "./ListItem"
 import styled from "styled-components"
 import { AiOutlineEdit } from "react-icons/ai"
-import { Button } from "@chakra-ui/react"
+import { Button, MenuItem } from "@chakra-ui/react"
 
 import DraggableCard from "../dnd/DraggableCard"
+import { UIDropdown } from "../../shared"
 
 interface ICardStyles {
   cover: string
@@ -19,6 +20,16 @@ interface IProps {
 const Container = styled.div<ICardStyles>``
 
 const ListCardItem = ({ card, cardIndex, listIndex, listId }: IProps) => {
+  const handleArchiveCard = () => {}
+
+  const CARD_ACTIONS = [
+    {
+      handleClick: handleArchiveCard,
+      key: "archive-car",
+      title: "Archive card",
+    },
+  ]
+
   return (
     <DraggableCard
       cardId={card?.id}
@@ -28,9 +39,11 @@ const ListCardItem = ({ card, cardIndex, listIndex, listId }: IProps) => {
     >
       <Container cover={card?.cover} className="list-card">
         <div className="list-card-cover" />
+
         <Button className="edit-button" size="xs">
           <AiOutlineEdit />
         </Button>
+
         <div className="list-card-labels">
           {card?.prefs?.labels.map((label: string, index: number) => (
             <span className="card-label " color={label} key={index} />

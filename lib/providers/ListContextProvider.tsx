@@ -3,40 +3,86 @@ import {
   ReactNode,
   useCallback,
   useContext,
-  useEffect,
-  useState,
+  useRef,
 } from "react"
-import { isEmpty } from "lodash"
+import { isArray, isEmpty } from "lodash"
 import update from "immutability-helper"
 
 import { clientRequest } from "../../api"
-import { IListItem } from "../../components/board/canvas/ListItem"
-import { useGlobalState } from "../hooks/context"
-import { useBoard } from "./BoardContextProvider"
+import { IBoard } from "./HomeContextProvider"
 import { ICardDraggingProps } from "./ListCardsContextProvider"
+import { ICardItem, IListItem } from "../../components/board/canvas/ListItem"
+import { useBoard } from "./BoardContextProvider"
+import { useGlobalState } from "../hooks/context"
 
 interface IProps {
   children: ReactNode
 }
 
+interface IUpdateStateOptions {
+  isNew: boolean
+}
+
 const ListContextProvider = ({ children }: IProps) => {
-  const { board, setActiveBoard } = useBoard()
+  const { board, boardId, setActiveBoard } = useBoard()
   const { notify } = useGlobalState()
 
-  if (!board) return null
-  const [lists, setLists] = useState<IListItem[]>([])
-  const hasBoardList = !isEmpty(lists)
+  const dragRef = useRef<ICardItem | null>(null)
 
-  const updateBoardLists = (updatedListItem: IListItem) => {
-    const newList = board.lists.map((list: IListItem) =>
-      list.id === updatedListItem.id ? updatedListItem : list
-    )
+  const updateListsState = (
+    update: IListItem,
+    options?: IUpdateStateOptions
+  ) => {
+    if (options?.isNew) {
+      return setActiveBoard((prev: IBoard) => ({
+        ...prev,
+        lists: [...prev.lists, update],
+      }))
+    }
 
-    setActiveBoard({ ...board, lists: newList })
+    if (isArray(update)) {
+      return setActiveBoard((prev: IBoard) => ({
+        ...prev,
+        lists: [...update],
+      }))
+    }
+
+    setActiveBoard((prev: IBoard) => ({
+      ...prev,
+      lists: prev.lists.map((list: ICardItem) =>
+        list.id === update.id ? update : list
+      ),
+    }))
+  }
+
+  const updateCardsState = (
+    update: ICardItem | ICardItem[],
+    options?: IUpdateStateOptions
+  ) => {
+    if (options?.isNew) {
+      return setActiveBoard((prev: IBoard) => ({
+        ...prev,
+        cards: [...prev.cards, update],
+      }))
+    }
+
+    if (isArray(update)) {
+      return setActiveBoard((prev: IBoard) => ({
+        ...prev,
+        cards: update,
+      }))
+    }
+
+    setActiveBoard((prev: IBoard) => ({
+      ...prev,
+      cards: prev.cards.map((card: ICardItem) =>
+        card.id === update.id ? update : card
+      ),
+    }))
   }
 
   const saveListDndChanges = async (data: IListDraggingProps) => {
-    if (!data?.source || !data?.target) return
+    if (!data?.sourceListId || !data?.targetListId) return
 
     await clientRequest.moveList({ ...data, boardId: board.id }).catch(err => {
       notify({
@@ -48,7 +94,7 @@ const ListContextProvider = ({ children }: IProps) => {
 
   const saveCardDndChanges = async (data: ICardDraggingProps) => {
     const dndData = { ...data, boardId: board.id }
-
+    dragRef.current = null
     await clientRequest.moveCard(dndData).catch(err => {
       notify({
         description: err.message,
@@ -57,11 +103,27 @@ const ListContextProvider = ({ children }: IProps) => {
     })
   }
 
-  const handleUpdateList = useCallback(
+  const switchCardList = useCallback(
+    (cardId, hoverListId) => {
+      const dragCard = board.cards.find(card => card.id === cardId)
+      const cardIndex = board.cards.findIndex(card => card.id === cardId)
+
+      if (!dragCard) return
+
+      const updatedCards = update(board.cards, {
+        [cardIndex]: { listId: { $set: hoverListId } },
+      })
+
+      updateCardsState(updatedCards)
+    },
+    [updateCardsState, board?.cards]
+  )
+
+  const saveListChanges = useCallback(
     async (listId: string, update: { [key: string]: any }) => {
       await clientRequest
-        .updateList(update, { listId, boardId: board.id })
-        .then(res => updateBoardLists(res.data))
+        .updateList(update, { listId, boardId })
+        .then(res => updateListsState(res.data))
         .catch(err =>
           notify({
             description: err.message,
@@ -69,47 +131,57 @@ const ListContextProvider = ({ children }: IProps) => {
           })
         )
     },
-    [notify, board]
+    [notify, boardId]
+  )
+
+  const moveCard = useCallback(
+    (dragCardId, targetCardId) => {
+      if (dragCardId === undefined || targetCardId === undefined) return
+
+      const dragCard = board.cards.find(card => card.id === dragCardId)
+      const dragIndex = board.cards.findIndex(card => card.id === dragCardId)
+      const hoverIndex = board.cards.findIndex(card => card.id === targetCardId)
+
+      const updatedCards = update(board.cards, {
+        $splice: [
+          [dragIndex, 1],
+          [hoverIndex, 0, dragCard],
+        ],
+      })
+
+      updateCardsState(updatedCards)
+    },
+    [board?.cards, updateCardsState]
   )
 
   const onMoveList = useCallback(
     (dragIndex: number, hoverIndex: number) => {
-      const dragList = lists[dragIndex]
+      const dragList = board.lists[dragIndex]
 
-      const updatedList = update(lists, {
+      const updatedList = update(board.lists, {
         $splice: [
           [dragIndex, 1],
           [hoverIndex, 0, dragList],
         ],
-        $apply: function (list: IListItem[]) {
-          const newList = list.map((item, index) => ({
-            ...item,
-            position: index,
-          }))
-
-          return newList
-        },
       })
 
-      setLists(updatedList)
+      updateListsState(updatedList)
     },
-    [lists]
+    [board?.lists, updateListsState]
   )
-
-  useEffect(() => {
-    setLists(board.lists)
-  }, [board.lists])
 
   return (
     <ListContext.Provider
       value={{
+        hasBoardList: !isEmpty(board?.lists),
         onMoveList,
-        handleUpdateList,
-        updateBoardLists,
-        saveListDndChanges,
-        hasBoardList,
-        lists,
+        moveCard,
         saveCardDndChanges,
+        saveListChanges,
+        saveListDndChanges,
+        switchCardList,
+        updateCardsState,
+        updateListsState,
       }}
     >
       {children}
@@ -118,16 +190,18 @@ const ListContextProvider = ({ children }: IProps) => {
 }
 
 export interface IListDraggingProps {
-  source: string
-  target: string
-  listId?: string
+  sourceListId: string
+  targetListId: string
   boardId?: string
 }
 
 export interface IListContextProps {
-  updateBoardLists: (newListItem: IListItem) => void
+  updateListsState: (
+    newListItem: IListItem,
+    options?: IUpdateStateOptions
+  ) => void
+  updateCardsState: (card: ICardItem, options?: IUpdateStateOptions) => void
   sourceIndex?: number
-  lists: IListItem[]
   hasBoardList: boolean
   saveCardDndChanges: (cardItem: ICardDraggingProps) => void
   onMoveList: (
@@ -136,7 +210,9 @@ export interface IListContextProps {
     isActive?: boolean
   ) => void
   saveListDndChanges: (data: IListDraggingProps) => void
-  handleUpdateList: (listId: string, update: { [key: string]: any }) => void
+  saveListChanges: (listId: string, update: { [key: string]: any }) => void
+  switchCardList: (cardId: string, hoverListId: string) => void
+  moveCard: (dragCardId: string, hoverCardId: string) => void
 }
 
 export const ListContext = createContext({} as IListContextProps)

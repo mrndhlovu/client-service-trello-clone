@@ -1,11 +1,11 @@
-import { ChangeEvent, useState } from "react"
+import { ChangeEvent, memo, useState } from "react"
 import { Button, Input } from "@chakra-ui/react"
 import { AiOutlineEllipsis } from "react-icons/ai"
 import { FiStar } from "react-icons/fi"
 import styled from "styled-components"
 
 import { UIDropdown } from "../shared"
-import { useBoard } from "../../lib/providers"
+import { IBoard, useBoard } from "../../lib/providers"
 
 interface IStyleProps {
   starred: boolean
@@ -56,8 +56,9 @@ const BoardHeader = () => {
   const {
     board,
     toggleDrawerMenu,
-    handleUpdateBoard,
+    setActiveBoard,
     handleStarBoard,
+    saveBoardChanges,
     isStarred,
   } = useBoard()
 
@@ -66,7 +67,9 @@ const BoardHeader = () => {
 
   const handleEditTitle = () => {
     if (newBoardTitle && newBoardTitle !== board?.title) {
-      handleUpdateBoard({ title: newBoardTitle })
+      const response = saveBoardChanges({ title: newBoardTitle })
+      if (!response) return
+      setActiveBoard((prev: IBoard) => ({ ...prev, title: newBoardTitle }))
     }
     toggleEditTitle()
   }
@@ -95,7 +98,11 @@ const BoardHeader = () => {
           <FiStar className="star-icon" />
         </Button>
 
-        <UIDropdown heading="Invite to board" toggle={<Button>Invite</Button>}>
+        <UIDropdown
+          className="chakra-button"
+          heading="Invite to board"
+          toggle={<div>Invite</div>}
+        >
           <Input placeholder="Email address or username" />
         </UIDropdown>
       </div>
@@ -109,4 +116,4 @@ const BoardHeader = () => {
   )
 }
 
-export default BoardHeader
+export default memo(BoardHeader)

@@ -36,16 +36,30 @@ const GlobalContextProvider = ({ children }) => {
   }
 
   const notify = useCallback(
-    (msg: IToastProps) =>
-      toast({
+    (msg: IToastProps) => {
+      const data = {
         title: msg.title,
-        description: msg.description,
         status: msg.status || "success",
         duration: 9000,
         isClosable: true,
         position: msg.placement || "bottom",
-      }),
-    []
+      }
+
+      if (typeof msg.description === "string") {
+        return toast({
+          ...data,
+          description: msg.description,
+        })
+      }
+
+      return msg.description.map(desc =>
+        toast({
+          ...data,
+          description: desc,
+        })
+      )
+    },
+    [toast]
   )
 
   return (

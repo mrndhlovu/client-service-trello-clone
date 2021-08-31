@@ -1,4 +1,6 @@
-import { useEffect, useState } from "react"
+import { AxiosPromise, AxiosResponse } from "axios"
+import { useCallback, useEffect, useState } from "react"
+import { IAxiosInterceptorError } from "../../api"
 
 import { isBrowser } from "../../util"
 
@@ -42,4 +44,19 @@ export const useLocalStorage = <T extends string, Y>(
   }, [key])
 
   return [storageValue, handleStorage]
+}
+
+export const useFetch = () => {
+  const requestHandler = useCallback(
+    async <T extends AxiosPromise>(requestHandler: T) => {
+      return await requestHandler
+        .then((res: AxiosResponse) => {
+          return [res.data]
+        })
+        .catch((err: IAxiosInterceptorError) => [, err.message])
+    },
+    []
+  )
+
+  return [requestHandler]
 }

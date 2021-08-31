@@ -8,11 +8,7 @@ import {
 import { XYCoord } from "dnd-core"
 
 import { DRAG_TYPES } from "../../../util/constants"
-import {
-  ICardDraggingProps,
-  useListCardsContext,
-  useListContext,
-} from "../../../lib/providers"
+import { ICardDraggingProps, useListContext } from "../../../lib/providers"
 
 export interface DragItemProps {
   id: string
@@ -40,8 +36,7 @@ const typedMemo: <T>(Component: T) => T = memo
 
 const DraggableCard = typedMemo(
   ({ children, cardId, index, listIndex, listId }) => {
-    const { moveCard } = useListCardsContext()
-    const { saveCardDndChanges } = useListContext()
+    const { saveCardDndChanges, moveCard } = useListContext()
 
     const ref = useRef<HTMLDivElement>(null)
 
@@ -59,26 +54,24 @@ const DraggableCard = typedMemo(
       },
       type: DRAG_TYPES.CARD,
       collect: (monitor: DragSourceMonitor) => ({
-        isDragging: !!monitor.isDragging(),
+        isDragging: (monitor.getItem() as ICardDndItem)?.cardId === cardId,
       }),
     })
 
-    const [{ handlerId, isOver }, drop] = useDrop({
+    const [{ handlerId }, drop] = useDrop({
       accept: DRAG_TYPES.CARD,
       collect(monitor) {
         return {
           handlerId: monitor.getHandlerId(),
-          isOver: !!monitor.isOver(),
         }
       },
+
       drop(item: ICardDndItem) {
         if (item.targetListId === item.sourceListId) {
           const data: ICardDraggingProps = {
             sourceCardId: item.cardId,
             targetCardId: item.targetId,
             sourceListId: item.sourceListId,
-            targetListId: item.targetListId,
-            isSwitchingList: false,
           }
 
           saveCardDndChanges(data)
@@ -89,21 +82,16 @@ const DraggableCard = typedMemo(
       hover(item: ICardDndItem, monitor: DropTargetMonitor) {
         if (!ref.current) return
 
-        // const sourceListIndex = item.sourceListIndex
-        // const listHoverIndex = listIndex
-        // const isOnCurrentList = sourceListIndex === listHoverIndex
-
-        // if (!isOnCurrentList) return
-
         const dragIndex = item.index
         const hoverIndex = index
+        const hoverCardId = cardId
 
-        const hoverBoundingRect = ref.current?.getBoundingClientRect()
+        const hoverBoundingRect = ref.current.getBoundingClientRect()
         const clientOffset = monitor.getClientOffset()
 
-        const hasMovedFromOffset = dragIndex !== hoverIndex
+        const isOnSourceCard = dragIndex === hoverIndex
 
-        if (!hasMovedFromOffset) return
+        if (isOnSourceCard) return
 
         const hoverMiddleY =
           (hoverBoundingRect.bottom - hoverBoundingRect.top) / 2
@@ -114,10 +102,10 @@ const DraggableCard = typedMemo(
 
         if (dragIndex > hoverIndex && hoverClientY > hoverMiddleY) return
 
-        moveCard(dragIndex, hoverIndex)
+        moveCard(item.cardId, hoverCardId)
 
         item.index = hoverIndex
-        item.targetId = cardId
+        item.targetId = hoverCardId
       },
     })
 
@@ -129,9 +117,7 @@ const DraggableCard = typedMemo(
       <div
         ref={ref}
         style={containerStyle}
-        className={`${
-          isDragging || isOver ? "card-drag-placeholder" : "card-item"
-        }`}
+        className={`${isDragging ? "card-drag-placeholder" : "card-item"}`}
         data-handler-id={handlerId}
       >
         {children}

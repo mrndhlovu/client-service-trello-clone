@@ -11,11 +11,11 @@ interface IProps {
 }
 
 const index = ({ data }: IProps) => {
-  return (
+  return data ? (
     <BoardContextProvider board={data}>
       <Board board={data} />
     </BoardContextProvider>
-  )
+  ) : null
 }
 
 export const getServerSideProps = withAuthSsp(

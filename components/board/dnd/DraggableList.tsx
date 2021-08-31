@@ -49,8 +49,8 @@ const DraggableList = typedMemo(({ children, listId, listIndex }) => {
     },
     drop(item: IListDndItem) {
       const data: IListDraggingProps = {
-        source: item.sourceId,
-        target: item.hoverId,
+        sourceListId: item.sourceId,
+        targetListId: item.hoverId,
       }
       saveListDndChanges(data)
 

@@ -3,15 +3,10 @@ import { useDrop } from "react-dnd"
 
 import { DRAG_TYPES } from "../../../util/constants"
 import { ICardDndItem } from "./DraggableCard"
-import {
-  ICardDraggingProps,
-  useBoard,
-  useListContext,
-} from "../../../lib/providers"
+import { ICardDraggingProps, useListContext } from "../../../lib/providers"
 
 const ForeignCardDropZone = ({ children, listId, listIndex }) => {
-  const { switchCardList } = useBoard()
-  const { saveCardDndChanges } = useListContext()
+  const { saveCardDndChanges, switchCardList } = useListContext()
 
   const ref = useRef<HTMLDivElement>(null)
 
@@ -34,24 +29,12 @@ const ForeignCardDropZone = ({ children, listId, listIndex }) => {
     hover(item: ICardDndItem) {
       const sourceListIndex = item.sourceListIndex
       const listHoverIndex = listIndex
-      const isOnCurrentList = sourceListIndex === listHoverIndex
+      const isOnSourceList = sourceListIndex === listHoverIndex
 
-      if (isOnCurrentList) return
+      if (isOnSourceList) return
 
+      switchCardList(item.cardId, listId)
       item.targetListId = listId
-
-      switchCardList(item.index, item.sourceListId, listId)
-
-      console.log("====================================")
-      console.log(
-        item.hoverIndex,
-        item.index,
-        item.sourceListId,
-        listId,
-        item.targetListId
-      )
-      console.log("====================================")
-
       item.sourceListIndex = listIndex
     },
   })

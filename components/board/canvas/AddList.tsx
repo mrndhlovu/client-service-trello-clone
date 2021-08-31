@@ -4,14 +4,16 @@ import { AiOutlineClose, AiOutlinePlus } from "react-icons/ai"
 
 import { clientRequest } from "../../../api"
 import { useGlobalState } from "../../../lib/hooks/context"
-import { useBoard } from "../../../lib/providers"
+import { IBoard, useBoard, useListContext } from "../../../lib/providers"
+import { IListItem } from "./ListItem"
 
 interface IProps {
   isFirst: boolean
+  newListPosition: number
 }
 
-const AddList = ({ isFirst }: IProps) => {
-  const { setActiveBoard, board } = useBoard()
+const AddList = ({ isFirst, newListPosition }: IProps) => {
+  const { boardId, setActiveBoard } = useBoard()
   const { notify } = useGlobalState()
 
   const [editing, setEditing] = useState<boolean>(false)
@@ -25,12 +27,12 @@ const AddList = ({ isFirst }: IProps) => {
     if (!title) return
 
     await clientRequest
-      .createList({ title }, board.id)
+      .createList({ title, position: newListPosition }, boardId)
       .then(res => {
-        const boardLists = [...board.lists]
-        boardLists.push(res.data)
-
-        setActiveBoard({ ...board, lists: boardLists })
+        setActiveBoard((prev: IBoard) => ({
+          ...prev,
+          lists: [...prev.lists, res.data],
+        }))
         setTitle("")
         toggleAddInput()
       })

@@ -18,6 +18,7 @@ interface IProps {
 }
 
 export interface IListItem {
+  cards?: ICardItem[]
   [key: string]: any
 }
 
@@ -27,17 +28,17 @@ export interface ICardItem {
 }
 
 const ListItem = ({ listItem, listIndex }: IProps) => {
-  const { handleUpdateList } = useListContext()
+  const { saveListChanges } = useListContext()
 
   const handleUpdateTitle = (title: string) => {
-    handleUpdateList(listItem.id, { title })
+    saveListChanges(listItem.id, { title })
   }
 
   const handleArchiveList = () => {
-    handleUpdateList(listItem.id, { archived: true })
+    saveListChanges(listItem.id, { archived: true })
   }
 
-  const listActions = [{ title: "Archive list", onClick: handleArchiveList }]
+  const LIST_ACTIONS = [{ title: "Archive list", onClick: handleArchiveList }]
 
   return (
     <div className="list-wrapper">
@@ -58,7 +59,7 @@ const ListItem = ({ listItem, listIndex }: IProps) => {
                   </Button>
                 }
               >
-                {listActions.map((action, index) => (
+                {LIST_ACTIONS.map((action, index) => (
                   <MenuItem key={index} onClick={action.onClick}>
                     {action.title}
                   </MenuItem>
