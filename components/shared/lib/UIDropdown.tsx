@@ -65,7 +65,9 @@ const UIDropdown = ({
 }: IProps) => {
   return (
     <StyledMenu>
-      <MenuButton className={`dropdown ${className}`}>{toggle}</MenuButton>
+      <MenuButton className={`dropdown ${className || ""}`}>
+        {toggle}
+      </MenuButton>
       <MenuList>
         <header>
           <DropdownHeader>{heading}</DropdownHeader>

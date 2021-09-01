@@ -21,6 +21,10 @@ interface IProps {
 
 const Container = styled.div<ICardStyles>``
 
+const CardLabel = styled.span<{ color: string }>`
+  background-color: ${props => props.color || "none"};
+`
+
 const ListCardItem = ({ card, cardIndex, listIndex, listId }: IProps) => {
   const [isOpen, setIsOpen] = useState<boolean>(false)
 
@@ -41,9 +45,15 @@ const ListCardItem = ({ card, cardIndex, listIndex, listId }: IProps) => {
           <div className="list-card-cover" />
           <div className="list-card-labels">
             {card?.prefs?.labels.map((label: string, index: number) => (
-              <span className="card-label " color={label} key={index} />
+              <CardLabel className="card-label " color={label} key={index} />
             ))}
           </div>
+
+          {!isOpen && (
+            <Button onClick={toggleEditMenu} size="xs" className="edit-button">
+              <FiEdit2 size={15} />
+            </Button>
+          )}
 
           <div className="list-card-details">
             {isOpen ? (
@@ -55,15 +65,6 @@ const ListCardItem = ({ card, cardIndex, listIndex, listId }: IProps) => {
               />
             ) : (
               <span className="list-card-title">{card?.title}</span>
-            )}
-            {!isOpen && (
-              <Button
-                onClick={toggleEditMenu}
-                size="xs"
-                className="edit-button"
-              >
-                <FiEdit2 size={15} />
-              </Button>
             )}
           </div>
         </Container>

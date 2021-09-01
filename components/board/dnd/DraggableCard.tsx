@@ -38,7 +38,7 @@ const DraggableCard = typedMemo(
 
     const ref = useRef<HTMLDivElement>(null)
 
-    const [{ isDragging }, drag, preview] = useDrag({
+    const [{ isDragging }, drag] = useDrag({
       item: () => {
         return {
           sourceListIndex: listIndex,
@@ -52,7 +52,9 @@ const DraggableCard = typedMemo(
       },
       type: DRAG_TYPES.CARD,
       collect: (monitor: DragSourceMonitor) => ({
-        isDragging: (monitor.getItem() as ICardDndItem)?.cardId === cardId,
+        isDragging:
+          !!monitor.isDragging &&
+          (monitor.getItem() as ICardDndItem)?.cardId === cardId,
       }),
     })
 

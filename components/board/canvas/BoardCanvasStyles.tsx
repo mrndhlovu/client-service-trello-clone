@@ -1,6 +1,7 @@
 import styled from "styled-components"
 
 export default styled.div`
+  min-width: 100vw;
   height: 100%;
   width: 100%;
 
@@ -9,8 +10,9 @@ export default styled.div`
     height: 99%;
     width: 100%;
     padding: 0 5px;
-    overflow-x: scroll;
+    overflow-x: auto;
     min-width: 100vw;
+    flex-wrap: nowrap;
 
     .list-wrapper {
       margin-left: 8px;
@@ -79,7 +81,7 @@ export default styled.div`
 
     .card-drag-placeholder,
     .drag-placeholder {
-      background-color: #6b6b6b6b;
+      background-color: #ccc;
 
       div {
         opacity: 0;
@@ -198,16 +200,17 @@ export default styled.div`
       .card-drag-placeholder,
       .list-card {
         ${props => props.theme.styles.cardBoxShadow};
+        ${props => props.theme.mixins.flex("column", "space-evenly", "start")};
         background-color: #fff;
         border-radius: 3px;
         cursor: pointer;
-        display: block;
         margin-bottom: 8px;
         max-width: 300px;
         min-height: 20px;
         position: relative;
         text-decoration: none;
         min-height: 35px;
+        padding: 8px 4px 4px;
 
         &:hover {
           .edit-button {
@@ -221,7 +224,7 @@ export default styled.div`
       }
 
       .card-drag-placeholder {
-        background-color: #e9e9e9f8;
+        background-color: #ccc;
         box-shadow: none;
       }
 
@@ -275,6 +278,13 @@ export default styled.div`
         padding: 0;
         text-shadow: none;
         width: auto;
+
+        border-radius: 4px;
+        display: block;
+        overflow: hidden;
+        position: relative;
+        text-overflow: ellipsis;
+        white-space: nowrap;
       }
 
       .card-editor {
