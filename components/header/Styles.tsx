@@ -121,6 +121,7 @@ export default styled.header<IHeaderStyles>`
           background-color: #ffffff;
           color: #5e6c84;
         }
+        ${props => props.theme.mixins.placeholderColor("#fff")};
       }
 
       span {
@@ -128,7 +129,6 @@ export default styled.header<IHeaderStyles>`
         position: absolute;
         right: 2px;
         font-weight: 700;
-        color: #5e6c84;
         line-height: 16px;
         margin-top: 12px;
         margin-bottom: 4px;

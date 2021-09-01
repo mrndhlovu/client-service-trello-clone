@@ -73,7 +73,7 @@ const AddList = ({ isFirst, newListPosition }: IProps) => {
             <Button
               onClick={toggleAddInput}
               className="create-button"
-              leftIcon={<AiOutlinePlus />}
+              leftIcon={<AiOutlinePlus size={18} />}
               size="md"
             >
               {isFirst ? "Add a list" : "Add another list"}

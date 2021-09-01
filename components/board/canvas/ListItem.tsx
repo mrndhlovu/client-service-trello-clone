@@ -53,11 +53,9 @@ const ListItem = ({ listItem, listIndex }: IProps) => {
 
               <UIDropdown
                 heading="List actions"
-                toggle={
-                  <Button size="xs">
-                    <AiOutlineEllipsis size={18} />
-                  </Button>
-                }
+                toggleSize="md"
+                className="list-actions-menu-button"
+                toggle={<AiOutlineEllipsis size={20} />}
               >
                 {LIST_ACTIONS.map((action, index) => (
                   <MenuItem key={index} onClick={action.onClick}>

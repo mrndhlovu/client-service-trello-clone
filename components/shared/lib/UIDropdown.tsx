@@ -8,6 +8,7 @@ interface IProps {
   children: ReactNode
   className?: string
   heading?: string
+  toggleSize?: string
 }
 
 const StyledMenu = styled(Menu)`
@@ -55,7 +56,13 @@ const StyledMenu = styled(Menu)`
 
 const DropdownHeader = styled.h6``
 
-const UIDropdown = ({ toggle, children, className, heading }: IProps) => {
+const UIDropdown = ({
+  toggle,
+  children,
+  className,
+  heading,
+  toggleSize,
+}: IProps) => {
   return (
     <StyledMenu>
       <MenuButton className={`dropdown ${className}`}>{toggle}</MenuButton>

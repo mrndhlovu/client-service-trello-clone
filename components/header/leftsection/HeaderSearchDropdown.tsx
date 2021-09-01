@@ -1,3 +1,4 @@
+import { Input } from "@chakra-ui/react"
 import { useState } from "react"
 import { FiSearch } from "react-icons/fi"
 
@@ -12,26 +13,19 @@ const HeaderSearchDropdown = () => {
   }
 
   return (
-    <UIDropdown
-      className="header-search-dropdown-button"
-      toggle={
-        <div className="header-search-content">
-          <label>Search</label>
-          <div>
-            <input
-              defaultValue={search}
-              onChange={handleSearch}
-              placeholder="Search"
-            />
-          </div>
-          <span>
-            <FiSearch />
-          </span>
-        </div>
-      }
-    >
-      <div />
-    </UIDropdown>
+    <div className="header-search-content">
+      <label>Search</label>
+      <div>
+        <Input
+          defaultValue={search}
+          onChange={handleSearch}
+          placeholder="Search"
+        />
+      </div>
+      <span>
+        <FiSearch />
+      </span>
+    </div>
   )
 }
 

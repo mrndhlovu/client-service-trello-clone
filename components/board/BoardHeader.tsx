@@ -99,9 +99,12 @@ const BoardHeader = () => {
         </Button>
 
         <UIDropdown
-          className="chakra-button"
           heading="Invite to board"
-          toggle={<div>Invite</div>}
+          toggle={
+            <span>
+              <Button>Invite</Button>
+            </span>
+          }
         >
           <Input placeholder="Email address or username" />
         </UIDropdown>

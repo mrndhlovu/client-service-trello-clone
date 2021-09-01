@@ -1,7 +1,15 @@
-import { Button, Menu, MenuItem, Textarea } from "@chakra-ui/react"
 import { ChangeEvent, useState } from "react"
-import { AiOutlineClose } from "react-icons/ai"
+import {
+  AiFillSwitcher,
+  AiOutlineClose,
+  AiOutlineIdcard,
+  AiOutlineTag,
+} from "react-icons/ai"
+
+import { Button, Menu, MenuItem, Textarea } from "@chakra-ui/react"
+
 import { useListCardsContext } from "../../../lib/providers"
+import { CgCreditCard } from "react-icons/cg"
 
 interface IProps {
   title: string
@@ -32,28 +40,51 @@ const EditCardMenu = ({ title, close, cardId, listId }: IProps) => {
 
   const CARD_ACTIONS = [
     {
+      handleClick: () => {},
+      key: "open-card",
+      title: "Open card",
+      icon: <CgCreditCard />,
+    },
+    {
+      handleClick: () => {},
+      key: "change-cover",
+      title: "Change cover",
+      icon: <AiOutlineIdcard />,
+    },
+    {
+      handleClick: () => {},
+      key: "edit-labels",
+      title: "Edit labels",
+      icon: <AiOutlineTag />,
+    },
+
+    {
       handleClick: handleArchiveCard,
       key: "archive-car",
-      title: "Archive card",
+      title: "Archive",
+      icon: <AiFillSwitcher />,
     },
   ]
 
   return (
     <div className="card-editor">
-      <div>
+      <div className="card-editor-content">
         <Textarea onChange={handleChange} defaultValue={title} />
-
-        <div>
-          <Button size="sm" onClick={handleSave} colorScheme="green">
-            Save
-          </Button>
-          <AiOutlineClose className="close-button" onClick={close} />
-        </div>
       </div>
-      <div>
+      <div className="action-buttons">
+        <Button size="sm" onClick={handleSave} colorScheme="blue">
+          Save
+        </Button>
+        <AiOutlineClose size={22} className="close-button" onClick={close} />
+      </div>
+      <div className="action-options">
         <Menu>
           {CARD_ACTIONS.map(action => (
-            <MenuItem onClick={action.handleClick} key={action.key}>
+            <MenuItem
+              icon={action.icon}
+              onClick={action.handleClick}
+              key={action.key}
+            >
               {action.title}
             </MenuItem>
           ))}

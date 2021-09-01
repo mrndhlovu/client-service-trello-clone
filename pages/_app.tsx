@@ -1,5 +1,6 @@
 import { AppProps } from "next/dist/next-server/lib/router/router"
 import { ChakraProvider } from "@chakra-ui/react"
+
 import {
   AuthContextProvider,
   GlobalContextProvider,
@@ -9,17 +10,17 @@ import Layout from "../components/layout"
 
 const AppComponent = ({ Component, pageProps }: AppProps) => {
   return (
-    <ThemeProvider>
-      <ChakraProvider>
-        <AuthContextProvider>
-          <GlobalContextProvider>
+    <AuthContextProvider>
+      <GlobalContextProvider>
+        <ChakraProvider>
+          <ThemeProvider>
             <Layout>
               <Component {...pageProps} />
             </Layout>
-          </GlobalContextProvider>
-        </AuthContextProvider>
-      </ChakraProvider>
-    </ThemeProvider>
+          </ThemeProvider>
+        </ChakraProvider>
+      </GlobalContextProvider>
+    </AuthContextProvider>
   )
 }
 

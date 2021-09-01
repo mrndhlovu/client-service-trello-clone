@@ -11,7 +11,6 @@ declare module "styled-components" {
       body: string
       border: string
       borderLight: string
-      facebook: string
       heading: string
       lightBgBody: string
       lightBoxShadowBorder: string

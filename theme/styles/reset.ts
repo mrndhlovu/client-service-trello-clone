@@ -2,34 +2,7 @@ import { css } from "styled-components"
 
 const reset = css`
   html {
-    color: #222;
-    font-size: 1em;
-    line-height: 1.4;
-  }
-  ::-moz-selection {
-    background: #b3d4fc;
-    text-shadow: none;
-  }
-
-  ::selection {
-    background: #b3d4fc;
-    text-shadow: none;
-  }
-  hr {
-    display: block;
-    height: 1px;
-    border: 0;
-    border-top: 1px solid #ccc;
-    margin: 1em 0;
-    padding: 0;
-  }
-  audio,
-  canvas,
-  iframe,
-  img,
-  svg,
-  video {
-    vertical-align: middle;
+    color: ${props => props.theme.colors.border};
   }
 
   .layout {
@@ -94,7 +67,7 @@ const reset = css`
     top: 0px;
     width: 100vw;
     height: 100vh;
-    background-color: #0009;
+    background-color: #00000070;
   }
 
   .visuallyhidden {

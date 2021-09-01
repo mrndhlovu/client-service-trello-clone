@@ -1,7 +1,7 @@
 import { useState } from "react"
 import styled from "styled-components"
 
-import { AiOutlineEdit } from "react-icons/ai"
+import { FiEdit2 } from "react-icons/fi"
 import { Button, Modal } from "@chakra-ui/react"
 
 import { ICardItem } from "./ListItem"
@@ -34,7 +34,10 @@ const ListCardItem = ({ card, cardIndex, listIndex, listId }: IProps) => {
         listId={listId}
         listIndex={listIndex}
       >
-        <Container cover={card?.cover} className="list-card">
+        <Container
+          cover={card?.cover}
+          className={`list-card ${isOpen ? "edit-open" : ""}`}
+        >
           <div className="list-card-cover" />
           <div className="list-card-labels">
             {card?.prefs?.labels.map((label: string, index: number) => (
@@ -59,7 +62,7 @@ const ListCardItem = ({ card, cardIndex, listIndex, listId }: IProps) => {
                 size="xs"
                 className="edit-button"
               >
-                <AiOutlineEdit />
+                <FiEdit2 size={15} />
               </Button>
             )}
           </div>

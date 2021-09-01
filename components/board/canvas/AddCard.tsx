@@ -73,7 +73,7 @@ const AddCard = () => {
           <Button
             size="sm"
             onClick={toggleAddInput}
-            leftIcon={<AiOutlinePlus />}
+            leftIcon={<AiOutlinePlus size={18} />}
             isFullWidth
             className="add-card-button"
           >

@@ -66,11 +66,6 @@ const darkStyles = css`
 
       ${props =>
         props.theme.mixins.placeholderColor(props.theme.colors.borderLight)};
-
-      /* &:focus,
-      &:active {
-        border-color: ${props => props.theme.colors.primary};
-      } */
     }
 
     blockquote {
@@ -83,27 +78,6 @@ const darkStyles = css`
 
           &:hover {
             color: ${props => props.theme.colors.primary};
-          }
-        }
-      }
-    }
-
-    /* Checkbox & Radio Styles */
-    input[type="checkbox"],
-    input[type="radio"] {
-      & ~ label {
-        &:before {
-          border-color: ${props => props.theme.colors.lightBorder};
-        }
-      }
-
-      &:checked {
-        & ~ label {
-          color: ${props => props.theme.colors.primary};
-
-          &:before {
-            color: ${props => props.theme.colors.primary};
-            border-color: ${props => props.theme.colors.primary};
           }
         }
       }

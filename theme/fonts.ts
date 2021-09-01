@@ -1,6 +1,6 @@
 const fonts = {
-  primary: "Nunito, sans-serif",
-  secondary: "Questrial, sans-serif",
+  secondary: "Montserrat, sans-serif",
+  primary: "Questrial, sans-serif",
 }
 
 export default fonts

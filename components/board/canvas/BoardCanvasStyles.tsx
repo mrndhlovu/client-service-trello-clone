@@ -26,7 +26,7 @@ export default styled.div`
       .foreign-card-dnd-zone {
         height: inherit;
         width: inherit;
-        overflow-y: auto;
+        /* overflow-y: auto; */
         transform: "translate3d(0, 0, 0)";
       }
     }
@@ -53,9 +53,13 @@ export default styled.div`
         background-color: transparent;
       }
 
-      button:last-child {
+      .list-actions-menu-button {
+        background-color: transparent;
+        border: none;
+        padding: 3px;
+
         &:hover {
-          background-color: #0000000d;
+          background-color: #cccccc63;
         }
       }
     }
@@ -71,10 +75,6 @@ export default styled.div`
       white-space: normal;
       width: 272px;
       transform: rotate3d(0, 0, 0);
-
-      button {
-        border: none;
-      }
     }
 
     .card-drag-placeholder,
@@ -191,10 +191,9 @@ export default styled.div`
       flex: 1 1 auto;
       margin: 0 4px;
       min-height: 0;
-      overflow-x: hidden;
-      overflow-y: auto;
+      /* overflow-x: hidden; */
+      /* overflow-y: auto; */
       padding: 0 4px;
-      z-index: 1;
 
       .card-drag-placeholder,
       .list-card {
@@ -208,7 +207,6 @@ export default styled.div`
         min-height: 20px;
         position: relative;
         text-decoration: none;
-        z-index: 0;
         min-height: 35px;
 
         &:hover {
@@ -218,8 +216,12 @@ export default styled.div`
         }
       }
 
+      .list-card.edit-open {
+        z-index: 1;
+      }
+
       .card-drag-placeholder {
-        background-color: #cccccc50;
+        background-color: #e9e9e9f8;
         box-shadow: none;
       }
 
@@ -247,10 +249,15 @@ export default styled.div`
         right: 1px;
         visibility: hidden;
         border-radius: 3px;
+        background-color: transparent;
+
+        &:hover {
+          background-color: #f1f1f1;
+        }
       }
 
       .list-card-details {
-        overflow: hidden;
+        /* overflow: hidden; */
         padding: 6px 8px 2px;
         position: relative;
         /* z-index: 10; */
@@ -268,6 +275,48 @@ export default styled.div`
         padding: 0;
         text-shadow: none;
         width: auto;
+      }
+
+      .card-editor {
+        ${props =>
+          props.theme.mixins.flex("column", "space-evenly", "flex-start")};
+        position: relative;
+        gap: 5px;
+
+        &-content {
+          textarea {
+            color: ${props => props.theme.colors.border};
+            padding: 4px;
+            width: 239px;
+          }
+        }
+      }
+      .action-options {
+        position: absolute;
+        right: -68%;
+        top: -6px;
+
+        button {
+          background-color: #00000052;
+          color: #fff;
+          margin-bottom: 5px;
+          border-radius: 3px;
+          width: fit-content;
+
+          &:hover {
+            transform: translateX(5px);
+          }
+        }
+      }
+
+      .action-buttons {
+        ${props => props.theme.mixins.flex("row", "start")};
+        gap: 5px;
+
+        button {
+          border-radius: 3px;
+          font-weight: lighter;
+        }
       }
     }
   }

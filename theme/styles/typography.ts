@@ -34,9 +34,8 @@ const typography = css`
     -webkit-font-smoothing: antialiased;
     -moz-osx-font-smoothing: grayscale;
     font-size: ${props => props.theme.variables.body};
-    line-height: 1.29rem;
     font-family: ${props => props.theme.fonts.secondary};
-    color: ${props => props.theme.colors.body};
+    color: ${props => props.theme.colors.border};
     font-weight: 400;
     background: ${props => props.theme.colors.bgBody};
 
@@ -53,86 +52,6 @@ const typography = css`
     max-width: 100%;
   }
   ${props => props.theme.mixins.placeholderColor(props.theme.colors.body)};
-
-  h1,
-  h2,
-  h3,
-  h4,
-  h5,
-  h6 {
-    font-family: ${props => props.theme.fonts.primary};
-    color: ${props => props.theme.colors.border};
-  }
-
-  h1 {
-    font-size: 3.2857rem;
-    line-height: 4rem;
-
-    @media ${props => props.theme.device.tablet} {
-      font-size: 2.9857rem;
-      line-height: 3.4rem;
-    }
-
-    @media ${props => props.theme.device.mobileLg} {
-      font-size: 2.6857rem;
-      line-height: 3.1rem;
-    }
-  }
-
-  h2 {
-    font-size: 2.57rem;
-    line-height: 3.2857rem;
-
-    @media ${props => props.theme.device.tablet} {
-      font-size: 2.37rem;
-      line-height: 3.0857rem;
-    }
-
-    @media ${props => props.theme.device.mobileLg} {
-      font-size: 2.17rem;
-      line-height: 2.857rem;
-    }
-  }
-
-  h3 {
-    font-size: 2rem;
-    line-height: 2.7rem;
-
-    @media ${props => props.theme.device.mobileLg} {
-      font-size: 1.91rem;
-      line-height: 2.357rem;
-    }
-  }
-
-  h4 {
-    font-size: 1.71rem;
-    line-height: 2.43rem;
-
-    @media ${props => props.theme.device.mobileLg} {
-      font-size: 1.51rem;
-      line-height: 2.13rem;
-    }
-  }
-
-  h5 {
-    font-size: 1.43rem;
-    line-height: 2.14rem;
-
-    @media ${props => props.theme.device.mobileLg} {
-      font-size: 1.23rem;
-      line-height: 2.04rem;
-    }
-  }
-
-  h6 {
-    font-size: 1.14rem;
-    line-height: 1.857rem;
-
-    @media ${props => props.theme.device.mobileLg} {
-      font-size: 1.04rem;
-      line-height: 1.657rem;
-    }
-  }
 
   .input-container {
     position: relative;
