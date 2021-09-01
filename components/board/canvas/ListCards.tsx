@@ -9,6 +9,7 @@ const ListCards = ({ listIndex, listId }) => {
       {board?.cards?.map(
         (card, index) =>
           card?.id &&
+          !card?.archived &&
           card.listId === listId && (
             <ListCardItem
               listIndex={listIndex}

@@ -66,6 +66,37 @@ const reset = css`
     display: none !important;
   }
 
+  .card-editor {
+    z-index: 20;
+  }
+
+  .card-editor-modal {
+    background-color: transparent;
+  }
+
+  .card-editor-modal-content {
+    background-color: transparent;
+    z-index: 0;
+
+    .close-button {
+      border-color: none;
+    }
+
+    svg {
+      color: #fff;
+    }
+  }
+
+  .card-editor-overlay {
+    z-index: 0;
+    position: fixed;
+    left: 0px;
+    top: 0px;
+    width: 100vw;
+    height: 100vh;
+    background-color: #0009;
+  }
+
   .visuallyhidden {
     border: 0;
     clip: rect(0 0 0 0);

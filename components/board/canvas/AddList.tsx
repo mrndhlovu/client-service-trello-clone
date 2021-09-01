@@ -1,11 +1,10 @@
-import { ChangeEvent, useEffect, useState } from "react"
+import { ChangeEvent, useState } from "react"
 import { Button, Input } from "@chakra-ui/react"
 import { AiOutlineClose, AiOutlinePlus } from "react-icons/ai"
 
 import { clientRequest } from "../../../api"
 import { useGlobalState } from "../../../lib/hooks/context"
-import { IBoard, useBoard, useListContext } from "../../../lib/providers"
-import { IListItem } from "./ListItem"
+import { IBoard, useBoard } from "../../../lib/providers"
 
 interface IProps {
   isFirst: boolean
@@ -47,38 +46,40 @@ const AddList = ({ isFirst, newListPosition }: IProps) => {
   const toggleAddInput = () => setEditing(prev => !prev)
 
   return (
-    <div className="create-list">
-      <div>
-        {editing ? (
-          <div className="create-list-wrapper">
-            <Input
-              placeholder="Add list title..."
-              defaultValue={title}
-              onChange={handleChange}
-              size="sm"
-              autoFocus
-            />
-            <div className="c-flex">
-              <Button size="sm" colorScheme="blue" onClick={handleSave}>
-                Add list
-              </Button>
-              <AiOutlineClose
-                cursor="pointer"
-                onClick={toggleAddInput}
-                size={20}
+    <div className="list-wrapper">
+      <div className="create-list">
+        <div className="create-list-content">
+          {editing ? (
+            <div className="create-list-wrapper">
+              <Input
+                placeholder="Add list title..."
+                defaultValue={title}
+                onChange={handleChange}
+                size="sm"
+                autoFocus
               />
+              <div className="c-flex">
+                <Button size="sm" colorScheme="blue" onClick={handleSave}>
+                  Add list
+                </Button>
+                <AiOutlineClose
+                  cursor="pointer"
+                  onClick={toggleAddInput}
+                  size={20}
+                />
+              </div>
             </div>
-          </div>
-        ) : (
-          <Button
-            onClick={toggleAddInput}
-            className="create-button"
-            leftIcon={<AiOutlinePlus />}
-            size="md"
-          >
-            {isFirst ? "Add a list" : "Add another list"}
-          </Button>
-        )}
+          ) : (
+            <Button
+              onClick={toggleAddInput}
+              className="create-button"
+              leftIcon={<AiOutlinePlus />}
+              size="md"
+            >
+              {isFirst ? "Add a list" : "Add another list"}
+            </Button>
+          )}
+        </div>
       </div>
     </div>
   )

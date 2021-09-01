@@ -1,4 +1,4 @@
-import { memo, ReactNode, useRef, CSSProperties, useMemo } from "react"
+import { memo, ReactNode, useRef, useMemo } from "react"
 import {
   DropTargetMonitor,
   useDrag,
@@ -30,8 +30,6 @@ export interface ICardDndItem {
   targetListId?: string
 }
 
-const style: CSSProperties = {}
-
 const typedMemo: <T>(Component: T) => T = memo
 
 const DraggableCard = typedMemo(
@@ -40,7 +38,7 @@ const DraggableCard = typedMemo(
 
     const ref = useRef<HTMLDivElement>(null)
 
-    const [{ isDragging }, drag] = useDrag({
+    const [{ isDragging }, drag, preview] = useDrag({
       item: () => {
         return {
           sourceListIndex: listIndex,
@@ -109,14 +107,18 @@ const DraggableCard = typedMemo(
       },
     })
 
-    const containerStyle = useMemo(() => ({ ...style, cursor: "pointer" }), [])
+    const containerStyle = useMemo(
+      () => ({
+        cursor: "pointer",
+      }),
+      []
+    )
 
     drag(drop(ref))
 
     return (
       <div
         ref={ref}
-        style={containerStyle}
         className={`${isDragging ? "card-drag-placeholder" : "card-item"}`}
         data-handler-id={handlerId}
       >

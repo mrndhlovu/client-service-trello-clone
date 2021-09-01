@@ -1,4 +1,4 @@
-import { memo, ReactNode, useRef, CSSProperties, useMemo } from "react"
+import { memo, ReactNode, useRef, useMemo } from "react"
 import { DropTargetMonitor, useDrag, useDrop } from "react-dnd"
 import { XYCoord } from "dnd-core"
 
@@ -20,15 +20,13 @@ export interface IListDndItem {
   hoverId: string
 }
 
-const style: CSSProperties = {}
-
 const typedMemo: <T>(Component: T) => T = memo
 
 const DraggableList = typedMemo(({ children, listId, listIndex }) => {
   const { saveListDndChanges, onMoveList } = useListContext()
   const ref = useRef<HTMLDivElement>(null)
 
-  const [{ isDragging }, drag] = useDrag({
+  const [{ isDragging }, drag, preview] = useDrag({
     item: () => {
       return { sourceIndex: listIndex, sourceId: listId, hoveIndex: listIndex }
     },
@@ -44,7 +42,6 @@ const DraggableList = typedMemo(({ children, listId, listIndex }) => {
       return {
         handlerId: monitor.getHandlerId(),
         isOver: monitor.isOver(),
-        canDrop: monitor.canDrop(),
       }
     },
     drop(item: IListDndItem) {
@@ -95,10 +92,8 @@ const DraggableList = typedMemo(({ children, listId, listIndex }) => {
 
   const containerStyle = useMemo(
     () => ({
-      ...style,
       cursor: "pointer",
       borderRadius: "3px",
-      transform: "none",
     }),
     [isDragging]
   )
@@ -106,14 +101,12 @@ const DraggableList = typedMemo(({ children, listId, listIndex }) => {
   drag(drop(ref))
 
   return (
-    <div
-      ref={ref}
-      style={{
-        ...containerStyle,
-      }}
-      data-handler-id={handlerId}
-    >
-      <div className={`${isDragging ? "drag-placeholder" : "list-item"}`}>
+    <div className="drag-preview" ref={preview} style={containerStyle}>
+      <div
+        ref={ref}
+        data-handler-id={handlerId}
+        className={`${isDragging ? "drag-placeholder" : "list-item"}`}
+      >
         {children}
       </div>
     </div>

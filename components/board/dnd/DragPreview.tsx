@@ -2,14 +2,16 @@ import { forwardRef } from "react"
 import { CSSProperties } from "react"
 
 const styles: CSSProperties = {
-  display: "inline-block",
-  transform: "rotate(+7deg)",
-  WebkitTransform: "rotate(+7deg)",
-  width: "272px",
+  transform: "rotate(-3deg)",
+  borderRadius: "3px",
 }
 
-const DragPreview = ({ isDragging }, ref) => {
-  return <div ref={ref} style={isDragging ? styles : {}} />
+const DragPreview = ({ isDragging, children }, ref) => {
+  return (
+    <div className="drag-preview" ref={ref} style={isDragging ? styles : {}}>
+      {children}
+    </div>
+  )
 }
 
 export default forwardRef(DragPreview)

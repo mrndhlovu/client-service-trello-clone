@@ -1,6 +1,9 @@
-import { createContext, ReactNode, useContext } from "react"
+import { createContext, ReactNode, useCallback, useContext } from "react"
+import { clientRequest } from "../../api"
+import { useGlobalState } from "../hooks/context"
 
 import { useBoard } from "./BoardContextProvider"
+import { useListContext } from "./ListContextProvider"
 
 interface IProps {
   listId: string
@@ -23,8 +26,25 @@ export interface IDndProps {
 
 const ListCardsContextProvider = ({ children, listId, listIndex }: IProps) => {
   const { findCardsByListId } = useBoard()
+  const { updateCardsState } = useListContext()
+  const { notify } = useGlobalState()
 
   const [, listHasCards] = findCardsByListId(listId)
+
+  const saveCardChanges = useCallback(
+    async (cardId: string, listId: string, update: { [key: string]: any }) => {
+      await clientRequest
+        .updateCard(update, { listId, cardId })
+        .then(res => updateCardsState(res.data))
+        .catch(err =>
+          notify({
+            description: err.message,
+            placement: "top",
+          })
+        )
+    },
+    [notify, updateCardsState]
+  )
 
   return (
     <CardContext.Provider
@@ -32,6 +52,7 @@ const ListCardsContextProvider = ({ children, listId, listIndex }: IProps) => {
         listIndex,
         listHasCards,
         listId,
+        saveCardChanges,
       }}
     >
       {children}
@@ -43,6 +64,11 @@ export interface IListCardsContextProps {
   listHasCards: boolean
   listIndex?: number
   listId: string
+  saveCardChanges: (
+    cardId: string,
+    listId: string,
+    update: { [key: string]: any }
+  ) => void
 }
 
 export const CardContext = createContext({} as IListCardsContextProps)

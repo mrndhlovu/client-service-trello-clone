@@ -20,7 +20,7 @@ interface IProps {
 }
 
 interface IUpdateStateOptions {
-  isNew: boolean
+  isNew?: boolean
 }
 
 const ListContextProvider = ({ children }: IProps) => {
@@ -174,8 +174,8 @@ const ListContextProvider = ({ children }: IProps) => {
     <ListContext.Provider
       value={{
         hasBoardList: !isEmpty(board?.lists),
-        onMoveList,
         moveCard,
+        onMoveList,
         saveCardDndChanges,
         saveListChanges,
         saveListDndChanges,

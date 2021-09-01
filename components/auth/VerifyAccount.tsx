@@ -4,10 +4,10 @@ import Link from "next/link"
 
 import { AlertDescription, AlertTitle, Button } from "@chakra-ui/react"
 
-import { requestNewVerificationLink } from "../../api"
 import { ROUTES } from "../../util/constants"
 import { useGlobalState } from "../../lib/hooks/context"
 import EmailConfirmation from "./EmailConfirmation"
+import { clientRequest } from "../../api"
 
 const VerifyAccount = () => {
   const router = useRouter()
@@ -17,7 +17,8 @@ const VerifyAccount = () => {
   const isNew = Boolean(router.query?.isNew === "true")
 
   const handleClick = async (formData: { email: string }) => {
-    await requestNewVerificationLink(formData)
+    await clientRequest
+      .requestNewVerificationLink(formData)
       .then(() => notify({ description: "Verification link sent." }))
       .catch(() =>
         notify({ description: "Failed to send link to email provided." })

@@ -48,7 +48,7 @@ const ListItem = ({ listItem, listIndex }: IProps) => {
             <div className="editable-header">
               <EditableTitle
                 handleUpdate={handleUpdateTitle}
-                title={`${listItem.title} ${listItem?.id}`}
+                title={listItem.title}
               />
 
               <UIDropdown

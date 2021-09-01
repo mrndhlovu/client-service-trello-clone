@@ -189,6 +189,16 @@ class ApiRequest extends AxiosConfig {
     )
   }
 
+  async updateCard(
+    data: { [key: string]: any },
+    options: { listId: string; cardId: string }
+  ) {
+    return await this.http.patch(
+      `${END_POINTS.cards}/id/${options.cardId}/${options.listId}`,
+      data
+    )
+  }
+
   async createList(data: { [key: string]: any }, boardId: string) {
     return await this.http.post(`${END_POINTS.lists}/create/${boardId}`, data)
   }

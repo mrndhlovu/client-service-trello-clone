@@ -6,10 +6,11 @@ export default styled.div`
 
   .content {
     ${props => props.theme.mixins.flex("row", "flex-start", "baseline")};
-    height: 100%;
+    height: 99%;
     width: 100%;
     padding: 0 5px;
     overflow-x: scroll;
+    min-width: 100vw;
 
     .list-wrapper {
       margin-left: 8px;
@@ -23,8 +24,10 @@ export default styled.div`
       position: relative;
 
       .foreign-card-dnd-zone {
-        height: 100%;
-        width: 100%;
+        height: inherit;
+        width: inherit;
+        overflow-y: auto;
+        transform: "translate3d(0, 0, 0)";
       }
     }
 
@@ -67,7 +70,7 @@ export default styled.div`
       position: relative;
       white-space: normal;
       width: 272px;
-      /* transform: rotate(-2deg); */
+      transform: rotate3d(0, 0, 0);
 
       button {
         border: none;
@@ -85,12 +88,9 @@ export default styled.div`
 
     .create-card,
     .create-list {
-      display: inline-block;
-      margin: 0 4px 0 4px;
       vertical-align: top;
       white-space: nowrap;
-      max-width: 272px;
-      min-width: 272px;
+      width: 100%;
 
       input {
         height: 32px;
@@ -99,6 +99,19 @@ export default styled.div`
         border-radius: 3px;
         font-weight: lighter;
         justify-content: end;
+      }
+    }
+
+    .create-list {
+      max-height: 76px;
+      height: 100%;
+      position: relative;
+
+      &-content {
+        height: 100%;
+        button {
+          padding: 0 9px;
+        }
       }
     }
 
@@ -150,10 +163,11 @@ export default styled.div`
     .create-card-wrapper,
     .create-list-wrapper {
       background-color: #ebecf0;
-      ${props => props.theme.mixins.flex("column", "flex-start", "end")};
-      gap: 3px;
-      padding: 4px;
+      ${props => props.theme.mixins.flex("column", "space-evenly", "end")};
+      gap: 7px;
+      padding: 0 4px;
       border-radius: 3px;
+      height: 100%;
     }
 
     .create-card-wrapper button {
@@ -239,7 +253,7 @@ export default styled.div`
         overflow: hidden;
         padding: 6px 8px 2px;
         position: relative;
-        z-index: 10;
+        /* z-index: 10; */
       }
 
       .card-label {

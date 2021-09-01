@@ -9,8 +9,8 @@ import Layout from "../components/layout"
 
 const AppComponent = ({ Component, pageProps }: AppProps) => {
   return (
-    <ChakraProvider>
-      <ThemeProvider>
+    <ThemeProvider>
+      <ChakraProvider>
         <AuthContextProvider>
           <GlobalContextProvider>
             <Layout>
@@ -18,8 +18,8 @@ const AppComponent = ({ Component, pageProps }: AppProps) => {
             </Layout>
           </GlobalContextProvider>
         </AuthContextProvider>
-      </ThemeProvider>
-    </ChakraProvider>
+      </ChakraProvider>
+    </ThemeProvider>
   )
 }
 
