@@ -24,7 +24,6 @@ export interface IListItem {
 
 export interface ICardItem {
   [key: string]: any
-  cardIndex: number
 }
 
 const ListItem = ({ listItem, listIndex }: IProps) => {

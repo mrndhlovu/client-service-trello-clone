@@ -1,6 +1,8 @@
 import { IPlan } from "../components/profile/billing/BillingPlans"
 import { IRequestError } from "../api"
 import { isArray } from "lodash"
+import { ILabelProps } from "../components/board/canvas/CardLabels"
+import { LABEL_DEFAULT_OPTIONS } from "./constants"
 
 export const getErrorMessage = (data: IRequestError) => {
   let message: string | string[]
@@ -77,4 +79,31 @@ export const getPlanDiscount = (
     100
   ).toFixed(2)
   return `Save ${discount}%`
+}
+
+export const getLabelOptions = (
+  savedLabels: ILabelProps[],
+  slice?: boolean
+): ILabelProps[] => {
+  if (slice) {
+    const labelOptions = [
+      ...LABEL_DEFAULT_OPTIONS.slice(0, 6).filter(
+        label =>
+          label.color !==
+          savedLabels.find(item => item.color === label.color)?.color
+      ),
+      ...savedLabels,
+    ]
+
+    return labelOptions
+  }
+
+  return [
+    ...LABEL_DEFAULT_OPTIONS.filter(
+      label =>
+        label.color !==
+        savedLabels.find(item => item.color === label.color)?.color
+    ),
+    ...savedLabels,
+  ]
 }

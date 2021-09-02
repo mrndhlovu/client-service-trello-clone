@@ -14,57 +14,21 @@ import { CgCreditCard } from "react-icons/cg"
 interface IProps {
   title: string
   close: () => void
-  listId: string
-  cardId: string
+  save: (newTitle: string) => void
 }
 
-const EditCardMenu = ({ title, close, cardId, listId }: IProps) => {
-  const { saveCardChanges } = useListCardsContext()
+const EditCardMenu = ({ title, close, save }: IProps) => {
   const [newTitle, setNewTitle] = useState<string>("")
-
-  const handleArchiveCard = () => {
-    saveCardChanges(cardId, listId, { archived: true })
-    close()
-  }
-
-  const handleSave = () => {
-    if (newTitle && newTitle !== title) {
-      saveCardChanges(cardId, listId, { title: newTitle })
-      close()
-    }
-  }
 
   const handleChange = (ev: ChangeEvent<HTMLElement>) => {
     setNewTitle((ev.target as any).value)
   }
 
-  const CARD_ACTIONS = [
-    {
-      handleClick: () => {},
-      key: "open-card",
-      title: "Open card",
-      icon: <CgCreditCard />,
-    },
-    {
-      handleClick: () => {},
-      key: "change-cover",
-      title: "Change cover",
-      icon: <AiOutlineIdcard />,
-    },
-    {
-      handleClick: () => {},
-      key: "edit-labels",
-      title: "Edit labels",
-      icon: <AiOutlineTag />,
-    },
-
-    {
-      handleClick: handleArchiveCard,
-      key: "archive-car",
-      title: "Archive",
-      icon: <AiFillSwitcher />,
-    },
-  ]
+  const handleSave = () => {
+    if (newTitle && newTitle !== title) {
+      save(newTitle)
+    }
+  }
 
   return (
     <div className="card-editor">
@@ -76,19 +40,6 @@ const EditCardMenu = ({ title, close, cardId, listId }: IProps) => {
           Save
         </Button>
         <AiOutlineClose size={22} className="close-button" onClick={close} />
-      </div>
-      <div className="action-options">
-        <Menu>
-          {CARD_ACTIONS.map(action => (
-            <MenuItem
-              icon={action.icon}
-              onClick={action.handleClick}
-              key={action.key}
-            >
-              {action.title}
-            </MenuItem>
-          ))}
-        </Menu>
       </div>
     </div>
   )

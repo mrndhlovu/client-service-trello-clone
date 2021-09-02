@@ -104,3 +104,17 @@ export enum DRAG_TYPES {
   LIST = "LIST",
   FOREIGN_CARD = "FOREIGN_CARD",
 }
+
+export const LABEL_DEFAULT_OPTIONS = [
+  { color: "#61bd4f", name: "" },
+  { color: "#f2d600", name: "" },
+  { color: "#ff9f1a", name: "" },
+  { color: "#eb5a46", name: "" },
+  { color: "#c377e0", name: "" },
+
+  { color: "#0079bf", name: "" },
+  { color: "#00c2e0", name: "" },
+  { color: "#51e898", name: "" },
+  { color: "#ff78cb", name: "" },
+  { color: "#344563", name: "" },
+]

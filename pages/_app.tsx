@@ -11,15 +11,15 @@ import Layout from "../components/layout"
 const AppComponent = ({ Component, pageProps }: AppProps) => {
   return (
     <AuthContextProvider>
-      <GlobalContextProvider>
-        <ChakraProvider>
+      <ChakraProvider>
+        <GlobalContextProvider>
           <ThemeProvider>
             <Layout>
               <Component {...pageProps} />
             </Layout>
           </ThemeProvider>
-        </ChakraProvider>
-      </GlobalContextProvider>
+        </GlobalContextProvider>
+      </ChakraProvider>
     </AuthContextProvider>
   )
 }

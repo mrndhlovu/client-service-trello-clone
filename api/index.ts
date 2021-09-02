@@ -4,6 +4,7 @@ import axios, {
   AxiosRequestConfig,
   AxiosResponse,
 } from "axios"
+import { ILabelProps } from "../components/board/canvas/CardLabels"
 
 import { ICardDetails } from "../lib/hooks/context"
 import { ICardDraggingProps, IListDraggingProps } from "../lib/providers"
@@ -197,6 +198,18 @@ class ApiRequest extends AxiosConfig {
       `${END_POINTS.cards}/id/${options.cardId}/${options.listId}`,
       data
     )
+  }
+
+  async createLabel(data: ILabelProps) {
+    return await this.http.post(`${END_POINTS.cards}/new-label/`, data)
+  }
+
+  async getUserCardLabels() {
+    return await this.http.get(`${END_POINTS.cards}/user/labels`)
+  }
+
+  async deleteLabel(labelId: string) {
+    return await this.http.delete(`${END_POINTS.cards}/label/${labelId}`)
   }
 
   async createList(data: { [key: string]: any }, boardId: string) {

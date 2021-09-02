@@ -1,7 +1,7 @@
 import { ReactNode, ReactElement } from "react"
 import styled from "styled-components"
 
-import { Divider, Menu, MenuButton, MenuList } from "@chakra-ui/react"
+import { Divider, Menu, MenuButton, MenuList, Portal } from "@chakra-ui/react"
 
 interface IProps {
   toggle: ReactElement
@@ -13,17 +13,19 @@ interface IProps {
 
 const StyledMenu = styled(Menu)`
   width: fit-content;
-  .dropdown-menu {
-    min-width: 350px;
-  }
+  z-index: 100;
+`
+
+const StyledMenuContent = styled(MenuList)`
+  border-radius: 2px;
+  min-width: 300px;
 
   header {
     margin-bottom: 8px;
     padding: 0 12px;
     position: relative;
     text-align: center;
-    display: grid;
-    grid-template-columns: 12px 1fr 12px;
+    font-weight: 500;
 
     div {
       color: #172b4d;
@@ -52,6 +54,10 @@ const StyledMenu = styled(Menu)`
     color: #5e6c84;
     font-size: 14px;
   }
+
+  .dropdown-content {
+    padding: 10px;
+  }
 `
 
 const DropdownHeader = styled.h6``
@@ -68,14 +74,15 @@ const UIDropdown = ({
       <MenuButton className={`dropdown ${className || ""}`}>
         {toggle}
       </MenuButton>
-      <MenuList>
-        <header>
-          <DropdownHeader>{heading}</DropdownHeader>
-        </header>
-        <Divider />
-
-        {children}
-      </MenuList>
+      <Portal>
+        <StyledMenuContent>
+          <header>
+            <DropdownHeader>{heading}</DropdownHeader>
+          </header>
+          <Divider />
+          <div className="dropdown-content">{children}</div>
+        </StyledMenuContent>
+      </Portal>
     </StyledMenu>
   )
 }

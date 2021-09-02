@@ -200,21 +200,21 @@ export default styled.div`
       .card-drag-placeholder,
       .list-card {
         ${props => props.theme.styles.cardBoxShadow};
-        ${props => props.theme.mixins.flex("column", "space-evenly", "start")};
         background-color: #fff;
         border-radius: 3px;
         cursor: pointer;
-        margin-bottom: 8px;
         max-width: 300px;
         min-height: 20px;
         position: relative;
         text-decoration: none;
         min-height: 35px;
         padding: 8px 4px 4px;
+        margin-bottom: 8px;
 
         &:hover {
           .edit-button {
             visibility: visible;
+            background-color: #f1f1f1;
           }
         }
       }
@@ -248,11 +248,12 @@ export default styled.div`
 
       .edit-button {
         position: absolute;
-        top: 1px;
-        right: 1px;
+        top: 6px;
+        right: 6px;
         visibility: hidden;
         border-radius: 3px;
         background-color: transparent;
+        z-index: 1;
 
         &:hover {
           background-color: #f1f1f1;
@@ -260,10 +261,31 @@ export default styled.div`
       }
 
       .list-card-details {
-        /* overflow: hidden; */
-        padding: 6px 8px 2px;
+        ${props => props.theme.mixins.flex("column", "space-evenly", "start")};
+        padding: 3px 4px 2px;
         position: relative;
-        /* z-index: 10; */
+        gap: 5px;
+
+        .action-options {
+          ${props =>
+            props.theme.mixins.flex("column", "space-evenly", "start")};
+
+          position: absolute;
+          right: -64%;
+          top: -6px;
+
+          & > button {
+            background-color: #00000052 !important;
+            color: #fff;
+            margin-bottom: 5px;
+            border-radius: 3px;
+            width: fit-content;
+
+            &:hover {
+              transform: translateX(5px);
+            }
+          }
+        }
       }
 
       .card-label {
@@ -298,23 +320,9 @@ export default styled.div`
             color: ${props => props.theme.colors.border};
             padding: 4px;
             width: 239px;
-          }
-        }
-      }
-      .action-options {
-        position: absolute;
-        right: -68%;
-        top: -6px;
-
-        button {
-          background-color: #00000052;
-          color: #fff;
-          margin-bottom: 5px;
-          border-radius: 3px;
-          width: fit-content;
-
-          &:hover {
-            transform: translateX(5px);
+            border: none;
+            margin-top: 3px;
+            border-radius: 2px;
           }
         }
       }

@@ -32,7 +32,12 @@ const ListCardsContextProvider = ({ children, listId, listIndex }: IProps) => {
   const [, listHasCards] = findCardsByListId(listId)
 
   const saveCardChanges = useCallback(
-    async (cardId: string, listId: string, update: { [key: string]: any }) => {
+    async (
+      cardId: string,
+      listId: string,
+      update: { [key: string]: any },
+      options?: { updateState: boolean }
+    ) => {
       await clientRequest
         .updateCard(update, { listId, cardId })
         .then(res => updateCardsState(res.data))
@@ -47,7 +52,7 @@ const ListCardsContextProvider = ({ children, listId, listIndex }: IProps) => {
   )
 
   return (
-    <CardContext.Provider
+    <ListCardContext.Provider
       value={{
         listIndex,
         listHasCards,
@@ -56,7 +61,7 @@ const ListCardsContextProvider = ({ children, listId, listIndex }: IProps) => {
       }}
     >
       {children}
-    </CardContext.Provider>
+    </ListCardContext.Provider>
   )
 }
 
@@ -71,7 +76,7 @@ export interface IListCardsContextProps {
   ) => void
 }
 
-export const CardContext = createContext({} as IListCardsContextProps)
-export const useListCardsContext = () => useContext(CardContext)
+const ListCardContext = createContext({} as IListCardsContextProps)
+export const useListCardsContext = () => useContext(ListCardContext)
 
 export { ListCardsContextProvider }

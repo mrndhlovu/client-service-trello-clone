@@ -1,4 +1,5 @@
 import { useBoard } from "../../../lib/providers"
+import { CardContextProvider } from "../../../lib/providers/CardContextProvider"
 import ListCardItem from "./ListCardItem"
 
 const ListCards = ({ listIndex, listId }) => {
@@ -11,13 +12,14 @@ const ListCards = ({ listIndex, listId }) => {
           card?.id &&
           !card?.archived &&
           card.listId === listId && (
-            <ListCardItem
-              listIndex={listIndex}
-              listId={listId}
-              cardIndex={index}
-              card={card}
-              key={card?.id}
-            />
+            <CardContextProvider key={card?.id} card={card} cardIndex={index}>
+              <ListCardItem
+                listIndex={listIndex}
+                listId={listId}
+                cardIndex={index}
+                card={card}
+              />
+            </CardContextProvider>
           )
       )}
     </div>
