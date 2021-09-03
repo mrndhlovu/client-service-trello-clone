@@ -4,7 +4,7 @@ import axios, {
   AxiosRequestConfig,
   AxiosResponse,
 } from "axios"
-import { ILabelProps } from "../components/board/canvas/CardLabels"
+import { ILabelProps } from "../components/board/canvas/cardActions/CardLabels"
 
 import { ICardDetails } from "../lib/hooks/context"
 import { ICardDraggingProps, IListDraggingProps } from "../lib/providers"
@@ -226,12 +226,23 @@ class ApiRequest extends AxiosConfig {
     )
   }
 
+  async getCardAttachments(cardId: string) {
+    return await this.http.get(`${END_POINTS.cards}/${cardId}/attachments`)
+  }
+
   async moveList(data: IListDraggingProps) {
     return await this.http.patch(`${END_POINTS.lists}/move`, data)
   }
 
   async moveCard(data: ICardDraggingProps) {
     return await this.http.patch(`${END_POINTS.cards}/move`, data)
+  }
+
+  async uploadImageCardCover(formData: FormData, cardId: string) {
+    return await this.http.post(
+      `${END_POINTS.cards}/upload/${cardId}/add-cover`,
+      formData
+    )
   }
 
   createCustomerSubscription = async (data: ICardDetails) => {

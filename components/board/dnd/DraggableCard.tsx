@@ -32,8 +32,20 @@ export interface ICardDndItem {
 
 const typedMemo: <T>(Component: T) => T = memo
 
+const getClass = (isDragging: boolean, actionsOpen: boolean) => {
+  switch (true) {
+    case isDragging && !actionsOpen:
+      return "card-drag-placeholder"
+
+    case actionsOpen && !isDragging:
+      return "card-item actions-active"
+    default:
+      return "card-item"
+  }
+}
+
 const DraggableCard = typedMemo(
-  ({ children, cardId, index, listIndex, listId }) => {
+  ({ children, cardId, index, listIndex, listId, actionOpen }) => {
     const { saveCardDndChanges, moveCard } = useListContext()
 
     const ref = useRef<HTMLDivElement>(null)
@@ -121,7 +133,7 @@ const DraggableCard = typedMemo(
     return (
       <div
         ref={ref}
-        className={`${isDragging ? "card-drag-placeholder" : "card-item"}`}
+        className={getClass(isDragging, actionOpen)}
         data-handler-id={handlerId}
       >
         {children}

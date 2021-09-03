@@ -198,7 +198,8 @@ export default styled.div`
       padding: 0 4px;
 
       .card-drag-placeholder,
-      .list-card {
+      .list-card,
+      .card-item {
         ${props => props.theme.styles.cardBoxShadow};
         background-color: #fff;
         border-radius: 3px;
@@ -208,7 +209,6 @@ export default styled.div`
         position: relative;
         text-decoration: none;
         min-height: 35px;
-        padding: 8px 4px 4px;
         margin-bottom: 8px;
 
         &:hover {
@@ -219,7 +219,32 @@ export default styled.div`
         }
       }
 
-      .list-card.edit-open {
+      .card-action-options {
+        ${props => props.theme.mixins.flex("column", "space-evenly", "start")};
+
+        position: absolute;
+        right: -64%;
+        top: 0;
+
+        & > button {
+          background-color: #00000052 !important;
+          color: #fff;
+          margin-bottom: 5px;
+          border-radius: 3px;
+          width: fit-content;
+
+          &:hover {
+            transform: translateX(5px);
+          }
+        }
+      }
+
+      .list-card {
+        padding: 4px 4px 0px;
+        margin: 0;
+      }
+
+      .card-item.actions-active {
         z-index: 1;
       }
 
@@ -239,11 +264,6 @@ export default styled.div`
       }
 
       .list-card-cover {
-        background-position: 50%;
-        background-repeat: no-repeat;
-        background-size: cover;
-        -webkit-user-select: none;
-        user-select: none;
       }
 
       .edit-button {
@@ -264,28 +284,6 @@ export default styled.div`
         ${props => props.theme.mixins.flex("column", "space-evenly", "start")};
         padding: 3px 4px 2px;
         position: relative;
-        gap: 5px;
-
-        .action-options {
-          ${props =>
-            props.theme.mixins.flex("column", "space-evenly", "start")};
-
-          position: absolute;
-          right: -64%;
-          top: -6px;
-
-          & > button {
-            background-color: #00000052 !important;
-            color: #fff;
-            margin-bottom: 5px;
-            border-radius: 3px;
-            width: fit-content;
-
-            &:hover {
-              transform: translateX(5px);
-            }
-          }
-        }
       }
 
       .card-label {

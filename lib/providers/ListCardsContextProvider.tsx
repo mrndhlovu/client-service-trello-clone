@@ -32,12 +32,7 @@ const ListCardsContextProvider = ({ children, listId, listIndex }: IProps) => {
   const [, listHasCards] = findCardsByListId(listId)
 
   const saveCardChanges = useCallback(
-    async (
-      cardId: string,
-      listId: string,
-      update: { [key: string]: any },
-      options?: { updateState: boolean }
-    ) => {
+    async (cardId: string, listId: string, update: { [key: string]: any }) => {
       await clientRequest
         .updateCard(update, { listId, cardId })
         .then(res => updateCardsState(res.data))

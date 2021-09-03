@@ -1,16 +1,17 @@
-import { ChangeEvent, MouseEvent, useState } from "react"
-import { Button, Divider, Input } from "@chakra-ui/react"
-import { useEffect } from "react"
 import { BsCheck } from "react-icons/bs"
+import { Button, Divider, Input } from "@chakra-ui/react"
+import { ChangeEvent, MouseEvent, useState } from "react"
 import { FiEdit2 } from "react-icons/fi"
+import { useEffect } from "react"
+import { useRef } from "react"
 import styled from "styled-components"
 
-import { clientRequest } from "../../../api"
-import { LABEL_DEFAULT_OPTIONS } from "../../../util/constants"
-import { useCardContext, useListCardsContext } from "../../../lib/providers"
-import { useGlobalState } from "../../../lib/hooks/context"
-import { getLabelOptions } from "../../../util"
-import { useRef } from "react"
+import { clientRequest } from "../../../../api"
+import { getLabelOptions } from "../../../../util"
+import { LABEL_DEFAULT_OPTIONS } from "../../../../util/constants"
+import { useCardContext, useListCardsContext } from "../../../../lib/providers"
+import { useGlobalState } from "../../../../lib/hooks/context"
+import CardActionStyles from "./CardActionStyles"
 
 export interface ILabelProps {
   color: string
@@ -26,120 +27,6 @@ const StyledLi = styled.li<{ bgColor: string; checked: boolean }>`
 
   .check-icon {
     visibility: ${props => (props.checked ? "visible" : "hidden")};
-  }
-`
-
-const Container = styled.div`
-  max-width: 300px;
-
-  ul {
-    list-style: none;
-  }
-
-  .divider {
-    margin: 14px 0;
-  }
-
-  .button-group {
-    justify-content: space-between;
-    display: flex;
-    width: 100%;
-    margin-top: 10px;
-  }
-
-  button {
-    border-radius: 3px;
-  }
-
-  .label-color {
-    border-radius: 3px;
-    cursor: pointer;
-    font-weight: 700;
-    margin: 0 0 4px;
-    min-height: 20px;
-    padding: 10px 12px;
-    position: relative;
-    transition: padding 85ms, margin 85ms, box-shadow 85ms;
-    color: #fff;
-    text-overflow: ellipsis;
-    white-space: nowrap;
-    width: 100%;
-  }
-
-  .confirm-label,
-  .pick-label {
-    position: relative;
-    display: flex;
-  }
-
-  .pick-label {
-    flex-direction: column;
-
-    .label-color {
-      width: 100%;
-      display: flex;
-      justify-content: space-between;
-
-      .saved-label-name {
-        color: #fff;
-      }
-    }
-  }
-
-  .confirm-label {
-    .label-color {
-      height: 32px;
-      margin: 0 8px 8px 0;
-      padding: 0;
-      width: 48px;
-
-      span {
-        display: flex;
-        justify-content: center;
-        align-items: center;
-        height: 100%;
-      }
-    }
-  }
-
-  .confirm-label {
-    flex-wrap: wrap;
-    place-content: center;
-  }
-
-  .item,
-  .item-selected {
-    display: flex;
-    position: relative;
-  }
-
-  .item {
-    padding-right: 36px;
-
-    a {
-      border-radius: 3px;
-      padding: 6px;
-      position: absolute;
-      right: 0;
-      top: 0;
-    }
-  }
-
-  .item-selected {
-    width: fit-content;
-  }
-
-  input,
-  h4 {
-    margin-bottom: 10px;
-  }
-
-  h4 {
-    color: #5e6c84;
-    font-size: 12px;
-    font-weight: 500;
-    letter-spacing: 0.04em;
-    text-transform: uppercase;
   }
 `
 
@@ -190,7 +77,7 @@ const CardLabels = () => {
         setLabelOptions(prev =>
           prev.map(item => (item.color === res.data.color ? res.data : item))
         )
-        // setSelectedLabel({} as ILabelProps)
+
         inputRef.current.value = ""
         handleCreateLabel()
       })
@@ -262,7 +149,7 @@ const CardLabels = () => {
   }, [])
 
   return (
-    <Container>
+    <CardActionStyles>
       {createLabel ? (
         <>
           {selectedLabel?.color !== undefined && (
@@ -349,7 +236,7 @@ const CardLabels = () => {
           </Button>
         </>
       )}
-    </Container>
+    </CardActionStyles>
   )
 }
 

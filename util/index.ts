@@ -1,7 +1,7 @@
 import { IPlan } from "../components/profile/billing/BillingPlans"
 import { IRequestError } from "../api"
 import { isArray } from "lodash"
-import { ILabelProps } from "../components/board/canvas/CardLabels"
+import { ILabelProps } from "../components/board/canvas/cardActions/CardLabels"
 import { LABEL_DEFAULT_OPTIONS } from "./constants"
 
 export const getErrorMessage = (data: IRequestError) => {

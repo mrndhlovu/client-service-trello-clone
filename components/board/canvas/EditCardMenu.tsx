@@ -1,15 +1,6 @@
 import { ChangeEvent, useState } from "react"
-import {
-  AiFillSwitcher,
-  AiOutlineClose,
-  AiOutlineIdcard,
-  AiOutlineTag,
-} from "react-icons/ai"
-
-import { Button, Menu, MenuItem, Textarea } from "@chakra-ui/react"
-
-import { useListCardsContext } from "../../../lib/providers"
-import { CgCreditCard } from "react-icons/cg"
+import { AiOutlineClose } from "react-icons/ai"
+import { Button, Textarea } from "@chakra-ui/react"
 
 interface IProps {
   title: string

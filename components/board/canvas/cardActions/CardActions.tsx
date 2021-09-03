@@ -3,9 +3,10 @@ import { Fragment } from "react"
 import { AiFillSwitcher, AiOutlineIdcard, AiOutlineTag } from "react-icons/ai"
 import { CgCreditCard } from "react-icons/cg"
 
-import { useListCardsContext } from "../../../lib/providers"
-import { UIDropdown } from "../../shared"
+import { useListCardsContext } from "../../../../lib/providers"
+import { UIDropdown } from "../../../shared"
 import CardLabels from "./CardLabels"
+import ChangeCover from "./ChangeCover"
 
 interface IProps {
   cardId: string
@@ -34,7 +35,7 @@ const CardActions = ({ listId, cardId, close }: IProps) => {
       key: "change-cover",
       title: "Change cover",
       icon: <AiOutlineIdcard />,
-      content: <CardLabels />,
+      content: <ChangeCover />,
     },
     {
       handleClick: () => {},
@@ -54,7 +55,7 @@ const CardActions = ({ listId, cardId, close }: IProps) => {
   ]
 
   return (
-    <div className="action-options">
+    <div className="card-action-options">
       <Menu>
         {CARD_ACTIONS.map(action => (
           <Fragment key={action.key}>
