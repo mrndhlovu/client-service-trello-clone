@@ -1,15 +1,17 @@
-import { Divider, Input } from "@chakra-ui/react"
+import { Button, Divider, Input } from "@chakra-ui/react"
+import { isEmpty } from "lodash"
 import {
   useState,
   useEffect,
   ChangeEvent,
   MouseEvent,
   KeyboardEvent,
+  useCallback,
 } from "react"
 import styled from "styled-components"
 
 import { clientRequest } from "../../../api"
-import { IBoard, useBoard } from "../../../lib/providers"
+import { useGlobalState } from "../../../lib/hooks/context"
 
 export const ImageTile = styled.div<{ bgImage: string }>`
   background-image: url("${props => props.bgImage}");
@@ -57,54 +59,85 @@ interface IUnSplashImage {
 }
 
 const UnSplashImages = ({ handleSelectedImage }: IProps) => {
+  const { notify } = useGlobalState()
+
   const [images, setImages] = useState<IUnSplashImage[] | []>([])
   const [query, setQuery] = useState<string>("nature")
   const [page, setPage] = useState<number>(0)
+  const [isLoading, setIsLoading] = useState<boolean>(false)
+  const [pageTotal, setPageTotal] = useState<number>(0)
+
+  const hasNext = pageTotal > page
 
   const handleSearch = (ev: KeyboardEvent<HTMLInputElement>) => {
     if (ev.key !== "Enter") return
-    clientRequest
-      .getUnsplashImages(query, page)
-      .then(res => setImages(res.data.results))
-      .catch(err => {})
+    getImages()
   }
 
   const handleChange = (ev: ChangeEvent<HTMLInputElement>) => {
     setQuery(ev.target.value)
   }
 
-  useEffect(() => {
-    const getData = () => {
-      clientRequest
-        .getUnsplashImages(query, page)
-        .then(res => setImages(res.data.results))
-        .catch(err => {})
-    }
+  const getImages = useCallback(() => {
+    notify({ description: "Processing...", placement: "top-right" })
+    setIsLoading(true)
+    clientRequest
+      .getUnsplashImages(query, page)
+      .then(res => {
+        setImages(prev => [...prev, ...res.data.results])
+        setPage(prev => prev + 1)
 
-    getData()
+        setPageTotal(res.data.total_pages)
+      })
+      .catch(err => {})
+      .finally(() => setIsLoading(false))
+  }, [query, page, notify])
+
+  useEffect(() => {
+    getImages()
   }, [])
+
+  useEffect(() => {
+    setImages([])
+  }, [query])
 
   return (
     <>
-      <Input
-        size="sm"
-        placeholder="Search photo"
-        onChange={handleChange}
-        onKeyDown={handleSearch}
-        defaultValue={query}
-      />
+      <div>
+        <Input
+          size="md"
+          placeholder="Search photo"
+          onChange={handleChange}
+          onKeyDown={handleSearch}
+        />
+      </div>
       <Divider className="divider" />
-      <div className="colors-wrapper">
-        {images.map((option: IUnSplashImage, index: number) => (
-          <ImageTile
-            onClick={handleSelectedImage}
-            id={option?.urls.full}
-            key={index}
-            bgImage={option?.urls?.thumb}
+      <div className="tiles-wrapper images">
+        <div className="tile-content">
+          {images.map((option: IUnSplashImage, index: number) => (
+            <ImageTile
+              onClick={handleSelectedImage}
+              id={option?.urls.full}
+              key={index}
+              bgImage={option?.urls?.thumb}
+            >
+              <span>{option?.user?.first_name}</span>
+            </ImageTile>
+          ))}
+        </div>
+        <Divider className="divider" />
+
+        {!isEmpty(images) && hasNext && (
+          <Button
+            colorScheme="green"
+            onClick={getImages}
+            size="sm"
+            isFullWidth
+            isLoading={isLoading}
           >
-            <span>{option?.user?.first_name}</span>
-          </ImageTile>
-        ))}
+            Load more...
+          </Button>
+        )}
       </div>
     </>
   )

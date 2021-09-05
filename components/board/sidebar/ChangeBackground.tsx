@@ -12,6 +12,7 @@ import {
   LABEL_DEFAULT_OPTIONS,
   PHOTOS_IMAGE,
 } from "../../../util/constants"
+import { ChangeBgWrapper } from "./DrawerStyles"
 import UnSplashImages, { ImageTile } from "./UnSplashImages"
 
 interface IAttachment {
@@ -24,74 +25,7 @@ interface IAttachment {
   id: string
 }
 
-const Container = styled.div<{ photos: string; colors: string }>`
-  .tiles-wrapper {
-    display: flex;
-    position: relative;
-    height: 100%;
-  }
-
-  .tiles-wrapper.custom {
-    gap: 10px;
-  }
-
-  .colors-wrapper {
-    display: grid;
-    position: relative;
-    height: 100%;
-    width: 100%;
-    grid-template-columns: 1fr 1fr;
-    gap: 12px;
-  }
-
-  .tile {
-    ${props => props.theme.mixins.flex("column")};
-    cursor: pointer;
-    float: left;
-    padding: 0 4px;
-    position: relative;
-    text-align: center;
-    width: 50%;
-
-    input {
-      display: none;
-    }
-
-    span {
-      font-size: 14px;
-    }
-  }
-  .tile-image,
-  .tile-colors {
-    border-radius: 8px;
-    height: 96px;
-    margin-bottom: 8px;
-    width: 100%;
-    background-color: #dfe1e6;
-    background-size: cover;
-  }
-
-  .tile-image {
-    background-image: url("${props => props.photos}");
-  }
-  .tile-colors {
-    background-image: url("${props => props.colors}");
-  }
-
-  .tile.custom {
-    background: #091e420a;
-    height: 96px;
-    border-radius: 8px;
-  }
-
-  h2 {
-    margin-bottom: 10px;
-  }
-`
-
-const StyleImageTile = styled(ImageTile)`
-  width: 50%;
-`
+const StyleImageTile = styled(ImageTile)``
 
 const ColorOption = styled.div<{ bgColor: string }>`
   background-color: ${props => props.bgColor};
@@ -200,7 +134,7 @@ const ChangeBackground = ({ handleMenuChange, openMenu }) => {
   }, [])
 
   return (
-    <Container colors={COLORS_IMAGE} photos={PHOTOS_IMAGE}>
+    <ChangeBgWrapper colors={COLORS_IMAGE} photos={PHOTOS_IMAGE}>
       {openMenu === "changeColor" && (
         <>
           <div className="tiles-wrapper">
@@ -263,7 +197,7 @@ const ChangeBackground = ({ handleMenuChange, openMenu }) => {
           ))}
         </div>
       )}
-    </Container>
+    </ChangeBgWrapper>
   )
 }
 

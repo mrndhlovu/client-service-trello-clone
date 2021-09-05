@@ -5,7 +5,7 @@ import styled from "styled-components"
 
 import { useBoard } from "../../../lib/providers"
 import SideBarHeader from "./SideBarHeader"
-import DrawerStyles from "./DrawerStyles"
+import DrawerStyles, { StyledUl } from "./DrawerStyles"
 import ChangeBackground from "./ChangeBackground"
 
 interface OpenMenuOptions {
@@ -64,59 +64,6 @@ const sideBarOptions: OpenMenuOptions = {
   },
 }
 
-const StyledUl = styled.ul<{ boardBgColor: string; boardBgImage: string }>`
-  li {
-    padding: 6px 6px 6px 40px;
-    position: relative;
-    text-align: left;
-
-    border-radius: 3px;
-    font-weight: 600;
-    line-height: 20px;
-    text-decoration: none;
-    cursor: pointer;
-
-    display: flex;
-    text-align: center;
-    justify-content: flex-start;
-
-    div {
-      text-align: left;
-
-      &span:first-child {
-        font-weight: 600;
-      }
-      small {
-        font-weight: lighter;
-      }
-    }
-
-    &:hover {
-      background-color: #e9e9e9ea;
-    }
-
-    .button-icon {
-      font-size: 20px;
-      height: 20px;
-      left: 12px;
-      line-height: 20px;
-      position: absolute;
-      top: 6px;
-      width: 20px;
-
-      .change-color {
-        background-position: 50%;
-        background-size: cover;
-        border-radius: 3px;
-        background-color: ${props => props.boardBgColor};
-        background-image: url("${props => props.boardBgImage}");
-        width: 20px;
-        height: 20px;
-      }
-    }
-  }
-`
-
 const StyledDrawerContent = styled(DrawerContent)`
   top: 38px !important;
 
@@ -125,11 +72,10 @@ const StyledDrawerContent = styled(DrawerContent)`
     padding: 0 10px;
     height: 100%;
     position: relative;
-    overflow-y: auto;
   }
 
   .divider {
-    margin: 15px 0;
+    margin: 15px 0 10px;
   }
 `
 
