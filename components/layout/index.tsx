@@ -9,7 +9,7 @@ export const siteTitle = "Trello clone"
 const Layout = ({ children }) => {
   const { darkMode } = useGlobalState()
   const { isAuthenticated } = useAuth()
-  const [mounted, setMounted] = useState(false)
+  const [mounted, setMounted] = useState<boolean>(false)
 
   useEffect(() => {
     darkMode

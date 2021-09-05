@@ -7,14 +7,8 @@ import BoardCanvas from "./canvas/BoardCanvas"
 import BoardDrawer from "./sidebar/BoardSidebar"
 
 interface IBoardStyles {
-  bgColor: string
   image: string
-}
-
-interface IBoardProps {
-  board: {
-    [key: string]: any
-  }
+  bgColor: string
 }
 
 const Container = styled.div<IBoardStyles>`
@@ -39,7 +33,10 @@ const Board = () => {
   const { board } = useBoard()
   return (
     <>
-      <Container image={board?.prefs?.image} bgColor={board?.prefs?.color}>
+      <Container
+        image={board?.activeBg === "image" ? board?.prefs?.image : ""}
+        bgColor={board?.prefs?.color}
+      >
         <Content>
           <BoardHeader />
           <ListContextProvider>

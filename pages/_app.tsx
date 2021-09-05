@@ -10,17 +10,17 @@ import Layout from "../components/layout"
 
 const AppComponent = ({ Component, pageProps }: AppProps) => {
   return (
-    <AuthContextProvider>
+    <ThemeProvider>
       <ChakraProvider>
-        <GlobalContextProvider>
-          <ThemeProvider>
+        <AuthContextProvider>
+          <GlobalContextProvider>
             <Layout>
               <Component {...pageProps} />
             </Layout>
-          </ThemeProvider>
-        </GlobalContextProvider>
+          </GlobalContextProvider>
+        </AuthContextProvider>
       </ChakraProvider>
-    </AuthContextProvider>
+    </ThemeProvider>
   )
 }
 

@@ -17,7 +17,7 @@ const colors = {
   lightBgDark: "#0c0e16",
 
   amazon: "#e47911",
-  twiiter: "#3b5999",
+  twiiter: "#3182ce",
   spotify: "#81b71a",
   trello: "#026aa7",
   twitter: "#55acee",

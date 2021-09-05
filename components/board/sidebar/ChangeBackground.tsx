@@ -1,5 +1,5 @@
 import { Divider, Input } from "@chakra-ui/react"
-import { ChangeEvent, useRef } from "react"
+import { ChangeEvent, useEffect, useRef } from "react"
 import { MouseEvent, useState } from "react"
 import { FiPlus } from "react-icons/fi"
 import styled from "styled-components"
@@ -12,13 +12,27 @@ import {
   LABEL_DEFAULT_OPTIONS,
   PHOTOS_IMAGE,
 } from "../../../util/constants"
-import UnSplashImages from "./UnSplashImages"
+import UnSplashImages, { ImageTile } from "./UnSplashImages"
+
+interface IAttachment {
+  active?: boolean
+  boardId?: string
+  edgeColor?: string
+  height?: string
+  width?: string
+  url: string
+  id: string
+}
 
 const Container = styled.div<{ photos: string; colors: string }>`
   .tiles-wrapper {
     display: flex;
     position: relative;
     height: 100%;
+  }
+
+  .tiles-wrapper.custom {
+    gap: 10px;
   }
 
   .colors-wrapper {
@@ -70,9 +84,13 @@ const Container = styled.div<{ photos: string; colors: string }>`
     border-radius: 8px;
   }
 
-  h4 {
+  h2 {
     margin-bottom: 10px;
   }
+`
+
+const StyleImageTile = styled(ImageTile)`
+  width: 50%;
 `
 
 const ColorOption = styled.div<{ bgColor: string }>`
@@ -85,22 +103,22 @@ const ColorOption = styled.div<{ bgColor: string }>`
 
 const ChangeBackground = ({ handleMenuChange, openMenu }) => {
   const inputRef = useRef<HTMLInputElement>()
-  const { saveBoardChanges, setActiveBoard, boardId } = useBoard()
+  const { saveBoardChanges, setActiveBoard, boardId, board } = useBoard()
   const { notify } = useGlobalState()
 
-  const [boardImages, setBoardImages] = useState<[{ [key: string]: any }] | []>(
-    []
-  )
+  const [boardImages, setBoardImages] = useState<IAttachment[]>([])
 
   const handleSelectedColor = async (ev: MouseEvent) => {
     const updatedBoard = await saveBoardChanges({
       "prefs.color": ev.currentTarget.id,
+      activeBg: "color",
     })
 
     if (!updatedBoard) return
 
     setActiveBoard((prev: IBoard) => ({
       ...prev,
+      activeBg: updatedBoard.activeBg,
       prefs: { ...prev.prefs, color: updatedBoard?.prefs?.color },
     }))
   }
@@ -129,7 +147,7 @@ const ChangeBackground = ({ handleMenuChange, openMenu }) => {
     clientRequest
       .uploadBoardBgImage(formData, boardId)
       .then(res => {
-        // setBoardImages(prev => [...prev, res.data])
+        setBoardImages(prev => [...prev, res.data])
         setActiveBoard((prev: IBoard) => ({
           ...prev,
           prefs: { ...prev.prefs, image: res.data.url },
@@ -154,6 +172,33 @@ const ChangeBackground = ({ handleMenuChange, openMenu }) => {
     handleMenuChange(ev)
   }
 
+  const handleSelectedImage = async (ev: MouseEvent) => {
+    const imageUrl = ev.currentTarget.id
+    const response = await saveBoardChanges({
+      "prefs.image": imageUrl,
+      activeBg: imageUrl === board?.prefs?.image ? "color" : "image",
+    })
+
+    if (!response) return
+
+    setActiveBoard((prev: IBoard) => ({
+      ...prev,
+      activeBg: response.activeBg,
+      prefs: { ...prev.prefs, image: response.prefs.image },
+    }))
+  }
+
+  useEffect(() => {
+    const getData = () => {
+      clientRequest
+        .getBoardImageAttachments(boardId)
+        .then(res => setBoardImages(res.data))
+        .catch(err => {})
+    }
+
+    getData()
+  }, [])
+
   return (
     <Container colors={COLORS_IMAGE} photos={PHOTOS_IMAGE}>
       {openMenu === "changeColor" && (
@@ -170,28 +215,40 @@ const ChangeBackground = ({ handleMenuChange, openMenu }) => {
           </div>
           <Divider className="divider" />
 
-          <h4>Custom</h4>
+          <h2>Custom</h2>
 
-          <div
-            id="custom"
-            onClick={handleSelectedOption}
-            className="tile custom"
-          >
-            <div className="tile-custom" />
-            <FiPlus size={22} />
-            <Input
-              className="image-upload"
-              ref={inputRef}
-              type="file"
-              accept="image/*"
-              onChange={handleChange}
-              multiple={false}
-            />
+          <div className="tiles-wrapper custom">
+            <div
+              id="custom"
+              onClick={handleSelectedOption}
+              className="tile custom"
+            >
+              <div className="tile-custom" />
+              <FiPlus size={22} />
+              <Input
+                className="image-upload"
+                ref={inputRef}
+                type="file"
+                accept="image/*"
+                onChange={handleChange}
+                multiple={false}
+              />
+            </div>
+            {boardImages.map((image, index) => (
+              <StyleImageTile
+                onClick={handleSelectedImage}
+                id={image?.url}
+                key={index}
+                bgImage={image?.url}
+              />
+            ))}
           </div>
         </>
       )}
 
-      {openMenu === "photo" && <UnSplashImages />}
+      {openMenu === "photo" && (
+        <UnSplashImages handleSelectedImage={handleSelectedImage} />
+      )}
 
       {openMenu === "colors" && (
         <div className="colors-wrapper">

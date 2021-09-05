@@ -25,6 +25,12 @@ const reset = css`
     padding: 0;
   }
 
+  input,
+  textarea,
+  button {
+    border-radius: 3px !important;
+  }
+
   textarea {
     resize: vertical;
   }

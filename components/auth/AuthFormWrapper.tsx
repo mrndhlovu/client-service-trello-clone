@@ -139,7 +139,7 @@ const AuthFormWrapper = forwardRef<HTMLInputElement, IProps>(
                 buttonText={buttonText}
                 disabled={loading}
                 loading={loading}
-                variant="twitter"
+                variant="blue"
               />
             </div>
           </UIForm>

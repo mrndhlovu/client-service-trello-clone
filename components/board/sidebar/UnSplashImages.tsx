@@ -11,7 +11,7 @@ import styled from "styled-components"
 import { clientRequest } from "../../../api"
 import { IBoard, useBoard } from "../../../lib/providers"
 
-const ImageTile = styled.div<{ bgImage: string }>`
+export const ImageTile = styled.div<{ bgImage: string }>`
   background-image: url("${props => props.bgImage}");
   border-radius: 8px;
   height: 96px;
@@ -39,6 +39,10 @@ const ImageTile = styled.div<{ bgImage: string }>`
   }
 `
 
+interface IProps {
+  handleSelectedImage: (ev: MouseEvent) => void
+}
+
 interface IUnSplashImage {
   [key: string]: any
   urls: {
@@ -52,24 +56,10 @@ interface IUnSplashImage {
   }
 }
 
-const UnSplashImages = () => {
+const UnSplashImages = ({ handleSelectedImage }: IProps) => {
   const [images, setImages] = useState<IUnSplashImage[] | []>([])
   const [query, setQuery] = useState<string>("nature")
   const [page, setPage] = useState<number>(0)
-  const { saveBoardChanges, setActiveBoard } = useBoard()
-
-  const handleSelectedImage = async (ev: MouseEvent) => {
-    const response = await saveBoardChanges({
-      "prefs.image": ev.currentTarget.id,
-    })
-
-    if (!response) return
-
-    setActiveBoard((prev: IBoard) => ({
-      ...prev,
-      prefs: { ...prev.prefs, image: response.prefs.image },
-    }))
-  }
 
   const handleSearch = (ev: KeyboardEvent<HTMLInputElement>) => {
     if (ev.key !== "Enter") return

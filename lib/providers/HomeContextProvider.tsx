@@ -17,6 +17,12 @@ export interface IBoard {
   cards?: ICardItem[]
   title?: string
   id?: string
+  activeBg?: "image" | "color"
+  prefs?: {
+    color?: string
+    image?: string
+    starred: "true" | "false" | boolean
+  }
   [key: string]: any
 }
 

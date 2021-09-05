@@ -34,7 +34,7 @@ const typography = css`
     -webkit-font-smoothing: antialiased;
     -moz-osx-font-smoothing: grayscale;
     font-size: ${props => props.theme.variables.body};
-    font-family: ${props => props.theme.fonts.secondary};
+    font-family: ${props => props.theme.fonts.secondary} !important;
     color: ${props => props.theme.colors.border};
     font-weight: 400;
     background: ${props => props.theme.colors.bgBody};

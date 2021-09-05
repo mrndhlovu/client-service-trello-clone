@@ -117,6 +117,8 @@ export const LABEL_DEFAULT_OPTIONS = [
   { color: "#51e898", name: "" },
   { color: "#ff78cb", name: "" },
   { color: "#344563", name: "" },
+
+  { color: "#838c91", name: "" },
 ]
 
 export const COLORS_IMAGE =
