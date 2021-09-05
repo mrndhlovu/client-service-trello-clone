@@ -1,6 +1,6 @@
 import styled from "styled-components"
 
-import { ListContextProvider } from "../../lib/providers"
+import { ListContextProvider, useBoard } from "../../lib/providers"
 
 import BoardHeader from "./BoardHeader"
 import BoardCanvas from "./canvas/BoardCanvas"
@@ -35,8 +35,8 @@ const Content = styled.div`
   position: relative;
 `
 
-const Board = ({ board }: IBoardProps) => {
-  if (!board) return null
+const Board = () => {
+  const { board } = useBoard()
   return (
     <>
       <Container image={board?.prefs?.image} bgColor={board?.prefs?.color}>
@@ -45,9 +45,8 @@ const Board = ({ board }: IBoardProps) => {
           <ListContextProvider>
             <BoardCanvas />
           </ListContextProvider>
+          <BoardDrawer />
         </Content>
-
-        <BoardDrawer />
       </Container>
     </>
   )

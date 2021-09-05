@@ -7,7 +7,7 @@ import {
   useState,
 } from "react"
 import { useRouter } from "next/router"
-import { isEmpty } from "lodash"
+import { isArray, isEmpty } from "lodash"
 
 import { clientRequest } from "../../api"
 import { IBoard } from "./HomeContextProvider"
@@ -18,6 +18,10 @@ import { useGlobalState } from "../hooks/context"
 interface IProps {
   board?: IBoard
   children: ReactNode
+}
+
+interface IUpdateStateOptions {
+  isNew?: boolean
 }
 
 const BoardContextProvider = ({ children, board }: IProps) => {
@@ -43,6 +47,14 @@ const BoardContextProvider = ({ children, board }: IProps) => {
     },
     [activeBoard, notify]
   )
+
+  const updateBoardState = (update: IBoard, options?: IUpdateStateOptions) => {
+    if (options?.isNew) {
+      return router.push(`/${ROUTES.board}/${update.id}`)
+    }
+
+    setActiveBoard(update)
+  }
 
   const handleStarBoard = useCallback(async () => {
     const update = {
@@ -109,6 +121,7 @@ const BoardContextProvider = ({ children, board }: IProps) => {
         findCardsByListId,
         saveBoardChanges,
         boardId: board.id,
+        updateBoardState,
       }}
     >
       {children}
@@ -128,6 +141,7 @@ interface IBoardContext {
   toggleDrawerMenu: () => void
   closeBoard: () => void
   setActiveBoard: (board?: IBoard) => void
+  updateBoardState: (board?: IBoard) => void
   boardId: string
 }
 

@@ -28,7 +28,6 @@ export default styled.div`
       .foreign-card-dnd-zone {
         height: inherit;
         width: inherit;
-        /* overflow-y: auto; */
         transform: "translate3d(0, 0, 0)";
       }
     }
@@ -77,9 +76,14 @@ export default styled.div`
       white-space: normal;
       width: 272px;
       transform: rotate3d(0, 0, 0);
+
+      opacity: 1;
+      animation-name: ${props => props.theme.keyframes.fadeIn};
+      animation-iteration-count: 1;
+      animation-timing-function: ease-out;
+      animation-duration: 400ms;
     }
 
-    .card-drag-placeholder,
     .drag-placeholder {
       background-color: #ccc;
 
@@ -193,11 +197,20 @@ export default styled.div`
       flex: 1 1 auto;
       margin: 0 4px;
       min-height: 0;
-      /* overflow-x: hidden; */
-      /* overflow-y: auto; */
       padding: 0 4px;
 
-      .card-drag-placeholder,
+      .drag-placeholder {
+        background-color: #ccc;
+        border-radius: 3px;
+        position: relative;
+        margin-bottom: 8px;
+        max-width: 257px;
+        min-height: max-content;
+        text-decoration: none;
+        box-shadow: none;
+        z-index: 2;
+      }
+
       .list-card,
       .card-item {
         ${props => props.theme.styles.cardBoxShadow};
@@ -210,7 +223,9 @@ export default styled.div`
         text-decoration: none;
         min-height: 35px;
         margin-bottom: 8px;
+      }
 
+      .card-item {
         &:hover {
           .edit-button {
             visibility: visible;
@@ -248,11 +263,6 @@ export default styled.div`
         z-index: 1;
       }
 
-      .card-drag-placeholder {
-        background-color: #ccc;
-        box-shadow: none;
-      }
-
       .list-card-title {
         word-wrap: break-word;
         clear: both;
@@ -261,9 +271,6 @@ export default styled.div`
         margin: 0 0 4px;
         overflow: hidden;
         text-decoration: none;
-      }
-
-      .list-card-cover {
       }
 
       .edit-button {

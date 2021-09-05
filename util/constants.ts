@@ -118,3 +118,9 @@ export const LABEL_DEFAULT_OPTIONS = [
   { color: "#ff78cb", name: "" },
   { color: "#344563", name: "" },
 ]
+
+export const COLORS_IMAGE =
+  "https://res.cloudinary.com/drxavrtbi/image/upload/c_fit,w_1000/v1630793219/trello-clone/robert-katzki-jbtfM0XBeRc-unsplash_cfgosx.jpg"
+
+export const PHOTOS_IMAGE =
+  "https://res.cloudinary.com/drxavrtbi/image/upload/c_scale,w_1000/v1630793751/trello-clone/pexels-pineapple-supply-co-191429_xvc8hc.jpg"

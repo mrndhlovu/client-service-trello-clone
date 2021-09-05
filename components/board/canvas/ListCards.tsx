@@ -1,6 +1,6 @@
 import { useBoard } from "../../../lib/providers"
 import { CardContextProvider } from "../../../lib/providers/CardContextProvider"
-import ListCardItem from "./ListCardItem"
+import DraggableCard from "../dnd/DraggableCard"
 
 const ListCards = ({ listIndex, listId }) => {
   const { board } = useBoard()
@@ -12,13 +12,14 @@ const ListCards = ({ listIndex, listId }) => {
           card?.id &&
           !card?.archived &&
           card.listId === listId && (
-            <CardContextProvider key={card?.id} card={card} cardIndex={index}>
-              <ListCardItem
-                listIndex={listIndex}
-                listId={listId}
-                cardIndex={index}
-                card={card}
-              />
+            <CardContextProvider
+              listId={listId}
+              listIndex={listIndex}
+              key={card?.id}
+              card={card}
+              cardIndex={index}
+            >
+              <DraggableCard />
             </CardContextProvider>
           )
       )}

@@ -70,4 +70,21 @@ const slideInStar = keyframes`
   }
 `
 
-export default { fadeInDown, fadeInUp, fadeInLeft, fadeInRight, slideInStar }
+const fadeIn = keyframes`
+  from {
+    opacity: 0;
+  }
+
+  to {
+    opacity: 1;
+  }
+`
+
+export default {
+  fadeInDown,
+  fadeInUp,
+  fadeInLeft,
+  fadeInRight,
+  slideInStar,
+  fadeIn,
+}

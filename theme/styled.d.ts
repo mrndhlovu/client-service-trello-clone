@@ -43,6 +43,7 @@ declare module "styled-components" {
       fadeInRight: Interpolation<ThemeProps<DefaultTheme>>
       fadeInUp: Interpolation<ThemeProps<DefaultTheme>>
       slideInStar: Interpolation<ThemeProps<DefaultTheme>>
+      fadeIn: Interpolation<ThemeProps<DefaultTheme>>
     }
     device: {
       desktop: string

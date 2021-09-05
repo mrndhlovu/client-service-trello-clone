@@ -1,18 +1,27 @@
 import { createContext, useContext } from "react"
 import { ICardItem } from "../../components/board/canvas/ListItem"
 
-const CardContextProvider = ({ card, children, cardIndex }) => {
+const CardContextProvider = ({
+  card,
+  children,
+  cardIndex,
+  listId,
+  listIndex,
+}) => {
   return (
-    <CardContext.Provider value={{ card, cardId: card.id, cardIndex }}>
+    <CardContext.Provider
+      value={{ card, cardId: card.id, cardIndex, listId, listIndex }}
+    >
       {children}
     </CardContext.Provider>
   )
 }
 
 interface ICardContext {
-  // handleStarBoard: (board?: IBoard) => void
   card: ICardItem
   cardId: string
+  listId: string
+  listIndex: number
   cardIndex: number
 }
 

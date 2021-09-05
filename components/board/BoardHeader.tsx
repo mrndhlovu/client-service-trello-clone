@@ -94,7 +94,7 @@ const BoardHeader = () => {
           />
         )}
 
-        <Button onClick={handleStarBoard}>
+        <Button size="sm" onClick={handleStarBoard}>
           <FiStar className="star-icon" />
         </Button>
 
@@ -102,7 +102,7 @@ const BoardHeader = () => {
           heading="Invite to board"
           toggle={
             <span>
-              <Button>Invite</Button>
+              <Button size="sm">Invite</Button>
             </span>
           }
         >
@@ -111,7 +111,11 @@ const BoardHeader = () => {
       </div>
 
       <div className="board-header-right-icons">
-        <Button onClick={toggleDrawerMenu} leftIcon={<AiOutlineEllipsis />}>
+        <Button
+          size="sm"
+          onClick={toggleDrawerMenu}
+          leftIcon={<AiOutlineEllipsis />}
+        >
           Show menu
         </Button>
       </div>

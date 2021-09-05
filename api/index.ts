@@ -245,6 +245,19 @@ class ApiRequest extends AxiosConfig {
     )
   }
 
+  async uploadBoardBgImage(formData: FormData, boardId: string) {
+    return await this.http.post(
+      `${END_POINTS.boards}/upload/${boardId}/add-cover`,
+      formData
+    )
+  }
+
+  async getUnsplashImages(query: string, pageIndex: number) {
+    return await this.http.get(
+      `${END_POINTS.boards}/unsplash/images?query=${query}&pageIndex=${pageIndex}`
+    )
+  }
+
   createCustomerSubscription = async (data: ICardDetails) => {
     return await this.http.post(END_POINTS.payments, data)
   }

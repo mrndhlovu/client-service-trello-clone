@@ -26,7 +26,7 @@ const DraggableList = typedMemo(({ children, listId, listIndex }) => {
   const { saveListDndChanges, onMoveList } = useListContext()
   const ref = useRef<HTMLDivElement>(null)
 
-  const [{ isDragging }, drag, preview] = useDrag({
+  const [{ isDragging }, drag] = useDrag({
     item: () => {
       return { sourceIndex: listIndex, sourceId: listId, hoveIndex: listIndex }
     },
@@ -36,12 +36,11 @@ const DraggableList = typedMemo(({ children, listId, listIndex }) => {
     }),
   })
 
-  const [{ handlerId }, drop] = useDrop({
+  const [, drop] = useDrop({
     accept: DRAG_TYPES.LIST,
     collect(monitor) {
       return {
-        handlerId: monitor.getHandlerId(),
-        isOver: monitor.isOver(),
+        isOver: !!monitor.isOver(),
       }
     },
     drop(item: IListDndItem) {
@@ -101,14 +100,11 @@ const DraggableList = typedMemo(({ children, listId, listIndex }) => {
   drag(drop(ref))
 
   return (
-    <div className="drag-preview" ref={preview} style={containerStyle}>
-      <div
-        ref={ref}
-        data-handler-id={handlerId}
-        className={`${isDragging ? "drag-placeholder" : "list-item"}`}
-      >
-        {children}
-      </div>
+    <div
+      ref={ref}
+      className={`${isDragging ? "drag-placeholder" : "list-item"}`}
+    >
+      {children}
     </div>
   )
 })

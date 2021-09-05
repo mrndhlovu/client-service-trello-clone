@@ -13,7 +13,7 @@ interface IProps {
 const index = ({ data }: IProps) => {
   return data ? (
     <BoardContextProvider board={data}>
-      <Board board={data} />
+      <Board />
     </BoardContextProvider>
   ) : null
 }

@@ -1,14 +1,14 @@
-import { memo, ReactNode, useRef, useMemo } from "react"
-import {
-  DropTargetMonitor,
-  useDrag,
-  useDrop,
-  DragSourceMonitor,
-} from "react-dnd"
+import { memo, ReactNode, useRef, useMemo, useState } from "react"
+import { DropTargetMonitor, useDrag, useDrop } from "react-dnd"
 import { XYCoord } from "dnd-core"
 
 import { DRAG_TYPES } from "../../../util/constants"
-import { ICardDraggingProps, useListContext } from "../../../lib/providers"
+import {
+  ICardDraggingProps,
+  useCardContext,
+  useListContext,
+} from "../../../lib/providers"
+import CardItem from "../canvas/CardItem"
 
 export interface DragItemProps {
   id: string
@@ -32,10 +32,10 @@ export interface ICardDndItem {
 
 const typedMemo: <T>(Component: T) => T = memo
 
-const getClass = (isDragging: boolean, actionsOpen: boolean) => {
+const getClass = (isDragging: boolean, actionsOpen?: boolean) => {
   switch (true) {
     case isDragging && !actionsOpen:
-      return "card-drag-placeholder"
+      return "drag-placeholder"
 
     case actionsOpen && !isDragging:
       return "card-item actions-active"
@@ -44,102 +44,98 @@ const getClass = (isDragging: boolean, actionsOpen: boolean) => {
   }
 }
 
-const DraggableCard = typedMemo(
-  ({ children, cardId, index, listIndex, listId, actionOpen }) => {
-    const { saveCardDndChanges, moveCard } = useListContext()
+const DraggableCard = typedMemo(() => {
+  const { saveCardDndChanges, moveCard } = useListContext()
+  const { cardId, cardIndex, listIndex, listId } = useCardContext()
 
-    const ref = useRef<HTMLDivElement>(null)
+  const ref = useRef<HTMLDivElement>(null)
 
-    const [{ isDragging }, drag] = useDrag({
-      item: () => {
-        return {
-          sourceListIndex: listIndex,
-          cardId: cardId,
-          index: index,
-          targetId: cardId,
-          hoverIndex: index,
-          sourceListId: listId,
-          targetListId: listId,
-        }
-      },
-      type: DRAG_TYPES.CARD,
-      collect: (monitor: DragSourceMonitor) => ({
-        isDragging:
-          !!monitor.isDragging &&
-          (monitor.getItem() as ICardDndItem)?.cardId === cardId,
-      }),
-    })
+  const [actionsOpen, setActionsOpen] = useState<boolean>(false)
 
-    const [{ handlerId }, drop] = useDrop({
-      accept: DRAG_TYPES.CARD,
-      collect(monitor) {
-        return {
-          handlerId: monitor.getHandlerId(),
-        }
-      },
+  const toggleActionsMenu = () => setActionsOpen(prev => !prev)
 
-      drop(item: ICardDndItem) {
-        if (item.targetListId === item.sourceListId) {
-          const data: ICardDraggingProps = {
-            sourceCardId: item.cardId,
-            targetCardId: item.targetId,
-            sourceListId: item.sourceListId,
-          }
+  const [{ isDragging }, drag] = useDrag({
+    item: {
+      sourceListIndex: listIndex,
+      cardId: cardId,
+      index: cardIndex,
+      targetId: cardId,
+      hoverIndex: cardIndex,
+      sourceListId: listId,
+      targetListId: listId,
+    },
+    type: DRAG_TYPES.CARD,
+    collect: monitor => {
+      return {
+        isDragging: !!monitor.isDragging(),
+      }
+    },
+  })
 
-          saveCardDndChanges(data)
+  const [{ isOver }, drop] = useDrop({
+    accept: DRAG_TYPES.CARD,
+    collect: monitor => {
+      return {
+        isOver: !!monitor.isOver(),
+      }
+    },
+    drop(item: ICardDndItem) {
+      if (item.targetListId === item.sourceListId) {
+        const data: ICardDraggingProps = {
+          sourceCardId: item.cardId,
+          targetCardId: item.targetId,
+          sourceListId: item.sourceListId,
         }
 
-        return {}
-      },
-      hover(item: ICardDndItem, monitor: DropTargetMonitor) {
-        if (!ref.current) return
+        saveCardDndChanges(data)
+      }
 
-        const dragIndex = item.index
-        const hoverIndex = index
-        const hoverCardId = cardId
+      return {}
+    },
+    hover(item: ICardDndItem, monitor: DropTargetMonitor) {
+      if (!ref.current) return
 
-        const hoverBoundingRect = ref.current.getBoundingClientRect()
-        const clientOffset = monitor.getClientOffset()
+      const dragIndex = item.index
+      const hoverIndex = cardIndex
+      const hoverCardId = cardId
 
-        const isOnSourceCard = dragIndex === hoverIndex
+      const hoverBoundingRect = ref.current.getBoundingClientRect()
+      const clientOffset = monitor.getClientOffset()
 
-        if (isOnSourceCard) return
+      const isOnSourceCard = dragIndex === hoverIndex
 
-        const hoverMiddleY =
-          (hoverBoundingRect.bottom - hoverBoundingRect.top) / 2
+      if (isOnSourceCard) return
 
-        const hoverClientY = (clientOffset as XYCoord).y - hoverBoundingRect.top
+      const hoverMiddleY =
+        (hoverBoundingRect.bottom - hoverBoundingRect.top) / 2
 
-        if (dragIndex < hoverIndex && hoverClientY < hoverMiddleY) return
+      const hoverClientY = (clientOffset as XYCoord).y - hoverBoundingRect.top
 
-        if (dragIndex > hoverIndex && hoverClientY > hoverMiddleY) return
+      if (dragIndex < hoverIndex && hoverClientY < hoverMiddleY) return
 
-        moveCard(item.cardId, hoverCardId)
+      if (dragIndex > hoverIndex && hoverClientY > hoverMiddleY) return
 
-        item.index = hoverIndex
-        item.targetId = hoverCardId
-      },
-    })
+      moveCard(item.cardId, hoverCardId)
 
-    const containerStyle = useMemo(
-      () => ({
-        cursor: "pointer",
-      }),
-      []
-    )
+      item.index = hoverIndex
+      item.targetId = hoverCardId
+    },
+  })
 
-    drag(drop(ref))
+  drag(drop(ref))
 
-    return (
-      <div
-        ref={ref}
-        className={getClass(isDragging, actionOpen)}
-        data-handler-id={handlerId}
-      >
-        {children}
-      </div>
-    )
-  }
-)
+  return (
+    <div
+      id="card-item"
+      className={getClass(isOver || isDragging, actionsOpen)}
+      ref={ref}
+    >
+      <CardItem
+        toggleActionsMenu={toggleActionsMenu}
+        actionsOpen={actionsOpen}
+      />
+    </div>
+  )
+})
 
 export default DraggableCard
