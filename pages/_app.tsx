@@ -1,6 +1,6 @@
 import { AppProps } from "next/dist/next-server/lib/router/router"
 import { ChakraProvider } from "@chakra-ui/react"
-
+import { ReactQueryDevtools } from "react-query-devtools"
 import {
   AuthContextProvider,
   GlobalContextProvider,
@@ -14,9 +14,12 @@ const AppComponent = ({ Component, pageProps }: AppProps) => {
       <ChakraProvider>
         <AuthContextProvider>
           <GlobalContextProvider>
-            <Layout>
-              <Component {...pageProps} />
-            </Layout>
+            <>
+              <Layout>
+                <Component {...pageProps} />
+              </Layout>
+              <ReactQueryDevtools initialIsOpen={false} />
+            </>
           </GlobalContextProvider>
         </AuthContextProvider>
       </ChakraProvider>

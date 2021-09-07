@@ -11,10 +11,8 @@ export const ChangeBgWrapper = styled.div<{
   flex-direction: column;
   display: flex;
 
-  .observable {
-    position: absolute;
-    bottom: 0;
-    height: 10px;
+  .loading-block {
+    height: 500px;
   }
 
   .tiles-wrapper {
@@ -23,7 +21,7 @@ export const ChangeBgWrapper = styled.div<{
   }
 
   .tile-content {
-    height: 83%;
+    height: 84%;
     width: 100%;
     overflow-y: auto;
 
@@ -43,7 +41,7 @@ export const ChangeBgWrapper = styled.div<{
   }
 
   .tiles-wrapper.images {
-    min-height: 92%;
+    min-height: 100%;
     flex-direction: column;
   }
 

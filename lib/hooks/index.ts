@@ -1,11 +1,10 @@
 import { AxiosPromise, AxiosResponse } from "axios"
 import {
-  DetailedHTMLProps,
   Dispatch,
-  HTMLAttributes,
   SetStateAction,
   useCallback,
   useEffect,
+  useRef,
   useState,
 } from "react"
 import { IAxiosInterceptorError } from "../../api"
@@ -75,8 +74,12 @@ export interface IntersectionObserverOptions {
   thresholds?: number[]
 }
 
-export const useOnScreen = (options: IntersectionObserverOptions) => {
-  const [ref, setRef] = useState<HTMLElement>()
+export const useOnScreen = (
+  options: IntersectionObserverOptions
+): [Dispatch<SetStateAction<HTMLDivElement>>, boolean] => {
+  const [observableRef, setObservableRef] = useState<HTMLDivElement | null>(
+    null
+  )
   const [isVisible, setIsVisible] = useState<boolean>(false)
 
   useEffect(() => {
@@ -85,16 +88,24 @@ export const useOnScreen = (options: IntersectionObserverOptions) => {
       options
     )
 
-    if (ref) {
-      observer.observe(ref)
+    if (observableRef) {
+      observer.observe(observableRef)
     }
 
     return () => {
-      if (ref) {
-        observer.unobserve(ref)
+      if (observableRef) {
+        observer.unobserve(observableRef)
       }
     }
-  }, [options, ref])
+  }, [options, observableRef])
 
-  return [setRef, isVisible]
+  return [setObservableRef, isVisible]
+}
+
+export const usePrevious = <T>(value: T) => {
+  const ref = useRef<T>()
+  useEffect(() => {
+    ref.current = value
+  })
+  return ref.current
 }
