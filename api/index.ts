@@ -256,10 +256,17 @@ class ApiRequest extends AxiosConfig {
     )
   }
 
-  async getUnsplashImages(query: string, pageIndex: number) {
-    return await this.http.get(
-      `${END_POINTS.boards}/unsplash/images?query=${query}&pageIndex=${pageIndex}`
-    )
+  async getUnsplashImages(params: { query: string; pageParam: number }) {
+    return await this.http
+      .get(
+        `${END_POINTS.boards}/unsplash/images?query=${params.query}&pageIndex=${params.pageParam}`
+      )
+      .then(res => ({
+        images: res.data.results,
+        pageTotal: res.data.total_pages,
+        page: params.pageParam,
+      }))
+      .catch(err => err.message)
   }
 
   createCustomerSubscription = async (data: ICardDetails) => {

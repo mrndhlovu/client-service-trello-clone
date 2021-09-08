@@ -1,6 +1,6 @@
 import { IPlan } from "../components/profile/billing/BillingPlans"
 import { IRequestError } from "../api"
-import { isArray } from "lodash"
+import { isArray, merge } from "lodash"
 import { ILabelProps } from "../components/board/canvas/cardActions/CardLabels"
 import { LABEL_DEFAULT_OPTIONS } from "./constants"
 
@@ -106,4 +106,12 @@ export const getLabelOptions = (
     ),
     ...savedLabels,
   ]
+}
+
+export const getMergedData = data => {
+  if (!data) return
+  const result = []
+  data?.map(arr => result.push(arr?.images))
+
+  return merge(result)
 }
