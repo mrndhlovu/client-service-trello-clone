@@ -3,10 +3,10 @@ import router from "next/router"
 
 import { Button } from "@chakra-ui/react"
 
-import { deleteUser, IPasswordConfirmation } from "../../api"
+import { clientRequest, IPasswordConfirmation } from "../../api"
+import { ROUTES } from "../../util/constants"
 import { useAuth } from "../../lib/hooks/context"
 import PasswordConfirmation from "../auth/PasswordConfirmation"
-import { ROUTES } from "../../util/constants"
 
 const DeleteUser = () => {
   const { verifyUserPassword } = useAuth()
@@ -19,7 +19,8 @@ const DeleteUser = () => {
 
     if (!response) return
 
-    deleteUser()
+    clientRequest
+      .deleteUser()
       .then(() => router.push(`/${ROUTES.login}`))
       .catch(err => {})
   }

@@ -1,13 +1,21 @@
 import { useState } from "react"
+import Link from "next/link"
 import styled from "styled-components"
 
 import { FiEdit2 } from "react-icons/fi"
 import { Button, Modal, ModalOverlay } from "@chakra-ui/react"
 
 import { IAttachment } from "./cardActions/ChangeCover"
-import { useCardContext, useListCardsContext } from "../../../lib/providers"
+import {
+  useBoard,
+  useCardContext,
+  useListCardsContext,
+} from "../../../lib/providers"
 import CardActions from "./cardActions/CardActions"
 import EditCardMenu from "./EditCardMenu"
+import { ROUTES } from "../../../util/constants"
+import { useRouter } from "next/router"
+import CardModal from "./card/CardModal"
 
 interface ICardProps {
   colorCover?: string
@@ -50,6 +58,8 @@ interface IProps {
 const CardItem = ({ toggleActionsMenu, actionsOpen }: IProps) => {
   const { saveCardChanges, listId } = useListCardsContext()
   const { card } = useCardContext()
+  const { boardId } = useBoard()
+  const { query } = useRouter()
 
   const handleSave = (title: string) => {
     saveCardChanges(card.id, listId, { title })
@@ -57,58 +67,66 @@ const CardItem = ({ toggleActionsMenu, actionsOpen }: IProps) => {
   }
 
   return (
-    <>
-      {card?.colorCover && !card?.imageCover?.active && (
-        <CardBgCover
-          colorCover={card?.colorCover}
-          className="list-card-cover"
-        />
-      )}
-      {card?.imageCover?.url && card.imageCover?.active && (
-        <CardImageCover image={card?.imageCover} className="list-card-cover" />
-      )}
-      {!actionsOpen && (
-        <Button onClick={toggleActionsMenu} size="xs" className="edit-button">
-          <FiEdit2 size={15} />
-        </Button>
-      )}
+    <Link href={`/${ROUTES.board}/${boardId}/?activeCard=${card?.id}`}>
+      <a href="#">
+        {card?.colorCover && !card?.imageCover?.active && (
+          <CardBgCover
+            colorCover={card?.colorCover}
+            className="list-card-cover"
+          />
+        )}
+        {card?.imageCover?.url && card.imageCover?.active && (
+          <CardImageCover
+            image={card?.imageCover}
+            className="list-card-cover"
+          />
+        )}
+        {!actionsOpen && (
+          <Button onClick={toggleActionsMenu} size="xs" className="edit-button">
+            <FiEdit2 size={15} />
+          </Button>
+        )}
 
-      {actionsOpen && (
-        <CardActions
-          close={toggleActionsMenu}
-          listId={listId}
-          cardId={card.id}
-        />
-      )}
+        {actionsOpen && (
+          <CardActions
+            close={toggleActionsMenu}
+            listId={listId}
+            cardId={card.id}
+          />
+        )}
 
-      <div className={`list-card ${actionsOpen ? "edit-open" : ""}`}>
-        <div className="list-card-details">
-          <div className="list-card-labels">
-            {card?.labels.map((label: string, index: number) => (
-              <CardLabel className="card-label " color={label} key={index} />
-            ))}
+        <div className={`list-card ${actionsOpen ? "edit-open" : ""}`}>
+          <div className="list-card-details">
+            <div className="list-card-labels">
+              {card?.labels.map((label: string, index: number) => (
+                <CardLabel className="card-label " color={label} key={index} />
+              ))}
+            </div>
+
+            {actionsOpen ? (
+              <EditCardMenu
+                title={card.title}
+                close={toggleActionsMenu}
+                save={handleSave}
+              />
+            ) : (
+              <span className="list-card-title">{card?.title}</span>
+            )}
           </div>
-
-          {actionsOpen ? (
-            <EditCardMenu
-              title={card.title}
-              close={toggleActionsMenu}
-              save={handleSave}
-            />
-          ) : (
-            <span className="list-card-title">{card?.title}</span>
-          )}
         </div>
-      </div>
-      <Modal
-        size="full"
-        isOpen={actionsOpen}
-        onClose={toggleActionsMenu}
-        closeOnOverlayClick={true}
-      >
-        <ModalOverlay className="card-editor-overlay" />
-      </Modal>
-    </>
+        <Modal
+          size="full"
+          isOpen={actionsOpen}
+          onClose={toggleActionsMenu}
+          closeOnOverlayClick={true}
+        >
+          <ModalOverlay className="card-editor-overlay" />
+        </Modal>
+        {query?.activeCard !== undefined && (
+          <CardModal isOpen={query?.activeCard !== undefined} />
+        )}
+      </a>
+    </Link>
   )
 }
 
