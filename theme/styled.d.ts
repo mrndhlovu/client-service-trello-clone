@@ -2,7 +2,6 @@ import "styled-components"
 
 declare module "styled-components" {
   export interface DefaultTheme {
-    activeBoardBg?: string
     colors: {
       amazon: string
       bgBody: string

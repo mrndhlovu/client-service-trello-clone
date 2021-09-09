@@ -226,11 +226,19 @@ export default styled.div`
       }
 
       .card-item {
+        .edit-button {
+          z-index: 40;
+        }
+
         &:hover {
           .edit-button {
             visibility: visible;
             background-color: #f1f1f1;
           }
+        }
+
+        a {
+          z-index: 1;
         }
       }
 

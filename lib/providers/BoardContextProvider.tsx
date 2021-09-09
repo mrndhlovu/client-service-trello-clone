@@ -11,7 +11,7 @@ import { isArray, isEmpty } from "lodash"
 
 import { clientRequest } from "../../api"
 import { IBoard } from "./HomeContextProvider"
-import { ICardItem } from "../../components/board/canvas/ListItem"
+import { ICardItem, IListItem } from "../../components/board/canvas/ListItem"
 import { ROUTES } from "../../util/constants"
 import { useGlobalState } from "../hooks/context"
 
@@ -91,6 +91,15 @@ const BoardContextProvider = ({ children, board }: IProps) => {
     [board?.cards]
   )
 
+  const findListById = useCallback(
+    (id: string): [IListItem, boolean] => {
+      const list = board.lists.find((list: IListItem) => list?.id === id)
+      const hasCards = !isEmpty(list?.cards)
+      return [list, hasCards]
+    },
+    [board?.lists]
+  )
+
   const closeBoard = async () => {
     await clientRequest
       .updateBoard({ archived: "true" }, activeBoard.id)
@@ -119,6 +128,7 @@ const BoardContextProvider = ({ children, board }: IProps) => {
         closeBoard,
         setActiveBoard,
         findCardsByListId,
+        findListById,
         saveBoardChanges,
         boardId: board.id,
         updateBoardState,
@@ -136,6 +146,8 @@ interface IBoardContext {
   board?: IBoard
   handleDeleteBoard: () => void
   findCardsByListId: (listId: string) => [IBoard["cards"]?, boolean?]
+  findListById: (listId: string) => [IListItem?, boolean?]
+
   drawerOpen: boolean
   isStarred: boolean
   toggleDrawerMenu: () => void

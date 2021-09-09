@@ -43,10 +43,14 @@ export const ImageTile = styled.div<{ bgImage: string }>`
 
 interface IProps {
   handleSelectedImage: (ev: MouseEvent) => void
+  showSearchInput?: boolean
+  perPage?: number
+  infiniteScroll?: boolean
 }
 
 interface IUnSplashImage {
   [key: string]: any
+  color: string
   urls: {
     full: string
     thumb: string
@@ -66,7 +70,12 @@ interface UnSplashFetchProps {
 
 const DEFAULT_QUERY = "nature"
 
-const UnSplashImages = ({ handleSelectedImage }: IProps) => {
+const UnSplashImages = ({
+  handleSelectedImage,
+  showSearchInput = true,
+  perPage = 20,
+  infiniteScroll = true,
+}: IProps) => {
   const [loadMoreObservableRef, isVisible] = useOnScreen({
     rootMargin: "20px 0px 0px",
   })
@@ -75,7 +84,7 @@ const UnSplashImages = ({ handleSelectedImage }: IProps) => {
 
   const [query, setQuery] = useState<string>(DEFAULT_QUERY)
   const fetchIMages = ({ pageParam = 1 }) =>
-    clientRequest.getUnsplashImages({ query, pageParam })
+    clientRequest.getUnsplashImages({ query, pageParam, perPage })
 
   const previous = usePrevious({ isVisible, query })
   const stillVisibleAfterUpdate = isVisible === previous?.isVisible
@@ -101,29 +110,48 @@ const UnSplashImages = ({ handleSelectedImage }: IProps) => {
   }
 
   useEffect(() => {
-    if (isFetching || !hasNextPage || !isVisible || stillVisibleAfterUpdate)
+    if (
+      isFetching ||
+      !hasNextPage ||
+      !isVisible ||
+      stillVisibleAfterUpdate ||
+      !infiniteScroll
+    )
       return
 
     fetchNextPage()
   }, [
+    fetchNextPage,
+    hasNextPage,
+    infiniteScroll,
     isFetching,
     isVisible,
     stillVisibleAfterUpdate,
-    hasNextPage,
-    fetchNextPage,
   ])
+
+  useEffect(() => {
+    return () => {
+      clientQuery.clear()
+    }
+  }, [])
 
   return (
     <>
-      <div>
-        <Input
-          size="md"
-          placeholder="Search photo"
-          onChange={handleChange}
-          onKeyDown={handleSearch}
-        />
-      </div>
-      <Divider className="divider" />
+      {showSearchInput ? (
+        <>
+          <div>
+            <Input
+              size="md"
+              placeholder="Search photo"
+              onChange={handleChange}
+              onKeyDown={handleSearch}
+            />
+          </div>
+          <Divider className="divider" />
+        </>
+      ) : (
+        <h4>Unsplash</h4>
+      )}
       <div className="tiles-wrapper images">
         <div className="tile-content">
           {data?.pages.map((page: UnSplashFetchProps, i) => (
@@ -131,7 +159,7 @@ const UnSplashImages = ({ handleSelectedImage }: IProps) => {
               {page?.images?.map((option: IUnSplashImage, index: number) => (
                 <ImageTile
                   onClick={handleSelectedImage}
-                  id={option?.urls.full}
+                  id={`${option?.urls.full}|${option?.color}|${option.urls.thumb}`}
                   key={index}
                   bgImage={option?.urls?.thumb}
                   ref={

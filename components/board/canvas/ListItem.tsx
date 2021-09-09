@@ -23,6 +23,11 @@ export interface IListItem {
 }
 
 export interface ICardItem {
+  coverUrl?: {
+    image: string
+    edgeColor: string
+    active: boolean
+  }
   [key: string]: any
 }
 
@@ -52,7 +57,6 @@ const ListItem = ({ listItem, listIndex }: IProps) => {
 
               <UIDropdown
                 heading="List actions"
-                toggleSize="md"
                 className="list-actions-menu-button"
                 toggle={<AiOutlineEllipsis size={20} />}
               >

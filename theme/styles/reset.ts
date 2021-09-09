@@ -34,6 +34,12 @@ const reset = css`
   textarea {
     resize: vertical;
   }
+
+  .chakra-modal__overlay,
+  .chakra-modal__content-container {
+    z-index: 1;
+  }
+
   .browserupgrade {
     margin: 0.2em 0;
     background: #ccc;

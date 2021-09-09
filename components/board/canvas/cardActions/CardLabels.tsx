@@ -20,6 +20,10 @@ export interface ILabelProps {
   name?: string
 }
 
+interface IProps {
+  showCancelButton?: boolean
+}
+
 const StyledLi = styled.li<{ bgColor: string; checked: boolean }>`
   .label-color {
     background-color: ${props => props.bgColor};
@@ -30,7 +34,7 @@ const StyledLi = styled.li<{ bgColor: string; checked: boolean }>`
   }
 `
 
-const CardLabels = () => {
+const CardLabels = ({ showCancelButton }: IProps) => {
   const { card, cardId } = useCardContext()
   const { saveCardChanges, listId } = useListCardsContext()
   const { notify } = useGlobalState()
@@ -191,6 +195,12 @@ const CardLabels = () => {
             ) && (
               <Button onClick={handleDelete} size="sm" colorScheme="red">
                 Delete
+              </Button>
+            )}
+
+            {showCancelButton && (
+              <Button onClick={handleCreateLabel} size="sm" colorScheme="gray">
+                Cancel
               </Button>
             )}
           </div>

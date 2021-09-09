@@ -256,10 +256,14 @@ class ApiRequest extends AxiosConfig {
     )
   }
 
-  async getUnsplashImages(params: { query: string; pageParam: number }) {
+  async getUnsplashImages(params: {
+    query: string
+    pageParam: number
+    perPage: number
+  }) {
     return await this.http
       .get(
-        `${END_POINTS.boards}/unsplash/images?query=${params.query}&pageIndex=${params.pageParam}`
+        `${END_POINTS.boards}/unsplash/images?query=${params.query}&pageIndex=${params.pageParam}&perPage=${params.perPage}`
       )
       .then(res => ({
         images: res.data.results,

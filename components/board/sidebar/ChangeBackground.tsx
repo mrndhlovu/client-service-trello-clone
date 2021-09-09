@@ -107,7 +107,7 @@ const ChangeBackground = ({ handleMenuChange, openMenu }) => {
   }
 
   const handleSelectedImage = async (ev: MouseEvent) => {
-    const imageUrl = ev.currentTarget.id
+    const [imageUrl] = ev.currentTarget.id.split("|")
     const response = await saveBoardChanges({
       "prefs.image": imageUrl,
       activeBg: imageUrl === board?.prefs?.image ? "color" : "image",

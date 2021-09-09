@@ -8,17 +8,37 @@ interface IProps {
   children: ReactNode
   className?: string
   heading?: string
-  toggleSize?: string
+  placement?:
+    | "top"
+    | "right"
+    | "bottom"
+    | "left"
+    | "auto"
+    | "auto-start"
+    | "auto-end"
+    | "top-start"
+    | "top-end"
+    | "bottom-start"
+    | "bottom-end"
+    | "right-start"
+    | "right-end"
+    | "left-start"
+    | "left-end"
 }
 
 const StyledMenu = styled(Menu)`
   width: fit-content;
-  z-index: 100;
 `
 
 const StyledMenuContent = styled(MenuList)`
-  border-radius: 2px;
+  border-radius: 3px;
   min-width: 300px;
+  z-index: 50;
+  overflow-y: auto;
+
+  &::-webkit-scrollbar {
+    display: none;
+  }
 
   header {
     margin-bottom: 8px;
@@ -67,10 +87,10 @@ const UIDropdown = ({
   children,
   className,
   heading,
-  toggleSize,
+  placement = "bottom",
 }: IProps) => {
   return (
-    <StyledMenu>
+    <StyledMenu placement={placement}>
       <MenuButton className={`dropdown ${className || ""}`}>
         {toggle}
       </MenuButton>

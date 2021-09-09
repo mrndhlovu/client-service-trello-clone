@@ -31,6 +31,7 @@ const EditableTitle = ({ handleUpdate, title }: IProps) => {
           isFullWidth
           size="sm"
           onClick={toggleEditTitle}
+          autoFocus={false}
         >
           {title}
         </Button>
