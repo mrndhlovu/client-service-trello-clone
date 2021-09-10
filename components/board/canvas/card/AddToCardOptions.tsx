@@ -3,15 +3,14 @@ import { AiOutlineClockCircle } from "react-icons/ai"
 import { BsCheckBox, BsTag } from "react-icons/bs"
 import { HiOutlinePaperClip } from "react-icons/hi"
 import { IoMdCard } from "react-icons/io"
-import { useCardContext } from "../../../../lib/providers"
 
 import { UIDropdown } from "../../../shared"
+import { useCardContext } from "../../../../lib/providers"
 import CardLabels from "../cardActions/CardLabels"
 import ChangeCover from "../cardActions/ChangeCover"
 
 const AddToCardOptions = () => {
-  const { card } = useCardContext()
-  const hasCardCover = card?.colorCover || card?.imageCover?.active
+  const { showCardCover } = useCardContext()
 
   const ADD_TO_CARD_OPTIONS = [
     { title: "Labels", id: 0, icon: <BsTag />, menu: <CardLabels /> },
@@ -24,7 +23,7 @@ const AddToCardOptions = () => {
       icon: <IoMdCard />,
       menu: <ChangeCover />,
       placementAuto: true,
-      hidden: hasCardCover,
+      hidden: showCardCover,
     },
   ]
 

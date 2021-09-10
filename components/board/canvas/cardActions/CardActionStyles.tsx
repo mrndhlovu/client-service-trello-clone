@@ -137,7 +137,7 @@ export default styled.div`
     .list-footer {
       width: 93%;
       position: fixed;
-      bottom: 0px;
+      bottom: 8px;
       display: flex;
       justify-content: space-between;
       background-color: #fff;

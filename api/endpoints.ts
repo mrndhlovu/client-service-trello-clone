@@ -1,4 +1,5 @@
 const END_POINTS = {
+  accounts: "/accounts",
   board: "/board",
   boards: "/boards",
   createBoard: "/boards/create",
@@ -21,6 +22,8 @@ const END_POINTS = {
   verify: "/accounts/verify",
   verifyCredentials: "/auth/login-verify",
   verifyMfaCode: "/auth/mfa/validate",
+
+  spotify: "/auth/mfa/validate",
 
   payments: "/payments/subscription",
   getBillingOptions: "/payments/products",

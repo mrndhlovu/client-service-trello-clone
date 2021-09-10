@@ -28,7 +28,7 @@ const DeleteUser = () => {
   const handleOnClick = () => setShowPasswordConfirmation(prev => !prev)
 
   return (
-    <div className="option-container">
+    <div className="option-container delete-account">
       <p>Delete Account</p>
       <p>You will not be able to recover your account.</p>
       {showPasswordConfirmation ? (
@@ -38,7 +38,9 @@ const DeleteUser = () => {
         />
       ) : (
         <div>
-          <Button onClick={handleOnClick}>Delete</Button>
+          <Button size="sm" onClick={handleOnClick}>
+            Delete
+          </Button>
         </div>
       )}
     </div>

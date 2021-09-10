@@ -83,6 +83,7 @@ export const PROFILE_TAB_OPTIONS = [
 
 export const PROFILE_SETTINGS_OPTIONS = [
   { key: "two-step-auth", title: "Two-step verification" },
+  { key: "power-up", title: "Power ups" },
   { key: "delete-account", title: "Delete account" },
 ]
 
@@ -126,3 +127,6 @@ export const COLORS_IMAGE =
 
 export const PHOTOS_IMAGE =
   "https://res.cloudinary.com/drxavrtbi/image/upload/c_scale,w_1000/v1630793751/trello-clone/pexels-pineapple-supply-co-191429_xvc8hc.jpg"
+
+export const SPOTIFY_SCOPES =
+  "user-read-email playlist-modify-private playlist-read-private user-read-playback-state"

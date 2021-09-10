@@ -21,7 +21,7 @@ const MultiFactorAuth = () => {
         )}
       </p>
       {!user?.multiFactorAuth ? (
-        <Button size="md" onClick={toggleModal}>
+        <Button size="sm" onClick={toggleModal}>
           Set up two-step verification
         </Button>
       ) : (
@@ -30,7 +30,7 @@ const MultiFactorAuth = () => {
             You’ve kept your account extra secure with a second login step
             since:
           </p>
-          <p>{user.twoStepRecovery?.setupDate}</p>
+          {/* <p>{user?.twoStepRecovery?.setupDate}</p> */}
         </>
       )}
 

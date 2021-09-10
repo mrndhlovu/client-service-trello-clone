@@ -31,7 +31,7 @@ const PasswordConfirmation = ({ handleClick, buttonText }) => {
             type="password"
           />
 
-          <Button size="md" onClick={handleOnClick} colorScheme="blue">
+          <Button size="sm" onClick={handleOnClick} colorScheme="red">
             {buttonText}
           </Button>
         </div>

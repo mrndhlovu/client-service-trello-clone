@@ -230,6 +230,10 @@ class ApiRequest extends AxiosConfig {
     )
   }
 
+  async getPowerUps() {
+    return await this.http.get(`${END_POINTS.accounts}/power-ups`)
+  }
+
   async getCardAttachments(cardId: string) {
     return await this.http.get(`${END_POINTS.cards}/${cardId}/attachments`)
   }
@@ -253,6 +257,12 @@ class ApiRequest extends AxiosConfig {
     return await this.http.post(
       `${END_POINTS.boards}/upload/${boardId}/add-cover`,
       formData
+    )
+  }
+
+  async getSpotifyAuthToken(code: string) {
+    return await this.http.get(
+      `${END_POINTS.accounts}/spotify-connect?code=${code}`
     )
   }
 

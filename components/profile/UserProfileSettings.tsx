@@ -5,10 +5,18 @@ import styled from "styled-components"
 import { PROFILE_SETTINGS_OPTIONS } from "../../util/constants"
 import DeleteUser from "./DeleteUser"
 import MultiFactorAuth from "./mfa/MultiFactorAuth"
+import PowerUps from "./powerups/PowerUps"
 
 const Container = styled.div`
   .option-container {
-    margin-top: 5px;
+    margin: 10px 0 20px;
+
+    .connected-spotify {
+      display: flex;
+      flex-direction: column;
+      gap: 3px;
+      width: max-content;
+    }
 
     p:first-child {
       padding-bottom: 10px;
@@ -21,8 +29,12 @@ const UserProfileSettings = () => {
     switch (id) {
       case "two-step-auth":
         return <MultiFactorAuth />
+
       case "delete-account":
         return <DeleteUser />
+
+      case "power-up":
+        return <PowerUps />
 
       default:
         return null
