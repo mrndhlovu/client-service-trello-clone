@@ -260,12 +260,6 @@ class ApiRequest extends AxiosConfig {
     )
   }
 
-  async getSpotifyAuthToken(code: string) {
-    return await this.http.get(
-      `${END_POINTS.accounts}/spotify-connect?code=${code}`
-    )
-  }
-
   async getUnsplashImages(params: {
     query: string
     pageParam: number
@@ -293,6 +287,42 @@ class ApiRequest extends AxiosConfig {
 
   getBillingHistory = async () => {
     return await this.http.get(END_POINTS.getBillingHistory)
+  }
+
+  //Spotify
+
+  async getSpotifyRedirectUrl(scopes: string, state: string) {
+    return await this.http.get(
+      `${END_POINTS.spotify}/redirect?scopes=${scopes}&state=${state}`
+    )
+  }
+
+  async getSpotifyAuthToken(code: string) {
+    return await this.http.get(`${END_POINTS.spotify}/connect?code=${code}`)
+  }
+
+  async revokeSpotifyAccess(powerUpId: string) {
+    return await this.http.get(`${END_POINTS.spotify}/${powerUpId}/revoke`)
+  }
+
+  async selectPlayer(data: { deviceId: string; play: boolean }) {
+    return await this.http.put(`${END_POINTS.spotify}/select-player`, data)
+  }
+
+  async spotifyModifyPlayback(data: {
+    state: string
+    deviceId: string
+    seek?: number
+  }) {
+    return await this.http.put(`${END_POINTS.spotify}/modify-playback`, data)
+  }
+
+  async getSpotifyDevices() {
+    return await this.http.get(`${END_POINTS.spotify}/devices`)
+  }
+
+  async getCurrentlyPlaying() {
+    return await this.http.get(`${END_POINTS.spotify}/current-playing`)
   }
 }
 

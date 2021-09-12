@@ -5,6 +5,7 @@ import { AuthContext } from "../hooks/context"
 import { ROUTES } from "../../util/constants"
 import { IUIRequestError } from "./GlobalContextProvider"
 import { clientRequest, IPasswordConfirmation } from "../../api"
+import { IPowerUp } from "../../components/profile/powerups/PowerUps"
 
 export interface IAccountFields {
   expired?: boolean
@@ -16,6 +17,7 @@ export interface IAccountFields {
   status: string
   email?: string
   customerId?: string
+  powerUps?: IPowerUp[]
 }
 
 interface IUserBoardRoles {

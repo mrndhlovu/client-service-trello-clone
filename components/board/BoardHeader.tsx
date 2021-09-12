@@ -6,6 +6,7 @@ import styled from "styled-components"
 
 import { UIDropdown } from "../shared"
 import { IBoard, useBoard } from "../../lib/providers"
+import PowerUpButtons from "./PowerUpButtons"
 
 interface IStyleProps {
   starred: boolean
@@ -111,6 +112,7 @@ const BoardHeader = () => {
       </div>
 
       <div className="board-header-right-icons">
+        <PowerUpButtons />
         <Button
           size="sm"
           onClick={toggleDrawerMenu}

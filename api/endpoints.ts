@@ -23,7 +23,7 @@ const END_POINTS = {
   verifyCredentials: "/auth/login-verify",
   verifyMfaCode: "/auth/mfa/validate",
 
-  spotify: "/auth/mfa/validate",
+  spotify: "/accounts/powerups/spotify",
 
   payments: "/payments/subscription",
   getBillingOptions: "/payments/products",

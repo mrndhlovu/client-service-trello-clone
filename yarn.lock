@@ -1127,6 +1127,18 @@
   resolved "https://registry.yarnpkg.com/@types/scheduler/-/scheduler-0.16.2.tgz#1a62f89525723dde24ba1b01b092bf5df8ad4d39"
   integrity sha512-hppQEBDmlwhFAXKJX2KnWLYu5yMfi91yazPb2l+lbJiwW+wdo1gNeRA+3RgNSO39WYX2euey41KEwnqesU2Jew==
 
+"@types/spotify-api@*":
+  version "0.0.11"
+  resolved "https://registry.yarnpkg.com/@types/spotify-api/-/spotify-api-0.0.11.tgz#5cc45ad6341b5233f4617601dc4826b9e6370473"
+  integrity sha512-ZSEpG22JPMcN+tR0+U3wvmGHF4L+jyh1N+8aFbT6WzdXwPuTgH2iL+wKASkMN79CEntHQTPgBwpywZVDhll0Eg==
+
+"@types/spotify-web-api-node@^5.0.3":
+  version "5.0.3"
+  resolved "https://registry.yarnpkg.com/@types/spotify-web-api-node/-/spotify-web-api-node-5.0.3.tgz#0968b8063146898056cde826e6e0db9e6884f8e1"
+  integrity sha512-aw7bW/Jxb7urwWLrJutMuTzyiNQVTeO/6/0OaPpDkXKauAPAoO1RiI8bJncoK4umtWTk8oeHqOTYRAhY3DLjCQ==
+  dependencies:
+    "@types/spotify-api" "*"
+
 "@types/stripe-v3@*":
   version "3.1.25"
   resolved "https://registry.yarnpkg.com/@types/stripe-v3/-/stripe-v3-3.1.25.tgz#bb7f4a056346ffe9e9afa23071177c8bd9d43fff"

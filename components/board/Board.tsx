@@ -1,6 +1,10 @@
 import styled from "styled-components"
 
-import { ListContextProvider, useBoard } from "../../lib/providers"
+import {
+  ListContextProvider,
+  SpotifyContextProvider,
+  useBoard,
+} from "../../lib/providers"
 
 import BoardHeader from "./BoardHeader"
 import BoardCanvas from "./canvas/BoardCanvas"
@@ -37,13 +41,15 @@ const Board = () => {
         image={board?.activeBg === "image" ? board?.prefs?.image : ""}
         bgColor={board?.prefs?.color}
       >
-        <Content>
-          <BoardHeader />
-          <ListContextProvider>
-            <BoardCanvas />
-          </ListContextProvider>
-          <BoardDrawer />
-        </Content>
+        <SpotifyContextProvider>
+          <Content>
+            <BoardHeader />
+            <ListContextProvider>
+              <BoardCanvas />
+            </ListContextProvider>
+            <BoardDrawer />
+          </Content>
+        </SpotifyContextProvider>
       </Container>
     </>
   )

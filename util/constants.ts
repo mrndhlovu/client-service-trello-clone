@@ -130,3 +130,6 @@ export const PHOTOS_IMAGE =
 
 export const SPOTIFY_SCOPES =
   "user-read-email playlist-modify-private playlist-read-private user-read-playback-state"
+
+export const SPOTIFY_LOGO =
+  "https://res.cloudinary.com/drxavrtbi/image/upload/c_scale,w_40/v1631265632/trello-clone/assets/Spotify_Icon_CMYK_Green_gwzjmc.png"

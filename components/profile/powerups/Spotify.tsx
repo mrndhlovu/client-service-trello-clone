@@ -1,35 +1,49 @@
-import { Button } from "@chakra-ui/button"
+import { clientRequest } from "../../../api"
 import { IPowerUp } from "./PowerUps"
+import { SPOTIFY_LOGO } from "../../../util/constants"
+import PowerUpListItem from "./PowerUpListItem"
+import { useGlobalState } from "../../../lib/hooks/context"
 
 const Spotify = ({ powerUp }: { powerUp: IPowerUp }) => {
   const isActive = powerUp?.status === "active"
+  const { notify } = useGlobalState()
 
   const handleConnect = () => {
-    const scopes =
-      "user-read-email playlist-modify-private playlist-read-private user-read-playback-state"
-
-    const redirectUrl =
-      "https://accounts.spotify.com/authorize" +
-      "?response_type=code" +
-      "&client_id=" +
-      process.env.NEXT_PUBLIC_SPOTIFY_ID +
-      (scopes ? "&scope=" + encodeURIComponent(scopes) : "") +
-      "&redirect_uri=" +
-      encodeURIComponent(`${process.env.NEXT_PUBLIC_BASE_URL}/powerup/spotify`)
-    window.location.assign(redirectUrl)
+    const scopes = [
+      "user-read-playback-state, user-read-currently-playing, user-modify-playback-state",
+    ]
+    const state = ""
+    clientRequest
+      .getSpotifyRedirectUrl(scopes.join("|"), state)
+      .then(res => window.location.assign(res.data.url))
+      .catch(err =>
+        notify({
+          description: "Failed to connect with Spotify",
+          placement: "top-right",
+          title: "Connection issue",
+        })
+      )
   }
 
-  return isActive ? (
-    <div className="connected-spotify">
-      <Button colorScheme="green" size="sm" onClick={handleConnect}>
-        Connected to Spotify
-      </Button>
-      <small>Since: {powerUp?.createdAt}</small>
-    </div>
-  ) : (
-    <Button size="sm" onClick={handleConnect}>
-      Connect to spotify
-    </Button>
+  const handleRevoke = () => {
+    clientRequest
+      .revokeSpotifyAccess(powerUp.id)
+      .then(res => {})
+      .catch(err => {})
+
+    window.location.assign("https://www.spotify.com/ie/account/apps/")
+  }
+
+  return (
+    <PowerUpListItem
+      handleConnect={handleConnect}
+      handleRevoke={handleRevoke}
+      activeSince={powerUp?.createdAt.split("T")[0]}
+      description="Controls playback on all devices from your board."
+      isActive={isActive}
+      image={SPOTIFY_LOGO}
+      title="Spotify"
+    />
   )
 }
 

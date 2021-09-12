@@ -115,3 +115,20 @@ export const getMergedData = data => {
 
   return merge(result)
 }
+
+export const calculateMinutes = (milli: number) => {
+  if (!milli) return "--:--"
+  const seconds = Math.floor((milli / 1000) % 60)
+  const minutes = Math.floor((milli / (60 * 1000)) % 60)
+
+  return (
+    (minutes < 10 ? `0${minutes}` : minutes) +
+    ":" +
+    (seconds < 10 ? `0${seconds}` : seconds)
+  )
+}
+
+export const getPercentage = (progress: number, duration_ms: number) => {
+  if (!progress) return 0
+  return ((progress / 60000) * 100) / (duration_ms / 60000)
+}

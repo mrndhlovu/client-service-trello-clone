@@ -16,6 +16,7 @@
     "@stripe/react-stripe-js": "^1.4.1",
     "@stripe/stripe-js": "^1.16.0",
     "@types/react-stripe-elements": "^6.0.5",
+    "@types/spotify-web-api-node": "^5.0.3",
     "@types/styled-components": "^5.1.11",
     "axios": "^0.21.1",
     "compression": "^1.7.4",
