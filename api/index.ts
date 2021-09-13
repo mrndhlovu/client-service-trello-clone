@@ -67,11 +67,14 @@ interface IUpdateBoardData {
 }
 
 class AxiosConfig {
+  private baseUrl = isBrowser
+    ? `/api`
+    : `${process.env.NEXT_PUBLIC_NGINX_BASE_URL}/api`
+  private headers = isBrowser ? {} : { Host: process.env.NEXT_PUBLIC_HOST }
+
   private instance = axios.create({
-    baseURL: isBrowser
-      ? `/api`
-      : `${process.env.NEXT_PUBLIC_NGINX_BASE_URL}/api`,
-    headers: isBrowser ? {} : { Host: process.env.NEXT_PUBLIC_HOST },
+    baseURL: this.baseUrl,
+    headers: this.headers,
   })
 
   http: AxiosInstance
