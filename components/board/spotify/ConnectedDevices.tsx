@@ -61,7 +61,7 @@ const ConnectedDevices = () => {
           value={device.id}
         >
           {device.name}
-          {activeDevice?.id === device.id && <GiSpeaker />}
+          {/* {activeDevice?.id === device.id && <GiSpeaker />} */}
         </option>
       ))}
     </Select>
