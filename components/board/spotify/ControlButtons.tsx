@@ -1,5 +1,5 @@
 import styled from "styled-components"
-import { MouseEventHandler, useRef, useState } from "react"
+import { useState } from "react"
 
 import { MdForward10, MdReplay10 } from "react-icons/md"
 import { BiPlayCircle, BiPauseCircle } from "react-icons/bi"

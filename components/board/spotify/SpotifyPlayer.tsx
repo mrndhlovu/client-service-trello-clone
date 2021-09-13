@@ -1,13 +1,12 @@
-import { useMemo } from "react"
 import styled from "styled-components"
 
 import ConnectedDevices from "./ConnectedDevices"
 import ControlButtons from "./ControlButtons"
 import CurrentlyPlaying from "./CurrentlyPlaying"
-import ProgressTracker from "./ProgressTracker"
 
 const Container = styled.div`
   max-width: 300px;
+
   .device-options {
     min-height: 300px;
     display: grid;
