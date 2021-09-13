@@ -18,7 +18,7 @@ export const getServerSideProps = withAuthSsp(
       .then(res => {
         return {
           redirect: {
-            destination: `/${currentUser?.username}/settings`,
+            destination: `/${currentUser?.username}/settings/?newSpotify=true`,
             permanent: false,
           },
         }

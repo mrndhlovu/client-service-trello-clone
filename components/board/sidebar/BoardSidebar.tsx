@@ -1,12 +1,15 @@
 import { MouseEvent, ReactNode, useState } from "react"
+import { useRouter } from "next/router"
 import { Divider, Drawer, DrawerContent } from "@chakra-ui/react"
 import { IoIosRocket } from "react-icons/io"
 import styled from "styled-components"
 
+import { ROUTES } from "../../../util/constants"
+import { useAuth } from "../../../lib/hooks/context"
 import { useBoard } from "../../../lib/providers"
-import SideBarHeader from "./SideBarHeader"
-import DrawerStyles, { StyledUl } from "./DrawerStyles"
 import ChangeBackground from "./ChangeBackground"
+import DrawerStyles, { StyledUl } from "./DrawerStyles"
+import SideBarHeader from "./SideBarHeader"
 
 interface OpenMenuOptions {
   [key: string]: {
@@ -81,12 +84,17 @@ const StyledDrawerContent = styled(DrawerContent)`
 
 const BoardDrawer = () => {
   const { toggleDrawerMenu, drawerOpen, closeBoard, board } = useBoard()
+  const { user } = useAuth()
+  const router = useRouter()
 
   const [openMenu, setOpenMenu] = useState<
     OpenMenuOptions[keyof OpenMenuOptions]
   >(sideBarOptions.main)
 
   const handleMenuChange = (ev: MouseEvent) => {
+    if (ev.currentTarget.id === "powerUp") {
+      return router.push(`/${user.username}/${ROUTES.settings}`)
+    }
     setOpenMenu(sideBarOptions[ev.currentTarget.id])
   }
 

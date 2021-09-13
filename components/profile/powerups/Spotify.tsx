@@ -1,12 +1,16 @@
+import { useRouter } from "next/router"
+
 import { clientRequest } from "../../../api"
 import { IPowerUp } from "./PowerUps"
 import { SPOTIFY_LOGO } from "../../../util/constants"
-import PowerUpListItem from "./PowerUpListItem"
 import { useGlobalState } from "../../../lib/hooks/context"
+import PowerUpListItem from "./PowerUpListItem"
 
 const Spotify = ({ powerUp }: { powerUp: IPowerUp }) => {
-  const isActive = powerUp?.status === "active"
   const { notify } = useGlobalState()
+  const { newSpotify } = useRouter()?.query
+
+  const isActive = powerUp?.status === "active"
 
   const handleConnect = () => {
     const scopes = [
@@ -43,6 +47,7 @@ const Spotify = ({ powerUp }: { powerUp: IPowerUp }) => {
       isActive={isActive}
       image={SPOTIFY_LOGO}
       title="Spotify"
+      isNew={newSpotify !== undefined}
     />
   )
 }

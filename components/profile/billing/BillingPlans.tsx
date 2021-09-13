@@ -37,6 +37,10 @@ const Container = styled.div`
     }
   }
 
+  hr {
+    margin: 0 0 17px;
+  }
+
   h3 {
     margin: 0;
   }
@@ -54,6 +58,7 @@ const StyledCard = styled.div<ICardProps>`
   margin: 0;
   position: relative;
   text-align: left;
+  height: 96px;
 
   label {
     border-radius: 3px;

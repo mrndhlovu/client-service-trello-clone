@@ -1,4 +1,6 @@
 import { Button } from "@chakra-ui/button"
+import { Badge } from "@chakra-ui/react"
+import { useRouter } from "next/router"
 import styled from "styled-components"
 
 const Container = styled.div<{ image: string }>`
@@ -50,10 +52,18 @@ const Container = styled.div<{ image: string }>`
     }
   }
 
-  small {
+  .new-badge {
+    margin-left: 10px;
+  }
+
+  .badge {
     position: absolute;
     right: 10px;
     bottom: 10px;
+
+    small {
+      font-weight: 200;
+    }
   }
 
   .description {
@@ -76,6 +86,7 @@ interface IProps {
   image: string
   title: string
   isActive: boolean
+  isNew: boolean
   activeSince: string
   description: string
   handleConnect: () => void
@@ -92,13 +103,21 @@ const PowerUpListItem = ({
   handleConnect,
   handleRevoke,
   className,
+  isNew,
 }: IProps) => {
   return (
     <Container image={image} className={className}>
       <div className="powerup-block">
         <div className="heading">
           <span className="img-icon" />
-          <span className="title">{title}</span>
+          <span className="title">
+            {title}{" "}
+            {isNew && (
+              <Badge size="sm" colorScheme="red" className="new-badge">
+                New
+              </Badge>
+            )}
+          </span>
         </div>
 
         {isActive ? (
@@ -110,7 +129,11 @@ const PowerUpListItem = ({
             Add
           </Button>
         )}
-        {isActive && <small>Connected since: {activeSince}</small>}
+        {isActive && (
+          <Badge className="badge" colorScheme="green" size="sm">
+            Active since: <small>{activeSince}</small>
+          </Badge>
+        )}
         <p className="description">{description}</p>
       </div>
     </Container>
