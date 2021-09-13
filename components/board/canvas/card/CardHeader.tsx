@@ -99,7 +99,7 @@ const CardHeader = () => {
             <p>
               in list{" "}
               <UIDropdown
-                toggle={<button className="list-title">{list.title}</button>}
+                toggle={<button className="list-title">{list?.title}</button>}
                 heading="Move card"
               >
                 <h4>Select Destination</h4>
