@@ -23,7 +23,6 @@ const ProgressTracker = ({ progress, setProgress }) => {
 
   useEffect(() => {
     if (!isPlaying) return
-
     setTimeout(() => {
       setProgress(progress + 1000)
     }, 1000)
