@@ -1,14 +1,9 @@
 import { Elements } from "@stripe/react-stripe-js"
 import { loadStripe } from "@stripe/stripe-js"
-import { ReactNode } from "react"
+import { createContext, ReactNode, useContext } from "react"
 
-import {
-  ICardDetails,
-  StripeContext,
-  useAuth,
-  useGlobalState,
-} from "../hooks/context"
 import { clientRequest } from "../../api"
+import { useAuth, useGlobalState } from "."
 
 const stripePromise = loadStripe(process.env.NEXT_PUBLIC_STRIPE_PUBLISHABLE_KEY)
 
@@ -64,5 +59,26 @@ const StripeContextProvider = ({ children, data }: IProps) => {
     </StripeContext.Provider>
   )
 }
+
+interface ICardDetails {
+  productId?: string
+  priceId?: string
+  source?: string
+  currency?: "usd" | "eur"
+  customerId?: string
+  amount?: string
+  paymentMethodId?: string
+  plan?: string
+}
+
+interface IStripeContext {
+  createSubscription: (cardData: ICardDetails) => any
+  products?: IStripeProduct[]
+  invoices?: IStripeInvoice[]
+}
+
+const StripeContext = createContext<IStripeContext>({} as IStripeContext)
+
+export const useStripeContext = () => useContext(StripeContext)
 
 export { StripeContextProvider }

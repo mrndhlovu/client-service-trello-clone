@@ -1,9 +1,9 @@
 import { useRouter } from "next/router"
 import { MenuItem } from "@chakra-ui/react"
 
-import { UIDropdown } from "../../shared"
-import { useAuth } from "../../../lib/hooks/context"
 import { ROUTES } from "../../../util/constants"
+import { UIDropdown } from "../../shared"
+import { useAuth } from "../../../lib/providers"
 import UserAvatar from "../../shared/lib/UserAvatar"
 
 const HeaderAuthDropdown = () => {

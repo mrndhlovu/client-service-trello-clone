@@ -1,6 +1,5 @@
-import { useState } from "react"
 import { IPasswordConfirmation } from "../../../api"
-import { useAuth } from "../../../lib/hooks/context"
+import { useAuth } from "../../../lib/providers"
 import PasswordConfirmation from "../../auth/PasswordConfirmation"
 
 const initialState = {

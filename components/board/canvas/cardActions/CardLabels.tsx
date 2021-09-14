@@ -9,8 +9,11 @@ import styled from "styled-components"
 import { clientRequest } from "../../../../api"
 import { getLabelOptions } from "../../../../util"
 import { LABEL_DEFAULT_OPTIONS } from "../../../../util/constants"
-import { useCardContext, useListCardsContext } from "../../../../lib/providers"
-import { useGlobalState } from "../../../../lib/hooks/context"
+import {
+  useCardContext,
+  useGlobalState,
+  useListCardsContext,
+} from "../../../../lib/providers"
 import CardActionStyles from "./CardActionStyles"
 
 export interface ILabelProps {

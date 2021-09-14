@@ -10,8 +10,7 @@ import {
   Stack,
 } from "@chakra-ui/react"
 
-import { useStripeContext } from "../../../lib/hooks/context"
-import { IStripeProduct } from "../../../lib/providers"
+import { IStripeProduct, useStripeContext } from "../../../lib/providers"
 import { getPlanDiscount } from "../../../util"
 
 export interface IPlan extends IStripeProduct {

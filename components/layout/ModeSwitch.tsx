@@ -3,7 +3,7 @@ import styled from "styled-components"
 
 import { BsMoon, BsSun } from "react-icons/bs"
 
-import { useGlobalState } from "../../lib/hooks/context"
+import { useGlobalState } from "../../lib/providers"
 
 const Container = styled.div`
   z-index: 999;

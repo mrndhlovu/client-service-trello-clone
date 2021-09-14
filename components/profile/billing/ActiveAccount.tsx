@@ -1,6 +1,6 @@
 import { Alert, Badge, Button } from "@chakra-ui/react"
 
-import { useAuth } from "../../../lib/hooks/context"
+import { useAuth } from "../../../lib/providers"
 
 const ActiveAccount = ({ toggleBillingForm }) => {
   const { user } = useAuth()

@@ -1,12 +1,13 @@
 import { Button } from "@chakra-ui/button"
 import { FaSpotify } from "react-icons/fa"
 
-import { useAuth } from "../../lib/hooks/context"
 import { UIDropdown } from "../shared"
+import { useAuth } from "../../lib/providers"
 import SpotifyPlayer from "./spotify/SpotifyPlayer"
 
 const PowerUpButtons = () => {
   const { user } = useAuth()
+
   const spotifyActive =
     user?.account.powerUps.find(item => item.name === "spotify")?.status ===
     "active"

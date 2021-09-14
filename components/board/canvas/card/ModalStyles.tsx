@@ -70,7 +70,6 @@ export default styled(ModalContent)`
     display: grid;
     grid-template-columns: 3.5fr 1fr;
     padding: 10px 0 0;
-    z-index: 1;
 
     button {
       font-weight: 500;

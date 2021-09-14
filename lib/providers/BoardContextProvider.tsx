@@ -7,13 +7,13 @@ import {
   useState,
 } from "react"
 import { useRouter } from "next/router"
-import { isArray, isEmpty } from "lodash"
+import { isEmpty } from "lodash"
 
 import { clientRequest } from "../../api"
 import { IBoard } from "./HomeContextProvider"
 import { ICardItem, IListItem } from "../../components/board/canvas/ListItem"
 import { ROUTES } from "../../util/constants"
-import { useGlobalState } from "../hooks/context"
+import { useGlobalState } from "."
 
 interface IProps {
   board?: IBoard

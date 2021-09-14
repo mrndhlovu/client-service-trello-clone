@@ -1,6 +1,7 @@
 import { FaRegUser } from "react-icons/fa"
-import { useAuth } from "../../../lib/hooks/context"
 import styled from "styled-components"
+
+import { useAuth } from "../../../lib/providers"
 
 const Container = styled.div`
   background-color: ${props => props.theme.colors.borderLight};

@@ -5,7 +5,7 @@ import { Button } from "@chakra-ui/react"
 
 import { clientRequest, IPasswordConfirmation } from "../../api"
 import { ROUTES } from "../../util/constants"
-import { useAuth } from "../../lib/hooks/context"
+import { useAuth } from "../../lib/providers"
 import PasswordConfirmation from "../auth/PasswordConfirmation"
 
 const DeleteUser = () => {

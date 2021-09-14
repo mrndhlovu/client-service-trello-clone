@@ -7,10 +7,10 @@ import {
   useState,
 } from "react"
 
-import { clientRequest } from "../../api"
 import { checkStringIncludes } from "../../util"
-import { useAuth } from "../hooks/context"
+import { clientRequest } from "../../api"
 import { ICardItem, IListItem } from "../../components/board/canvas/ListItem"
+import { useAuth } from "."
 
 export interface IBoard {
   lists?: IListItem[]
@@ -42,6 +42,10 @@ const HomeContextProvider = ({ children, boardList }: IProps) => {
     )
     setBoards(updatedList)
   }
+
+  const updateBoardsState = useCallback((newBoardsList: IBoard[]) => {
+    setBoards(newBoardsList)
+  }, [])
 
   const updateBoardWithRetry = useCallback(
     async (update: IBoard, boardId?: string) => {
@@ -81,6 +85,7 @@ const HomeContextProvider = ({ children, boardList }: IProps) => {
       value={{
         boards,
         handleStarBoard,
+        updateBoardsState,
       }}
     >
       {children}
@@ -91,6 +96,7 @@ const HomeContextProvider = ({ children, boardList }: IProps) => {
 interface IHomeContext {
   handleStarBoard: (board?: IBoard) => void
   boards?: IBoard[]
+  updateBoardsState: (boards: IBoard[]) => void
 }
 
 export const HomeContext = createContext<IHomeContext>({} as IHomeContext)

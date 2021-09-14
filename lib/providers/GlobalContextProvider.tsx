@@ -1,8 +1,8 @@
 import { useToast } from "@chakra-ui/react"
-import { useCallback } from "react"
+import { createContext, useCallback, useContext, useState } from "react"
 
-import { GlobalContext } from "../hooks/context"
 import { useLocalStorage } from "../hooks"
+import { IBoard } from "."
 
 export type IUIRequestError = string[]
 
@@ -28,12 +28,17 @@ const GlobalContextProvider = ({ children }) => {
   const [theme, setTheme] = useLocalStorage<string, IThemeMode>("theme", {
     darkMode: false,
   })
+  const [boards, setBoards] = useState<IBoard[]>([])
 
   const handleModeChange = () => {
     return setTheme((prev: IThemeMode) => {
       return { ...prev, darkMode: !prev?.darkMode }
     })
   }
+
+  const handleUpdateBoardState = useCallback(newBoards => {
+    setBoards(newBoards)
+  }, [])
 
   const notify = useCallback(
     (msg: IToastProps) => {
@@ -68,11 +73,25 @@ const GlobalContextProvider = ({ children }) => {
         handleModeChange,
         darkMode: theme?.darkMode,
         notify,
+        handleUpdateBoardState,
       }}
     >
       {children}
     </GlobalContext.Provider>
   )
 }
+
+interface IDefaultGlobalState {
+  darkMode: boolean
+  handleModeChange: () => void
+  notify: (option: IToastProps) => void
+  handleUpdateBoardState: (boards: IBoard[]) => void
+}
+
+export const GlobalContext = createContext<IDefaultGlobalState>(
+  {} as IDefaultGlobalState
+)
+
+export const useGlobalState = () => useContext(GlobalContext)
 
 export { GlobalContextProvider }

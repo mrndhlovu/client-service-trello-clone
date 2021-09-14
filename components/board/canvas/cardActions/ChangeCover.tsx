@@ -5,11 +5,11 @@ import { ChangeEvent, useRef } from "react"
 import styled from "styled-components"
 
 import { clientRequest } from "../../../../api"
-import { useGlobalState } from "../../../../lib/hooks/context"
 import {
   useCardContext,
   useListCardsContext,
   useListContext,
+  useGlobalState,
 } from "../../../../lib/providers"
 import { LABEL_DEFAULT_OPTIONS } from "../../../../util/constants"
 import UnSplashImages from "../../sidebar/UnSplashImages"

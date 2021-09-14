@@ -3,8 +3,7 @@ import { Button, Input } from "@chakra-ui/react"
 import { AiOutlineClose, AiOutlinePlus } from "react-icons/ai"
 
 import { clientRequest } from "../../../api"
-import { useGlobalState } from "../../../lib/hooks/context"
-import { IBoard, useBoard } from "../../../lib/providers"
+import { IBoard, useBoard, useGlobalState } from "../../../lib/providers"
 
 interface IProps {
   isFirst: boolean

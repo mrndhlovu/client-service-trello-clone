@@ -16,11 +16,11 @@ import { HiOutlineUsers } from "react-icons/hi"
 import { RiSettings5Line } from "react-icons/ri"
 import { AiOutlineRight } from "react-icons/ai"
 
-import { useGlobalState } from "../../../lib/hooks/context"
 import {
   HOME_SIDEBAR_PRIMARY,
   HOME_SIDEBAR_WORKSPACE_MENU,
 } from "../../../util/constants"
+import { useGlobalState } from "../../../lib/providers"
 import SideBarStyles from "./SideBarStyles"
 
 const NavSidebar = () => {

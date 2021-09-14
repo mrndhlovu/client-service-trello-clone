@@ -5,8 +5,7 @@ import { FiPlus } from "react-icons/fi"
 import styled from "styled-components"
 
 import { clientRequest } from "../../../api"
-import { useGlobalState } from "../../../lib/hooks/context"
-import { IBoard, useBoard } from "../../../lib/providers"
+import { IBoard, useBoard, useGlobalState } from "../../../lib/providers"
 import {
   COLORS_IMAGE,
   LABEL_DEFAULT_OPTIONS,

@@ -5,7 +5,7 @@ import { useRouter } from "next/router"
 import styled from "styled-components"
 
 import { PROFILE_TAB_OPTIONS } from "../../util/constants"
-import { useAuth } from "../../lib/hooks/context"
+import { useAuth } from "../../lib/providers"
 import UserAvatar from "../shared/lib/UserAvatar"
 
 const StyledContainer = styled(Container)`

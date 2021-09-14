@@ -1,7 +1,7 @@
 import { Button } from "@chakra-ui/react"
 
 import { clientRequest } from "../../../api"
-import { useAuth } from "../../../lib/hooks/context"
+import { useAuth } from "../../../lib/providers"
 
 const MfaStep4 = ({ recoveryData }) => {
   const { rehydrateUser } = useAuth()

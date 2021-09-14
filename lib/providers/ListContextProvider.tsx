@@ -13,7 +13,7 @@ import { IBoard } from "./HomeContextProvider"
 import { ICardDraggingProps } from "./ListCardsContextProvider"
 import { ICardItem, IListItem } from "../../components/board/canvas/ListItem"
 import { useBoard } from "./BoardContextProvider"
-import { useGlobalState } from "../hooks/context"
+import { useGlobalState } from "."
 
 interface IProps {
   children: ReactNode

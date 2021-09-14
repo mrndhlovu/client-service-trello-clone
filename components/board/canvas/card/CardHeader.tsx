@@ -10,7 +10,7 @@ import {
   useListCardsContext,
 } from "../../../../lib/providers"
 import { ICardCoverProps } from "../CardItem"
-import { UIDropdown } from "../../../shared"
+import { MoveItem, UIDropdown } from "../../../shared"
 import ChangeCover from "../cardActions/ChangeCover"
 import EditableTitle from "../../EditableTitle"
 
@@ -55,8 +55,10 @@ const CardHeader = () => {
     edgeColor,
     coverSize,
     coverUrl,
+    cardIndex,
   } = useCardContext()
   const { saveCardChanges, listId } = useListCardsContext()
+  const { findCardsByListId, board } = useBoard()
   const { findListById } = useBoard()
   const [list] = findListById(listId)
 
@@ -102,7 +104,10 @@ const CardHeader = () => {
                 toggle={<button className="list-title">{list?.title}</button>}
                 heading="Move card"
               >
-                <h4>Select Destination</h4>
+                <MoveItem
+                  destinationList={board?.lists}
+                  sourcePosition={cardIndex}
+                />
               </UIDropdown>
             </p>
           </div>

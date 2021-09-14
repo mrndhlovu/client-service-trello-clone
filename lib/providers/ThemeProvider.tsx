@@ -1,4 +1,3 @@
-import React, { ReactChildren } from "react"
 import { ThemeProvider as UITheme } from "styled-components"
 
 import theme from "../../theme"

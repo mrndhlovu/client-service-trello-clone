@@ -1,6 +1,6 @@
 import { useEffect, useState } from "react"
 
-import { useAuth, useGlobalState } from "../../lib/hooks/context"
+import { useGlobalState, useAuth } from "../../lib/providers"
 import Header from "../header/Header"
 import ModeSwitch from "./ModeSwitch"
 

@@ -7,7 +7,7 @@ import {
   SPOTIFY_LOGO,
   SPOTIFY_REVOKE_ACCESS_ENDPOINT,
 } from "../../../util/constants"
-import { useGlobalState } from "../../../lib/hooks/context"
+import { useGlobalState } from "../../../lib/providers"
 import PowerUpListItem from "./PowerUpListItem"
 
 const Spotify = ({ powerUp }: { powerUp: IPowerUp }) => {

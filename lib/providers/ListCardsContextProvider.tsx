@@ -1,8 +1,8 @@
 import { createContext, ReactNode, useCallback, useContext } from "react"
-import { clientRequest } from "../../api"
-import { useGlobalState } from "../hooks/context"
 
+import { clientRequest } from "../../api"
 import { useBoard } from "./BoardContextProvider"
+import { useGlobalState } from "."
 import { useListContext } from "./ListContextProvider"
 
 interface IProps {

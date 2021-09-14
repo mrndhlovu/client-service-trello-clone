@@ -1,10 +1,10 @@
 import { isEmpty } from "lodash"
 import { forwardRef, ReactChild, ReactElement, useEffect } from "react"
 import styled from "styled-components"
+import { useAuth } from "../../lib/providers"
 
 import { isBrowser } from "../../util"
 import { UIForm } from "../shared"
-import { useAuth } from "../../lib/hooks/context"
 import AuthFormButton from "./AuthFormButton"
 import AuthOptionLink from "./AuthOptionLink"
 import FormFeedback from "./FormFeedback"

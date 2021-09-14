@@ -1,7 +1,6 @@
 import { useEffect, ComponentType } from "react"
 
-import { useAuth } from "../hooks/context"
-import { IUser } from "../providers"
+import { IUser, useAuth } from "../providers"
 
 interface IProps {
   data?: any

@@ -3,9 +3,9 @@ import { Button, Textarea } from "@chakra-ui/react"
 import { AiOutlineClose, AiOutlinePlus } from "react-icons/ai"
 
 import { clientRequest } from "../../../api"
-import { useGlobalState } from "../../../lib/hooks/context"
 import {
   useBoard,
+  useGlobalState,
   useListCardsContext,
   useListContext,
 } from "../../../lib/providers"

@@ -1,10 +1,20 @@
 import router from "next/router"
-import { useCallback, useEffect, useState } from "react"
+import {
+  createContext,
+  useCallback,
+  useContext,
+  useEffect,
+  useState,
+} from "react"
 
-import { AuthContext } from "../hooks/context"
 import { ROUTES } from "../../util/constants"
 import { IUIRequestError } from "./GlobalContextProvider"
-import { clientRequest, IPasswordConfirmation } from "../../api"
+import {
+  clientRequest,
+  ILoginCredentials,
+  IPasswordConfirmation,
+  ISignupCredentials,
+} from "../../api"
 import { IPowerUp } from "../../components/profile/powerups/PowerUps"
 
 export interface IAccountFields {
@@ -189,5 +199,27 @@ const AuthContextProvider = ({ children }) => {
     </AuthContext.Provider>
   )
 }
+
+interface IDefaultAuthContext {
+  loading: boolean
+  user?: IUser
+  isAuthenticated: boolean
+  rehydrateUser: (newUser?: IUser) => void
+  logout: () => {} | void | null
+  login: (formData: ILoginCredentials) => Promise<void>
+  dismissAuthError: () => void
+  signup: (formData: ISignupCredentials) => Promise<void>
+  refreshToken: () => {} | void | null
+  fetchUser: () => Promise<void>
+  authError: undefined | IUIRequestError
+  verifyLogin: (formData: { token: string }) => Promise<void>
+  verifyUserPassword: (data: IPasswordConfirmation) => Promise<number | null>
+}
+
+const AuthContext = createContext<IDefaultAuthContext>(
+  {} as IDefaultAuthContext
+)
+
+export const useAuth = () => useContext(AuthContext)
 
 export { AuthContextProvider }

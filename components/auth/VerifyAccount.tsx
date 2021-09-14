@@ -4,10 +4,10 @@ import Link from "next/link"
 
 import { AlertDescription, AlertTitle, Button } from "@chakra-ui/react"
 
-import { ROUTES } from "../../util/constants"
-import { useGlobalState } from "../../lib/hooks/context"
-import EmailConfirmation from "./EmailConfirmation"
 import { clientRequest } from "../../api"
+import { ROUTES } from "../../util/constants"
+import { useGlobalState } from "../../lib/providers"
+import EmailConfirmation from "./EmailConfirmation"
 
 const VerifyAccount = () => {
   const router = useRouter()

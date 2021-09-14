@@ -1,8 +1,8 @@
 import { useState } from "react"
 import { Badge, Button } from "@chakra-ui/react"
 
+import { useAuth } from "../../../lib/providers"
 import TwoStepAuthWizardModal from "./TwoStepAuthWizardModal"
-import { useAuth } from "../../../lib/hooks/context"
 
 const MultiFactorAuth = () => {
   const [open, setOpen] = useState<boolean>(false)

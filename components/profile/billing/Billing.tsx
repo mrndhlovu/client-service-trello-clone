@@ -16,16 +16,16 @@ import {
   FormHelperText,
 } from "@chakra-ui/react"
 
-import {
-  useAuth,
-  useGlobalState,
-  useStripeContext,
-} from "../../../lib/hooks/context"
 import { getActivePlans, getFilteredPlans, getPendingPlan } from "../../../util"
+import {
+  useGlobalState,
+  useAuth,
+  useStripeContext,
+} from "../../../lib/providers"
+import ActiveAccount from "./ActiveAccount"
+import BillingHistory from "./BillingHistory"
 import BillingPlans, { IPlan } from "./BillingPlans"
 import FormFeedback from "../../shared/lib/FormFeedback"
-import BillingHistory from "./BillingHistory"
-import ActiveAccount from "./ActiveAccount"
 import PendingOrderSummary from "./PendingOrderSummary"
 
 const StyledContainer = styled(Container)`

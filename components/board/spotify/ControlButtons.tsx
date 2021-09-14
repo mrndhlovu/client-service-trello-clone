@@ -7,8 +7,7 @@ import { IoIosSkipForward, IoIosSkipBackward } from "react-icons/io"
 import { ButtonGroup } from "@chakra-ui/button"
 
 import { clientRequest } from "../../../api"
-import { useGlobalState } from "../../../lib/hooks/context"
-import { useSpotify } from "../../../lib/providers"
+import { useSpotify, useGlobalState } from "../../../lib/providers"
 import ProgressTracker from "./ProgressTracker"
 
 const ControlContainer = styled.div`

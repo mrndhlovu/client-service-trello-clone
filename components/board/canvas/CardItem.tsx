@@ -4,7 +4,7 @@ import styled, { css } from "styled-components"
 
 import { FiEdit2 } from "react-icons/fi"
 import { AiOutlineClose } from "react-icons/ai"
-import { Button, Modal, ModalOverlay, ModalCloseButton } from "@chakra-ui/react"
+import { Button, Modal, ModalOverlay } from "@chakra-ui/react"
 
 import { useCardContext, useListCardsContext } from "../../../lib/providers"
 import CardActions from "./cardActions/CardActions"
@@ -78,7 +78,6 @@ const CardItem = ({ toggleActionsMenu, actionsOpen }: IProps) => {
 
   const handleCardClick = (ev: MouseEvent) => {
     ev.preventDefault()
-    console.log(ev.currentTarget)
 
     push(`${asPath}/?activeCard=${card?.id}/`, undefined, { shallow: true })
   }
