@@ -1,10 +1,10 @@
 import { useRouter } from "next/router"
-import { MouseEvent, useRef } from "react"
-import Link from "next/link"
+import { MouseEvent } from "react"
 import styled, { css } from "styled-components"
 
 import { FiEdit2 } from "react-icons/fi"
-import { Button, Modal, ModalOverlay } from "@chakra-ui/react"
+import { AiOutlineClose } from "react-icons/ai"
+import { Button, Modal, ModalOverlay, ModalCloseButton } from "@chakra-ui/react"
 
 import { useCardContext, useListCardsContext } from "../../../lib/providers"
 import CardActions from "./cardActions/CardActions"
@@ -22,6 +22,8 @@ export interface ICardCoverProps {
 const CardLabel = styled.span<{ color: string }>`
   background-color: ${props => props.color || "none"};
 `
+
+const StyledSpan = styled.span``
 
 const CardCover = styled.div<ICardCoverProps>`
   ${props =>
@@ -67,7 +69,6 @@ const CardItem = ({ toggleActionsMenu, actionsOpen }: IProps) => {
   } = useCardContext()
   const { query } = useRouter()
   const { asPath, push } = useRouter()
-  const cardLinkRef = useRef<HTMLAnchorElement>()
   const cardModalOpen = query?.activeCard !== undefined
 
   const handleSave = (title: string) => {
@@ -76,72 +77,74 @@ const CardItem = ({ toggleActionsMenu, actionsOpen }: IProps) => {
   }
 
   const handleCardClick = (ev: MouseEvent) => {
+    ev.preventDefault()
+    console.log(ev.currentTarget)
+
     push(`${asPath}/?activeCard=${card?.id}/`, undefined, { shallow: true })
   }
 
   return (
-    <Link href="/">
-      <>
-        {!actionsOpen && (
-          <Button onClick={toggleActionsMenu} size="xs" className="edit-button">
-            <FiEdit2 size={15} />
-          </Button>
+    <>
+      {!actionsOpen && (
+        <Button onClick={toggleActionsMenu} size="xs" className="edit-button">
+          <FiEdit2 size={15} />
+        </Button>
+      )}
+
+      {actionsOpen && (
+        <CardActions
+          close={toggleActionsMenu}
+          listId={listId}
+          cardId={card.id}
+        />
+      )}
+      <StyledSpan onClick={handleCardClick}>
+        {showCardCover && (
+          <CardCover
+            className="list-card-cover"
+            imageCover={imageCover || coverUrl}
+            edgeColor={edgeColor}
+            colorCover={colorCover}
+            width={coverSize?.width}
+            height={coverSize?.height}
+          />
         )}
-        <a ref={cardLinkRef} onClick={handleCardClick} href="#">
-          {showCardCover && (
-            <CardCover
-              className="list-card-cover"
-              imageCover={imageCover || coverUrl}
-              edgeColor={edgeColor}
-              colorCover={colorCover}
-              width={coverSize?.width}
-              height={coverSize?.height}
-            />
-          )}
 
-          {actionsOpen && (
-            <CardActions
-              close={toggleActionsMenu}
-              listId={listId}
-              cardId={card.id}
-            />
-          )}
-
-          <div className={`list-card ${actionsOpen ? "edit-open" : ""}`}>
-            <div className="list-card-details">
-              <div className="list-card-labels">
-                {card?.labels.map((label: string, index: number) => (
-                  <CardLabel
-                    className="card-label "
-                    color={label}
-                    key={index}
-                  />
-                ))}
-              </div>
-
-              {actionsOpen ? (
-                <EditCardMenu
-                  title={card.title}
-                  close={toggleActionsMenu}
-                  save={handleSave}
-                />
-              ) : (
-                <span className="list-card-title">{card?.title}</span>
-              )}
+        <div className={`list-card ${actionsOpen ? "edit-open" : ""}`}>
+          <div className="list-card-details">
+            <div className="list-card-labels">
+              {card?.labels.map((label: string, index: number) => (
+                <CardLabel className="card-label " color={label} key={index} />
+              ))}
             </div>
+
+            {actionsOpen ? (
+              <EditCardMenu
+                title={card.title}
+                close={toggleActionsMenu}
+                save={handleSave}
+              />
+            ) : (
+              <span className="list-card-title">{card?.title}</span>
+            )}
           </div>
-          <Modal
-            size="full"
-            isOpen={actionsOpen}
-            onClose={toggleActionsMenu}
-            closeOnOverlayClick={true}
-          >
-            <ModalOverlay className="card-editor-overlay" />
-          </Modal>
-          {cardModalOpen && <CardModal isOpen={cardModalOpen} />}
-        </a>
-      </>
-    </Link>
+        </div>
+
+        {cardModalOpen && <CardModal isOpen={cardModalOpen} />}
+      </StyledSpan>
+
+      <Modal size="full" isOpen={actionsOpen} onClose={toggleActionsMenu}>
+        <ModalOverlay
+          onClick={toggleActionsMenu}
+          className="card-editor-overlay"
+        />
+        <AiOutlineClose
+          size={22}
+          className="card-actions-close-btn"
+          onClick={toggleActionsMenu}
+        />
+      </Modal>
+    </>
   )
 }
 

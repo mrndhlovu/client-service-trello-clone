@@ -40,6 +40,16 @@ const reset = css`
     z-index: 1;
   }
 
+  .chakra-portal 
+    .card-actions-close-btn {
+      position: absolute;
+      top: 38px;
+      right: 38px;
+      color: #fff;
+      cursor: pointer;
+    }
+  }
+
   .browserupgrade {
     margin: 0.2em 0;
     background: #ccc;

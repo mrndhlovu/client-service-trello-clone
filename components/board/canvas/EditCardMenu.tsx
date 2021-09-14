@@ -1,4 +1,4 @@
-import { ChangeEvent, useState } from "react"
+import { ChangeEvent, MouseEvent, useState } from "react"
 import { AiOutlineClose } from "react-icons/ai"
 import { Button, Textarea } from "@chakra-ui/react"
 
@@ -21,6 +21,12 @@ const EditCardMenu = ({ title, close, save }: IProps) => {
     }
   }
 
+  const handleClose = (ev: MouseEvent) => {
+    ev.preventDefault()
+
+    close()
+  }
+
   return (
     <div className="card-editor">
       <div className="card-editor-content">
@@ -30,7 +36,6 @@ const EditCardMenu = ({ title, close, save }: IProps) => {
         <Button size="sm" onClick={handleSave} colorScheme="blue">
           Save
         </Button>
-        <AiOutlineClose size={22} className="close-button" onClick={close} />
       </div>
     </div>
   )

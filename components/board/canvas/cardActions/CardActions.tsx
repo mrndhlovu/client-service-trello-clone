@@ -1,5 +1,5 @@
 import { Menu, MenuItem } from "@chakra-ui/react"
-import { Fragment } from "react"
+import { Fragment, MouseEvent } from "react"
 import { AiFillSwitcher, AiOutlineIdcard, AiOutlineTag } from "react-icons/ai"
 import { CgCreditCard } from "react-icons/cg"
 
@@ -17,7 +17,8 @@ interface IProps {
 const CardActions = ({ listId, cardId, close }: IProps) => {
   const { saveCardChanges } = useListCardsContext()
 
-  const handleArchiveCard = () => {
+  const handleArchiveCard = (ev: MouseEvent) => {
+    ev.preventDefault()
     saveCardChanges(cardId, listId, { archived: true })
     close()
   }
