@@ -1,6 +1,7 @@
 import { createContext, MouseEvent, useContext, useState } from "react"
 
 import { ISpotifyDevice } from "../../components/board/spotify/ConnectedDevices"
+import { IUserPlaylist } from "../../components/board/spotify/UserPlaylists"
 import { usePrevious } from "../hooks"
 
 export interface CurrentlyPlayingObject {
@@ -15,6 +16,9 @@ export interface CurrentlyPlayingObject {
 
 const SpotifyContextProvider = ({ children }) => {
   const [activeDevice, setActiveDevice] = useState<ISpotifyDevice | undefined>()
+  const [activePlaylist, setActivePlaylist] = useState<
+    IUserPlaylist | undefined
+  >()
 
   const [currentTrack, setCurrentTrack] = useState<
     CurrentlyPlayingObject | undefined
@@ -39,6 +43,7 @@ const SpotifyContextProvider = ({ children }) => {
     <SpotifyContext.Provider
       value={{
         activeDevice,
+        activePlaylist,
         canPlay,
         changedTrack,
         currentTrack,
@@ -46,6 +51,7 @@ const SpotifyContextProvider = ({ children }) => {
         hasSelectedDevice,
         isPlaying,
         setActiveDevice,
+        setActivePlaylist,
         setCurrentTrack,
         setIsPlaying,
         switchedDevices,
@@ -70,6 +76,8 @@ interface ISpotifyContext {
   changedTrack: boolean
   switchedDevices: boolean
   toggleIsPlaying: () => void
+  activePlaylist: IUserPlaylist
+  setActivePlaylist: (device: IUserPlaylist) => void
 }
 
 export const SpotifyContext = createContext<ISpotifyContext>(

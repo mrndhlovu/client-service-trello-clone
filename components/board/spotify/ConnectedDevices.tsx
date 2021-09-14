@@ -1,6 +1,5 @@
 import { Select } from "@chakra-ui/select"
 import { ChangeEvent, useEffect, useState } from "react"
-import { GiSpeaker } from "react-icons/gi"
 
 import { clientRequest } from "../../../api"
 import { useSpotify } from "../../../lib/providers"
@@ -24,7 +23,7 @@ const ConnectedDevices = () => {
     if (!selected) return
     setActiveDevice(selected)
     clientRequest
-      .selectPlayer({ deviceId: selected.id, play: true })
+      .selectPlayer({ deviceId: selected.id, play: false })
       .catch(err => {})
   }
 
@@ -61,7 +60,6 @@ const ConnectedDevices = () => {
           value={device.id}
         >
           {device.name}
-          {/* {activeDevice?.id === device.id && <GiSpeaker />} */}
         </option>
       ))}
     </Select>

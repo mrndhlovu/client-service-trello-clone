@@ -94,7 +94,7 @@ const UIDropdown = ({
       <MenuButton className={`dropdown ${className || ""}`}>
         {toggle}
       </MenuButton>
-      <Portal>
+      <>
         <StyledMenuContent>
           <header>
             <DropdownHeader>{heading}</DropdownHeader>
@@ -102,7 +102,7 @@ const UIDropdown = ({
           <Divider />
           <div className="dropdown-content">{children}</div>
         </StyledMenuContent>
-      </Portal>
+      </>
     </StyledMenu>
   )
 }

@@ -1,9 +1,8 @@
-import { useEffect, useState } from "react"
+import { useEffect } from "react"
 import styled from "styled-components"
 
 import { clientRequest } from "../../../api"
 import { useSpotify } from "../../../lib/providers"
-import ControlButtons from "./ControlButtons"
 
 const Container = styled.div<{ cover: string }>`
   .track-cover {
@@ -23,12 +22,12 @@ const CurrentlyPlaying = () => {
     setCurrentTrack,
     currentTrack,
     isPlaying,
-    changedTrack,
     hasActiveTrack,
+    hasSelectedDevice,
   } = useSpotify()
 
   useEffect(() => {
-    if (isPlaying || hasActiveTrack) return
+    if (isPlaying || hasActiveTrack || !hasSelectedDevice) return
     const getData = () => {
       clientRequest
         .getCurrentlyPlaying()
@@ -39,7 +38,7 @@ const CurrentlyPlaying = () => {
         .catch(err => null)
     }
     getData()
-  }, [isPlaying, changedTrack, hasActiveTrack])
+  }, [isPlaying, hasActiveTrack, hasSelectedDevice])
 
   return (
     <Container cover={currentTrack?.item?.images?.[1]?.url}>

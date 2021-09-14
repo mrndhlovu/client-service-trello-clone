@@ -1,13 +1,11 @@
 import { Input } from "@chakra-ui/react"
-import { useState } from "react"
+import { ChangeEvent, useState } from "react"
 import { FiSearch } from "react-icons/fi"
-
-import { UIDropdown } from "../../shared"
 
 const HeaderSearchDropdown = () => {
   const [search, setSearch] = useState("")
 
-  const handleSearch = ev => {
+  const handleSearch = (ev: ChangeEvent<HTMLInputElement>) => {
     ev.preventDefault()
     setSearch(ev.target.value)
   }

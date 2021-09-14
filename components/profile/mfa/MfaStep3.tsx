@@ -1,11 +1,7 @@
 import { useState } from "react"
 import { Button } from "@chakra-ui/react"
 
-import {
-  INewMfaData,
-  connectMultiFactorAuth,
-  generateQrCode,
-} from "../../../api"
+import { clientRequest, INewMfaData } from "../../../api"
 import { UIForm, UIFormInput } from "../../shared"
 import { useRef } from "react"
 import { FORM_VALIDATION } from "../../../util/formhelpers"
@@ -35,7 +31,8 @@ const MfaStep3 = ({ nextStep, setRecoveryData }) => {
       // },
       code: `${codeInputRef.current.values.code}`,
     }
-    await connectMultiFactorAuth(body)
+    await clientRequest
+      .connectMultiFactorAuth(body)
       .then(res => {
         setRecoveryData(res.data.twoStepRecovery)
         nextStep()
@@ -49,7 +46,8 @@ const MfaStep3 = ({ nextStep, setRecoveryData }) => {
   }
 
   const handleScanQrCode = async (ev: any) => {
-    await generateQrCode()
+    await clientRequest
+      .generateQrCode()
       .then(res => setQrCodeImage(res.data.qrCodeImage))
       .catch(err => {
         console.log(

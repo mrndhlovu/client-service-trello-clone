@@ -294,6 +294,12 @@ class ApiRequest extends AxiosConfig {
 
   //Spotify
 
+  async getUsePlaylists(limit: number, offset: number) {
+    return await this.http.get(
+      `${END_POINTS.spotify}/playlists?limit=${limit}&offset=${offset}`
+    )
+  }
+
   async getSpotifyRedirectUrl(scopes: string, state: string) {
     return await this.http.get(
       `${END_POINTS.spotify}/redirect?scopes=${scopes}&state=${state}`

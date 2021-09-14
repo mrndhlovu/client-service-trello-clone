@@ -2,7 +2,11 @@ import { useRouter } from "next/router"
 
 import { clientRequest } from "../../../api"
 import { IPowerUp } from "./PowerUps"
-import { SPOTIFY_LOGO } from "../../../util/constants"
+import {
+  SPOTIFY_ACCESS_SCOPES,
+  SPOTIFY_LOGO,
+  SPOTIFY_REVOKE_ACCESS_ENDPOINT,
+} from "../../../util/constants"
 import { useGlobalState } from "../../../lib/hooks/context"
 import PowerUpListItem from "./PowerUpListItem"
 
@@ -13,12 +17,9 @@ const Spotify = ({ powerUp }: { powerUp: IPowerUp }) => {
   const isActive = powerUp?.status === "active"
 
   const handleConnect = () => {
-    const scopes = [
-      "user-read-playback-state, user-read-currently-playing, user-modify-playback-state",
-    ]
     const state = ""
     clientRequest
-      .getSpotifyRedirectUrl(scopes.join("|"), state)
+      .getSpotifyRedirectUrl(SPOTIFY_ACCESS_SCOPES.join("|"), state)
       .then(res => window.location.assign(res.data.url))
       .catch(err =>
         notify({
@@ -34,8 +35,9 @@ const Spotify = ({ powerUp }: { powerUp: IPowerUp }) => {
       .revokeSpotifyAccess(powerUp.id)
       .then(res => {})
       .catch(err => {})
-
-    window.location.assign("https://www.spotify.com/ie/account/apps/")
+      .finally(() => {
+        window.location.assign(SPOTIFY_REVOKE_ACCESS_ENDPOINT)
+      })
   }
 
   return (
@@ -43,7 +45,7 @@ const Spotify = ({ powerUp }: { powerUp: IPowerUp }) => {
       handleConnect={handleConnect}
       handleRevoke={handleRevoke}
       activeSince={powerUp?.createdAt.split("T")[0]}
-      description="Controls playback on all devices from your board."
+      description="Controls playback on all devices from your board and manage your playlists."
       isActive={isActive}
       image={SPOTIFY_LOGO}
       title="Spotify"

@@ -133,3 +133,10 @@ export const SPOTIFY_SCOPES =
 
 export const SPOTIFY_LOGO =
   "https://res.cloudinary.com/drxavrtbi/image/upload/c_scale,w_40/v1631265632/trello-clone/assets/Spotify_Icon_CMYK_Green_gwzjmc.png"
+
+export const SPOTIFY_REVOKE_ACCESS_ENDPOINT =
+  "https://www.spotify.com/ie/account/apps/"
+
+export const SPOTIFY_ACCESS_SCOPES = [
+  "user-read-playback-state, user-read-currently-playing, user-modify-playback-state",
+]

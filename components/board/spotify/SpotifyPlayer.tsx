@@ -3,6 +3,7 @@ import styled from "styled-components"
 import ConnectedDevices from "./ConnectedDevices"
 import ControlButtons from "./ControlButtons"
 import CurrentlyPlaying from "./CurrentlyPlaying"
+import UserPlaylists from "./UserPlaylists"
 
 const Container = styled.div`
   max-width: 300px;
@@ -26,6 +27,7 @@ const SpotifyPlayer = () => {
     <Container>
       <ConnectedDevices />
       <div className="device-options">
+        <UserPlaylists />
         <CurrentlyPlaying />
         <ControlButtons />
       </div>

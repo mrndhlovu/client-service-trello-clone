@@ -1,6 +1,6 @@
 import { Button } from "@chakra-ui/react"
 
-import { handleUpdateUser } from "../../../api"
+import { clientRequest } from "../../../api"
 import { useAuth } from "../../../lib/hooks/context"
 
 const MfaStep4 = ({ recoveryData }) => {
@@ -8,13 +8,11 @@ const MfaStep4 = ({ recoveryData }) => {
 
   const handleSave = async () => {
     const update = { multiFactorAuth: true }
-    await handleUpdateUser(update)
+    await clientRequest
+      .handleUpdateUser(update)
       .then(res => rehydrateUser(res.data))
       .catch(err => {
-        console.log(
-          "🚀 ~ file: MultiFactorAuth.tsx ~ line 34 ~ awaitsetUpMultiFactorAuth ~ err",
-          err
-        )
+        console.log("🚀 ~ file awaitsetUpMultiFactorAuth ~ err", err)
       })
   }
 
