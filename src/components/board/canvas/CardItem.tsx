@@ -84,7 +84,7 @@ const CardItem = ({ toggleActionsMenu, actionsOpen }: IProps) => {
     toggleActionsMenu()
   }
 
-  const toggleCardOpenState = (ev?: MouseEvent) => {
+  const toggleCardModal = (ev?: MouseEvent) => {
     if (!ev || cardModalOpen) {
       replace(`/${ROUTES.board}/${boardId}`, undefined, { shallow: true })
 
@@ -110,7 +110,7 @@ const CardItem = ({ toggleActionsMenu, actionsOpen }: IProps) => {
           cardId={card.id}
         />
       )}
-      <StyledSpan onClick={toggleCardOpenState}>
+      <StyledSpan onClick={toggleCardModal}>
         {showCardCover && (
           <CardCover
             className="list-card-cover"
@@ -143,7 +143,7 @@ const CardItem = ({ toggleActionsMenu, actionsOpen }: IProps) => {
         </div>
       </StyledSpan>
       {cardModalOpen && (
-        <CardModal onClose={toggleCardOpenState} isOpen={cardModalOpen} />
+        <CardModal onClose={toggleCardModal} isOpen={cardModalOpen} />
       )}
 
       <Modal size="full" isOpen={actionsOpen} onClose={toggleActionsMenu}>

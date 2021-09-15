@@ -48,7 +48,7 @@ const GlobalContextProvider = ({ children }) => {
     },
     [boards]
   )
-  const updateBoardWithRetry = useCallback(
+  const saveBoardChanges = useCallback(
     async (update: IBoard, boardId?: string) => {
       const id = boardId
 
@@ -60,7 +60,7 @@ const GlobalContextProvider = ({ children }) => {
             const response = refreshToken()
 
             if (response) {
-              return updateBoardWithRetry(update, id)
+              return saveBoardChanges(update, id)
             }
           }
         })
@@ -73,7 +73,7 @@ const GlobalContextProvider = ({ children }) => {
       "prefs.starred": !Boolean(board?.prefs!?.starred === "true"),
     }
 
-    return updateBoardWithRetry(update, board.id)
+    return saveBoardChanges(update, board.id)
   }, [])
 
   const updateBoardsState = useCallback(newBoards => {

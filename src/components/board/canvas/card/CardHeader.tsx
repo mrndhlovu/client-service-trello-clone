@@ -127,7 +127,7 @@ const CardHeader = ({ onClose }) => {
                 }
                 heading="Move card"
               >
-                <MoveCardOption />
+                <MoveCardOption onClose={onClose} />
               </UIDropdown>
             </p>
           </div>

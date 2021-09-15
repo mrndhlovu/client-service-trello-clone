@@ -17,9 +17,13 @@ interface IMoveCardOptions {
   cardPosition: number
 }
 
-const MoveCardOption = () => {
+interface IProps {
+  onClose: () => void
+}
+
+const MoveCardOption = ({ onClose }: IProps) => {
   const { findCardsByListId, boardId } = useBoard()
-  const { boards } = useGlobalState()
+  const { boards, updateBoardsState } = useGlobalState()
   const { cardId, cardIndex, listId, listIndex } = useCardContext()
   const { moveCard, saveCardDndChanges } = useListContext()
 
@@ -65,7 +69,7 @@ const MoveCardOption = () => {
     setSelected(prev => ({
       ...prev,
       listId: id,
-      cardPosition: backToSource ? listCards.length - 1 : listCards.length + 1,
+      cardPosition: backToSource ? listCards.length - 1 : listCards.length,
     }))
   }
 
@@ -78,8 +82,11 @@ const MoveCardOption = () => {
 
   const handleMove = () => {
     if (isSourceList) {
-      const targetCardId = activeList.cards?.[selected.cardPosition - 1]?.id
-      moveCard(cardId, targetCardId)
+      const targetCardId = activeList.cards?.[selected.cardPosition] as any
+      console.log("====================================")
+      console.log(targetCardId, activeList)
+      console.log("====================================")
+      moveCard(cardId, targetCardId as string)
       saveCardDndChanges({
         sourceCardId: cardId,
         targetCardId,
@@ -87,6 +94,9 @@ const MoveCardOption = () => {
         boardId,
       })
     }
+
+    updateBoardsState([])
+    onClose()
   }
 
   useEffect(() => {
@@ -108,11 +118,9 @@ const MoveCardOption = () => {
   }, [selected.listId, listOptions])
 
   useEffect(() => {
-    setCardOptions(activeList?.cards.length)
+    setCardOptions(activeList?.cards.length - 1)
   }, [activeList?.cards])
-  console.log("====================================")
-  console.log(selected)
-  console.log("====================================")
+)
   return (
     <div>
       <h4>Select Destination</h4>
@@ -157,7 +165,7 @@ const MoveCardOption = () => {
             <label htmlFor="position-select">Position</label>
 
             <Select
-              value={cardPosition}
+              value={selected.cardPosition}
               onChange={handleSelectedPosition}
               id="position-select"
               disabled={!cardOptions && !listHasCards}
@@ -165,11 +173,11 @@ const MoveCardOption = () => {
               {listHasCards &&
                 times(hasChanged ? cardOptions + 1 : cardOptions, index => {
                   return (
-                    index > 0 && (
-                      <option key={index} value={index}>
-                        {` ${index} ${cardIndex === index ? "(current)" : ""}`}
-                      </option>
-                    )
+                    <option key={index} value={index}>
+                      {` ${index + 1} ${
+                        cardIndex === index ? "(current)" : ""
+                      }`}
+                    </option>
                   )
                 })}
 
