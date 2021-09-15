@@ -42,10 +42,14 @@ const index = ({ data }: IProps) => {
 export const getServerSideProps = withAuthSsp(
   async (ctx: GetServerSidePropsContext) => {
     const ssrRequest = new ApiRequest(ctx.req?.headers)
-
+    let hasData = false
+    if (hasData) return null
     return await ssrRequest
       .getBoardById(ctx?.params?.id as string)
-      .then(res => res?.data)
+      .then(res => {
+        hasData = true
+        return res?.data
+      })
       .catch(err => {
         return {
           redirect: {

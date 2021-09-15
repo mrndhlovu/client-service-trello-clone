@@ -65,6 +65,7 @@ const CardHeader = ({ onClose }) => {
 
   const [list] = findListById(listId)
   const boardIdex = boards.findIndex(boardItem => boardItem.id === boardId)
+  console.log(list?.title)
 
   const handleUpdateTitle = (newTitle: string) => {
     saveCardChanges(cardId, listId, { title: newTitle })

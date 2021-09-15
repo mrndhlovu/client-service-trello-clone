@@ -38,7 +38,7 @@ export default styled(ModalContent)`
       margin-left: 34px;
       position: relative;
 
-      button {
+      button:not(.move-btn) {
         background-color: transparent;
         justify-content: start;
         font-size: 18px;

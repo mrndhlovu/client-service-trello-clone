@@ -1,13 +1,12 @@
 import { Modal, ModalOverlay, ModalBody } from "@chakra-ui/react"
 import { MouseEvent } from "react"
+
 import AddToCardOptions from "./AddToCardOptions"
 import CardActivity from "./CardActivity"
 import CardDescription from "./CardDescription"
-
 import CardHeader from "./CardHeader"
 import CardLabelModule from "./CardLabelModule"
 import ModalCardActions from "./ModalCardActions"
-
 import ModalStyles from "./ModalStyles"
 
 interface IProps {

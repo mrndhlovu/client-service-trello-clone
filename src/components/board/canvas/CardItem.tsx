@@ -62,7 +62,7 @@ interface IProps {
 }
 
 const CardItem = ({ toggleActionsMenu, actionsOpen }: IProps) => {
-  const { saveCardChanges, listId } = useListCardsContext()
+  const { saveCardChanges } = useListCardsContext()
   const { boardId } = useBoard()
   const {
     card,
@@ -72,10 +72,12 @@ const CardItem = ({ toggleActionsMenu, actionsOpen }: IProps) => {
     edgeColor,
     coverUrl,
     coverSize,
+    listId,
   } = useCardContext()
   const { query, replace } = useRouter()
   const { asPath, push } = useRouter()
-  const cardModalOpen = query?.activeCard !== undefined
+  const cardModalOpen =
+    query?.openModalId !== undefined && query?.openModalId === card?.id
 
   const handleSave = (title: string) => {
     saveCardChanges(card.id, listId, { title })
@@ -84,13 +86,13 @@ const CardItem = ({ toggleActionsMenu, actionsOpen }: IProps) => {
 
   const toggleCardOpenState = (ev?: MouseEvent) => {
     if (!ev || cardModalOpen) {
-      replace(`/${ROUTES.board}/${boardId}`)
+      replace(`/${ROUTES.board}/${boardId}`, undefined, { shallow: true })
 
       return
     }
 
     ev.preventDefault()
-    push(`${asPath}/?activeCard=${card?.id}/`, undefined, { shallow: true })
+    replace(`${asPath}/?openModalId=${card?.id}`, undefined, { shallow: true })
   }
 
   return (
