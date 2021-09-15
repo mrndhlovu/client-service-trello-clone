@@ -1,8 +1,10 @@
-import { useToast } from "@chakra-ui/react"
 import { createContext, useCallback, useContext, useState } from "react"
+import { useToast } from "@chakra-ui/react"
 
+import { checkStringIncludes } from "../../util"
+import { clientRequest } from "../../api"
+import { IBoard, useAuth } from "."
 import { useLocalStorage } from "../hooks"
-import { IBoard } from "."
 
 export type IUIRequestError = string[]
 
@@ -24,6 +26,8 @@ export interface IThemeMode {
 }
 
 const GlobalContextProvider = ({ children }) => {
+  const { refreshToken } = useAuth()
+
   const toast = useToast()
   const [theme, setTheme] = useLocalStorage<string, IThemeMode>("theme", {
     darkMode: false,
@@ -36,7 +40,43 @@ const GlobalContextProvider = ({ children }) => {
     })
   }
 
-  const handleUpdateBoardState = useCallback(newBoards => {
+  const rehydrateBoardsList = useCallback(
+    (newBoard: IBoard) => {
+      setBoards(prev => [
+        ...prev.map(board => (board?.id === newBoard?.id ? newBoard : board)),
+      ])
+    },
+    [boards]
+  )
+  const updateBoardWithRetry = useCallback(
+    async (update: IBoard, boardId?: string) => {
+      const id = boardId
+
+      await clientRequest
+        .updateBoard(update, id)
+        .then(res => rehydrateBoardsList(res?.data))
+        .catch(err => {
+          if (checkStringIncludes(err?.message, ["expired", "Authorization"])) {
+            const response = refreshToken()
+
+            if (response) {
+              return updateBoardWithRetry(update, id)
+            }
+          }
+        })
+    },
+    []
+  )
+
+  const handleStarBoard = useCallback((board?: IBoard) => {
+    const update = {
+      "prefs.starred": !Boolean(board?.prefs!?.starred === "true"),
+    }
+
+    return updateBoardWithRetry(update, board.id)
+  }, [])
+
+  const updateBoardsState = useCallback(newBoards => {
     setBoards(newBoards)
   }, [])
 
@@ -70,10 +110,13 @@ const GlobalContextProvider = ({ children }) => {
   return (
     <GlobalContext.Provider
       value={{
-        handleModeChange,
+        boards,
         darkMode: theme?.darkMode,
+        handleModeChange,
+        handleStarBoard,
         notify,
-        handleUpdateBoardState,
+        rehydrateBoardsList,
+        updateBoardsState,
       }}
     >
       {children}
@@ -82,10 +125,13 @@ const GlobalContextProvider = ({ children }) => {
 }
 
 interface IDefaultGlobalState {
+  boards: IBoard[]
   darkMode: boolean
   handleModeChange: () => void
+  handleStarBoard: (board?: IBoard) => void
   notify: (option: IToastProps) => void
-  handleUpdateBoardState: (boards: IBoard[]) => void
+  updateBoardsState: (boards: IBoard[]) => void
+  rehydrateBoardsList: (board: IBoard) => void
 }
 
 export const GlobalContext = createContext<IDefaultGlobalState>(

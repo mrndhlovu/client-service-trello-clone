@@ -1,29 +1,32 @@
-import { AiOutlineStar, AiOutlineClockCircle } from "react-icons/ai"
-import { useHomeContext } from "../../lib/providers"
-
+import { useAuth, useGlobalState } from "../../lib/providers"
 import BoardsGroup from "./BoardsGroup"
 
 const BoardList = () => {
-  const { boards } = useHomeContext()
+  const { boards } = useGlobalState()
+  const { user } = useAuth()
+
+  const starredBoards = boards.filter(board => board.prefs.starred === "true")
+  const viewedRecentBoards = boards
+    .filter(board => user.viewedRecent.includes(board.id))
+    .reverse()
 
   return (
     <>
       <BoardsGroup
         heading="Starred boards"
-        icon={<AiOutlineStar size={22} />}
-        boards={boards}
+        icon="star"
+        boards={starredBoards}
         category="starred"
       />
       <BoardsGroup
         heading="Recently viewed"
-        icon={<AiOutlineClockCircle size={22} />}
-        boards={boards}
+        icon="clock"
+        boards={viewedRecentBoards}
         category="recent"
       />
 
       <BoardsGroup
         heading="YOUR WORKSPACES"
-        icon={<AiOutlineClockCircle size={22} />}
         boards={boards}
         category="workspaces"
       />

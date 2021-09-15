@@ -1,6 +1,6 @@
 import { useCallback } from "react"
 import { useState } from "react"
-import { AiOutlineQuestionCircle } from "react-icons/ai"
+import { GrCircleQuestion } from "react-icons/gr"
 import styled from "styled-components"
 
 import { Tooltip } from "@chakra-ui/react"
@@ -53,7 +53,7 @@ const CreateBoardTile = styled.li`
       }
     }
 
-    svg {
+    .tooltip {
       position: absolute;
       bottom: 8px;
       right: 8px;
@@ -66,14 +66,12 @@ const CreateBoardTile = styled.li`
   }
 `
 
-const StyledTooltip = styled(Tooltip)`
-  background-color: #fff;
-`
-
 const CreateBoard = () => {
   const [openModal, setOpenModal] = useState<boolean>(false)
 
   const toggleModal = useCallback(() => setOpenModal(prev => !prev), [])
+
+  const toolTipLabel = upgradeToolTipText(8)
 
   return (
     <>
@@ -83,17 +81,12 @@ const CreateBoard = () => {
             <span className="create-board-title">Create new board</span>
           </p>
           <p>
-            <span className="create-board-remaining">{`2 remaining`}</span>
+            <span className="create-board-remaining">2 remaining</span>
           </p>
-
-          <Tooltip
-            hasArrow
-            bg="gray.300"
-            placement="top"
-            color="black"
-            label={upgradeToolTipText(8)}
-          >
-            <AiOutlineQuestionCircle size={15} />
+          <Tooltip hasArrow placement="top" label={toolTipLabel}>
+            <div className="tooltip">
+              <GrCircleQuestion size={15} />
+            </div>
           </Tooltip>
         </div>
       </CreateBoardTile>

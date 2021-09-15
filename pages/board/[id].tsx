@@ -1,16 +1,37 @@
+import { useEffect } from "react"
+import { isEmpty } from "lodash"
 import { GetServerSidePropsContext } from "next"
 
-import ApiRequest from "../../api"
-import Board from "../../components/board/Board"
-import { withAuthComponent, withAuthSsp } from "../../lib/hocs"
-import { BoardContextProvider, IBoard } from "../../lib/providers"
+import {
+  BoardContextProvider,
+  IBoard,
+  useGlobalState,
+} from "../../lib/providers"
 import { ROUTES } from "../../util/constants"
+import { withAuthComponent, withAuthSsp } from "../../lib/hocs"
+import ApiRequest, { clientRequest } from "../../api"
+import Board from "../../components/board/Board"
 
 interface IProps {
   data: IBoard
 }
 
 const index = ({ data }: IProps) => {
+  const { updateBoardsState, boards } = useGlobalState()
+  const hasBoards = !isEmpty(boards)
+
+  useEffect(() => {
+    if (hasBoards) return
+
+    const getData = () => {
+      clientRequest
+        .getBoards()
+        .then(res => updateBoardsState(res?.data))
+        .catch(() => null)
+    }
+    getData()
+  }, [hasBoards, updateBoardsState])
+
   return data ? (
     <BoardContextProvider board={data}>
       <Board />

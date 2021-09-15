@@ -1,11 +1,11 @@
-import Link from "next/link"
-import styled, { css } from "styled-components"
-
-import { AiOutlineStar } from "react-icons/ai"
+import { ReactNode, MouseEvent } from "react"
 import { useRouter } from "next/router"
+import styled from "styled-components"
+
+import { AiOutlineClockCircle, AiOutlineStar } from "react-icons/ai"
+
 import CreateBoard from "./CreateBoard"
-import { ReactNode } from "react"
-import { IBoard, useHomeContext } from "../../lib/providers"
+import { IBoard, useGlobalState } from "../../lib/providers"
 
 interface ITileProps {
   image?: string
@@ -13,7 +13,7 @@ interface ITileProps {
 
 interface IProps {
   heading: string
-  icon: ReactNode
+  icon?: "star" | "clock"
   boards: IBoard[]
   category: "starred" | "workspaces" | "recent"
 }
@@ -121,18 +121,40 @@ export const Tile = styled.li<ITileProps>`
 
 const BoardsGroup = ({ heading, icon, boards, category }: IProps) => {
   const router = useRouter()
-  const { handleStarBoard } = useHomeContext()
+  const { handleStarBoard } = useGlobalState()
+  const canShowBoardGroup =
+    boards?.length > 0 || category === "workspaces" || category === "recent"
 
-  const handleClick = ev => {
-    ev.preventDefault()
-    const redirectTo = (ev.target as any)?.id
-    router.push(redirectTo)
+  const handleClick = (ev: MouseEvent) => {
+    ev.stopPropagation()
+
+    router.push(ev.currentTarget.id)
   }
 
-  return (
+  const handleStarClick = (ev: MouseEvent) => {
+    ev.stopPropagation()
+
+    const board = boards.find(board => board.id === ev.currentTarget.id)
+    handleStarBoard(board)
+  }
+
+  const getIcon = () => {
+    switch (icon) {
+      case "star":
+        return <AiOutlineStar size={22} />
+
+      case "clock":
+        return <AiOutlineClockCircle size={22} />
+
+      default:
+        return null
+    }
+  }
+
+  return canShowBoardGroup ? (
     <div className="home-boards-group">
       <div className="home-group-header">
-        <div className="home-group-header-icon">{icon}</div>
+        <div className="home-group-header-icon">{getIcon()}</div>
         <h5 className="home-boards-group-text">{heading}</h5>
       </div>
 
@@ -154,13 +176,12 @@ const BoardsGroup = ({ heading, icon, boards, category }: IProps) => {
                 <div className="home-boards-tile-detail">
                   <h6>{board?.title}</h6>
                   <div>
-                    {
-                      <AiOutlineStar
-                        className={`home-tile-star ${starred ? "active" : ""}`}
-                        size={15}
-                        onClick={() => handleStarBoard(board)}
-                      />
-                    }
+                    <AiOutlineStar
+                      className={`home-tile-star ${starred ? "active" : ""}`}
+                      size={15}
+                      id={board.id}
+                      onClick={handleStarClick}
+                    />
                   </div>
                 </div>
               </button>
@@ -171,7 +192,7 @@ const BoardsGroup = ({ heading, icon, boards, category }: IProps) => {
         {category === "workspaces" && <CreateBoard />}
       </ListWrapper>
     </div>
-  )
+  ) : null
 }
 
 export default BoardsGroup
