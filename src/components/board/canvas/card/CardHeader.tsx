@@ -7,12 +7,14 @@ import styled, { css } from "styled-components"
 import {
   useBoard,
   useCardContext,
+  useGlobalState,
   useListCardsContext,
 } from "../../../../lib/providers"
 import { ICardCoverProps } from "../CardItem"
-import { MoveItem, UIDropdown } from "../../../shared"
+import { UIDropdown } from "../../../shared"
 import ChangeCover from "../cardActions/ChangeCover"
 import EditableTitle from "../../EditableTitle"
+import MoveCardOption from "./MoveCardOption"
 
 const CardCover = styled.div<ICardCoverProps>`
   border-radius: 3px 3px 0;
@@ -44,9 +46,8 @@ const CardCover = styled.div<ICardCoverProps>`
         `};
 `
 
-const CardHeader = () => {
+const CardHeader = ({ onClose }) => {
   const {
-    closeCardModal,
     card,
     cardId,
     imageCover,
@@ -56,14 +57,31 @@ const CardHeader = () => {
     coverSize,
     coverUrl,
     cardIndex,
+    listId,
   } = useCardContext()
-  const { saveCardChanges, listId } = useListCardsContext()
-  const { findCardsByListId, board } = useBoard()
-  const { findListById } = useBoard()
+  const { boards } = useGlobalState()
+  const { saveCardChanges } = useListCardsContext()
+  const { findListById, boardId, board } = useBoard()
+
   const [list] = findListById(listId)
+  const boardIdex = boards.findIndex(boardItem => boardItem.id === boardId)
 
   const handleUpdateTitle = (newTitle: string) => {
     saveCardChanges(cardId, listId, { title: newTitle })
+  }
+
+  const handleMove = (
+    newBoardId: string,
+    newListId: string,
+    newCardIndex: number
+  ) => {
+    const isChangingCardPosition = cardIndex !== newCardIndex
+    const isChangingList = listId !== newListId
+    const isChangingBoard = newBoardId !== boardId
+
+    console.log("====================================")
+    console.log(isChangingCardPosition, isChangingBoard, isChangingList)
+    console.log("====================================")
   }
 
   return (
@@ -101,23 +119,20 @@ const CardHeader = () => {
             <p>
               in list{" "}
               <UIDropdown
-                toggle={<button className="list-title">{list?.title}</button>}
+                toggle={
+                  <span>
+                    <button className="list-title">{list?.title}</button>
+                  </span>
+                }
                 heading="Move card"
               >
-                <MoveItem
-                  destinationList={board?.lists}
-                  sourcePosition={cardIndex}
-                />
+                <MoveCardOption />
               </UIDropdown>
             </p>
           </div>
         </div>
       </ModalHeader>
-      <AiOutlineClose
-        onClick={closeCardModal}
-        className="card-close-btn"
-        size={22}
-      />
+      <AiOutlineClose onClick={onClose} className="card-close-btn" size={22} />
     </>
   )
 }

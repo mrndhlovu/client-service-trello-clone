@@ -1,15 +1,20 @@
 import { useRouter } from "next/router"
-import { MouseEvent } from "react"
+import { MouseEvent, useState } from "react"
 import styled, { css } from "styled-components"
 
 import { FiEdit2 } from "react-icons/fi"
 import { AiOutlineClose } from "react-icons/ai"
 import { Button, Modal, ModalOverlay } from "@chakra-ui/react"
 
-import { useCardContext, useListCardsContext } from "../../../lib/providers"
+import {
+  useBoard,
+  useCardContext,
+  useListCardsContext,
+} from "../../../lib/providers"
 import CardActions from "./cardActions/CardActions"
 import CardModal from "./card/CardModal"
 import EditCardMenu from "./EditCardMenu"
+import { ROUTES } from "../../../util/constants"
 
 export interface ICardCoverProps {
   colorCover?: string
@@ -58,6 +63,7 @@ interface IProps {
 
 const CardItem = ({ toggleActionsMenu, actionsOpen }: IProps) => {
   const { saveCardChanges, listId } = useListCardsContext()
+  const { boardId } = useBoard()
   const {
     card,
     imageCover,
@@ -67,7 +73,7 @@ const CardItem = ({ toggleActionsMenu, actionsOpen }: IProps) => {
     coverUrl,
     coverSize,
   } = useCardContext()
-  const { query } = useRouter()
+  const { query, replace } = useRouter()
   const { asPath, push } = useRouter()
   const cardModalOpen = query?.activeCard !== undefined
 
@@ -76,9 +82,14 @@ const CardItem = ({ toggleActionsMenu, actionsOpen }: IProps) => {
     toggleActionsMenu()
   }
 
-  const handleCardClick = (ev: MouseEvent) => {
-    ev.preventDefault()
+  const toggleCardOpenState = (ev?: MouseEvent) => {
+    if (!ev || cardModalOpen) {
+      replace(`/${ROUTES.board}/${boardId}`)
 
+      return
+    }
+
+    ev.preventDefault()
     push(`${asPath}/?activeCard=${card?.id}/`, undefined, { shallow: true })
   }
 
@@ -97,7 +108,7 @@ const CardItem = ({ toggleActionsMenu, actionsOpen }: IProps) => {
           cardId={card.id}
         />
       )}
-      <StyledSpan onClick={handleCardClick}>
+      <StyledSpan onClick={toggleCardOpenState}>
         {showCardCover && (
           <CardCover
             className="list-card-cover"
@@ -128,9 +139,10 @@ const CardItem = ({ toggleActionsMenu, actionsOpen }: IProps) => {
             )}
           </div>
         </div>
-
-        {cardModalOpen && <CardModal isOpen={cardModalOpen} />}
       </StyledSpan>
+      {cardModalOpen && (
+        <CardModal onClose={toggleCardOpenState} isOpen={cardModalOpen} />
+      )}
 
       <Modal size="full" isOpen={actionsOpen} onClose={toggleActionsMenu}>
         <ModalOverlay

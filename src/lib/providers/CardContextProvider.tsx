@@ -35,10 +35,6 @@ const CardContextProvider = ({
     ? card?.imageCover?.edgeColor
     : card?.coverUrl?.edgeColor
 
-  const closeCardModal = () => {
-    replace(`/${ROUTES.board}/${boardId}`)
-  }
-
   return (
     <CardContext.Provider
       value={{
@@ -54,7 +50,6 @@ const CardContextProvider = ({
         },
         listId,
         listIndex,
-        closeCardModal,
         showCardCover,
         colorCover: card?.colorCover,
       }}
@@ -70,7 +65,6 @@ interface ICardContext {
   listId: string
   listIndex: number
   cardIndex: number
-  closeCardModal: () => void
   showCardCover: string
   imageCover?: string
   colorCover?: string

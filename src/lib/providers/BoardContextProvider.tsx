@@ -27,7 +27,7 @@ interface IUpdateStateOptions {
 const BoardContextProvider = ({ children, board }: IProps) => {
   if (!board) return null
 
-  const { notify } = useGlobalState()
+  const { notify, rehydrateBoardsList } = useGlobalState()
   const router = useRouter()
 
   const [activeBoard, setActiveBoard] = useState<IProps["board"]>()
@@ -36,7 +36,7 @@ const BoardContextProvider = ({ children, board }: IProps) => {
   const isStarred = Boolean(activeBoard?.prefs?.starred === "true")
 
   const saveBoardChanges = useCallback(
-    async (update: IBoard) => {
+    async (update: IBoard): Promise<IBoard | void | undefined> => {
       return await clientRequest
         .updateBoard(update, activeBoard.id)
         .then(res => res.data as IBoard)
@@ -71,7 +71,8 @@ const BoardContextProvider = ({ children, board }: IProps) => {
         starred: response?.prefs?.starred,
       },
     }))
-  }, [saveBoardChanges])
+    rehydrateBoardsList(response)
+  }, [saveBoardChanges, rehydrateBoardsList])
 
   const handleDeleteBoard = async () => {
     await clientRequest

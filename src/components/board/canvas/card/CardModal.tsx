@@ -1,5 +1,5 @@
 import { Modal, ModalOverlay, ModalBody } from "@chakra-ui/react"
-import { useCardContext } from "../../../../lib/providers"
+import { MouseEvent } from "react"
 import AddToCardOptions from "./AddToCardOptions"
 import CardActivity from "./CardActivity"
 import CardDescription from "./CardDescription"
@@ -12,20 +12,15 @@ import ModalStyles from "./ModalStyles"
 
 interface IProps {
   isOpen: boolean
+  onClose: (ev?: MouseEvent) => void
 }
 
-const CardModal = ({ isOpen }: IProps) => {
-  const { closeCardModal } = useCardContext()
+const CardModal = ({ isOpen, onClose }: IProps) => {
   return (
-    <Modal
-      scrollBehavior="outside"
-      size="xl"
-      isOpen={isOpen}
-      onClose={closeCardModal}
-    >
+    <Modal scrollBehavior="outside" size="xl" isOpen={isOpen} onClose={onClose}>
       <ModalOverlay zIndex="-moz-initial" />
       <ModalStyles>
-        <CardHeader />
+        <CardHeader onClose={onClose} />
         <ModalBody className="card-modal-detail">
           <div className="card-content-column">
             <CardLabelModule />
