@@ -117,6 +117,12 @@ const BoardContextProvider = ({ children, board }: IProps) => {
     setActiveBoard(board)
   }, [])
 
+  useEffect(() => {
+    console.log("====================================")
+    console.log("board updated")
+    console.log("====================================")
+  }, [board])
+
   return (
     <BoardContext.Provider
       value={{

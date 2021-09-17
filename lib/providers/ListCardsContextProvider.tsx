@@ -18,6 +18,8 @@ export interface ICardDraggingProps {
   targetListId?: string
   boardId?: string
   isSwitchingList?: boolean
+  isSwitchingBoard?: boolean
+  targetBoardId?: string
 }
 
 export interface IDndProps {

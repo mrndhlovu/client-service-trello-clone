@@ -25,7 +25,7 @@ interface IUpdateStateOptions {
 
 const ListContextProvider = ({ children }: IProps) => {
   const { board, boardId, setActiveBoard } = useBoard()
-  const { notify } = useGlobalState()
+  const { notify, boards } = useGlobalState()
 
   const dragRef = useRef<ICardItem | null>(null)
 
@@ -93,6 +93,16 @@ const ListContextProvider = ({ children }: IProps) => {
   }
 
   const saveCardDndChanges = async (data: ICardDraggingProps) => {
+    if (
+      ((!data?.sourceCardId || !data?.targetCardId) &&
+        !data?.isSwitchingList) ||
+      // (data?.sourceCardId === data?.targetCardId && !data?.isSwitchingList) ||
+      (data?.sourceCardId === data?.targetCardId &&
+        data.sourceListId === data.targetListId &&
+        !data.isSwitchingList)
+    )
+      return
+
     const dndData = { ...data, boardId: board.id }
     dragRef.current = null
     await clientRequest.moveCard(dndData).catch(err => {
@@ -133,6 +143,19 @@ const ListContextProvider = ({ children }: IProps) => {
     },
     [notify, boardId]
   )
+
+  const removeCardFromSource = (cardId: string) => {
+    const dragCard = board.cards.find(card => card.id === cardId)
+    const cardIndex = board.cards.findIndex(card => card.id === cardId)
+
+    if (!dragCard) return
+
+    const updatedCards = update(board.cards, {
+      $splice: [[cardIndex, 1]],
+    })
+
+    updateCardsState(updatedCards)
+  }
 
   const moveCard = useCallback(
     (dragCardId, targetCardId) => {
@@ -182,6 +205,7 @@ const ListContextProvider = ({ children }: IProps) => {
         switchCardList,
         updateCardsState,
         updateListsState,
+        removeCardFromSource,
       }}
     >
       {children}
@@ -213,6 +237,7 @@ export interface IListContextProps {
   saveListChanges: (listId: string, update: { [key: string]: any }) => void
   switchCardList: (cardId: string, hoverListId: string) => void
   moveCard: (dragCardId: string, hoverCardId: string) => void
+  removeCardFromSource: (cardId: string) => void
 }
 
 export const ListContext = createContext({} as IListContextProps)
