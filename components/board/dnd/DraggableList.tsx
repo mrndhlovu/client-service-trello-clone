@@ -23,7 +23,7 @@ export interface IListDndItem {
 const typedMemo: <T>(Component: T) => T = memo
 
 const DraggableList = typedMemo(({ children, listId, listIndex }) => {
-  const { saveListDndChanges, onMoveList } = useListContext()
+  const { saveListDndChanges, moveList } = useListContext()
   const ref = useRef<HTMLDivElement>(null)
 
   const [{ isDragging }, drag] = useDrag({
@@ -82,7 +82,7 @@ const DraggableList = typedMemo(({ children, listId, listIndex }) => {
         return
       }
 
-      onMoveList(dragIndex, hoverIndex)
+      moveList(dragIndex, hoverIndex)
 
       item.hoveIndex = hoverIndex
       item.hoverId = listId

@@ -1,14 +1,31 @@
 import { Button } from "@chakra-ui/button"
-import { Portal } from "@chakra-ui/portal"
+import { MouseEvent } from "react"
 import { HiOutlineArrowRight, HiOutlineTemplate } from "react-icons/hi"
 import { MdContentCopy } from "react-icons/md"
 import { VscArchive } from "react-icons/vsc"
 
 import { UIDropdown } from "../../../shared"
+import { useCardContext, useListCardsContext } from "../../../../lib/providers"
+import MoveCardOption from "../moveDialog/MoveCardSettings"
 
 const ModalCardActions = () => {
+  const { saveCardChanges } = useListCardsContext()
+  const { cardId, listId } = useCardContext()
+
+  const handleArchiveCard = (ev: MouseEvent) => {
+    ev.preventDefault()
+    saveCardChanges(cardId, listId, { archived: true })
+    close()
+  }
+
   const ADD_TO_CARD_OPTIONS = [
-    { title: "Move", id: 0, icon: <HiOutlineArrowRight />, menu: <div /> },
+    {
+      title: "Move",
+      id: 0,
+      icon: <HiOutlineArrowRight />,
+      menu: <MoveCardOption />,
+    },
+
     { title: "Copy", id: 1, icon: <MdContentCopy />, menu: <div /> },
     {
       title: "Make template",
@@ -16,7 +33,21 @@ const ModalCardActions = () => {
       icon: <HiOutlineTemplate />,
       menu: <div />,
     },
-    { title: "Archive", id: 3, icon: <VscArchive />, menu: <div /> },
+    {
+      title: "Archive",
+      id: 3,
+      icon: <VscArchive />,
+      menu: (
+        <Button
+          colorScheme="red"
+          size="md"
+          isFullWidth
+          onClick={handleArchiveCard}
+        >
+          Archive
+        </Button>
+      ),
+    },
   ]
 
   return (
@@ -32,13 +63,14 @@ const ModalCardActions = () => {
                 size="sm"
                 colorScheme="gray"
                 isFullWidth
+                alignItems="center"
               >
                 {option.title}
               </Button>
             }
             heading={option.title}
           >
-            <Portal>{option.menu}</Portal>
+            {option.menu}
           </UIDropdown>
         ))}
       </div>

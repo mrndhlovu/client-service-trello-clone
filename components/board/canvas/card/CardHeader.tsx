@@ -7,14 +7,13 @@ import styled, { css } from "styled-components"
 import {
   useBoard,
   useCardContext,
-  useGlobalState,
   useListCardsContext,
 } from "../../../../lib/providers"
 import { ICardCoverProps } from "../CardItem"
 import { UIDropdown } from "../../../shared"
 import ChangeCover from "../cardActions/ChangeCover"
 import EditableTitle from "../../EditableTitle"
-import MoveCardOption from "./MoveCardOption"
+import MoveCardSettings from "../moveDialog/MoveCardSettings"
 
 const CardCover = styled.div<ICardCoverProps>`
   border-radius: 3px 3px 0;
@@ -56,33 +55,16 @@ const CardHeader = ({ onClose }) => {
     edgeColor,
     coverSize,
     coverUrl,
-    cardIndex,
     listId,
   } = useCardContext()
-  const { boards } = useGlobalState()
   const { saveCardChanges } = useListCardsContext()
-  const { findListById, boardId, board } = useBoard()
+  const { findListById } = useBoard()
 
   const [list] = findListById(listId)
-  const boardIdex = boards.findIndex(boardItem => boardItem.id === boardId)
   console.log(list?.title)
 
   const handleUpdateTitle = (newTitle: string) => {
     saveCardChanges(cardId, listId, { title: newTitle })
-  }
-
-  const handleMove = (
-    newBoardId: string,
-    newListId: string,
-    newCardIndex: number
-  ) => {
-    const isChangingCardPosition = cardIndex !== newCardIndex
-    const isChangingList = listId !== newListId
-    const isChangingBoard = newBoardId !== boardId
-
-    console.log("====================================")
-    console.log(isChangingCardPosition, isChangingBoard, isChangingList)
-    console.log("====================================")
   }
 
   return (
@@ -127,7 +109,7 @@ const CardHeader = ({ onClose }) => {
                 }
                 heading="Move card"
               >
-                <MoveCardOption onClose={onClose} />
+                <MoveCardSettings onClose={onClose} />
               </UIDropdown>
             </p>
           </div>

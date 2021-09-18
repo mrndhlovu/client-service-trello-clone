@@ -4,11 +4,13 @@ import { clientRequest } from "../../api"
 import { useBoard } from "./BoardContextProvider"
 import { useGlobalState } from "."
 import { useListContext } from "./ListContextProvider"
+import { IListItem } from "../../components/board/canvas/ListItem"
 
 interface IProps {
   listId: string
   listIndex: number
   children: ReactNode
+  list: IListItem
 }
 
 export interface ICardDraggingProps {
@@ -26,7 +28,12 @@ export interface IDndProps {
   isSwitchingList?: boolean
 }
 
-const ListCardsContextProvider = ({ children, listId, listIndex }: IProps) => {
+const ListCardsContextProvider = ({
+  children,
+  listId,
+  listIndex,
+  list,
+}: IProps) => {
   const { findCardsByListId } = useBoard()
   const { updateCardsState } = useListContext()
   const { notify } = useGlobalState()
@@ -54,6 +61,7 @@ const ListCardsContextProvider = ({ children, listId, listIndex }: IProps) => {
         listIndex,
         listHasCards,
         listId,
+        list,
         saveCardChanges,
       }}
     >
@@ -66,6 +74,7 @@ export interface IListCardsContextProps {
   listHasCards: boolean
   listIndex?: number
   listId: string
+  list: IListItem
   saveCardChanges: (
     cardId: string,
     listId: string,

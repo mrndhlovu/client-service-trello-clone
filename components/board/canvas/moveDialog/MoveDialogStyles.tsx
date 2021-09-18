@@ -1,6 +1,8 @@
 import styled from "styled-components"
 
 export default styled.div`
+  max-width: 300px;
+  display: grid;
   h4 {
     color: #5e6c84;
     font-size: 12px;
@@ -11,11 +13,11 @@ export default styled.div`
     text-transform: uppercase;
   }
 
-  .content {
+  .content-dialog {
     margin-top: 8px;
   }
 
-  .setting {
+  select {
     background-color: #091e420a;
     border: none;
     border-radius: 3px;
@@ -24,7 +26,6 @@ export default styled.div`
     cursor: pointer;
     display: block;
     height: 48px;
-    max-width: 300px;
     overflow: hidden;
     padding: 6px 12px;
     position: relative;
@@ -47,35 +48,34 @@ export default styled.div`
     margin-bottom: 0;
   }
 
-  .list-select {
-    flex: 3;
-    margin-right: 8px;
+  .setting-container {
+    margin: 0 0 10px;
+
+    svg {
+      display: none;
+    }
   }
 
   .setting-grid {
     display: flex;
     flex-wrap: wrap;
     width: 100%;
+    position: relative;
+    gap: 5px;
 
-    .list-setting {
-      margin-right: 8px;
+    .setting-container:first-child {
       float: left;
       margin-top: 0;
       position: relative;
+      flex: 2;
+    }
+
+    .setting-container:last-child {
+      flex: 1;
     }
   }
-  svg {
-    display: none;
-  }
 
-  .position {
-    flex: 1;
-  }
-
-  .options {
-    position: relative;
-    margin-bottom: 10px;
-    label {
-    }
+  .move-btn {
+    width: max-content !important;
   }
 `

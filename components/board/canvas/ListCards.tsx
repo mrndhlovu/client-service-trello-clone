@@ -1,10 +1,10 @@
-import { useBoard } from "../../../lib/providers"
 import { CardContextProvider } from "../../../lib/providers/CardContextProvider"
-
+import { useBoard, useListCardsContext } from "../../../lib/providers"
 import DraggableCard from "../dnd/DraggableCard"
 
-const ListCards = ({ listIndex, listId }) => {
-  const { board, boardId } = useBoard()
+const ListCards = () => {
+  const { board } = useBoard()
+  const { listIndex, listId } = useListCardsContext()
 
   return (
     <div className="list-cards">

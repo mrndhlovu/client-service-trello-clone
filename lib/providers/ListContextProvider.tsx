@@ -157,6 +157,16 @@ const ListContextProvider = ({ children }: IProps) => {
     updateCardsState(updatedCards)
   }
 
+  const removeListFromSource = (listId: string) => {
+    const dragList = board.lists.findIndex(list => list.id === listId)
+
+    const updatedList = update(board.lists, {
+      $splice: [[dragList, 1]],
+    })
+
+    updateListsState(updatedList)
+  }
+
   const moveCard = useCallback(
     (dragCardId, targetCardId) => {
       if (dragCardId === undefined || targetCardId === undefined) return
@@ -177,7 +187,7 @@ const ListContextProvider = ({ children }: IProps) => {
     [board?.cards, updateCardsState]
   )
 
-  const onMoveList = useCallback(
+  const moveList = useCallback(
     (dragIndex: number, hoverIndex: number) => {
       const dragList = board.lists[dragIndex]
 
@@ -198,7 +208,7 @@ const ListContextProvider = ({ children }: IProps) => {
       value={{
         hasBoardList: !isEmpty(board?.lists),
         moveCard,
-        onMoveList,
+        moveList,
         saveCardDndChanges,
         saveListChanges,
         saveListDndChanges,
@@ -206,6 +216,7 @@ const ListContextProvider = ({ children }: IProps) => {
         updateCardsState,
         updateListsState,
         removeCardFromSource,
+        removeListFromSource,
       }}
     >
       {children}
@@ -217,6 +228,8 @@ export interface IListDraggingProps {
   sourceListId: string
   targetListId: string
   boardId?: string
+  isSwitchingBoard?: boolean
+  targetBoardId: string
 }
 
 export interface IListContextProps {
@@ -228,16 +241,13 @@ export interface IListContextProps {
   sourceIndex?: number
   hasBoardList: boolean
   saveCardDndChanges: (cardItem: ICardDraggingProps) => void
-  onMoveList: (
-    dragIndex: number,
-    hoverIndex: number,
-    isActive?: boolean
-  ) => void
+  moveList: (dragIndex: number, hoverIndex: number) => void
   saveListDndChanges: (data: IListDraggingProps) => void
   saveListChanges: (listId: string, update: { [key: string]: any }) => void
   switchCardList: (cardId: string, hoverListId: string) => void
   moveCard: (dragCardId: string, hoverCardId: string) => void
   removeCardFromSource: (cardId: string) => void
+  removeListFromSource: (listId: string) => void
 }
 
 export const ListContext = createContext({} as IListContextProps)

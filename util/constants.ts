@@ -140,3 +140,20 @@ export const SPOTIFY_REVOKE_ACCESS_ENDPOINT =
 export const SPOTIFY_ACCESS_SCOPES = [
   "user-read-playback-state, user-read-currently-playing, user-modify-playback-state",
 ]
+
+export const LIST_ACTIONS = {
+  menu: {
+    key: "menu",
+    title: "List actions",
+    main: true,
+  },
+  move: {
+    key: "move",
+    title: "Move list",
+  },
+
+  archive: {
+    key: "archive",
+    title: "Archive",
+  },
+}

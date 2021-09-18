@@ -1,7 +1,6 @@
 import { Button } from "@chakra-ui/button"
-import { Select } from "@chakra-ui/select"
 import { isEmpty, times } from "lodash"
-import { ChangeEvent, useEffect, useRef, useState } from "react"
+import { ChangeEvent, useEffect, useState } from "react"
 import {
   IBoard,
   useBoard,
@@ -11,18 +10,19 @@ import {
 } from "../../../../lib/providers"
 import { IListItem } from "../ListItem"
 import MoveDialogStyles from "./MoveDialogStyles"
+import MoveSetting from "./MoveSetting"
 
-interface IMoveCardOptions {
+interface IMoveCardSettings {
   boardId: string
   listId: string
   cardPosition: number
 }
 
 interface IProps {
-  onClose: () => void
+  onClose?: () => void
 }
 
-const MoveCardOption = ({ onClose }: IProps) => {
+const MoveCardSettings = ({ onClose }: IProps) => {
   const { findCardsByListId, boardId } = useBoard()
   const { boards, updateBoardsState } = useGlobalState()
   const { cardId, cardIndex, listId } = useCardContext()
@@ -33,7 +33,7 @@ const MoveCardOption = ({ onClose }: IProps) => {
 
   const [listOptions, setListOptions] = useState<IListItem[]>([])
   const [targetedList, setTargetedList] = useState<IListItem | undefined>()
-  const [selected, setSelected] = useState<IMoveCardOptions>({
+  const [selected, setSelected] = useState<IMoveCardSettings>({
     boardId,
     listId,
     cardPosition: cardIndex,
@@ -140,7 +140,7 @@ const MoveCardOption = ({ onClose }: IProps) => {
     setBoardOptions([])
     setListOptions([])
 
-    onClose()
+    if (onClose) onClose()
   }
 
   useEffect(() => {
@@ -148,9 +148,6 @@ const MoveCardOption = ({ onClose }: IProps) => {
   }, [boards])
 
   useEffect(() => {
-    console.log("====================================")
-    console.log(boardOptions)
-    console.log("====================================")
     setListOptions(
       boardOptions?.find(board => board.id === selected.boardId)?.lists
     )
@@ -163,34 +160,29 @@ const MoveCardOption = ({ onClose }: IProps) => {
   return (
     <MoveDialogStyles>
       <h4>Select Destination</h4>
-      <div className="content">
-        <div className="options ">
-          <label htmlFor="board-select">Board</label>
-          <Select
-            value={selected.boardId}
-            onChange={handleSelectedBoard}
-            id="board-select"
-            className="setting"
+      <div className="content-dialog">
+        <MoveSetting
+          heading="Board"
+          className="board"
+          onChange={handleSelectedBoard}
+          value={selected.boardId}
+        >
+          {boardOptions?.map(item => (
+            <option key={item.id} value={item.id}>
+              {` ${item.title} ${boardId === item.id ? "(current)" : ""}`}
+            </option>
+          ))}
+        </MoveSetting>
+
+        <div className="setting-grid">
+          <MoveSetting
+            heading="List"
+            className="list"
+            onChange={handleSelectedList}
+            value={selected.listId}
+            disabled={!targetListHasOptions}
           >
-            {boardOptions?.map(item => (
-              <option key={item.id} value={item.id}>
-                {` ${item.title} ${boardId === item.id ? "(current)" : ""}`}
-              </option>
-            ))}
-          </Select>
-        </div>
-
-        <div className="options setting-grid">
-          <div className="list-select">
-            <label htmlFor="list-select">List</label>
-
-            <Select
-              value={selected.listId}
-              onChange={handleSelectedList}
-              id="list-select"
-              disabled={!targetListHasOptions}
-              className="setting"
-            >
+            <>
               {!disableSelectFields &&
                 listOptions?.map(item => (
                   <option id={item.id} key={item.id} value={item.id}>
@@ -201,19 +193,17 @@ const MoveCardOption = ({ onClose }: IProps) => {
               {disableSelectFields && (
                 <option value="no-lists">No Lists</option>
               )}
-            </Select>
-          </div>
+            </>
+          </MoveSetting>
 
-          <div className="options position">
-            <label htmlFor="position-select">Position</label>
-
-            <Select
-              value={defaultCardPosition}
-              onChange={handleSelectedPosition}
-              id="position-select"
-              disabled={!cardOptions && !targetListHasOptions}
-              className="setting list-setting"
-            >
+          <MoveSetting
+            heading="Position"
+            className="position"
+            onChange={handleSelectedPosition}
+            value={defaultCardPosition}
+            disabled={!cardOptions && !targetListHasOptions}
+          >
+            <>
               {!disableSelectFields &&
                 times(cardOptions, index => {
                   return (
@@ -228,8 +218,8 @@ const MoveCardOption = ({ onClose }: IProps) => {
                 })}
 
               {disableSelectFields && <option value="no-cards">N/A</option>}
-            </Select>
-          </div>
+            </>
+          </MoveSetting>
         </div>
         <Button
           className="move-btn"
@@ -245,4 +235,4 @@ const MoveCardOption = ({ onClose }: IProps) => {
   )
 }
 
-export default MoveCardOption
+export default MoveCardSettings

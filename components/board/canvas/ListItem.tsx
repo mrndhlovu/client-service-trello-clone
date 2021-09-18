@@ -1,15 +1,13 @@
-import { Button, MenuItem } from "@chakra-ui/react"
-import { AiOutlineEllipsis } from "react-icons/ai"
-
 import {
   ListCardsContextProvider,
+  useListCardsContext,
   useListContext,
 } from "../../../lib/providers"
-import { UIDropdown } from "../../shared"
 import AddCard from "./AddCard"
 import DraggableList from "../dnd/DraggableList"
 import EditableTitle from "../EditableTitle"
 import ForeignCardDropZone from "../dnd/ForeignCardDropZone"
+import ListActions from "./listActions/ListActions"
 import ListCards from "./ListCards"
 
 interface IProps {
@@ -31,45 +29,27 @@ export interface ICardItem {
   [key: string]: any
 }
 
-const ListItem = ({ listItem, listIndex }: IProps) => {
+const ListItem = () => {
   const { saveListChanges } = useListContext()
+  const { list, listId, listIndex } = useListCardsContext()
 
   const handleUpdateTitle = (title: string) => {
-    saveListChanges(listItem.id, { title })
+    saveListChanges(listId, { title })
   }
-
-  const handleArchiveList = () => {
-    saveListChanges(listItem.id, { archived: true })
-  }
-
-  const LIST_ACTIONS = [{ title: "Archive list", onClick: handleArchiveList }]
 
   return (
     <div className="list-wrapper">
-      <ForeignCardDropZone listId={listItem.id} listIndex={listIndex}>
-        <DraggableList listId={listItem.id} listIndex={listIndex}>
-          <ListCardsContextProvider listId={listItem.id} listIndex={listIndex}>
-            <div className="editable-header">
-              <EditableTitle
-                handleUpdate={handleUpdateTitle}
-                title={listItem.title}
-              />
-
-              <UIDropdown
-                heading="List actions"
-                className="list-actions-menu-button"
-                toggle={<AiOutlineEllipsis size={20} />}
-              >
-                {LIST_ACTIONS.map((action, index) => (
-                  <MenuItem key={index} onClick={action.onClick}>
-                    {action.title}
-                  </MenuItem>
-                ))}
-              </UIDropdown>
-            </div>
-            <ListCards listId={listItem.id} listIndex={listIndex} />
-            <AddCard />
-          </ListCardsContextProvider>
+      <ForeignCardDropZone listId={listId} listIndex={listIndex}>
+        <DraggableList listId={listId} listIndex={listIndex}>
+          <div className="editable-header">
+            <EditableTitle
+              handleUpdate={handleUpdateTitle}
+              title={list.title}
+            />
+            <ListActions />
+          </div>
+          <ListCards />
+          <AddCard />
         </DraggableList>
       </ForeignCardDropZone>
     </div>
