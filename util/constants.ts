@@ -46,7 +46,7 @@ export const HOME_SIDEBAR_WORKSPACE_MENU: IWorkspaceLink[] = [
   },
 ]
 
-export const BOARD_COLOR_OPTIONS = [
+export const NEW_BOARD_BG_OPTIONS = [
   {
     key: 0,
     image:

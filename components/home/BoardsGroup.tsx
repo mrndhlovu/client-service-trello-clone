@@ -1,6 +1,6 @@
 import { ReactNode, MouseEvent } from "react"
 import { useRouter } from "next/router"
-import styled from "styled-components"
+import styled, { css } from "styled-components"
 
 import { AiOutlineClockCircle, AiOutlineStar } from "react-icons/ai"
 
@@ -8,7 +8,8 @@ import CreateBoard from "./CreateBoard"
 import { IBoard, useGlobalState } from "../../lib/providers"
 
 interface ITileProps {
-  image?: string
+  imageCover?: string
+  colorCover?: string
 }
 
 interface IProps {
@@ -35,11 +36,6 @@ export const Tile = styled.li<ITileProps>`
   width: 100%;
 
   .home-boards-tile-details {
-    background-color: ${props => props?.color};
-    background-image: url("${props => props?.image}");
-    background-size: cover;
-    background-repeat: no-repeat;
-    background-position: center center;
     display: flex;
     position: relative;
     flex-direction: column;
@@ -48,6 +44,23 @@ export const Tile = styled.li<ITileProps>`
     height: 100px;
     width: 100%;
     padding: 6px 8px;
+
+    ${props =>
+      props?.imageCover
+        ? css<ITileProps>`
+            background-size: cover;
+            background-color: ${props => props?.colorCover};
+            background-image: url("${props => props?.imageCover}");
+            background-position: center center;
+            transition: opacity 85ms;
+            background-repeat: no-repeat;
+            transition: opacity 85ms;
+          `
+        : css<ITileProps>`
+            background-size: initial;
+            background-position: left center;
+            background-color: ${props => props?.colorCover};
+          `};
 
     .home-boards-tile-detail {
       ${props =>
@@ -122,6 +135,7 @@ export const Tile = styled.li<ITileProps>`
 const BoardsGroup = ({ heading, icon, boards, category }: IProps) => {
   const router = useRouter()
   const { handleStarBoard } = useGlobalState()
+
   const canShowBoardGroup =
     boards?.length > 0 || category === "workspaces" || category === "recent"
 
@@ -160,12 +174,15 @@ const BoardsGroup = ({ heading, icon, boards, category }: IProps) => {
 
       <ListWrapper className="d-flex justify-content-flex-start">
         {boards?.map(board => {
-          const starred = board?.prefs?.starred === "true"
+          const isStarred = Boolean(board?.prefs?.starred === "true")
+          const imageCover =
+            board.activeBg === "image" ? board?.prefs.image : ""
+          const colorCover = board?.prefs?.color
           return (
             <Tile
               key={board?.id}
-              color={board?.prefs?.color}
-              image={board?.prefs?.image}
+              colorCover={colorCover}
+              imageCover={imageCover}
             >
               <button
                 id={`/board/${board?.id}`}
@@ -177,7 +194,7 @@ const BoardsGroup = ({ heading, icon, boards, category }: IProps) => {
                   <h6>{board?.title}</h6>
                   <div>
                     <AiOutlineStar
-                      className={`home-tile-star ${starred ? "active" : ""}`}
+                      className={`home-tile-star ${isStarred ? "active" : ""}`}
                       size={15}
                       id={board.id}
                       onClick={handleStarClick}

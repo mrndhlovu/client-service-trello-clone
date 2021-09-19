@@ -25,8 +25,6 @@ interface IUpdateStateOptions {
 }
 
 const BoardContextProvider = ({ children, board }: IProps) => {
-  if (!board) return null
-
   const { notify, rehydrateBoardsList } = useGlobalState()
   const router = useRouter()
 
@@ -34,6 +32,9 @@ const BoardContextProvider = ({ children, board }: IProps) => {
   const [drawerOpen, setDrawerOpen] = useState<boolean>(false)
 
   const isStarred = Boolean(activeBoard?.prefs?.starred === "true")
+
+  const imageCover = board.activeBg === "image" ? board?.prefs.image : ""
+  const colorCover = board?.prefs?.color
 
   const saveBoardChanges = useCallback(
     async (update: IBoard): Promise<IBoard | void | undefined> => {
@@ -117,12 +118,6 @@ const BoardContextProvider = ({ children, board }: IProps) => {
     setActiveBoard(board)
   }, [])
 
-  useEffect(() => {
-    console.log("====================================")
-    console.log("board updated")
-    console.log("====================================")
-  }, [board])
-
   return (
     <BoardContext.Provider
       value={{
@@ -139,6 +134,8 @@ const BoardContextProvider = ({ children, board }: IProps) => {
         saveBoardChanges,
         boardId: board.id,
         updateBoardState,
+        imageCover,
+        colorCover,
       }}
     >
       {children}
@@ -154,7 +151,8 @@ interface IBoardContext {
   handleDeleteBoard: () => void
   findCardsByListId: (listId: string) => [IBoard["cards"]?, boolean?]
   findListById: (listId: string) => [IListItem?, boolean?]
-
+  imageCover: string
+  colorCover: string
   drawerOpen: boolean
   isStarred: boolean
   toggleDrawerMenu: () => void

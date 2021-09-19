@@ -40,6 +40,26 @@ const reset = css`
     z-index: 1;
   }
 
+  .create-modal-content{
+    background-color: transparent;
+  }
+
+  .new-board-overlay{
+    background: #0c0e16c7;
+  }
+
+  .new-board-modal-footer {
+    justify-content: start;
+    border-top: none;
+    padding-top: 0;
+
+    button {
+      border: none;
+      font-weight: 500;
+    }
+  }
+
+
   .chakra-portal 
     .card-actions-close-btn {
       position: absolute;

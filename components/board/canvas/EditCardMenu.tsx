@@ -1,5 +1,4 @@
 import { ChangeEvent, MouseEvent, useState } from "react"
-import { AiOutlineClose } from "react-icons/ai"
 import { Button, Textarea } from "@chakra-ui/react"
 
 interface IProps {

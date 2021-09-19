@@ -87,7 +87,7 @@ const GlobalContextProvider = ({ children }) => {
         status: msg.status || "success",
         duration: 9000,
         isClosable: true,
-        position: msg.placement || "bottom",
+        position: msg.placement || "top-right",
       }
 
       if (typeof msg.description === "string") {

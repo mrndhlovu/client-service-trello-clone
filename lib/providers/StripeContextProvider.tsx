@@ -60,7 +60,7 @@ const StripeContextProvider = ({ children, data }: IProps) => {
   )
 }
 
-interface ICardDetails {
+export interface ICardDetails {
   productId?: string
   priceId?: string
   source?: string

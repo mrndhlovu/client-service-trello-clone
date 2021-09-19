@@ -6,8 +6,11 @@ import axios, {
 } from "axios"
 import { ILabelProps } from "../components/board/canvas/cardActions/CardLabels"
 
-import { ICardDetails } from "../lib/hooks/context"
-import { ICardDraggingProps, IListDraggingProps } from "../lib/providers"
+import {
+  ICardDetails,
+  ICardDraggingProps,
+  IListDraggingProps,
+} from "../lib/providers"
 
 import { getErrorMessage, isBrowser } from "../util"
 
@@ -30,6 +33,7 @@ export interface ICodeVerification {
 
 export interface INewBoardData {
   title: string
+  activeBg: string
   prefs: {
     image?: string
     color?: string
