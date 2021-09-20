@@ -9,6 +9,7 @@ import EditableTitle from "../EditableTitle"
 import ForeignCardDropZone from "../dnd/ForeignCardDropZone"
 import ListActions from "./listActions/ListActions"
 import ListCards from "./ListCards"
+import { IChecklist } from "./card/AddChecklist"
 
 interface IProps {
   listItem: IListItem
@@ -26,6 +27,7 @@ export interface ICardItem {
     edgeColor: string
     active: boolean
   }
+  checklists: IChecklist[]
   [key: string]: any
 }
 

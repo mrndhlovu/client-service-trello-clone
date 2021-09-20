@@ -8,6 +8,7 @@ import { UIDropdown } from "../../../shared"
 import { useCardContext } from "../../../../lib/providers"
 import CardLabels from "../cardActions/CardLabels"
 import ChangeCover from "../cardActions/ChangeCover"
+import AddChecklist from "./AddChecklist"
 
 const AddToCardOptions = () => {
   const { showCardCover } = useCardContext()
@@ -15,7 +16,7 @@ const AddToCardOptions = () => {
   const ADD_TO_CARD_OPTIONS = [
     { title: "Labels", id: 0, icon: <BsTag />, menu: <CardLabels /> },
     { title: "Dates", id: 1, icon: <AiOutlineClockCircle />, menu: <div /> },
-    { title: "Checklist", id: 2, icon: <BsCheckBox />, menu: <div /> },
+    { title: "Checklist", id: 2, icon: <BsCheckBox />, menu: <AddChecklist /> },
     { title: "Attachment", id: 3, icon: <HiOutlinePaperClip />, menu: <div /> },
     {
       title: "Cover",

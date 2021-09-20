@@ -1,8 +1,14 @@
 import { useRouter } from "next/router"
-import { createContext, ReactNode, useContext } from "react"
+import {
+  createContext,
+  ReactNode,
+  useCallback,
+  useContext,
+  useEffect,
+  useState,
+} from "react"
+import { useListContext } from "."
 import { ICardItem } from "../../components/board/canvas/ListItem"
-import { ROUTES } from "../../util/constants"
-import { useBoard } from "./BoardContextProvider"
 
 interface IProps {
   card: ICardItem
@@ -19,29 +25,43 @@ const CardContextProvider = ({
   listId,
   listIndex,
 }: IProps) => {
-  const { boardId } = useBoard()
-  const { replace } = useRouter()
+  const { updateCardsState } = useListContext()
+
+  const [cardItem, setCardItem] = useState<ICardItem>()
 
   const showCardCover =
-    card?.colorCover || card?.imageCover?.active || card?.coverUrl?.active
+    cardItem?.colorCover ||
+    cardItem?.imageCover?.active ||
+    cardItem?.coverUrl?.active
 
-  const imageCover = card?.imageCover?.active
-    ? card?.imageCover
-    : card?.coverUrl?.active
-    ? card?.coverUrl
+  const imageCover = cardItem?.imageCover?.active
+    ? cardItem?.imageCover
+    : cardItem?.coverUrl?.active
+    ? cardItem?.coverUrl
     : ""
 
-  const edgeColor = card?.imageCover?.active
-    ? card?.imageCover?.edgeColor
-    : card?.coverUrl?.edgeColor
+  const edgeColor = cardItem?.imageCover?.active
+    ? cardItem?.imageCover?.edgeColor
+    : cardItem?.coverUrl?.edgeColor
+
+  const updateCardState = useCallback((newCard: ICardItem) => {
+    setCardItem(newCard)
+    updateCardsState(newCard)
+  }, [])
+
+  useEffect(() => {
+    setCardItem(card)
+  }, [card])
 
   return (
     <CardContext.Provider
       value={{
-        card,
-        cardId: card.id,
-        imageCover: card?.imageCover?.active ? card?.imageCover?.url : "",
-        coverUrl: card?.coverUrl?.active ? card?.coverUrl?.image : "",
+        card: cardItem,
+        cardId: cardItem?.id,
+        imageCover: cardItem?.imageCover?.active
+          ? cardItem?.imageCover?.url
+          : "",
+        coverUrl: cardItem?.coverUrl?.active ? cardItem?.coverUrl?.image : "",
         edgeColor,
         cardIndex,
         coverSize: {
@@ -51,7 +71,8 @@ const CardContextProvider = ({
         listId,
         listIndex,
         showCardCover,
-        colorCover: card?.colorCover,
+        colorCover: cardItem?.colorCover,
+        updateCardState,
       }}
     >
       {children}
@@ -70,6 +91,7 @@ interface ICardContext {
   colorCover?: string
   coverUrl?: string
   edgeColor?: string
+  updateCardState: (card: ICardItem) => void
   coverSize?: {
     width: string
     height: string

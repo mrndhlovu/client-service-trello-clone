@@ -124,6 +124,10 @@ export default styled(ModalContent)`
         padding: 8px 8px 0px 0px;
       }
 
+      .module-header.checklist-header {
+        justify-content: space-between;
+      }
+
       .card-description {
         resize: none;
         margin-bottom: 4px;

@@ -51,7 +51,7 @@ const CardDescription = () => {
       )}
 
       {editing && (
-        <div className="description-edit module-content ">
+        <div className="description-edit module-content">
           <Textarea
             placeholder="Add a more detailed description..."
             onChange={handleChange}

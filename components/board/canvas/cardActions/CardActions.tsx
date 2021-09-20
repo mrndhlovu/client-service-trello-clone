@@ -59,7 +59,7 @@ const CardActions = ({ listId, cardId, close }: IProps) => {
     <div className="card-action-options">
       <Menu>
         {CARD_ACTIONS.map(action => (
-          <Fragment key={action.key}>
+          <span key={action.key}>
             {action?.button ? (
               <MenuItem icon={action.icon} onClick={action.handleClick}>
                 {action.title}
@@ -76,7 +76,7 @@ const CardActions = ({ listId, cardId, close }: IProps) => {
                 {action?.content}
               </UIDropdown>
             )}
-          </Fragment>
+          </span>
         ))}
       </Menu>
     </div>
