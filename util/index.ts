@@ -3,6 +3,7 @@ import { IRequestError } from "../api"
 import { isArray, merge } from "lodash"
 import { ILabelProps } from "../components/board/canvas/cardActions/CardLabels"
 import { LABEL_DEFAULT_OPTIONS } from "./constants"
+import { ITaskItem } from "../components/board/canvas/cardActions/AddChecklist"
 
 export const getErrorMessage = (data: IRequestError) => {
   let message: string | string[]
@@ -131,4 +132,14 @@ export const calculateMinutes = (milli: number) => {
 export const getPercentage = (progress: number, duration_ms: number) => {
   if (!progress) return 0
   return ((progress / 60000) * 100) / (duration_ms / 60000)
+}
+
+export const calculateCompleteState = (tasks: ITaskItem[]): number => {
+  if (tasks.length === 0) return 0
+  const tasksTotal = tasks.length
+  const complete = tasks.filter(task => task.state === "complete").length
+
+  const percentage = (complete * 100) / tasksTotal
+
+  return +percentage.toFixed(0)
 }

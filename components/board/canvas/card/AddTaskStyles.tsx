@@ -4,7 +4,6 @@ export default styled.div`
   &,
   .content {
     display: grid;
-    gap: 5px;
   }
 
   button {
@@ -16,8 +15,22 @@ export default styled.div`
   }
 
   .progress {
+    justify-content: flex-start;
+    align-items: center;
+    position: relative;
+
     div:first-child {
       border-radius: 8px;
+    }
+
+    small {
+      position: absolute;
+      left: -7px;
+      top: -3px;
+    }
+
+    &-range {
+      margin-left: 28px;
     }
   }
 
@@ -32,7 +45,7 @@ export default styled.div`
     display: flex;
     align-items: center;
     cursor: pointer;
-    padding-right: 10px;
+    left: -12px;
 
     .checkbox {
       margin: 6px;
@@ -47,6 +60,15 @@ export default styled.div`
       flex-grow: 3;
       padding: 0 10px;
       ${props => props.theme.mixins.flex("row", "start")};
+
+      .edit-title-button {
+        width: 100%;
+        background-color: transparent;
+        cursor: pointer;
+        padding: 0;
+        font-size: inherit;
+        justify-content: flex-start;
+      }
     }
 
     .controls {
@@ -60,6 +82,11 @@ export default styled.div`
           background-color: #091e4214;
         }
       }
+
+      .menu-option {
+        width: 100%;
+        padding: 5px;
+      }
     }
 
     &:hover {
@@ -67,6 +94,12 @@ export default styled.div`
       .controls {
         visibility: visible;
       }
+    }
+  }
+
+  .add-item {
+    button {
+      margin-top: 10px;
     }
   }
 `

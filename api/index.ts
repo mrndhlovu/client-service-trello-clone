@@ -241,14 +241,37 @@ class ApiRequest extends AxiosConfig {
     return await this.http.post(`${END_POINTS.cards}/create-checklist`, data)
   }
 
+  async updateChecklist(data: { [key: string]: any; checklistId: string }) {
+    return await this.http.post(`${END_POINTS.cards}/update-checklist`, data)
+  }
+
   async createTask(data: { item: string; checklistId: string }) {
     return await this.http.post(`${END_POINTS.cards}/create-task`, data)
+  }
+
+  async updateTask(data: { [key: string]: any; taskId: string }) {
+    return await this.http.post(`${END_POINTS.cards}/update-task`, data)
   }
 
   async deleteChecklist(data: { cardId: string; checklistId: string }) {
     return await this.http.delete(
       `${END_POINTS.cards}/${data.cardId}/${data.checklistId}/del-checklist`
     )
+  }
+
+  async deleteTask(data: { checklistId: string; taskId: string }) {
+    return await this.http.delete(
+      `${END_POINTS.cards}/${data.checklistId}/${data.taskId}/del-task`
+    )
+  }
+
+  async convertTaskToCard(data: {
+    checklistId: string
+    taskId: string
+    boardId: string
+    listId: string
+  }) {
+    return await this.http.post(`${END_POINTS.cards}/convert-task`, data)
   }
 
   async getPowerUps() {

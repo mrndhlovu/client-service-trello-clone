@@ -9,7 +9,7 @@ const CardActivity = () => {
       <CardModule
         title="Activity"
         className="activity"
-        icon={<GrUnorderedList size={24} />}
+        icon={<GrUnorderedList size={16} />}
         option={
           <Button size="sm" colorScheme="gray">
             Show details

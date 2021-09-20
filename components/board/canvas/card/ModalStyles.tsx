@@ -3,7 +3,7 @@ import styled from "styled-components"
 
 export default styled(ModalContent)`
   border-radius: 3px;
-  max-width: 768px;
+  max-width: 720px;
   z-index: 40;
   background-color: #f4f5f7;
 
@@ -42,7 +42,7 @@ export default styled(ModalContent)`
         background-color: transparent;
         justify-content: start;
         font-size: 18px;
-        font-weight: 00;
+        font-weight: 700;
         padding: 0;
       }
       svg {
@@ -58,10 +58,27 @@ export default styled(ModalContent)`
       color: #a4acc4;
 
       .list-title {
-        font-size: 14px;
+        font-size: 14px !important;
         text-decoration: underline;
         font-weight: 400;
       }
+    }
+  }
+
+  .original-text {
+    width: 100%;
+    height: 100%;
+    cursor: pointer;
+  }
+
+  .editable-text {
+    width: 100%;
+    display: grid;
+    gap: 5px;
+    margin: 10px 0;
+
+    textarea {
+      background-color: #fff;
     }
   }
 
@@ -126,6 +143,14 @@ export default styled(ModalContent)`
 
       .module-header.checklist-header {
         justify-content: space-between;
+
+        .edit-title-button {
+          width: 100%;
+          background-color: transparent;
+          cursor: pointer;
+          padding: 0;
+          font-size: inherit;
+        }
       }
 
       .card-description {
@@ -167,7 +192,7 @@ export default styled(ModalContent)`
           align-items: center;
           display: flex;
           min-height: 32px;
-          margin: 0 0 4px 32px;
+          margin: 0 0 4px 24px;
           padding: 8px 0;
           position: relative;
 
@@ -184,9 +209,13 @@ export default styled(ModalContent)`
 
           .module-icon {
             color: #42526e;
-            left: -40px;
+            left: -32px;
             position: absolute;
-            top: 9px;
+            top: 10px;
+
+            svg {
+              font-size: 18px;
+            }
           }
         }
 
@@ -197,6 +226,10 @@ export default styled(ModalContent)`
           gap: 10px;
         }
       }
+    }
+
+    .task-list {
+      margin: 10px 0;
     }
 
     .card-sidebar {

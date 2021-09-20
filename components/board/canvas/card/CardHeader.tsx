@@ -96,7 +96,7 @@ const CardHeader = ({ onClose }) => {
         )}
 
         <div className="card-header-content">
-          <BsCardHeading />
+          <BsCardHeading size={16} />
           <EditableTitle handleUpdate={handleUpdateTitle} title={card.title} />
           <div className="list-id">
             <p>

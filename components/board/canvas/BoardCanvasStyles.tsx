@@ -52,6 +52,7 @@ export default styled.div`
 
       .edit-title-button {
         background-color: transparent;
+        font-weight: 600;
       }
 
       .list-actions-menu-button {

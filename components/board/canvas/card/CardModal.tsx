@@ -3,7 +3,7 @@ import { MouseEvent } from "react"
 
 import AddToCardOptions from "./AddToCardOptions"
 import CardActivity from "./CardActivity"
-import CardChecklists from "../checklist/CardChecklists"
+import CardChecklists from "./CardChecklists"
 import CardDescription from "./CardDescription"
 import CardHeader from "./CardHeader"
 import CardLabelModule from "./CardLabelModule"

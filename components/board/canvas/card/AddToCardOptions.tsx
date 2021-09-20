@@ -8,7 +8,7 @@ import { UIDropdown } from "../../../shared"
 import { useCardContext } from "../../../../lib/providers"
 import CardLabels from "../cardActions/CardLabels"
 import ChangeCover from "../cardActions/ChangeCover"
-import AddChecklist from "./AddChecklist"
+import AddChecklist from "../cardActions/AddChecklist"
 
 const AddToCardOptions = () => {
   const { showCardCover } = useCardContext()

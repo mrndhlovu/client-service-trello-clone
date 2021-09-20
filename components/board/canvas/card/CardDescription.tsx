@@ -29,7 +29,7 @@ const CardDescription = () => {
   return (
     <div className="card-description module">
       <CardModule
-        icon={<GrTextAlignFull size={22} />}
+        icon={<GrTextAlignFull size={16} />}
         className="description"
         title="Description"
         option={

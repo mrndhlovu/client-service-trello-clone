@@ -3,10 +3,10 @@ import { ChangeEvent, useState } from "react"
 
 import { clientRequest } from "../../../../api"
 import { useCardContext } from "../../../../lib/providers"
-import ChecklistStyles from "./ChecklistStyles"
+import AddChecklistStyles from "./AddChecklistStyles"
 
 export interface ITaskItem extends Document {
-  status: "todo" | "doing" | "done" | "cancelled"
+  state: "todo" | "complete"
   checklist: string
   item: string
   assignees: string[]
@@ -24,7 +24,7 @@ export interface IChecklist {
 const AddChecklist = () => {
   const { cardId, card, updateCardState } = useCardContext()
 
-  const [title, setTitle] = useState<string>("")
+  const [title, setTitle] = useState<string>("Checklist")
 
   const handleChange = (ev: ChangeEvent<HTMLInputElement>) => {
     setTitle(ev.target.value)
@@ -45,7 +45,7 @@ const AddChecklist = () => {
   }
 
   return (
-    <ChecklistStyles>
+    <AddChecklistStyles>
       <div className="input-wrapper">
         <label htmlFor="checklist">Title</label>
         <Input
@@ -59,7 +59,7 @@ const AddChecklist = () => {
       <Button size="sm" onClick={handleAddChecklist} colorScheme="blue">
         Add
       </Button>
-    </ChecklistStyles>
+    </AddChecklistStyles>
   )
 }
 

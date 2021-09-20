@@ -3,11 +3,12 @@ import { MouseEvent, useEffect, useRef, useState } from "react"
 import { FiCheckSquare } from "react-icons/fi"
 
 import { clientRequest } from "../../../../api"
-import { IChecklist } from "../card/AddChecklist"
+import { IChecklist } from "../cardActions/AddChecklist"
 import { useCardContext } from "../../../../lib/providers"
 import { usePrevious } from "../../../../lib/hooks"
 import AddChecklistTask from "./AddChecklistTask"
-import CardModule from "../card/CardModule"
+import CardModule from "./CardModule"
+import EditableText from "../../EditableText"
 
 const CardChecklists = () => {
   const { cardId, card, updateCardState } = useCardContext()
@@ -41,6 +42,23 @@ const CardChecklists = () => {
       .catch(() => {})
   }
 
+  const handleUpdateTitle = (newTitle: string, checklistId: string) => {
+    const update = { update: { title: newTitle }, checklistId }
+
+    clientRequest
+      .updateChecklist(update)
+      .then(res => {
+        setChecklists(prev => [
+          ...prev.map(checklist =>
+            checklist.id === checklistId
+              ? { ...checklist, title: res.data.title }
+              : checklist
+          ),
+        ])
+      })
+      .catch(() => {})
+  }
+
   useEffect(() => {
     setChecklists(card?.checklists)
   }, [card?.checklists])
@@ -64,9 +82,20 @@ const CardChecklists = () => {
         return (
           <div key={checklist?.id} className="">
             <CardModule
-              icon={<FiCheckSquare size={22} />}
+              icon={<FiCheckSquare size={16} />}
               className="checklist-header"
-              title={checklist?.title}
+              title={
+                <EditableText
+                  handleUpdate={(newTitle: string) =>
+                    handleUpdateTitle(newTitle, checklist.id)
+                  }
+                  originalText={checklist?.title}
+                  saveButtonText="Save"
+                  placeholder="Update title"
+                  className="checklist-title"
+                  key="checklist-title"
+                />
+              }
               option={
                 <Button
                   onClick={handleDeleteChecklist}

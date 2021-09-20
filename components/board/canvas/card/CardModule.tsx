@@ -3,7 +3,7 @@ import { ReactNode } from "react"
 interface IProps {
   option?: ReactNode
   icon?: ReactNode
-  title?: string
+  title?: string | ReactNode
   className: string
 }
 

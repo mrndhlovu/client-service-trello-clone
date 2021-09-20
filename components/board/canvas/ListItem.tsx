@@ -9,7 +9,7 @@ import EditableTitle from "../EditableTitle"
 import ForeignCardDropZone from "../dnd/ForeignCardDropZone"
 import ListActions from "./listActions/ListActions"
 import ListCards from "./ListCards"
-import { IChecklist } from "./card/AddChecklist"
+import { IChecklist } from "./cardActions/AddChecklist"
 
 interface IProps {
   listItem: IListItem

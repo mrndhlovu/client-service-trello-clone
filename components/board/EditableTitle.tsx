@@ -4,9 +4,10 @@ import { ChangeEvent, useState } from "react"
 interface IProps {
   handleUpdate: (newTitle: string) => void
   title: string
+  as?: any
 }
 
-const EditableTitle = ({ handleUpdate, title }: IProps) => {
+const EditableTitle = ({ handleUpdate, title, as = "button" }: IProps) => {
   const [editing, setEditing] = useState<boolean>(false)
   const [newBoardTitle, setNewBoardTitle] = useState<string>("")
 
@@ -30,6 +31,7 @@ const EditableTitle = ({ handleUpdate, title }: IProps) => {
           className="edit-title-button"
           isFullWidth
           size="sm"
+          as={as}
           onClick={toggleEditTitle}
           autoFocus={false}
         >
