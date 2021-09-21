@@ -1,9 +1,16 @@
+import { useState } from "react"
 import { Button } from "@chakra-ui/button"
 import { GrUnorderedList } from "react-icons/gr"
+
+import Activities from "./Activities"
 
 import CardModule from "./CardModule"
 
 const CardActivity = () => {
+  const [showActivities, setShowActivities] = useState<boolean>(true)
+
+  const toggleActivities = () => setShowActivities(prev => !prev)
+
   return (
     <div className="card-activity module">
       <CardModule
@@ -11,11 +18,12 @@ const CardActivity = () => {
         className="activity"
         icon={<GrUnorderedList size={16} />}
         option={
-          <Button size="sm" colorScheme="gray">
+          <Button onClick={toggleActivities} size="sm" colorScheme="gray">
             Show details
           </Button>
         }
       />
+      {showActivities && <Activities />}
     </div>
   )
 }

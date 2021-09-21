@@ -278,6 +278,10 @@ class ApiRequest extends AxiosConfig {
     return await this.http.get(`${END_POINTS.accounts}/power-ups`)
   }
 
+  async getActivities() {
+    return await this.http.get(`${END_POINTS.accounts}/activities`)
+  }
+
   async getCardAttachments(cardId: string) {
     return await this.http.get(`${END_POINTS.cards}/${cardId}/attachments`)
   }

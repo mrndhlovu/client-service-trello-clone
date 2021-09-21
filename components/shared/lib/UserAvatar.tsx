@@ -28,13 +28,13 @@ const Container = styled.div`
   }
 `
 
-const UserAvatar = () => {
+const UserAvatar = ({ initials }) => {
   const { user } = useAuth()
 
   return (
     <Container className="avatar-auth-button">
       {user?.initials ? (
-        <span className="avatar-button-text">{user?.initials}</span>
+        <span className="avatar-button-text">{initials || user?.initials}</span>
       ) : (
         <FaRegUser className="avatar-auth-user-icon" />
       )}

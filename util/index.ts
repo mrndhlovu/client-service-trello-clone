@@ -4,6 +4,7 @@ import { isArray, merge } from "lodash"
 import { ILabelProps } from "../components/board/canvas/cardActions/CardLabels"
 import { LABEL_DEFAULT_OPTIONS } from "./constants"
 import { ITaskItem } from "../components/board/canvas/cardActions/AddChecklist"
+import { IActivity } from "../components/board/canvas/card/Activities"
 
 export const getErrorMessage = (data: IRequestError) => {
   let message: string | string[]
