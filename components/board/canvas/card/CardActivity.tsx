@@ -5,9 +5,13 @@ import { GrUnorderedList } from "react-icons/gr"
 import Activities from "./Activities"
 
 import CardModule from "./CardModule"
+import { useLocalStorage } from "../../../../lib/hooks"
 
 const CardActivity = () => {
-  const [showActivities, setShowActivities] = useState<boolean>(true)
+  const [showActivities, setShowActivities] = useLocalStorage(
+    "SHOW_ACTIVITIES",
+    true
+  )
 
   const toggleActivities = () => setShowActivities(prev => !prev)
 

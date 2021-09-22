@@ -1,42 +1,25 @@
+import { ACTION_KEYS } from "@tusksui/shared"
+import { MouseEvent } from "react"
 import { IActivity } from "../../board/canvas/card/Activities"
 import NextLink from "./NextLink"
 
-export enum ACTION_KEYS {
-  CREATE_BOARD = "created:board",
-  DELETED_BOARD = "deleted:board",
-  ARCHIVED_BOARD = "archived:board",
-
-  CREATE_CARD = "created:card",
-  TRANSFER_CARD = "transferred:card",
-  COMMENT_ON_CARD = "commented:on:card",
-  ADD_CHECKLIST = "added:checklist:to:card",
-  MOVE_CARD_TO_LIST = "moved:card:from:list:to:list",
-  MOVE_CARD_UP = "moved:card:up",
-  MOVE_CARD_DOWN = "moved:card:down",
-  DELETED_CARD = "deleted:card",
-  ARCHIVED_CARD = "archived:card",
-  CONVERT_TASK_TO_CARD = "converted:task:to:card",
-  CHANGED_CARD_COVER = "added:card:cover",
-  REMOVED_CARD_COVER = "removed:card:cover",
-  ADD_CARD_ATTACHMENT = "added:card:attachment",
-  REMOVE_CARD_ATTACHMENT = "removed:card:attachment",
-
-  CREATE_LIST = "add:list:to:board",
-  TRANSFER_LIST = "transferred:list",
-  DELETED_LIST = "deleted:list",
-  ARCHIVED_LIST = "archived:list",
-}
-
 const FormattedActivity = <T extends IActivity>({
   activity,
+  openAttachmentModal,
 }: {
   activity: T
+  openAttachmentModal: (ev: MouseEvent) => void
 }) => {
   const name =
     activity.memberCreator?.fullName || `@${activity.memberCreator.username}`
 
-  const getCardHref = (data: IActivity["data"]) =>
-    `/board/${data?.id}?openModalId=${data?.card?.id}`
+  const getHref = (data: IActivity["entities"], isBoardHref?: boolean) => {
+    if (isBoardHref) {
+      return `/board/${data?.boardId}`
+    }
+
+    return `/board/${data?.boardId}?openModalId=${data?.card?.id}`
+  }
 
   const getString = () => {
     switch (activity.translationKey) {
@@ -44,7 +27,7 @@ const FormattedActivity = <T extends IActivity>({
         return ` created this board.`
 
       case ACTION_KEYS.CREATE_LIST:
-        return ` created the ${activity?.data?.list?.name} list.`
+        return ` created the ${activity?.entities?.list?.name} list.`
 
       case ACTION_KEYS.CREATE_CARD:
         return (
@@ -52,15 +35,137 @@ const FormattedActivity = <T extends IActivity>({
             {" "}
             added{" "}
             <NextLink
-              href={getCardHref(activity?.data)}
-              linkText={activity.data?.card.name}
+              href={getHref(activity?.entities)}
+              linkText={activity.entities?.card.name}
             />{" "}
-            card to {activity?.data?.list?.name} list.
+            card to {activity?.entities?.list?.name} list.
           </span>
         )
 
       case ACTION_KEYS.DELETED_BOARD:
-        return ` created the ${activity?.data?.list?.name}.`
+        return ` deleted the board ${activity?.entities?.name}.`
+
+      case ACTION_KEYS.ARCHIVED_BOARD:
+        return ` archived the board ${activity?.entities?.name}.`
+
+      case ACTION_KEYS.DELETED_CARD:
+        return ` deleted ${activity?.entities?.card?.name} card.`
+
+      case ACTION_KEYS.ARCHIVED_CARD:
+        return ` archived ${activity?.entities?.card?.name} card.`
+
+      case ACTION_KEYS.MOVE_LIST_LEFT:
+        return <span> moved {activity?.entities?.list?.name} down.</span>
+
+      case ACTION_KEYS.MOVE_LIST_RIGHT:
+        return <span> moved {activity?.entities?.list?.name} right.</span>
+
+      case ACTION_KEYS.ADD_CARD_ATTACHMENT:
+        const [url = "", attachmentName = ""] =
+          activity?.entities?.attachment?.name?.split("|")
+        return (
+          <span>
+            {" "}
+            attached{" "}
+            <NextLink
+              href="#"
+              linkText={attachmentName}
+              onClick={openAttachmentModal}
+              id={`${url}|${activity?.entities?.attachment?.id}`}
+            />{" "}
+            {activity?.entities?.card?.name && (
+              <>
+                to{" "}
+                <NextLink
+                  onClick={openAttachmentModal}
+                  href="#"
+                  id={`${url}|${activity?.entities?.attachment?.id}`}
+                  linkText={activity?.entities?.card?.name}
+                />
+              </>
+            )}
+            <div className="attachment">
+              <img src={url} alt="attachment" className="attachment-img" />
+            </div>
+          </span>
+        )
+
+      case ACTION_KEYS.MOVE_CARD_DOWN:
+        return (
+          <span>
+            {" "}
+            moved{" "}
+            <NextLink
+              href={getHref(activity?.entities)}
+              linkText={activity?.entities?.card?.name}
+            />{" "}
+            down.
+          </span>
+        )
+
+      case ACTION_KEYS.MOVE_CARD_UP:
+        return (
+          <span>
+            {" "}
+            moved{" "}
+            <NextLink
+              href={getHref(activity?.entities)}
+              linkText={activity?.entities?.card?.name}
+            />{" "}
+            up.
+          </span>
+        )
+
+      case ACTION_KEYS.MOVE_CARD_TO_LIST:
+        return (
+          <span>
+            {" "}
+            moved{" "}
+            <NextLink
+              href={getHref(activity?.entities)}
+              linkText={activity?.entities?.card?.name}
+            />{" "}
+            from {activity?.entities?.list?.name} to{" "}
+            {activity?.entities?.targetList?.name}.
+          </span>
+        )
+
+      case ACTION_KEYS.TRANSFER_CARD:
+        return (
+          <span>
+            {" "}
+            transferred{" "}
+            <NextLink
+              href={getHref(activity?.entities)}
+              linkText={activity?.entities?.card?.name}
+            />{" "}
+            from {activity?.entities?.list?.name} to{" "}
+            {activity?.entities?.targetList?.name} on{" "}
+            <NextLink
+              href={getHref(activity?.entities, true)}
+              linkText={activity?.entities?.targetBoard?.name}
+            />{" "}
+            board .
+          </span>
+        )
+
+      case ACTION_KEYS.TRANSFER_LIST:
+        return (
+          <span>
+            {" "}
+            transferred {activity?.entities?.list?.name} from{" "}
+            <NextLink
+              href={getHref(activity?.entities, true)}
+              linkText={activity?.entities?.name}
+            />{" "}
+            to{" "}
+            <NextLink
+              href={getHref(activity?.entities?.targetBoard, true)}
+              linkText={activity?.entities?.targetBoard?.name}
+            />{" "}
+            board .
+          </span>
+        )
 
       case ACTION_KEYS.ADD_CHECKLIST:
         return (
@@ -68,8 +173,8 @@ const FormattedActivity = <T extends IActivity>({
             {" "}
             added a checklist on{" "}
             <NextLink
-              href={getCardHref(activity?.data)}
-              linkText={activity.data.name}
+              href={getHref(activity?.entities)}
+              linkText={activity?.entities?.card?.name}
             />{" "}
             card.
           </span>

@@ -122,8 +122,19 @@ class ApiRequest extends AxiosConfig {
     super(ssHeaders)
   }
 
+  /**
+   *
+   * @param userData
+   * @returns
+   */
+
   signupUser = async (userData: ISignupCredentials) =>
     await this.http.post(END_POINTS.signup, userData)
+
+  /**
+   *
+   * @returns
+   */
 
   logoutUser = async () => await this.http.get(END_POINTS.logout)
 
@@ -191,6 +202,12 @@ class ApiRequest extends AxiosConfig {
   async deleteBoard(boardId: string) {
     return await this.http.delete(`${END_POINTS.boards}/${boardId}`)
   }
+  async deleteAttachment(attachmentId: string) {
+    return await this.http.delete(
+      `${END_POINTS.boards}/${attachmentId}/del-attachment`
+    )
+  }
+
   async updateList(
     data: { [key: string]: any },
     options: { listId: string; boardId: string }
@@ -278,8 +295,8 @@ class ApiRequest extends AxiosConfig {
     return await this.http.get(`${END_POINTS.accounts}/power-ups`)
   }
 
-  async getActivities() {
-    return await this.http.get(`${END_POINTS.accounts}/activities`)
+  async getActivities(boardId: string) {
+    return await this.http.get(`${END_POINTS.accounts}/${boardId}/activities`)
   }
 
   async getCardAttachments(cardId: string) {

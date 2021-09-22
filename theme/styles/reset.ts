@@ -40,28 +40,52 @@ const reset = css`
     z-index: 1;
   }
 
-  .create-modal-content{
+  .transparent-bg,
+  .create-modal-content {
     background-color: transparent;
   }
 
-  .new-board-overlay{
-    background: #0c0e16c7;
-  }
-
-  .new-board-modal-footer {
-    justify-content: start;
-    border-top: none;
-    padding-top: 0;
-
-    button {
-      border: none;
-      font-weight: 500;
+  .transparent-bg {
+    .attachment-frame {
+      padding: 48px 24px 112px;
+      height: auto;
+      text-align: center;
+      margin: 0 auto;
+      background-color: transparent;
     }
-  }
 
+    .attachment-detail {
+      margin: 0 auto;
+      position: absolute;
+      z-index: 2;
+      bottom: 10px;
+      left: 50%;
+      transform: translateX(-50%);
 
-  .chakra-portal 
-    .card-actions-close-btn {
+      a {
+        color: #fff;
+        margin: 0 10px;
+        text-decoration: underline;
+      }
+    }
+
+    .overlay-dark,
+    .new-board-overlay {
+      background-color: #0c0e16b3;
+    }
+
+    .new-board-modal-footer {
+      justify-content: start;
+      border-top: none;
+      padding-top: 0;
+
+      button {
+        border: none;
+        font-weight: 500;
+      }
+    }
+
+    .chakra-portal .card-actions-close-btn {
       position: absolute;
       top: 38px;
       right: 38px;
