@@ -20,17 +20,41 @@ export interface IActivity {
   translationKey: string
   initials: string
   createdAt: string
+  id: string
 }
 
 const Container = styled.div`
-  .mod-attachment-type {
+  .mod-preview-type {
     margin-left: 26px;
     min-height: 32px;
     padding: 8px 0;
     position: relative;
   }
 
-  .attachment {
+  .preview-frame {
+    padding: 48px 24px 112px;
+    height: auto;
+    text-align: center;
+    margin: 0 auto;
+    background-color: transparent;
+  }
+
+  .preview-detail {
+    margin: 0 auto;
+    position: absolute;
+    z-index: 2;
+    bottom: 10px;
+    left: 50%;
+    transform: translateX(-50%);
+
+    a {
+      color: #fff;
+      margin: 0 10px;
+      text-decoration: underline;
+    }
+  }
+
+  .preview {
     img {
       max-height: 300px;
       max-width: 100%;
@@ -77,23 +101,31 @@ const Activities = () => {
     return new Date(b?.createdAt)?.getTime() - new Date(a?.createdAt)?.getTime()
   })
 
-  const [attachment, setAttachment] = useState<
+  const [preview, setPreview] = useState<
     { url: string; id: string } | undefined
   >()
 
-  const modalIsOpen = attachment !== undefined
+  const modalIsOpen = preview !== undefined
 
-  const openAttachmentModal = (ev?: MouseEvent) => {
-    if (!ev?.currentTarget.id) return setAttachment(undefined)
+  const togglePreviewModal = (ev?: MouseEvent) => {
+    if (!ev?.currentTarget.id) return setPreview(undefined)
 
-    const [url, id] = ev?.currentTarget?.id.split("|")
-    setAttachment({ url, id })
+    const [url, previewId] = ev?.currentTarget?.id.split("|")
+    setPreview({ url, id: previewId })
   }
 
   const handleDelete = (ev?: MouseEvent) => {
+    const previewId = ev.currentTarget.id
     clientRequest
-      .deleteAttachment(ev.currentTarget.id)
-      .then(() => openAttachmentModal())
+      .deleteAttachment(previewId)
+      .then(() => {
+        setActivities(prev => [
+          ...prev.filter(
+            activity => activity?.entities?.attachment?.id !== previewId
+          ),
+        ])
+        togglePreviewModal()
+      })
       .catch(() => {})
   }
 
@@ -109,46 +141,41 @@ const Activities = () => {
   }, [])
 
   return (
-    <>
-      <Container>
-        {sortedList.map((activity, index) => (
-          <div className="mod-attachment-type" key={index}>
-            <div className="user-avatar">
-              <UserAvatar initials={activity?.initials} />
-            </div>
-            <FormattedActivity
-              openAttachmentModal={openAttachmentModal}
-              activity={activity}
-            />
-            <div className="date">
-              {formatDistance(new Date(activity?.createdAt), new Date(), {
-                addSuffix: true,
-              })}
-            </div>
+    <Container>
+      {sortedList.map((activity, index) => (
+        <div className="mod-preview-type" key={index}>
+          <div className="user-avatar">
+            <UserAvatar initials={activity?.initials} />
           </div>
-        ))}
-      </Container>
+          <FormattedActivity
+            openPreviewModal={togglePreviewModal}
+            activity={activity}
+          />
+          <div className="date">
+            {formatDistance(new Date(activity?.createdAt), new Date(), {
+              addSuffix: true,
+            })}
+          </div>
+        </div>
+      ))}
+
       {modalIsOpen && (
-        <Modal isOpen={modalIsOpen} onClose={openAttachmentModal}>
+        <Modal isOpen={modalIsOpen} onClose={togglePreviewModal}>
           <ModalOverlay className="overlay-dark" />
           <ModalContent className="transparent-bg">
-            <div className="attachment-frame">
-              <img
-                src={attachment.url}
-                alt="attachment preview"
-                className="attachment-preview"
-              />
+            <div className="preview-frame">
+              <img src={preview.url} alt="preview" className="preview" />
             </div>
-            <div className="attachment-detail">
+            <div className="preview-detail">
               <p className="meta">
                 <span>
-                  <a href={attachment.url} target="_blank">
+                  <a href={preview.url} target="_blank">
                     Open in new tab
                   </a>
                 </span>
                 <span>
                   <NextLink
-                    id={attachment.id}
+                    id={preview.id}
                     onClick={handleDelete}
                     href="#"
                     linkText="Delete"
@@ -159,7 +186,7 @@ const Activities = () => {
           </ModalContent>
         </Modal>
       )}
-    </>
+    </Container>
   )
 }
 

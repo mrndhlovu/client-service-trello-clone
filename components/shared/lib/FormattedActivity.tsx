@@ -5,10 +5,10 @@ import NextLink from "./NextLink"
 
 const FormattedActivity = <T extends IActivity>({
   activity,
-  openAttachmentModal,
+  openPreviewModal,
 }: {
   activity: T
-  openAttachmentModal: (ev: MouseEvent) => void
+  openPreviewModal: (ev: MouseEvent) => void
 }) => {
   const name =
     activity.memberCreator?.fullName || `@${activity.memberCreator.username}`
@@ -54,6 +54,9 @@ const FormattedActivity = <T extends IActivity>({
       case ACTION_KEYS.ARCHIVED_CARD:
         return ` archived ${activity?.entities?.card?.name} card.`
 
+      case ACTION_KEYS.REMOVE_CARD_ATTACHMENT:
+        return ` removed attachment ${activity?.entities?.attachment?.name}.`
+
       case ACTION_KEYS.MOVE_LIST_LEFT:
         return <span> moved {activity?.entities?.list?.name} down.</span>
 
@@ -61,31 +64,34 @@ const FormattedActivity = <T extends IActivity>({
         return <span> moved {activity?.entities?.list?.name} right.</span>
 
       case ACTION_KEYS.ADD_CARD_ATTACHMENT:
-        const [url = "", attachmentName = ""] =
-          activity?.entities?.attachment?.name?.split("|")
+        const previewId = `${activity?.entities?.attachment?.url}|${activity?.entities?.attachment?.id}`
         return (
           <span>
             {" "}
             attached{" "}
             <NextLink
               href="#"
-              linkText={attachmentName}
-              onClick={openAttachmentModal}
-              id={`${url}|${activity?.entities?.attachment?.id}`}
+              linkText={activity?.entities?.attachment?.name}
+              onClick={openPreviewModal}
+              id={previewId}
             />{" "}
             {activity?.entities?.card?.name && (
               <>
                 to{" "}
                 <NextLink
-                  onClick={openAttachmentModal}
+                  onClick={openPreviewModal}
                   href="#"
-                  id={`${url}|${activity?.entities?.attachment?.id}`}
+                  id={previewId}
                   linkText={activity?.entities?.card?.name}
                 />
               </>
             )}
-            <div className="attachment">
-              <img src={url} alt="attachment" className="attachment-img" />
+            <div className="preview">
+              <img
+                src={activity?.entities?.attachment?.url}
+                alt="attachment"
+                className="preview-img"
+              />
             </div>
           </span>
         )

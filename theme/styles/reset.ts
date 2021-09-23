@@ -40,13 +40,17 @@ const reset = css`
     z-index: 1;
   }
 
+  .chakra-modal__content {
+    border-radius: 2px;
+  }
+
   .transparent-bg,
   .create-modal-content {
     background-color: transparent;
   }
 
   .transparent-bg {
-    .attachment-frame {
+    .preview-frame {
       padding: 48px 24px 112px;
       height: auto;
       text-align: center;
@@ -54,7 +58,7 @@ const reset = css`
       background-color: transparent;
     }
 
-    .attachment-detail {
+    .preview-detail {
       margin: 0 auto;
       position: absolute;
       z-index: 2;
@@ -68,30 +72,29 @@ const reset = css`
         text-decoration: underline;
       }
     }
+  }
+  .overlay-dark,
+  .new-board-overlay {
+    background-color: #0c0e16b3;
+  }
 
-    .overlay-dark,
-    .new-board-overlay {
-      background-color: #0c0e16b3;
+  .new-board-modal-footer {
+    justify-content: start;
+    border-top: none;
+    padding-top: 0;
+
+    button {
+      border: none;
+      font-weight: 500;
     }
+  }
 
-    .new-board-modal-footer {
-      justify-content: start;
-      border-top: none;
-      padding-top: 0;
-
-      button {
-        border: none;
-        font-weight: 500;
-      }
-    }
-
-    .chakra-portal .card-actions-close-btn {
-      position: absolute;
-      top: 38px;
-      right: 38px;
-      color: #fff;
-      cursor: pointer;
-    }
+  .chakra-portal .card-actions-close-btn {
+    position: absolute;
+    top: 38px;
+    right: 38px;
+    color: #fff;
+    cursor: pointer;
   }
 
   .browserupgrade {
