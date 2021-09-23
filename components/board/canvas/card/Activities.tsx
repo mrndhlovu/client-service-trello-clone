@@ -4,12 +4,12 @@ import styled from "styled-components"
 import { Modal, ModalContent, ModalOverlay } from "@chakra-ui/modal"
 
 import { clientRequest } from "../../../../api"
-import { FormattedActivity } from "../../../shared"
+import { FormattedAction } from "../../../shared"
 import { useBoard } from "../../../../lib/providers"
 import UserAvatar from "../../../shared/lib/UserAvatar"
 import NextLink from "../../../shared/lib/NextLink"
 
-export interface IActivity {
+export interface IAction {
   entities: { boardId: string; name?: string; [key: string]: any }
   type: string
   memberCreator: {
@@ -20,6 +20,7 @@ export interface IActivity {
   translationKey: string
   initials: string
   createdAt: string
+  updatedAt: string
   id: string
 }
 
@@ -67,20 +68,14 @@ const Container = styled.div`
     }
   }
 
-  .user-avatar {
-    position: absolute;
-    left: -38px;
-    top: 12px;
-
-    .avatar-button-text {
-      font-size: 13px;
-    }
-  }
-
   .date {
     color: #5e6c84;
     font-size: 12px;
     font-weight: 400;
+  }
+
+  .comment-timeline {
+    margin-left: 10px;
   }
 
   .description {
@@ -95,7 +90,7 @@ const Container = styled.div`
 `
 
 const Activities = () => {
-  const [activities, setActivities] = useState<IActivity[]>([])
+  const [activities, setActivities] = useState<IAction[]>([])
   const { boardId } = useBoard()
   const sortedList = activities?.sort((a, b) => {
     return new Date(b?.createdAt)?.getTime() - new Date(a?.createdAt)?.getTime()
@@ -114,6 +109,10 @@ const Activities = () => {
     setPreview({ url, id: previewId })
   }
 
+  const updateActionsList = (data: IAction) => {
+    setActivities(prev => [...prev, data])
+  }
+
   const handleDelete = (ev?: MouseEvent) => {
     const previewId = ev.currentTarget.id
     clientRequest
@@ -121,10 +120,24 @@ const Activities = () => {
       .then(() => {
         setActivities(prev => [
           ...prev.filter(
-            activity => activity?.entities?.attachment?.id !== previewId
+            action => action?.entities?.attachment?.id !== previewId
           ),
         ])
         togglePreviewModal()
+      })
+      .catch(() => {})
+  }
+
+  const handleDeleteComment = (ev?: MouseEvent) => {
+    ev.stopPropagation()
+    const commentId = ev.currentTarget.id
+
+    clientRequest
+      .deleteComment(commentId)
+      .then(() => {
+        setActivities(prev => [
+          ...prev.filter(action => action?.id !== commentId),
+        ])
       })
       .catch(() => {})
   }
@@ -142,20 +155,24 @@ const Activities = () => {
 
   return (
     <Container>
-      {sortedList.map((activity, index) => (
+      {sortedList.map((action, index) => (
         <div className="mod-preview-type" key={index}>
           <div className="user-avatar">
-            <UserAvatar initials={activity?.initials} />
+            <UserAvatar initials={action?.initials} />
           </div>
-          <FormattedActivity
+          <FormattedAction
             openPreviewModal={togglePreviewModal}
-            activity={activity}
+            handleDeleteComment={handleDeleteComment}
+            updateActionsList={updateActionsList}
+            action={action}
           />
-          <div className="date">
-            {formatDistance(new Date(activity?.createdAt), new Date(), {
-              addSuffix: true,
-            })}
-          </div>
+          {action?.type !== "comment" && (
+            <div className="date">
+              {formatDistance(new Date(action?.createdAt), new Date(), {
+                addSuffix: true,
+              })}
+            </div>
+          )}
         </div>
       ))}
 

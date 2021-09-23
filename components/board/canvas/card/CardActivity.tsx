@@ -6,6 +6,7 @@ import Activities from "./Activities"
 
 import CardModule from "./CardModule"
 import { useLocalStorage } from "../../../../lib/hooks"
+import CommentModule from "./CommentModule"
 
 const CardActivity = () => {
   const [showActivities, setShowActivities] = useLocalStorage(
@@ -27,6 +28,7 @@ const CardActivity = () => {
           </Button>
         }
       />
+      <CommentModule />
       {showActivities && <Activities />}
     </div>
   )

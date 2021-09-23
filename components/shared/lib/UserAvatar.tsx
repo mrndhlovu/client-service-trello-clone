@@ -28,7 +28,7 @@ const Container = styled.div`
   }
 `
 
-const UserAvatar = ({ initials }) => {
+const UserAvatar = ({ initials }: { initials?: string }) => {
   const { user } = useAuth()
 
   return (

@@ -106,6 +106,16 @@ export default styled(ModalContent)`
       z-index: 0;
       height: max-content;
 
+      .user-avatar {
+        position: absolute;
+        left: -38px;
+        top: 12px;
+
+        .avatar-button-text {
+          font-size: 13px;
+        }
+      }
+
       .card-labels-module {
         margin-top: 0;
 
@@ -139,6 +149,7 @@ export default styled(ModalContent)`
       .module-content.description {
         background-color: transparent;
         padding: 8px 8px 0px 0px;
+        margin-left: 24px;
       }
 
       .module-header.checklist-header {
@@ -225,6 +236,71 @@ export default styled(ModalContent)`
         .module-header.description {
           gap: 10px;
         }
+      }
+
+      .mod-comment {
+        padding: 8px 0;
+        position: relative;
+        transition-duration: 85ms;
+        transition-property: padding-bottom;
+        transition-timing-function: ease;
+        margin: 0 0 8px 27px;
+
+        .user-avatar {
+          top: 17px;
+        }
+      }
+
+      .mod-comment-frame {
+        background-color: #fff;
+        border-radius: 3px;
+        box-shadow: 0 1px 2px -1px #091e4240, 0 0 0 1px #091e4214;
+        margin: 4px 0 2px;
+        overflow: hidden;
+        position: relative;
+        transition: box-shadow 85ms ease;
+      }
+
+      .new-comment {
+        min-height: 35px;
+        max-height: 50px;
+        border: 0;
+        box-shadow: none;
+        resize: none;
+        width: 100%;
+        font-size: 13px;
+        padding: 11px 7px;
+      }
+
+      .controls {
+        padding: 10px;
+        width: 100%;
+        grid-template-columns: 1fr 1fr;
+        display: none;
+
+        .control-btn {
+          display: flex;
+          gap: 10px;
+          padding: 5px 0;
+          width: 100%;
+          justify-content: flex-end;
+        }
+      }
+
+      .edit-controls {
+        font-size: 11px;
+        a {
+          margin: 0 5px;
+        }
+      }
+
+      .controls.active {
+        display: grid;
+      }
+
+      .comment-form.active > .new-comment {
+        min-height: 90px;
+        font-size: 15px;
       }
     }
 

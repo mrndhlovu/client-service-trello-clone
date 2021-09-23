@@ -1085,18 +1085,10 @@
   resolved "https://registry.yarnpkg.com/@stripe/stripe-js/-/stripe-js-1.16.0.tgz#73bce24fb7f47d719caa6b151e58e49b4167d463"
   integrity sha512-ZSHbiwTrISoaTbpercmYGuY7QTg7HxfFyNgbJBaYbwHWbzMhpEdGTsmMpaBXIU6iiqwEEDaIyD8O6yJ+H5DWCg==
 
-"@tusksui/shared@^0.0.71":
-  version "0.0.71"
-  resolved "https://registry.yarnpkg.com/@tusksui/shared/-/shared-0.0.71.tgz#507987d85bb1c58a39379cba8ca683ec2df87805"
-  integrity sha512-nPjhm9qBpTHgXltiVOBPHTxWpuQzDDHXsaZKN52uF5ojt4MKBbbusPG1a4pWoBI8UHpTL0dFt4Rb335FyQQQlw==
-  dependencies:
-    bcryptjs "^2.4.3"
-    cookie-session "^1.4.0"
-    express "^4.17.1"
-    express-validator "^6.12.0"
-    jsonwebtoken "^8.5.1"
-    node-nats-streaming "^0.3.2"
-    validator "^13.6.0"
+"@tusksui/shared@^0.0.72":
+  version "0.0.72"
+  resolved "https://registry.yarnpkg.com/@tusksui/shared/-/shared-0.0.72.tgz#763d5229b733e233d938dd4e86964090da817746"
+  integrity sha512-ZKs5yXmhDAoK9dhdnY1T0YBY/IL4EqO7HBpDstE8OZVvpBOiQGMu6ledgdeulM8DkHNwTUzFC9WEabgL3UvWGw==
 
 "@types/hoist-non-react-statics@*":
   version "3.3.1"

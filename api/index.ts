@@ -296,7 +296,7 @@ class ApiRequest extends AxiosConfig {
   }
 
   async getActivities(boardId: string) {
-    return await this.http.get(`${END_POINTS.accounts}/${boardId}/activities`)
+    return await this.http.get(`${END_POINTS.accounts}/${boardId}/actions`)
   }
 
   async getCardAttachments(cardId: string) {
@@ -398,6 +398,33 @@ class ApiRequest extends AxiosConfig {
 
   async getCurrentlyPlaying() {
     return await this.http.get(`${END_POINTS.spotify}/current-playing`)
+  }
+
+  // Comment
+  async comment(data: {
+    boardId: string
+    cardId: string
+    comment: string
+    parentId?: string
+    fullName?: string
+    initials: string
+    username: string
+  }) {
+    return await this.http.post(`${END_POINTS.accounts}/comment`, data)
+  }
+
+  async editComment(data: {
+    commentId: string
+    comment: string
+    textData?: { emoji: { [key: string]: any } }
+  }) {
+    return await this.http.post(`${END_POINTS.accounts}/edit-comment`, data)
+  }
+
+  async deleteComment(commentId: string) {
+    return await this.http.delete(
+      `${END_POINTS.accounts}/${commentId}/del-comment`
+    )
   }
 }
 

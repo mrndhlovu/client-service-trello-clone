@@ -8,7 +8,7 @@ const NextLink = ({
   id,
 }: {
   onClick?: (ev: MouseEvent) => void
-  href: string
+  href?: string
   linkText: string
   id?: string
 }) => {
