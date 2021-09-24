@@ -1,12 +1,9 @@
-import { useState } from "react"
 import { Button } from "@chakra-ui/button"
 import { GrUnorderedList } from "react-icons/gr"
 
-import Activities from "./Activities"
-
-import CardModule from "./CardModule"
 import { useLocalStorage } from "../../../../lib/hooks"
-import CommentModule from "./CommentModule"
+import Activities from "./Activities"
+import CardModule from "./CardModule"
 
 const CardActivity = () => {
   const [showActivities, setShowActivities] = useLocalStorage(
@@ -28,8 +25,7 @@ const CardActivity = () => {
           </Button>
         }
       />
-      <CommentModule />
-      {showActivities && <Activities />}
+      <Activities showActivities={showActivities} />
     </div>
   )
 }

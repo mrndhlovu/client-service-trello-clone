@@ -1,13 +1,19 @@
 import UserAvatar from "../../../shared/lib/UserAvatar"
+import { IAction } from "./Activities"
 
 import CommentItem from "./CommentItem"
 
 interface IProps {
   defaultValue?: string
   initials?: string
+  updateActionsList: (dat: IAction) => void
 }
 
-const CommentModule = ({ defaultValue, initials }: IProps) => {
+const CommentModule = ({
+  defaultValue,
+  initials,
+  updateActionsList,
+}: IProps) => {
   return (
     <div className="mod-comment">
       {!defaultValue && (
@@ -15,7 +21,10 @@ const CommentModule = ({ defaultValue, initials }: IProps) => {
           <UserAvatar initials={initials} />
         </div>
       )}
-      <CommentItem defaultValue={defaultValue} />
+      <CommentItem
+        defaultValue={defaultValue}
+        updateActionsList={updateActionsList}
+      />
     </div>
   )
 }

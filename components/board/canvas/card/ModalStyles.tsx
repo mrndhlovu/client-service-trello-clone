@@ -23,6 +23,11 @@ export default styled(ModalContent)`
     }
   }
 
+  .link-btn {
+    text-decoration: underline;
+    margin: 0 5px;
+  }
+
   header {
     padding-bottom: 0;
     position: relative;
@@ -262,14 +267,15 @@ export default styled(ModalContent)`
       }
 
       .new-comment {
-        min-height: 35px;
-        max-height: 50px;
+        min-height: 33px;
+        max-height: 33px;
         border: 0;
         box-shadow: none;
         resize: none;
         width: 100%;
         font-size: 13px;
-        padding: 11px 7px;
+        padding: 8px 7px;
+        transition: min-height 0.2s linear;
       }
 
       .controls {
@@ -298,9 +304,12 @@ export default styled(ModalContent)`
         display: grid;
       }
 
+      .comment-form {
+        min-height: 30px;
+      }
+
       .comment-form.active > .new-comment {
-        min-height: 90px;
-        font-size: 15px;
+        min-height: 60px;
       }
     }
 

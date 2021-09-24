@@ -8,6 +8,8 @@ import { FormattedAction } from "../../../shared"
 import { useBoard } from "../../../../lib/providers"
 import UserAvatar from "../../../shared/lib/UserAvatar"
 import NextLink from "../../../shared/lib/NextLink"
+import CommentModule from "./CommentModule"
+import { useLocalStorage } from "../../../../lib/hooks"
 
 export interface IAction {
   entities: { boardId: string; name?: string; [key: string]: any }
@@ -25,6 +27,8 @@ export interface IAction {
 }
 
 const Container = styled.div`
+  transition: all 0.5s linear;
+
   .mod-preview-type {
     margin-left: 26px;
     min-height: 32px;
@@ -89,7 +93,7 @@ const Container = styled.div`
   }
 `
 
-const Activities = () => {
+const Activities = ({ showActivities }: { showActivities: boolean }) => {
   const [activities, setActivities] = useState<IAction[]>([])
   const { boardId } = useBoard()
   const sortedList = activities?.sort((a, b) => {
@@ -109,7 +113,14 @@ const Activities = () => {
     setPreview({ url, id: previewId })
   }
 
-  const updateActionsList = (data: IAction) => {
+  const updateActionsList = (data: IAction, options?: { edited: false }) => {
+    if (options?.edited) {
+      setActivities(prev => [
+        ...prev.map(item => (item.id === data.id ? data : item)),
+      ])
+      return
+    }
+
     setActivities(prev => [...prev, data])
   }
 
@@ -154,56 +165,62 @@ const Activities = () => {
   }, [])
 
   return (
-    <Container>
-      {sortedList.map((action, index) => (
-        <div className="mod-preview-type" key={index}>
-          <div className="user-avatar">
-            <UserAvatar initials={action?.initials} />
-          </div>
-          <FormattedAction
-            openPreviewModal={togglePreviewModal}
-            handleDeleteComment={handleDeleteComment}
-            updateActionsList={updateActionsList}
-            action={action}
-          />
-          {action?.type !== "comment" && (
-            <div className="date">
-              {formatDistance(new Date(action?.createdAt), new Date(), {
-                addSuffix: true,
-              })}
-            </div>
-          )}
-        </div>
-      ))}
+    <>
+      <CommentModule updateActionsList={updateActionsList} />
 
-      {modalIsOpen && (
-        <Modal isOpen={modalIsOpen} onClose={togglePreviewModal}>
-          <ModalOverlay className="overlay-dark" />
-          <ModalContent className="transparent-bg">
-            <div className="preview-frame">
-              <img src={preview.url} alt="preview" className="preview" />
+      {showActivities && (
+        <Container>
+          {sortedList.map((action, index) => (
+            <div className="mod-preview-type" key={index}>
+              <div className="user-avatar">
+                <UserAvatar initials={action?.initials} />
+              </div>
+              <FormattedAction
+                openPreviewModal={togglePreviewModal}
+                handleDeleteComment={handleDeleteComment}
+                updateActionsList={updateActionsList}
+                action={action}
+              />
+              {action?.type !== "comment" && (
+                <div className="date">
+                  {formatDistance(new Date(action?.createdAt), new Date(), {
+                    addSuffix: true,
+                  })}
+                </div>
+              )}
             </div>
-            <div className="preview-detail">
-              <p className="meta">
-                <span>
-                  <a href={preview.url} target="_blank">
-                    Open in new tab
-                  </a>
-                </span>
-                <span>
-                  <NextLink
-                    id={preview.id}
-                    onClick={handleDelete}
-                    href="#"
-                    linkText="Delete"
-                  />
-                </span>
-              </p>
-            </div>
-          </ModalContent>
-        </Modal>
+          ))}
+
+          {modalIsOpen && (
+            <Modal isOpen={modalIsOpen} onClose={togglePreviewModal}>
+              <ModalOverlay className="overlay-dark" />
+              <ModalContent className="transparent-bg">
+                <div className="preview-frame">
+                  <img src={preview.url} alt="preview" className="preview" />
+                </div>
+                <div className="preview-detail">
+                  <p className="meta">
+                    <span>
+                      <a href={preview.url} target="_blank">
+                        Open in new tab
+                      </a>
+                    </span>
+                    <span>
+                      <NextLink
+                        id={preview.id}
+                        onClick={handleDelete}
+                        href="#"
+                        linkText="Delete"
+                      />
+                    </span>
+                  </p>
+                </div>
+              </ModalContent>
+            </Modal>
+          )}
+        </Container>
       )}
-    </Container>
+    </>
   )
 }
 

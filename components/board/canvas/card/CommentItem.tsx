@@ -1,21 +1,21 @@
 import { Button, ButtonGroup } from "@chakra-ui/button"
 import { Textarea } from "@chakra-ui/textarea"
-import { ChangeEvent, MouseEvent, useEffect, useRef, useState } from "react"
+import { ChangeEvent, MouseEvent, useRef, useState } from "react"
+
 import { FiPaperclip } from "react-icons/fi"
 import { GrEmoji } from "react-icons/gr"
+import { AiOutlineClose } from "react-icons/ai"
 
 import { clientRequest } from "../../../../api"
 import { IAction } from "./Activities"
 import { UIDropdown } from "../../../shared"
 import { useAuth, useBoard, useCardContext } from "../../../../lib/providers"
-import NextLink from "../../../shared/lib/NextLink"
-import { AiOutlineClose } from "react-icons/ai"
 
 interface IProps {
   defaultValue?: string
   commentId?: string
   handleDeleteComment?: (ev: MouseEvent) => void
-  updateActionsList?: (data: IAction) => void
+  updateActionsList?: (data: IAction, options?: { edited: boolean }) => void
 }
 
 const CommentItem = ({
@@ -28,14 +28,17 @@ const CommentItem = ({
   const { cardId } = useCardContext()
   const { user } = useAuth()
   const inputRef = useRef<HTMLTextAreaElement>()
+
   const [focused, setFocused] = useState<boolean>(false)
   const [comment, setComment] = useState<string>(defaultValue || "")
 
   const showFormControls = focused
   const editable = commentId !== undefined
 
-  const toggleInput = () => {
-    if (comment && !commentId) return
+  const toggleInput = (ev?: MouseEvent) => {
+    const isCloseButton = ev.currentTarget.id === "close-btn"
+
+    if (focused && !isCloseButton) return
     setFocused(prev => !prev)
   }
 
@@ -47,17 +50,12 @@ const CommentItem = ({
   const handleSave = () => {
     if (editable) {
       clientRequest
-        .editComment({
-          comment,
-          commentId,
-          //   textData?: { emoji: string }
-        })
+        .editComment({ comment, commentId })
         .then(res => {
-          updateActionsList(res.data)
           setFocused(false)
-          setComment("")
+          updateActionsList(res.data, { edited: true })
         })
-        .catch(() => {})
+        .catch(() => null)
 
       return
     }
@@ -70,14 +68,12 @@ const CommentItem = ({
     }
 
     clientRequest
-      .comment({
-        comment,
-        ...options,
-      })
+      .comment({ comment, ...options })
       .then(res => {
         updateActionsList(res.data)
-        setFocused(false)
+
         setComment("")
+        setFocused(false)
       })
       .catch(() => null)
   }
@@ -104,7 +100,11 @@ const CommentItem = ({
               >
                 Save
               </Button>
-              <AiOutlineClose cursor="pointer" onClick={toggleInput} />
+              <AiOutlineClose
+                id="close-btn"
+                cursor="pointer"
+                onClick={toggleInput}
+              />
             </ButtonGroup>
             <div className="control-btn">
               <UIDropdown
@@ -119,7 +119,7 @@ const CommentItem = ({
               <UIDropdown
                 toggle={
                   <span>
-                    <FiPaperclip size={15} />
+                    <FiPaperclip size={15} onClick={toggleInput} />
                   </span>
                 }
               >
@@ -131,17 +131,16 @@ const CommentItem = ({
       </div>
       {editable && (
         <div className="edit-controls">
-          <NextLink
-            href="#"
-            linkText={focused ? "Close" : "Edit"}
-            onClick={toggleInput}
-          />
-          <NextLink
+          <button className="link-btn" onClick={toggleInput}>
+            {focused ? "Close" : "Edit"}
+          </button>
+          <button
             id={commentId}
-            href="#"
-            linkText="Delete"
+            className="link-btn"
             onClick={handleDeleteComment}
-          />
+          >
+            Delete
+          </button>
         </div>
       )}
     </>

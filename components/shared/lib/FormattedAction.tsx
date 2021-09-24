@@ -15,7 +15,7 @@ const FormattedAction = <T extends IAction>({
   action: T
   openPreviewModal: (ev: MouseEvent) => void
   handleDeleteComment: (ev: MouseEvent) => void
-  updateActionsList?: (data: IAction) => void
+  updateActionsList?: (data: IAction, options?: { edited: boolean }) => void
 }) => {
   const name =
     action.memberCreator?.fullName || `@${action.memberCreator.username}`
@@ -34,7 +34,7 @@ const FormattedAction = <T extends IAction>({
         return <span> created this board.</span>
 
       case ACTION_KEYS.CREATE_LIST:
-        return <span> created the ${action?.entities?.list?.name} list.</span>
+        return <span> created the {action?.entities?.list?.name} list.</span>
 
       case ACTION_KEYS.CREATE_CARD:
         return (
@@ -50,7 +50,7 @@ const FormattedAction = <T extends IAction>({
         )
 
       case ACTION_KEYS.DELETED_BOARD:
-        return <span> deleted the board ${action?.entities?.name}.</span>
+        return <span> deleted the board {action?.entities?.name}.</span>
 
       case ACTION_KEYS.COMMENT_ON_CARD:
         return (
@@ -66,17 +66,14 @@ const FormattedAction = <T extends IAction>({
         return <span> archived the board ${action?.entities?.name}.</span>
 
       case ACTION_KEYS.DELETED_CARD:
-        return <span> deleted ${action?.entities?.card?.name} card.</span>
+        return <span> deleted {action?.entities?.card?.name} card.</span>
 
       case ACTION_KEYS.ARCHIVED_CARD:
-        return <span> archived ${action?.entities?.card?.name} card.</span>
+        return <span> archived {action?.entities?.card?.name} card.</span>
 
       case ACTION_KEYS.REMOVE_CARD_ATTACHMENT:
         return (
-          <span>
-            {" "}
-            removed attachment ${action?.entities?.attachment?.name}.
-          </span>
+          <span> removed attachment {action?.entities?.attachment?.name}.</span>
         )
 
       case ACTION_KEYS.MOVE_LIST_LEFT:
