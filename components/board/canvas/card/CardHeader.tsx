@@ -61,7 +61,6 @@ const CardHeader = ({ onClose }) => {
   const { findListById } = useBoard()
 
   const [list] = findListById(listId)
-  console.log(list?.title)
 
   const handleUpdateTitle = (newTitle: string) => {
     saveCardChanges(cardId, listId, { title: newTitle })
