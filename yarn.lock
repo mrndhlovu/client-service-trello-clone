@@ -1089,6 +1089,14 @@
   version "0.0.72"
   resolved "https://registry.yarnpkg.com/@tusksui/shared/-/shared-0.0.72.tgz#763d5229b733e233d938dd4e86964090da817746"
   integrity sha512-ZKs5yXmhDAoK9dhdnY1T0YBY/IL4EqO7HBpDstE8OZVvpBOiQGMu6ledgdeulM8DkHNwTUzFC9WEabgL3UvWGw==
+  dependencies:
+    bcryptjs "^2.4.3"
+    cookie-session "^1.4.0"
+    express "^4.17.1"
+    express-validator "^6.12.0"
+    jsonwebtoken "^8.5.1"
+    node-nats-streaming "^0.3.2"
+    validator "^13.6.0"
 
 "@types/hoist-non-react-statics@*":
   version "3.3.1"
@@ -2074,6 +2082,14 @@ elliptic@^6.5.3:
     inherits "^2.0.4"
     minimalistic-assert "^1.0.1"
     minimalistic-crypto-utils "^1.0.1"
+
+emoji-mart@^3.0.1:
+  version "3.0.1"
+  resolved "https://registry.yarnpkg.com/emoji-mart/-/emoji-mart-3.0.1.tgz#9ce86706e02aea0506345f98464814a662ca54c6"
+  integrity sha512-sxpmMKxqLvcscu6mFn9ITHeZNkGzIvD0BSNFE/LJESPbCA8s1jM6bCDPjWbV31xHq7JXaxgpHxLB54RCbBZSlg==
+  dependencies:
+    "@babel/runtime" "^7.0.0"
+    prop-types "^15.6.0"
 
 emojis-list@^2.0.0:
   version "2.1.0"
@@ -3574,7 +3590,7 @@ process@0.11.10, process@^0.11.10:
   resolved "https://registry.yarnpkg.com/process/-/process-0.11.10.tgz#7332300e840161bda3e69a1d1d91a7d4bc16f182"
   integrity sha1-czIwDoQBYb2j5podHZGn1LwW8YI=
 
-prop-types@15.7.2, prop-types@^15.6.2, prop-types@^15.7.2:
+prop-types@15.7.2, prop-types@^15.6.0, prop-types@^15.6.2, prop-types@^15.7.2:
   version "15.7.2"
   resolved "https://registry.yarnpkg.com/prop-types/-/prop-types-15.7.2.tgz#52c41e75b8c87e72b9d9360e0206b99dcbffa6c5"
   integrity sha512-8QQikdH7//R2vurIJSutZ1smHYTcLpRWEOlHnzcWHmBYrOGUysKwSsrC89BCiFj3CbrfJ/nXFdJepOVrY1GCHQ==

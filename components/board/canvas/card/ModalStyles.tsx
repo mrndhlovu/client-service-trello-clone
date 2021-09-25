@@ -261,7 +261,7 @@ export default styled(ModalContent)`
         border-radius: 3px;
         box-shadow: 0 1px 2px -1px #091e4240, 0 0 0 1px #091e4214;
         margin: 4px 0 2px;
-        overflow: hidden;
+        overflow: visible;
         position: relative;
         transition: box-shadow 85ms ease;
       }

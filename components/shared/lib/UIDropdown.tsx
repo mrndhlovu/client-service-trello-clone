@@ -94,15 +94,14 @@ const UIDropdown = ({
       <MenuButton className={`dropdown ${className || ""}`}>
         {toggle}
       </MenuButton>
-      <>
-        <StyledMenuContent>
-          <header>
-            <DropdownHeader>{heading}</DropdownHeader>
-          </header>
-          <Divider />
-          <div className="dropdown-content">{children}</div>
-        </StyledMenuContent>
-      </>
+
+      <StyledMenuContent>
+        <header>
+          <DropdownHeader>{heading}</DropdownHeader>
+        </header>
+        <Divider />
+        <div className="dropdown-content">{children}</div>
+      </StyledMenuContent>
     </StyledMenu>
   )
 }

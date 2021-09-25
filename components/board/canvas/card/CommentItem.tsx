@@ -1,6 +1,8 @@
+import "emoji-mart/css/emoji-mart.css"
 import { Button, ButtonGroup } from "@chakra-ui/button"
 import { Textarea } from "@chakra-ui/textarea"
 import { ChangeEvent, MouseEvent, useRef, useState } from "react"
+import { EmojiData, Picker } from "emoji-mart"
 
 import { FiPaperclip } from "react-icons/fi"
 import { GrEmoji } from "react-icons/gr"
@@ -36,15 +38,34 @@ const CommentItem = ({
   const editable = commentId !== undefined
 
   const toggleInput = (ev?: MouseEvent) => {
-    const isCloseButton = ev.currentTarget.id === "close-btn"
+    const isCloseButton = ev?.currentTarget?.id === "close-btn"
 
     if (focused && !isCloseButton) return
     setFocused(prev => !prev)
+    if (!editable) {
+      setComment("")
+    }
   }
 
-  const handleChange = (ev: ChangeEvent<HTMLTextAreaElement>) => {
-    ev.stopPropagation()
-    setComment(ev.target.value)
+  const handleChange = (ev?: ChangeEvent<HTMLTextAreaElement>) => {
+    if (!ev?.target?.value) return
+
+    setComment(ev?.target?.value)
+  }
+
+  const onEmojiClick = (emoji?: any, ev?: MouseEvent) => {
+    if (!emoji && focused) return
+
+    const { selectionStart, selectionEnd } = inputRef.current
+
+    const text =
+      (comment.slice(0, selectionStart) || "") +
+      (emoji?.native || "") +
+      (comment?.slice(selectionEnd) || "")
+
+    if (text) setComment(text)
+
+    toggleInput(ev)
   }
 
   const handleSave = () => {
@@ -87,48 +108,56 @@ const CommentItem = ({
             value={comment}
             onChange={handleChange}
             placeholder="Write a comment..."
-            onClick={toggleInput}
+            onClick={(ev?: MouseEvent) => onEmojiClick(undefined, ev)}
             ref={inputRef}
           />
+        </div>
 
-          <div className={`controls ${showFormControls ? "active" : ""}`}>
-            <ButtonGroup alignItems="center" className="save btn">
-              <Button
-                colorScheme={focused && comment ? "blue" : "gray"}
-                size="sm"
-                onClick={handleSave}
-              >
-                Save
-              </Button>
-              <AiOutlineClose
-                id="close-btn"
-                cursor="pointer"
-                onClick={toggleInput}
-              />
-            </ButtonGroup>
-            <div className="control-btn">
-              <UIDropdown
-                toggle={
-                  <span>
-                    <GrEmoji size={16} />
-                  </span>
-                }
-              >
-                <div />
-              </UIDropdown>
-              <UIDropdown
-                toggle={
-                  <span>
-                    <FiPaperclip size={15} onClick={toggleInput} />
-                  </span>
-                }
-              >
-                <div />
-              </UIDropdown>
-            </div>
+        <div className={`controls ${showFormControls ? "active" : ""}`}>
+          <ButtonGroup alignItems="center" className="save btn">
+            <Button
+              colorScheme={focused && comment ? "blue" : "gray"}
+              size="sm"
+              onClick={handleSave}
+            >
+              Save
+            </Button>
+            <AiOutlineClose
+              id="close-btn"
+              cursor="pointer"
+              onClick={toggleInput}
+            />
+          </ButtonGroup>
+          <div className="control-btn">
+            <UIDropdown
+              toggle={
+                <span>
+                  <GrEmoji size={16} />
+                </span>
+              }
+              heading="Emoji"
+            >
+              <div className="emoji-picker">
+                <Picker
+                  onSelect={(obj?: EmojiData, ev?: MouseEvent) =>
+                    onEmojiClick(obj, ev)
+                  }
+                />
+              </div>
+            </UIDropdown>
+            <UIDropdown
+              toggle={
+                <span>
+                  <FiPaperclip size={15} onClick={toggleInput} />
+                </span>
+              }
+            >
+              <div />
+            </UIDropdown>
           </div>
         </div>
       </div>
+
       {editable && (
         <div className="edit-controls">
           <button className="link-btn" onClick={toggleInput}>
