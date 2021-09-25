@@ -1,20 +1,11 @@
-import {
-  ListCardsContextProvider,
-  useListCardsContext,
-  useListContext,
-} from "../../../lib/providers"
+import { IChecklist } from "./cardActions/AddChecklist"
+import { useListCardsContext, useListContext } from "../../../lib/providers"
 import AddCard from "./AddCard"
 import DraggableList from "../dnd/DraggableList"
 import EditableTitle from "../EditableTitle"
 import ForeignCardDropZone from "../dnd/ForeignCardDropZone"
 import ListActions from "./listActions/ListActions"
 import ListCards from "./ListCards"
-import { IChecklist } from "./cardActions/AddChecklist"
-
-interface IProps {
-  listItem: IListItem
-  listIndex: number
-}
 
 export interface IListItem {
   cards?: ICardItem[]

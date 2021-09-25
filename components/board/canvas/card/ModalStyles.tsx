@@ -23,6 +23,18 @@ export default styled(ModalContent)`
     }
   }
 
+  .edit-title-button {
+    width: 100%;
+    background-color: transparent;
+    cursor: pointer;
+    padding: 0;
+    font-size: inherit;
+    border: none;
+    background-color: transparent;
+    justify-content: flex-start;
+    font-weight: 700;
+  }
+
   .link-btn {
     text-decoration: underline;
     margin: 0 5px;
@@ -104,8 +116,6 @@ export default styled(ModalContent)`
     .card-content-column {
       float: left;
       margin: 0;
-      overflow-x: hidden;
-      overflow-y: auto;
       padding: 0 8px 8px 16px;
       position: relative;
       z-index: 0;
@@ -159,14 +169,6 @@ export default styled(ModalContent)`
 
       .module-header.checklist-header {
         justify-content: space-between;
-
-        .edit-title-button {
-          width: 100%;
-          background-color: transparent;
-          cursor: pointer;
-          padding: 0;
-          font-size: inherit;
-        }
       }
 
       .card-description {

@@ -7,7 +7,7 @@ interface IHeaderStyles {
 export default styled.header<IHeaderStyles>`
   background-color: ${({ isTransParent, theme }) =>
     isTransParent ? "#00000036" : theme.colors.trello};
-  z-index: 100;
+  z-index: 1;
   height: 37px;
   position: absolute;
   top: 0;

@@ -57,10 +57,7 @@ const CardHeader = ({ onClose }) => {
     coverUrl,
     listId,
   } = useCardContext()
-  const { saveCardChanges } = useListCardsContext()
-  const { findListById } = useBoard()
-
-  const [list] = findListById(listId)
+  const { saveCardChanges, list } = useListCardsContext()
 
   const handleUpdateTitle = (newTitle: string) => {
     saveCardChanges(cardId, listId, { title: newTitle })
@@ -96,7 +93,11 @@ const CardHeader = ({ onClose }) => {
 
         <div className="card-header-content">
           <BsCardHeading size={16} />
-          <EditableTitle handleUpdate={handleUpdateTitle} title={card.title} />
+          <EditableTitle
+            as="h1"
+            handleUpdate={handleUpdateTitle}
+            title={card.title}
+          />
           <div className="list-id">
             <p>
               in list{" "}
