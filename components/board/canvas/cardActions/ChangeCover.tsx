@@ -13,7 +13,7 @@ import {
 } from "../../../../lib/providers"
 import { LABEL_DEFAULT_OPTIONS } from "../../../../util/constants"
 import UnSplashImages from "../../sidebar/UnSplashImages"
-import CardActionStyles from "./CardActionStyles"
+import CardActionStyles from "./StyleCardAction"
 
 export interface IAttachment {
   [key: string]: any

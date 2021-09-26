@@ -322,6 +322,23 @@ class ApiRequest extends AxiosConfig {
     )
   }
 
+  async addLinkAttachment(
+    data: { link: string; name: string },
+    cardId: string
+  ) {
+    return await this.http.post(
+      `${END_POINTS.cards}/upload/${cardId}/add-link-attachment`,
+      data
+    )
+  }
+
+  async uploadAttachment(formData: FormData, cardId: string) {
+    return await this.http.post(
+      `${END_POINTS.cards}/upload/${cardId}/attachment`,
+      formData
+    )
+  }
+
   async uploadBoardBgImage(formData: FormData, boardId: string) {
     return await this.http.post(
       `${END_POINTS.boards}/upload/${boardId}/add-cover`,
@@ -416,6 +433,7 @@ class ApiRequest extends AxiosConfig {
   async editComment(data: {
     commentId: string
     comment: string
+    isLink?: boolean
     textData?: { emoji: { [key: string]: any } }
   }) {
     return await this.http.post(`${END_POINTS.accounts}/edit-comment`, data)

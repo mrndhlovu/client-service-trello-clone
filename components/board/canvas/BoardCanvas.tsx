@@ -7,7 +7,7 @@ import {
   useListContext,
 } from "../../../lib/providers"
 import AddList from "./AddList"
-import BoardCanvasStyles from "./BoardCanvasStyles"
+import BoardCanvasStyles from "./StyleBoardCanvas"
 import ListItem from "./ListItem"
 
 const BoardCanvas = () => {

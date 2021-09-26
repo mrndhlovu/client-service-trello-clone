@@ -6,9 +6,10 @@ import { IoMdCard } from "react-icons/io"
 
 import { UIDropdown } from "../../../shared"
 import { useCardContext } from "../../../../lib/providers"
+import AddAttachment from "../cardActions/AddAttachment"
+import AddChecklist from "../cardActions/AddChecklist"
 import CardLabels from "../cardActions/CardLabels"
 import ChangeCover from "../cardActions/ChangeCover"
-import AddChecklist from "../cardActions/AddChecklist"
 
 const AddToCardOptions = () => {
   const { showCardCover } = useCardContext()
@@ -17,7 +18,13 @@ const AddToCardOptions = () => {
     { title: "Labels", id: 0, icon: <BsTag />, menu: <CardLabels /> },
     { title: "Dates", id: 1, icon: <AiOutlineClockCircle />, menu: <div /> },
     { title: "Checklist", id: 2, icon: <BsCheckBox />, menu: <AddChecklist /> },
-    { title: "Attachment", id: 3, icon: <HiOutlinePaperClip />, menu: <div /> },
+    {
+      title: "Attachment",
+      heading: "Attach from",
+      id: 3,
+      icon: <HiOutlinePaperClip />,
+      menu: <AddAttachment />,
+    },
     {
       title: "Cover",
       id: 4,
@@ -48,7 +55,7 @@ const AddToCardOptions = () => {
                     {option.title}
                   </Button>
                 }
-                heading={option.title}
+                heading={option?.heading || option.title}
               >
                 {option.menu}
               </UIDropdown>

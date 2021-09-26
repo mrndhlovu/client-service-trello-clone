@@ -14,7 +14,7 @@ import {
   useGlobalState,
   useListCardsContext,
 } from "../../../../lib/providers"
-import CardActionStyles from "./CardActionStyles"
+import CardActionStyles from "./StyleCardAction"
 
 export interface ILabelProps {
   color: string

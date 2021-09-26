@@ -17,7 +17,7 @@ import { clientRequest } from "../../../../api"
 import { ITaskItem } from "../cardActions/AddChecklist"
 import { UIDropdown } from "../../../shared"
 import { useBoard, useCardContext } from "../../../../lib/providers"
-import AddTaskStyles from "./AddTaskStyles"
+import AddTaskStyles from "./StyleAddTask"
 import EditableText from "../../EditableText"
 
 const AddChecklistTask = ({ checklistId, taskList, isNew }) => {

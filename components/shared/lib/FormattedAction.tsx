@@ -83,17 +83,44 @@ const FormattedAction = <T extends IAction>({
         return <span> moved {action?.entities?.list?.name} right.</span>
 
       case ACTION_KEYS.ADD_CARD_ATTACHMENT:
+        const modalPreviewOptions = ["png", "jpeg", "jpg", "gif"]
         const previewId = `${action?.entities?.attachment?.url}|${action?.entities?.attachment?.id}`
+
+        if (action?.entities?.attachment?.type === "link") {
+          return (
+            <CommentItem
+              commentId={action.id}
+              link={action?.entities?.attachment?.url}
+              defaultValue={action?.entities?.comment?.text}
+              isLink
+              handleDeleteComment={handleDeleteComment}
+              updateActionsList={updateActionsList}
+            />
+          )
+        }
+
         return (
           <span>
             {" "}
             attached{" "}
-            <NextLink
-              href="#"
-              linkText={action?.entities?.attachment?.name}
-              onClick={openPreviewModal}
-              id={previewId}
-            />{" "}
+            {modalPreviewOptions.includes(
+              action?.entities?.attachment?.type
+            ) && (
+              <NextLink
+                href="#"
+                linkText={action?.entities?.attachment?.name}
+                onClick={openPreviewModal}
+                id={previewId}
+              />
+            )}
+            {!modalPreviewOptions.includes(
+              action?.entities?.attachment?.type
+            ) &&
+              action?.entities?.attachment?.type !== "link" && (
+                <a href={action?.entities?.attachment?.url} download>
+                  {action?.entities?.attachment?.name}
+                </a>
+              )}{" "}
             {action?.entities?.card?.name && (
               <>
                 to{" "}
@@ -106,11 +133,13 @@ const FormattedAction = <T extends IAction>({
               </>
             )}
             <div className="preview">
-              <img
-                src={action?.entities?.attachment?.url}
-                alt="attachment"
-                className="preview-img"
-              />
+              {action?.entities?.attachment?.image && (
+                <img
+                  src={action?.entities?.attachment?.url}
+                  alt="attachment"
+                  className="preview-img"
+                />
+              )}
             </div>
           </span>
         )
@@ -214,7 +243,8 @@ const FormattedAction = <T extends IAction>({
     <span className="description">
       <div>
         <strong>{name}</strong>
-        {action.type === "comment" && (
+        {(action.type === "comment" ||
+          action?.entities?.attachment?.type === "link") && (
           <span className="date comment-timeline">
             {formatDistance(new Date(action?.updatedAt), new Date(), {
               addSuffix: true,

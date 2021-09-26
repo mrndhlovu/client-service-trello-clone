@@ -8,7 +8,7 @@ import CardDescription from "./CardDescription"
 import CardHeader from "./CardHeader"
 import CardLabelModule from "./CardLabelModule"
 import ModalCardActions from "./ModalCardActions"
-import ModalStyles from "./ModalStyles"
+import ModalStyles from "./StyleModal"
 
 interface IProps {
   isOpen: boolean

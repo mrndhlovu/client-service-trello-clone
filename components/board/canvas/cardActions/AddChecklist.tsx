@@ -3,7 +3,7 @@ import { ChangeEvent, useState } from "react"
 
 import { clientRequest } from "../../../../api"
 import { useCardContext } from "../../../../lib/providers"
-import AddChecklistStyles from "./AddChecklistStyles"
+import AddChecklistStyles from "./StyleAddChecklist"
 
 export interface ITaskItem extends Document {
   state: "todo" | "complete"

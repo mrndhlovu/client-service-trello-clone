@@ -16,6 +16,8 @@ import { useAuth, useBoard, useCardContext } from "../../../../lib/providers"
 interface IProps {
   defaultValue?: string
   commentId?: string
+  link?: string
+  isLink?: boolean
   handleDeleteComment?: (ev: MouseEvent) => void
   updateActionsList?: (data: IAction, options?: { edited: boolean }) => void
 }
@@ -23,8 +25,10 @@ interface IProps {
 const CommentItem = ({
   defaultValue,
   commentId,
+  link,
   handleDeleteComment,
   updateActionsList,
+  isLink = false,
 }: IProps) => {
   const { boardId } = useBoard()
   const { cardId } = useCardContext()
@@ -71,7 +75,7 @@ const CommentItem = ({
   const handleSave = () => {
     if (editable) {
       clientRequest
-        .editComment({ comment, commentId })
+        .editComment({ comment, commentId, isLink })
         .then(res => {
           setFocused(false)
           updateActionsList(res.data, { edited: true })
@@ -103,6 +107,13 @@ const CommentItem = ({
     <>
       <div className="mod-comment-frame">
         <div className={`comment-form ${showFormControls ? "active" : ""}`}>
+          {isLink && (
+            <div className="link-comment">
+              <a href={link} target="_blank" rel="noreferrer nofollow">
+                {link}
+              </a>
+            </div>
+          )}
           <Textarea
             className={`new-comment ${!focused ? "" : "active"}`}
             value={comment}

@@ -1,6 +1,5 @@
 import { MouseEvent, useEffect, useState } from "react"
 import { formatDistance } from "date-fns"
-import styled from "styled-components"
 import { Modal, ModalContent, ModalOverlay } from "@chakra-ui/modal"
 
 import { clientRequest } from "../../../../api"
@@ -9,7 +8,7 @@ import { useBoard } from "../../../../lib/providers"
 import UserAvatar from "../../../shared/lib/UserAvatar"
 import NextLink from "../../../shared/lib/NextLink"
 import CommentModule from "./CommentModule"
-import { useLocalStorage } from "../../../../lib/hooks"
+import StyleActivities from "./StyleActivities"
 
 export interface IAction {
   entities: { boardId: string; name?: string; [key: string]: any }
@@ -25,73 +24,6 @@ export interface IAction {
   updatedAt: string
   id: string
 }
-
-const Container = styled.div`
-  transition: all 0.5s linear;
-
-  .mod-preview-type {
-    margin-left: 26px;
-    min-height: 32px;
-    padding: 8px 0;
-    position: relative;
-  }
-
-  .preview-frame {
-    padding: 48px 24px 112px;
-    height: auto;
-    text-align: center;
-    margin: 0 auto;
-    background-color: transparent;
-  }
-
-  .preview-detail {
-    margin: 0 auto;
-    position: absolute;
-    z-index: 2;
-    bottom: 10px;
-    left: 50%;
-    transform: translateX(-50%);
-
-    a {
-      color: #fff;
-      margin: 0 10px;
-      text-decoration: underline;
-    }
-  }
-
-  .preview {
-    img {
-      max-height: 300px;
-      max-width: 100%;
-      border: 1px solid #dfe1e6;
-      border-radius: 3px;
-      box-sizing: border-box;
-      clear: both;
-      display: block;
-      margin: 8px 0 4px;
-    }
-  }
-
-  .date {
-    color: #5e6c84;
-    font-size: 12px;
-    font-weight: 400;
-  }
-
-  .comment-timeline {
-    margin-left: 10px;
-  }
-
-  .description {
-    color: #172b4d;
-    font-size: 14px;
-    font-weight: 400;
-    line-height: 20px;
-  }
-  a {
-    text-decoration: underline;
-  }
-`
 
 const Activities = ({ showActivities }: { showActivities: boolean }) => {
   const [activities, setActivities] = useState<IAction[]>([])
@@ -169,7 +101,7 @@ const Activities = ({ showActivities }: { showActivities: boolean }) => {
       <CommentModule updateActionsList={updateActionsList} />
 
       {showActivities && (
-        <Container>
+        <StyleActivities>
           {sortedList.map((action, index) => (
             <div className="mod-preview-type" key={index}>
               <div className="user-avatar">
@@ -181,13 +113,14 @@ const Activities = ({ showActivities }: { showActivities: boolean }) => {
                 updateActionsList={updateActionsList}
                 action={action}
               />
-              {action?.type !== "comment" && (
-                <div className="date">
-                  {formatDistance(new Date(action?.createdAt), new Date(), {
-                    addSuffix: true,
-                  })}
-                </div>
-              )}
+              {action?.type !== "comment" &&
+                action?.entities?.attachment?.type !== "link" && (
+                  <div className="date">
+                    {formatDistance(new Date(action?.createdAt), new Date(), {
+                      addSuffix: true,
+                    })}
+                  </div>
+                )}
             </div>
           ))}
 
@@ -218,7 +151,7 @@ const Activities = ({ showActivities }: { showActivities: boolean }) => {
               </ModalContent>
             </Modal>
           )}
-        </Container>
+        </StyleActivities>
       )}
     </>
   )
