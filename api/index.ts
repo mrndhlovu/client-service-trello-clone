@@ -295,8 +295,14 @@ class ApiRequest extends AxiosConfig {
     return await this.http.get(`${END_POINTS.accounts}/power-ups`)
   }
 
-  async getActivities(boardId: string) {
+  async getActions(boardId: string) {
     return await this.http.get(`${END_POINTS.accounts}/${boardId}/actions`)
+  }
+
+  async getActionByAttachmentId(boardId: string, attachmentId: string) {
+    return await this.http.get(
+      `${END_POINTS.accounts}/${boardId}/${attachmentId}/action`
+    )
   }
 
   async getCardAttachments(cardId: string) {
@@ -417,7 +423,7 @@ class ApiRequest extends AxiosConfig {
     return await this.http.get(`${END_POINTS.spotify}/current-playing`)
   }
 
-  // Comment
+  // Comments
   async comment(data: {
     boardId: string
     cardId: string

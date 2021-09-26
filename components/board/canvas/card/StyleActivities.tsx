@@ -3,9 +3,18 @@ import styled from "styled-components"
 export default styled.div`
   transition: all 0.5s linear;
 
-  .link-comment {
+  .link-attachment {
     margin: 8px;
-    padding-top: 5px;
+    width: 449px;
+    font-size: 12px;
+    overflow: hidden;
+    clear: both;
+    display: inline-block;
+    text-overflow: ellipsis;
+    height: 20px;
+    box-shadow: 0 1px 2px -1px #091e4240, 0 0 0 1px #091e4214;
+    padding: 0 5px;
+    border-radius: 3px;
   }
 
   .mod-preview-type {
@@ -13,23 +22,6 @@ export default styled.div`
     min-height: 32px;
     padding: 8px 0;
     position: relative;
-  }
-
-  .link-attachment {
-    background-color: #fff;
-    border-radius: 3px;
-    box-shadow: 0 1px 2px -1px #091e4240, 0 0 0 1px #091e4214;
-    box-sizing: border-box;
-    clear: both;
-    display: inline-block;
-    margin: 4px 2px 4px 0;
-    max-width: 100%;
-    overflow: hidden;
-    text-overflow: ellipsis;
-
-    .current {
-      padding: 8px 12px;
-    }
   }
 
   .preview-frame {

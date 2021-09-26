@@ -244,14 +244,15 @@ const FormattedAction = <T extends IAction>({
       <div>
         <strong>{name}</strong>
         {(action.type === "comment" ||
-          action?.entities?.attachment?.type === "link") && (
-          <span className="date comment-timeline">
-            {formatDistance(new Date(action?.updatedAt), new Date(), {
-              addSuffix: true,
-            })}
-            {action?.entities?.comment?.edited && " (edited)"}
-          </span>
-        )}
+          action?.entities?.attachment?.type === "link") &&
+          action?.updatedAt && (
+            <span className="date comment-timeline">
+              {formatDistance(new Date(action?.updatedAt), new Date(), {
+                addSuffix: true,
+              })}
+              {action?.entities?.comment?.edited && " (edited)"}
+            </span>
+          )}
       </div>
       <ActionItem />
     </span>

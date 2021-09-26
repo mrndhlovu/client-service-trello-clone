@@ -1,19 +1,16 @@
+import { useCardContext } from "../../../../lib/providers"
 import UserAvatar from "../../../shared/lib/UserAvatar"
-import { IAction } from "./Activities"
 
 import CommentItem from "./CommentItem"
 
 interface IProps {
   defaultValue?: string
   initials?: string
-  updateActionsList: (dat: IAction) => void
 }
 
-const CommentModule = ({
-  defaultValue,
-  initials,
-  updateActionsList,
-}: IProps) => {
+const CommentModule = ({ defaultValue, initials }: IProps) => {
+  const { updateActionsList } = useCardContext()
+
   return (
     <div className="mod-comment">
       {!defaultValue && (

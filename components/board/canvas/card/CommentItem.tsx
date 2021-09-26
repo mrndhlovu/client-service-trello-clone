@@ -108,7 +108,7 @@ const CommentItem = ({
       <div className="mod-comment-frame">
         <div className={`comment-form ${showFormControls ? "active" : ""}`}>
           {isLink && (
-            <div className="link-comment">
+            <div className="link-attachment">
               <a href={link} target="_blank" rel="noreferrer nofollow">
                 {link}
               </a>

@@ -1,6 +1,7 @@
 import styled from "styled-components"
 
 export default styled.div`
+  max-width: 40vw;
   &,
   .content {
     display: grid;

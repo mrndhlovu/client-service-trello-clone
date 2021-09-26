@@ -4,11 +4,19 @@ import { Divider } from "@chakra-ui/layout"
 import { Menu, MenuItemOption } from "@chakra-ui/menu"
 import { ChangeEvent, useRef, useState } from "react"
 import { clientRequest } from "../../../../api"
-import { useCardContext, useGlobalState } from "../../../../lib/providers"
+import {
+  ICardContext,
+  useCardContext,
+  useGlobalState,
+} from "../../../../lib/providers"
 import StyleAddAttachment from "./StyleAddAttachment"
 
-const AddAttachment = () => {
-  const { cardId } = useCardContext()
+interface IProps {
+  updateActionsList: ICardContext["updateActionsList"]
+}
+
+const AddAttachment = ({ updateActionsList }: IProps) => {
+  const { cardId, fetchAndUpdateActions } = useCardContext()
   const [name, setName] = useState<string>("")
   const [attachment, setAttachment] = useState<{
     data: string | FormData | undefined
@@ -60,10 +68,14 @@ const AddAttachment = () => {
 
     if (!name) return
 
-    clientRequest.addLinkAttachment(
-      { link: attachment.data as string, name },
-      cardId
-    )
+    clientRequest
+      .addLinkAttachment({ link: attachment.data as string, name }, cardId)
+      .then(res => {
+        setAttachment({ data: undefined, isFile: false, isImage: false })
+        setName("")
+        fetchAndUpdateActions(res.data.id)
+      })
+      .catch(() => null)
   }
 
   return (
@@ -96,6 +108,7 @@ const AddAttachment = () => {
           size="sm"
           name="link"
           placeholder="Paste any title here..."
+          value={(attachment.data as string) || ""}
         />
 
         {typeof attachment?.data === "string" && (
@@ -106,6 +119,7 @@ const AddAttachment = () => {
               size="sm"
               name="name"
               placeholder="Add name..."
+              value={name}
             />
           </>
         )}

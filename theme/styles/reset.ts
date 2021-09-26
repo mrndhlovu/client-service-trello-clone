@@ -41,7 +41,9 @@ const reset = css`
   }
 
   .chakra-modal__content {
-    border-radius: 2px;
+    max-width: 720px !important;
+    margin-top: 38px;
+    border-radius: 1.5px !important;
   }
 
   .transparent-bg,

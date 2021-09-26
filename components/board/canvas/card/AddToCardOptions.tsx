@@ -12,7 +12,7 @@ import CardLabels from "../cardActions/CardLabels"
 import ChangeCover from "../cardActions/ChangeCover"
 
 const AddToCardOptions = () => {
-  const { showCardCover } = useCardContext()
+  const { showCardCover, updateActionsList } = useCardContext()
 
   const ADD_TO_CARD_OPTIONS = [
     { title: "Labels", id: 0, icon: <BsTag />, menu: <CardLabels /> },
@@ -23,7 +23,7 @@ const AddToCardOptions = () => {
       heading: "Attach from",
       id: 3,
       icon: <HiOutlinePaperClip />,
-      menu: <AddAttachment />,
+      menu: <AddAttachment updateActionsList={updateActionsList} />,
     },
     {
       title: "Cover",

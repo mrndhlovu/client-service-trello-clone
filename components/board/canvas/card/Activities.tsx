@@ -4,7 +4,7 @@ import { Modal, ModalContent, ModalOverlay } from "@chakra-ui/modal"
 
 import { clientRequest } from "../../../../api"
 import { FormattedAction } from "../../../shared"
-import { useBoard } from "../../../../lib/providers"
+import { useBoard, useCardContext } from "../../../../lib/providers"
 import UserAvatar from "../../../shared/lib/UserAvatar"
 import NextLink from "../../../shared/lib/NextLink"
 import CommentModule from "./CommentModule"
@@ -26,11 +26,7 @@ export interface IAction {
 }
 
 const Activities = ({ showActivities }: { showActivities: boolean }) => {
-  const [activities, setActivities] = useState<IAction[]>([])
-  const { boardId } = useBoard()
-  const sortedList = activities?.sort((a, b) => {
-    return new Date(b?.createdAt)?.getTime() - new Date(a?.createdAt)?.getTime()
-  })
+  const { activities, setActivities } = useCardContext()
 
   const [preview, setPreview] = useState<
     { url: string; id: string } | undefined
@@ -43,17 +39,6 @@ const Activities = ({ showActivities }: { showActivities: boolean }) => {
 
     const [url, previewId] = ev?.currentTarget?.id.split("|")
     setPreview({ url, id: previewId })
-  }
-
-  const updateActionsList = (data: IAction, options?: { edited: false }) => {
-    if (options?.edited) {
-      setActivities(prev => [
-        ...prev.map(item => (item.id === data.id ? data : item)),
-      ])
-      return
-    }
-
-    setActivities(prev => [...prev, data])
   }
 
   const handleDelete = (ev?: MouseEvent) => {
@@ -85,24 +70,13 @@ const Activities = ({ showActivities }: { showActivities: boolean }) => {
       .catch(() => {})
   }
 
-  useEffect(() => {
-    const getData = () => {
-      clientRequest
-        .getActivities(boardId)
-        .then(res => setActivities(res.data))
-        .catch(() => {})
-    }
-
-    getData()
-  }, [])
-
   return (
     <>
-      <CommentModule updateActionsList={updateActionsList} />
+      <CommentModule />
 
       {showActivities && (
         <StyleActivities>
-          {sortedList.map((action, index) => (
+          {activities.map((action, index) => (
             <div className="mod-preview-type" key={index}>
               <div className="user-avatar">
                 <UserAvatar initials={action?.initials} />
@@ -110,11 +84,11 @@ const Activities = ({ showActivities }: { showActivities: boolean }) => {
               <FormattedAction
                 openPreviewModal={togglePreviewModal}
                 handleDeleteComment={handleDeleteComment}
-                updateActionsList={updateActionsList}
                 action={action}
               />
               {action?.type !== "comment" &&
-                action?.entities?.attachment?.type !== "link" && (
+                action?.entities?.attachment?.type !== "link" &&
+                action?.createdAt && (
                   <div className="date">
                     {formatDistance(new Date(action?.createdAt), new Date(), {
                       addSuffix: true,

@@ -1,13 +1,17 @@
 import { useRouter } from "next/router"
 import {
   createContext,
+  Dispatch,
   ReactNode,
+  SetStateAction,
   useCallback,
   useContext,
   useEffect,
   useState,
 } from "react"
-import { useListContext } from "."
+import { useBoard, useListContext } from "."
+import { clientRequest } from "../../api"
+import { IAction } from "../../components/board/canvas/card/Activities"
 import { ICardItem } from "../../components/board/canvas/ListItem"
 
 interface IProps {
@@ -26,8 +30,14 @@ const CardContextProvider = ({
   listIndex,
 }: IProps) => {
   const { updateCardsState } = useListContext()
+  const { boardId } = useBoard()
 
   const [cardItem, setCardItem] = useState<ICardItem>()
+  const [activities, setActivities] = useState<IAction[]>([])
+
+  const sortedList = activities?.sort((a, b) => {
+    return new Date(b?.createdAt)?.getTime() - new Date(a?.createdAt)?.getTime()
+  })
 
   const showCardCover =
     cardItem?.colorCover ||
@@ -49,9 +59,40 @@ const CardContextProvider = ({
     updateCardsState(newCard)
   }, [])
 
+  const updateActionsList = (data: IAction, options?: { edited: false }) => {
+    if (options?.edited) {
+      setActivities(prev => [
+        ...prev.map(item => (item.id === data.id ? data : item)),
+      ])
+      return
+    }
+
+    setActivities(prev => [...prev, data])
+  }
+
+  const fetchAndUpdateActions = (attachmentId: string) => {
+    clientRequest
+      .getActionByAttachmentId(boardId, attachmentId)
+      .then(res => {
+        updateActionsList(res.data)
+      })
+      .catch(() => null)
+  }
+
   useEffect(() => {
     setCardItem(card)
   }, [card])
+
+  useEffect(() => {
+    const getData = () => {
+      clientRequest
+        .getActions(boardId)
+        .then(res => setActivities(res.data))
+        .catch(() => {})
+    }
+
+    getData()
+  }, [])
 
   return (
     <CardContext.Provider
@@ -73,6 +114,10 @@ const CardContextProvider = ({
         showCardCover,
         colorCover: cardItem?.colorCover,
         updateCardState,
+        activities: sortedList,
+        updateActionsList,
+        setActivities,
+        fetchAndUpdateActions,
       }}
     >
       {children}
@@ -80,7 +125,7 @@ const CardContextProvider = ({
   )
 }
 
-interface ICardContext {
+export interface ICardContext {
   card: ICardItem
   cardId: string
   listId: string
@@ -92,6 +137,10 @@ interface ICardContext {
   coverUrl?: string
   edgeColor?: string
   updateCardState: (card: ICardItem) => void
+  fetchAndUpdateActions: (attachmentId: string) => void
+  setActivities: Dispatch<SetStateAction<IAction[]>>
+  updateActionsList: (data: IAction, options?: { edited: false }) => void
+  activities: IAction[]
   coverSize?: {
     width: string
     height: string

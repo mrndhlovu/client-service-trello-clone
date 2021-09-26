@@ -157,7 +157,7 @@ export default styled(ModalContent)`
       }
 
       .module-content {
-        margin-left: 32px;
+        margin-left: 23px;
         font-size: 14px;
       }
 

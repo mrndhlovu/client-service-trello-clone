@@ -8,7 +8,7 @@ import CardDescription from "./CardDescription"
 import CardHeader from "./CardHeader"
 import CardLabelModule from "./CardLabelModule"
 import ModalCardActions from "./ModalCardActions"
-import ModalStyles from "./StyleModal"
+import StyleModal from "./StyleModal"
 
 interface IProps {
   isOpen: boolean
@@ -17,9 +17,9 @@ interface IProps {
 
 const CardModal = ({ isOpen, onClose }: IProps) => {
   return (
-    <Modal scrollBehavior="outside" size="xl" isOpen={isOpen} onClose={onClose}>
+    <Modal scrollBehavior="outside" isOpen={isOpen} onClose={onClose}>
       <ModalOverlay zIndex="-moz-initial" />
-      <ModalStyles>
+      <StyleModal className="card-modal-content">
         <CardHeader onClose={onClose} />
         <ModalBody className="card-modal-detail">
           <div className="card-content-column">
@@ -33,7 +33,7 @@ const CardModal = ({ isOpen, onClose }: IProps) => {
             <ModalCardActions />
           </div>
         </ModalBody>
-      </ModalStyles>
+      </StyleModal>
     </Modal>
   )
 }
