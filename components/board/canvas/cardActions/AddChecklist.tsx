@@ -18,7 +18,9 @@ export interface IChecklist {
   tasks: ITaskItem[]
   owner: string
   title: string
+  complete: boolean
   id: string
+  hideComplete: boolean
 }
 
 const AddChecklist = () => {

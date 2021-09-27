@@ -345,6 +345,19 @@ class ApiRequest extends AxiosConfig {
     )
   }
 
+  async updateAttachment(data: { title: string }, attachmentId: string) {
+    return await this.http.patch(
+      `${END_POINTS.cards}/${attachmentId}/update-attachment`,
+      data
+    )
+  }
+
+  async updateRemoveAttachment(attachmentId: string) {
+    return await this.http.delete(
+      `${END_POINTS.cards}/${attachmentId}/del-attachment`
+    )
+  }
+
   async uploadBoardBgImage(formData: FormData, boardId: string) {
     return await this.http.post(
       `${END_POINTS.boards}/upload/${boardId}/add-cover`,

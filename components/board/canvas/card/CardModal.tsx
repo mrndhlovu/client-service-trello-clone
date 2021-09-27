@@ -3,6 +3,7 @@ import { MouseEvent } from "react"
 
 import AddToCardOptions from "./AddToCardOptions"
 import CardActivity from "./CardActivity"
+import CardAttachments from "./CardAttachments"
 import CardChecklists from "./CardChecklists"
 import CardDescription from "./CardDescription"
 import CardHeader from "./CardHeader"
@@ -25,6 +26,7 @@ const CardModal = ({ isOpen, onClose }: IProps) => {
           <div className="card-content-column">
             <CardLabelModule />
             <CardDescription />
+            <CardAttachments />
             <CardChecklists />
             <CardActivity />
           </div>

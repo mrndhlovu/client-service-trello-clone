@@ -23,6 +23,12 @@ export default styled(ModalContent)`
     }
   }
 
+  .checklist-complete-text {
+    display: block;
+    margin: 8px 0 0 27px;
+    color: #5e6c84;
+  }
+
   .edit-title-button {
     width: 100%;
     background-color: transparent;
@@ -38,6 +44,15 @@ export default styled(ModalContent)`
   .link-btn {
     text-decoration: underline;
     margin: 0 5px;
+  }
+
+  label {
+    color: #5e6c84;
+    display: block;
+    font-size: 12px;
+    font-weight: 700;
+    line-height: 16px;
+    margin-bottom: 4px;
   }
 
   header {
@@ -159,6 +174,83 @@ export default styled(ModalContent)`
       .module-content {
         margin-left: 23px;
         font-size: 14px;
+      }
+
+      .attachments {
+        .attachment-item {
+          margin: 0 0 8px;
+          min-height: 80px;
+          position: relative;
+          border-radius: 3px;
+        }
+
+        .preview {
+          color: #5e6c84;
+          display: block;
+          font-size: 18px;
+          font-weight: 700;
+          height: 100%;
+          line-height: 80px;
+          text-align: center;
+          text-decoration: none;
+          text-transform: uppercase;
+          width: 100%;
+
+          a {
+            background-color: #091e420a;
+            background-position: 50%;
+            background-repeat: no-repeat;
+            background-size: contain;
+            border-radius: 3px;
+            height: 80px;
+            left: 0;
+            margin-top: -40px;
+            position: absolute;
+            text-align: center;
+            text-decoration: none;
+            top: 50%;
+            width: 112px;
+            z-index: 1;
+          }
+        }
+
+        .attachment-controls {
+          color: #5e6c84;
+          margin-bottom: 8px;
+          font-size: 14px;
+          display: block;
+
+          .control-edit {
+            display: grid;
+            grid-gap: 5px;
+
+            button {
+              width: max-content;
+            }
+          }
+
+          .dropdown {
+            max-width: 250px;
+          }
+        }
+
+        .attachment-detail {
+          box-sizing: border-box;
+          cursor: pointer;
+          margin: 0;
+          min-height: 80px;
+          padding: 8px 8px 8px 128px;
+          z-index: 0;
+
+          .link-btn {
+            font-size: 12px;
+          }
+
+          .name {
+            word-wrap: break-word;
+            font-weight: 700;
+          }
+        }
       }
 
       .module-content.description {

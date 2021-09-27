@@ -1,14 +1,10 @@
 import { ModalHeader, Button } from "@chakra-ui/react"
 import { AiOutlineClose } from "react-icons/ai"
-import { BsCardHeading } from "react-icons/bs"
 import { IoMdCard } from "react-icons/io"
+import { CgCreditCard } from "react-icons/cg"
 import styled, { css } from "styled-components"
 
-import {
-  useBoard,
-  useCardContext,
-  useListCardsContext,
-} from "../../../../lib/providers"
+import { useCardContext, useListCardsContext } from "../../../../lib/providers"
 import { ICardCoverProps } from "../CardItem"
 import { UIDropdown } from "../../../shared"
 import ChangeCover from "../cardActions/ChangeCover"
@@ -92,7 +88,7 @@ const CardHeader = ({ onClose }) => {
         )}
 
         <div className="card-header-content">
-          <BsCardHeading size={16} />
+          <CgCreditCard size={16} />
           <EditableTitle
             as="h1"
             handleUpdate={handleUpdateTitle}

@@ -3,20 +3,13 @@ import { Input } from "@chakra-ui/input"
 import { Divider } from "@chakra-ui/layout"
 import { Menu, MenuItemOption } from "@chakra-ui/menu"
 import { ChangeEvent, useRef, useState } from "react"
+
 import { clientRequest } from "../../../../api"
-import {
-  ICardContext,
-  useCardContext,
-  useGlobalState,
-} from "../../../../lib/providers"
+import { useCardContext, useGlobalState } from "../../../../lib/providers"
 import StyleAddAttachment from "./StyleAddAttachment"
 
-interface IProps {
-  updateActionsList: ICardContext["updateActionsList"]
-}
-
-const AddAttachment = ({ updateActionsList }: IProps) => {
-  const { cardId, fetchAndUpdateActions } = useCardContext()
+const AddAttachment = () => {
+  const { cardId, fetchAndUpdateActions, setAttachments } = useCardContext()
   const [name, setName] = useState<string>("")
   const [attachment, setAttachment] = useState<{
     data: string | FormData | undefined
@@ -56,13 +49,29 @@ const AddAttachment = ({ updateActionsList }: IProps) => {
 
   const handleAttach = () => {
     if (attachment.isFile && !attachment.isImage) {
-      clientRequest.uploadAttachment(attachment.data as FormData, cardId)
+      clientRequest
+        .uploadAttachment(attachment.data as FormData, cardId)
+        .then(res => {
+          setAttachment({ data: undefined, isFile: false, isImage: false })
+          setName("")
+          fetchAndUpdateActions(res.data.id)
+          setAttachments(prev => [...prev, res.data])
+        })
+        .catch(() => null)
 
       return
     }
 
     if (attachment.isImage) {
-      clientRequest.uploadImageCardCover(attachment.data as FormData, cardId)
+      clientRequest
+        .uploadImageCardCover(attachment.data as FormData, cardId)
+        .then(res => {
+          setAttachment({ data: undefined, isFile: false, isImage: false })
+          setName("")
+          fetchAndUpdateActions(res.data.id)
+          setAttachments(prev => [...prev, res.data])
+        })
+        .catch(() => null)
       return
     }
 
@@ -74,6 +83,7 @@ const AddAttachment = ({ updateActionsList }: IProps) => {
         setAttachment({ data: undefined, isFile: false, isImage: false })
         setName("")
         fetchAndUpdateActions(res.data.id)
+        setAttachments(prev => [...prev, res.data])
       })
       .catch(() => null)
   }
@@ -108,7 +118,11 @@ const AddAttachment = ({ updateActionsList }: IProps) => {
           size="sm"
           name="link"
           placeholder="Paste any title here..."
-          value={(attachment.data as string) || ""}
+          value={
+            typeof attachment.data === "string"
+              ? (attachment.data as string)
+              : ""
+          }
         />
 
         {typeof attachment?.data === "string" && (

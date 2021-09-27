@@ -46,16 +46,16 @@ export default styled.div<IStyledModalProps>`
 
     input {
       border: none !important;
-      background: transparent !important;
+      background-color: #fff !important;
       box-shadow: none;
       color: #fff;
       font-size: 15px;
       font-weight: 600;
       left: -8px;
-      padding: 2px 8px;
+      padding: 0px 8px;
       position: relative;
       width: calc(100% - 18px - 16px);
-      height: 28px;
+      height: 33px;
     }
 
     .icon-wrapper {

@@ -1,7 +1,6 @@
 import styled from "styled-components"
 
 export default styled.div`
-  max-width: 40vw;
   &,
   .content {
     display: grid;
@@ -72,7 +71,7 @@ export default styled.div`
       }
     }
 
-    .controls {
+    .task-controls {
       visibility: hidden;
       ${props => props.theme.mixins.flex()};
       button {
@@ -92,7 +91,7 @@ export default styled.div`
 
     &:hover {
       background-color: #091e4214;
-      .controls {
+      .task-controls {
         visibility: visible;
       }
     }

@@ -12,6 +12,7 @@ import {
 import { useBoard, useListContext } from "."
 import { clientRequest } from "../../api"
 import { IAction } from "../../components/board/canvas/card/Activities"
+import { IAttachment } from "../../components/board/canvas/cardActions/ChangeCover"
 import { ICardItem } from "../../components/board/canvas/ListItem"
 
 interface IProps {
@@ -34,6 +35,7 @@ const CardContextProvider = ({
 
   const [cardItem, setCardItem] = useState<ICardItem>()
   const [activities, setActivities] = useState<IAction[]>([])
+  const [attachments, setAttachments] = useState<IAttachment[]>([])
 
   const sortedList = activities?.sort((a, b) => {
     return new Date(b?.createdAt)?.getTime() - new Date(a?.createdAt)?.getTime()
@@ -79,9 +81,30 @@ const CardContextProvider = ({
       .catch(() => null)
   }
 
+  const fetchAndUpdateAttachments = (attachmentId: string) => {
+    clientRequest
+      .getActionByAttachmentId(boardId, attachmentId)
+      .then(res => {
+        updateActionsList(res.data)
+      })
+      .catch(() => null)
+  }
+
   useEffect(() => {
     setCardItem(card)
   }, [card])
+
+  useEffect(() => {
+    if (!cardItem?.id) return
+    const getData = () => {
+      clientRequest
+        .getCardAttachments(cardItem?.id)
+        .then(res => setAttachments(res.data))
+        .catch(() => {})
+    }
+
+    getData()
+  }, [cardItem?.id])
 
   useEffect(() => {
     const getData = () => {
@@ -109,15 +132,18 @@ const CardContextProvider = ({
           width: imageCover?.width,
           height: imageCover?.height || "200",
         },
+        activities: sortedList,
+        attachments,
+        colorCover: cardItem?.colorCover,
+        fetchAndUpdateActions,
+        fetchAndUpdateAttachments,
         listId,
         listIndex,
-        showCardCover,
-        colorCover: cardItem?.colorCover,
-        updateCardState,
-        activities: sortedList,
-        updateActionsList,
         setActivities,
-        fetchAndUpdateActions,
+        setAttachments,
+        showCardCover,
+        updateActionsList,
+        updateCardState,
       }}
     >
       {children}
@@ -126,25 +152,25 @@ const CardContextProvider = ({
 }
 
 export interface ICardContext {
+  activities: IAction[]
+  attachments: IAttachment[]
   card: ICardItem
   cardId: string
-  listId: string
-  listIndex: number
   cardIndex: number
-  showCardCover: string
-  imageCover?: string
   colorCover?: string
   coverUrl?: string
+  coverSize?: { width: string; height: string }
   edgeColor?: string
-  updateCardState: (card: ICardItem) => void
   fetchAndUpdateActions: (attachmentId: string) => void
+  fetchAndUpdateAttachments: (attachmentId: string) => void
+  imageCover?: string
+  listId: string
+  listIndex: number
   setActivities: Dispatch<SetStateAction<IAction[]>>
+  setAttachments: Dispatch<SetStateAction<IAttachment[]>>
+  showCardCover: string
   updateActionsList: (data: IAction, options?: { edited: false }) => void
-  activities: IAction[]
-  coverSize?: {
-    width: string
-    height: string
-  }
+  updateCardState: (card: ICardItem) => void
 }
 
 export const CardContext = createContext<ICardContext>({} as ICardContext)

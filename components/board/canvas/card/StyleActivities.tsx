@@ -4,7 +4,7 @@ export default styled.div`
   transition: all 0.5s linear;
 
   .link-attachment {
-    margin: 8px;
+    margin: 8px 8px 0;
     width: 449px;
     font-size: 12px;
     overflow: hidden;

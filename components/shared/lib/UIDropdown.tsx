@@ -24,6 +24,7 @@ interface IProps {
     | "right-end"
     | "left-start"
     | "left-end"
+  usePortal?: boolean
 }
 
 const StyledMenu = styled(Menu)`
@@ -78,6 +79,10 @@ const StyledMenuContent = styled(MenuList)`
   .dropdown-content {
     padding: 10px;
   }
+
+  .dropdown > span:first-child {
+    z-index: -1;
+  }
 `
 
 const DropdownHeader = styled.h6``
@@ -88,6 +93,7 @@ const UIDropdown = ({
   className,
   heading,
   placement = "bottom",
+  usePortal = false,
 }: IProps) => {
   return (
     <StyledMenu placement={placement}>
@@ -95,15 +101,25 @@ const UIDropdown = ({
         {toggle}
       </MenuButton>
 
-      <StyledMenuContent>
-        <header>
-          <DropdownHeader>{heading}</DropdownHeader>
-        </header>
-        <Divider />
-        <div className="dropdown-content">{children}</div>
-      </StyledMenuContent>
+      <UIDropdown.Wrapper usePortal={usePortal}>
+        <StyledMenuContent>
+          <header>
+            <DropdownHeader>{heading}</DropdownHeader>
+          </header>
+          <Divider />
+          <div className="dropdown-content">{children}</div>
+        </StyledMenuContent>
+      </UIDropdown.Wrapper>
     </StyledMenu>
   )
 }
+
+UIDropdown.Wrapper = ({
+  usePortal,
+  children,
+}: {
+  usePortal: IProps["usePortal"]
+  children: IProps["children"]
+}) => (usePortal ? <Portal>{children}</Portal> : <>{children}</>)
 
 export { UIDropdown }

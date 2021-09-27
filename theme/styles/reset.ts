@@ -41,14 +41,17 @@ const reset = css`
   }
 
   .chakra-modal__content {
-    max-width: 720px !important;
     margin-top: 38px;
     border-radius: 1.5px !important;
   }
 
+  .card-modal-content {
+    max-width: 720px !important;
+  }
+
   .transparent-bg,
   .create-modal-content {
-    background-color: transparent;
+    background-color: transparent !important;
   }
 
   .transparent-bg {

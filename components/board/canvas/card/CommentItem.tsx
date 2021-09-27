@@ -114,14 +114,16 @@ const CommentItem = ({
               </a>
             </div>
           )}
-          <Textarea
-            className={`new-comment ${!focused ? "" : "active"}`}
-            value={comment}
-            onChange={handleChange}
-            placeholder="Write a comment..."
-            onClick={(ev?: MouseEvent) => onEmojiClick(undefined, ev)}
-            ref={inputRef}
-          />
+          {(showFormControls || !isLink || comment) && (
+            <Textarea
+              className={`new-comment ${!focused ? "" : "active"}`}
+              value={comment}
+              onChange={handleChange}
+              placeholder="Write a comment..."
+              onClick={(ev?: MouseEvent) => onEmojiClick(undefined, ev)}
+              ref={inputRef}
+            />
+          )}
         </div>
 
         <div className={`controls ${showFormControls ? "active" : ""}`}>
