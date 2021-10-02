@@ -299,9 +299,9 @@ class ApiRequest extends AxiosConfig {
     return await this.http.get(`${END_POINTS.accounts}/${boardId}/actions`)
   }
 
-  async getActionByAttachmentId(boardId: string, attachmentId: string) {
+  async getActionByAttachmentId(boardId: string, attachmentIds: string) {
     return await this.http.get(
-      `${END_POINTS.accounts}/${boardId}/${attachmentId}/action`
+      `${END_POINTS.accounts}/${boardId}/action?attachmentIds=${attachmentIds}`
     )
   }
 
@@ -340,7 +340,7 @@ class ApiRequest extends AxiosConfig {
 
   async uploadAttachment(formData: FormData, cardId: string) {
     return await this.http.post(
-      `${END_POINTS.cards}/upload/${cardId}/attachment`,
+      `${END_POINTS.cards}/${cardId}/upload/attachment`,
       formData
     )
   }

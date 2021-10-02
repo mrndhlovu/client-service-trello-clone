@@ -72,11 +72,11 @@ const CardContextProvider = ({
     setActivities(prev => [...prev, data])
   }
 
-  const fetchAndUpdateActions = (attachmentId: string) => {
+  const fetchAndUpdateActions = (attachmentIds: string) => {
     clientRequest
-      .getActionByAttachmentId(boardId, attachmentId)
+      .getActionByAttachmentId(boardId, attachmentIds)
       .then(res => {
-        updateActionsList(res.data)
+        setActivities(prev => [...prev, ...res.data])
       })
       .catch(() => null)
   }

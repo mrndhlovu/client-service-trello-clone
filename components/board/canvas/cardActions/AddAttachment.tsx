@@ -5,7 +5,8 @@ import { Menu, MenuItemOption } from "@chakra-ui/menu"
 import { ChangeEvent, useRef, useState } from "react"
 
 import { clientRequest } from "../../../../api"
-import { useCardContext, useGlobalState } from "../../../../lib/providers"
+import { useCardContext } from "../../../../lib/providers"
+import { IAttachment } from "./ChangeCover"
 import StyleAddAttachment from "./StyleAddAttachment"
 
 const AddAttachment = () => {
@@ -19,7 +20,6 @@ const AddAttachment = () => {
     data: undefined,
   })
   const inputRef = useRef<HTMLInputElement>()
-  const { notify } = useGlobalState()
 
   const handleClick = () => {
     inputRef.current.click()
@@ -52,10 +52,16 @@ const AddAttachment = () => {
       clientRequest
         .uploadAttachment(attachment.data as FormData, cardId)
         .then(res => {
+          const newAttachmentIds = []
+
+          const newAttachments: IAttachment[] = res.data
+          newAttachments.map(item => newAttachmentIds.push(item.id))
+
           setAttachment({ data: undefined, isFile: false, isImage: false })
           setName("")
-          fetchAndUpdateActions(res.data.id)
-          setAttachments(prev => [...prev, res.data])
+          fetchAndUpdateActions(newAttachmentIds.join("|"))
+
+          setAttachments(prev => [...prev, ...res.data])
         })
         .catch(() => null)
 
@@ -66,9 +72,13 @@ const AddAttachment = () => {
       clientRequest
         .uploadImageCardCover(attachment.data as FormData, cardId)
         .then(res => {
+          const newAttachmentIds = []
+
+          const newAttachments: IAttachment[] = res.data
+          newAttachments.map(item => newAttachmentIds.push(item.id))
           setAttachment({ data: undefined, isFile: false, isImage: false })
           setName("")
-          fetchAndUpdateActions(res.data.id)
+          fetchAndUpdateActions(newAttachmentIds.join("|"))
           setAttachments(prev => [...prev, res.data])
         })
         .catch(() => null)
@@ -80,9 +90,15 @@ const AddAttachment = () => {
     clientRequest
       .addLinkAttachment({ link: attachment.data as string, name }, cardId)
       .then(res => {
+        const newAttachmentIds = []
+
+        const newAttachments: IAttachment[] = res.data
+        newAttachments.map(item => newAttachmentIds.push(item.id))
+
         setAttachment({ data: undefined, isFile: false, isImage: false })
         setName("")
-        fetchAndUpdateActions(res.data.id)
+        fetchAndUpdateActions(newAttachmentIds.join("|"))
+
         setAttachments(prev => [...prev, res.data])
       })
       .catch(() => null)
