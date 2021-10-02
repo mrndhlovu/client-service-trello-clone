@@ -250,7 +250,7 @@ export default styled.div`
         right: -64%;
         top: 0;
 
-        & > button {
+        & button {
           background-color: #00000052 !important;
           color: #fff;
           margin-bottom: 5px;

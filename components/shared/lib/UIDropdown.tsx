@@ -34,6 +34,7 @@ const StyledMenu = styled(Menu)`
 const StyledMenuContent = styled(MenuList)`
   border-radius: 3px;
   min-width: 300px;
+  max-width: 300px;
   z-index: 50;
   overflow-y: auto;
 

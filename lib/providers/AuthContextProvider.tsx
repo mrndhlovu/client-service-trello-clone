@@ -55,8 +55,8 @@ export interface IUser {
 }
 
 const AuthContextProvider = ({ children }) => {
-  const [isAuthenticated, setIsAuthenticated] = useState(false)
-  const [loading, setLoading] = useState(false)
+  const [isAuthenticated, setIsAuthenticated] = useState<boolean>(false)
+  const [loading, setLoading] = useState<boolean>(false)
   const [user, setUser] = useState<IUser>()
 
   const [authError, setAuthError] = useState<IUIRequestError | null>()

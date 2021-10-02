@@ -1,9 +1,9 @@
-import { Menu, MenuItem } from "@chakra-ui/react"
-import { Fragment, MouseEvent } from "react"
+import { Menu, MenuItem, MenuItemOption } from "@chakra-ui/react"
+import { MouseEvent } from "react"
 import { AiFillSwitcher, AiOutlineIdcard, AiOutlineTag } from "react-icons/ai"
 import { CgCreditCard } from "react-icons/cg"
 
-import { useListCardsContext } from "../../../../lib/providers"
+import { useCardContext, useListCardsContext } from "../../../../lib/providers"
 import { UIDropdown } from "../../../shared"
 import CardLabels from "./CardLabels"
 import ChangeCover from "./ChangeCover"
@@ -16,6 +16,7 @@ interface IProps {
 
 const CardActions = ({ listId, cardId, close }: IProps) => {
   const { saveCardChanges } = useListCardsContext()
+  const { toggleCardIsOpen } = useCardContext()
 
   const handleArchiveCard = (ev: MouseEvent) => {
     ev.preventDefault()
@@ -25,7 +26,10 @@ const CardActions = ({ listId, cardId, close }: IProps) => {
 
   const CARD_ACTIONS = [
     {
-      handleClick: () => {},
+      handleClick: (ev: MouseEvent) => {
+        close()
+        toggleCardIsOpen(ev, cardId)
+      },
       key: "open-card",
       title: "Open card",
       icon: <CgCreditCard />,
@@ -61,9 +65,9 @@ const CardActions = ({ listId, cardId, close }: IProps) => {
         {CARD_ACTIONS.map(action => (
           <span key={action.key}>
             {action?.button ? (
-              <MenuItem icon={action.icon} onClick={action.handleClick}>
+              <MenuItemOption icon={action.icon} onClick={action.handleClick}>
                 {action.title}
-              </MenuItem>
+              </MenuItemOption>
             ) : (
               <UIDropdown
                 heading={action.title}

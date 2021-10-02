@@ -1,5 +1,5 @@
 import { Button, ButtonGroup } from "@chakra-ui/button"
-import { MouseEvent, useEffect, useRef, useState } from "react"
+import { MouseEvent, useEffect, useRef } from "react"
 import { FiCheckSquare } from "react-icons/fi"
 
 import { clientRequest } from "../../../../api"
@@ -38,8 +38,6 @@ const CardChecklists = () => {
   }
 
   const updateComplete = (newCompleteState: boolean, id: string) => {
-    console.log(id)
-
     setChecklists(prev => [
       ...prev.map(checklist =>
         checklist.id === id

@@ -1,6 +1,7 @@
 import { ACTION_KEYS } from "@tusksui/shared"
 import { formatDistance } from "date-fns"
 import { MouseEvent } from "react"
+import { ALLOWED_IMAGE_OPTIONS } from "../../../util/constants"
 
 import { IAction } from "../../board/canvas/card/Activities"
 import CommentItem from "../../board/canvas/card/CommentItem"
@@ -83,7 +84,9 @@ const FormattedAction = <T extends IAction>({
         return <span> moved {action?.entities?.list?.name} right.</span>
 
       case ACTION_KEYS.ADD_CARD_ATTACHMENT:
-        const modalPreviewOptions = ["png", "jpeg", "jpg", "gif"]
+        const isImage =
+          ALLOWED_IMAGE_OPTIONS.includes(action?.entities?.attachment?.type) ||
+          action?.entities?.attachment?.image
         const previewId = `${action?.entities?.attachment?.url}|${action?.entities?.attachment?.id}`
 
         if (action?.entities?.attachment?.type === "link") {
@@ -103,9 +106,7 @@ const FormattedAction = <T extends IAction>({
           <span>
             {" "}
             attached{" "}
-            {modalPreviewOptions.includes(
-              action?.entities?.attachment?.type
-            ) && (
+            {isImage && (
               <NextLink
                 href="#"
                 linkText={action?.entities?.attachment?.name}
@@ -113,14 +114,11 @@ const FormattedAction = <T extends IAction>({
                 id={previewId}
               />
             )}
-            {!modalPreviewOptions.includes(
-              action?.entities?.attachment?.type
-            ) &&
-              action?.entities?.attachment?.type !== "link" && (
-                <a href={action?.entities?.attachment?.url} download>
-                  {action?.entities?.attachment?.name}
-                </a>
-              )}{" "}
+            {!isImage && action?.entities?.attachment?.type !== "link" && (
+              <a href={action?.entities?.attachment?.url} download>
+                {action?.entities?.attachment?.name}
+              </a>
+            )}{" "}
             {action?.entities?.card?.name && (
               <>
                 to{" "}
@@ -132,15 +130,15 @@ const FormattedAction = <T extends IAction>({
                 />
               </>
             )}
-            <div className="preview">
-              {action?.entities?.attachment?.image && (
+            {isImage && (
+              <div className="preview">
                 <img
                   src={action?.entities?.attachment?.url}
                   alt="attachment"
                   className="preview-img"
                 />
-              )}
-            </div>
+              </div>
+            )}
           </span>
         )
 

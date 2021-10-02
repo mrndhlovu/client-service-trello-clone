@@ -54,6 +54,16 @@ const reset = css`
     background-color: transparent !important;
   }
 
+  .control-edit {
+    display: grid;
+    grid-gap: 5px;
+
+    button {
+      width: max-content;
+      margin-top: 10px;
+    }
+  }
+
   .transparent-bg {
     .preview-frame {
       padding: 48px 24px 112px;

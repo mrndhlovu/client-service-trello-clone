@@ -182,6 +182,13 @@ export default styled(ModalContent)`
           min-height: 80px;
           position: relative;
           border-radius: 3px;
+          max-height: 80px;
+          overflow: hidden;
+
+          &:hover {
+            background-color: #e9e9e9;
+            ${props => props.theme.mixins.transitionEffect()};
+          }
         }
 
         .preview {
@@ -219,15 +226,6 @@ export default styled(ModalContent)`
           margin-bottom: 8px;
           font-size: 14px;
           display: block;
-
-          .control-edit {
-            display: grid;
-            grid-gap: 5px;
-
-            button {
-              width: max-content;
-            }
-          }
 
           .dropdown {
             max-width: 250px;

@@ -3,15 +3,41 @@ import { Input } from "@chakra-ui/input"
 import { isEmpty } from "lodash"
 import { ChangeEvent, MouseEvent, useState } from "react"
 import { FiPaperclip } from "react-icons/fi"
+import styled from "styled-components"
 
 import { clientRequest } from "../../../../api"
-import { useCardContext } from "../../../../lib/providers"
+import { ICardCoverProps } from "../CardItem"
 import { UIDropdown } from "../../../shared"
-import NextLink from "../../../shared/lib/NextLink"
+import { useCardContext } from "../../../../lib/providers"
 import CardModule from "./CardModule"
+import NextLink from "../../../shared/lib/NextLink"
+
+const ImageAttachment = styled.div<ICardCoverProps>`
+  background-image: url("${props => props?.imageCover}");
+  min-height: 100px;
+  background-size: contain;
+  background-color: ${props => props.edgeColor};
+
+  background-position: 50%;
+  background-repeat: no-repeat;
+  width: 100%;
+  max-height: 270px;
+
+  border-radius: 3px;
+  height: 80px;
+  left: 0;
+  margin-top: -40px;
+  position: absolute;
+  text-align: center;
+  text-decoration: none;
+  top: 50%;
+  width: 112px;
+  z-index: 1;
+  cursor: pointer;
+`
 
 const CardAttachments = () => {
-  const { attachments, setAttachments } = useCardContext()
+  const { attachments, setAttachments, togglePreviewModal } = useCardContext()
 
   const [title, setTitle] = useState<string>("")
 
@@ -61,12 +87,22 @@ const CardAttachments = () => {
           {attachments?.map((attachment, index) => (
             <div key={index} className="attachment-item">
               <div className="preview">
-                <NextLink
-                  id={attachment.id}
-                  linkText={attachment?.resourceType}
-                  onClick={handlePreviewClick}
-                  href="#"
-                />
+                {attachment?.resourceType === "image" ? (
+                  <ImageAttachment
+                    className="image-attachment"
+                    imageCover={attachment?.url}
+                    edgeColor={attachment.edgeColor}
+                    id={`${attachment?.url}|${attachment?.id}`}
+                    onClick={togglePreviewModal}
+                  />
+                ) : (
+                  <NextLink
+                    id={attachment.id}
+                    linkText={attachment?.resourceType}
+                    onClick={handlePreviewClick}
+                    href="#"
+                  />
+                )}
               </div>
               <p className="attachment-detail">
                 <span className="name">{attachment?.title}</span>
@@ -83,6 +119,7 @@ const CardAttachments = () => {
                   </button>
                   <UIDropdown
                     heading="Edit attachment"
+                    usePortal
                     toggle={
                       <span>
                         <button id={attachment.id} className="link-btn">

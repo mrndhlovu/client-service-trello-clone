@@ -157,3 +157,5 @@ export const LIST_ACTIONS = {
     title: "Archive",
   },
 }
+
+export const ALLOWED_IMAGE_OPTIONS = ["png", "jpeg", "jpg", "gif"]

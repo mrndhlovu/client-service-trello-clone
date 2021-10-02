@@ -18,8 +18,9 @@ export const useLocalStorage = <T extends string, Y>(
   const [storageValue, setStorageValue] = useState(() => {
     if (!isBrowser) return defaultValue
 
-    const storedValue = localStorage.getItem(key)
-    return storedValue === null ? defaultValue : JSON.parse(storedValue)
+    const storedValue = key ? localStorage.getItem(key) : undefined
+
+    return !storedValue ? defaultValue : JSON.parse(storedValue)
   })
 
   const handleStorage = (newValue: (newValue: any) => void | string) => {

@@ -33,6 +33,7 @@ const AddAttachment = () => {
     }
 
     const file = ev.currentTarget.files?.[0]
+    if (!file) return
     const fileType = file.type.split("/")?.[1]
     const allowedImageFiles = ["png", "jpeg", "jpg", "gif"]
     const isImage = allowedImageFiles.includes(fileType)

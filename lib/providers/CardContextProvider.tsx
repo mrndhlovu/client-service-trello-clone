@@ -1,4 +1,3 @@
-import { merge } from "lodash"
 import {
   createContext,
   Dispatch,
@@ -8,6 +7,7 @@ import {
   useContext,
   useEffect,
   useState,
+  MouseEvent,
 } from "react"
 import { useBoard, useListContext } from "."
 import { clientRequest } from "../../api"
@@ -19,6 +19,7 @@ import {
 import { IAttachment } from "../../components/board/canvas/cardActions/ChangeCover"
 import { ICardItem } from "../../components/board/canvas/ListItem"
 import { mergeTasks } from "../../util"
+import { useLocalStorage } from "../hooks"
 
 interface IProps {
   card: ICardItem
@@ -26,6 +27,11 @@ interface IProps {
   cardIndex: number
   listId: string
   listIndex: number
+}
+
+interface IPreview {
+  url: string
+  id: string
 }
 
 const CardContextProvider = ({
@@ -38,13 +44,17 @@ const CardContextProvider = ({
   const { updateCardsState } = useListContext()
   const { boardId } = useBoard()
 
-  const [cardItem, setCardItem] = useState<ICardItem>()
   const [activities, setActivities] = useState<IAction[]>([])
   const [attachments, setAttachments] = useState<IAttachment[]>([])
-  const [tasks, setTasks] = useState<ITaskItem[]>([])
+  const [cardItem, setCardItem] = useState<ICardItem>()
   const [checklists, setChecklists] = useState<IChecklist[]>([])
+  const [preview, setPreview] = useState<IPreview | undefined>()
+  const [tasks, setTasks] = useState<ITaskItem[]>([])
 
-  console.log({ tasks, card })
+  const [openCardModalId, setOpenCardModalId] = useLocalStorage(
+    "CARD_OPEN_ID",
+    ""
+  )
 
   const sortedList = activities?.sort((a, b) => {
     return new Date(b?.createdAt)?.getTime() - new Date(a?.createdAt)?.getTime()
@@ -64,6 +74,24 @@ const CardContextProvider = ({
   const edgeColor = cardItem?.imageCover?.active
     ? cardItem?.imageCover?.edgeColor
     : cardItem?.coverUrl?.edgeColor
+
+  const previewModalIsOpen = preview !== undefined
+
+  const toggleCardIsOpen = useCallback(
+    (ev?: MouseEvent, id?: string) => {
+      const cardId = id ? id : ev?.currentTarget?.id
+
+      setOpenCardModalId(cardId)
+    },
+    [setOpenCardModalId]
+  )
+
+  const togglePreviewModal = (ev?: MouseEvent) => {
+    if (!ev?.currentTarget.id) return setPreview(undefined)
+
+    const [url, previewId] = ev?.currentTarget?.id.split("|")
+    setPreview({ url, id: previewId })
+  }
 
   const updateCardState = useCallback((newCard: ICardItem) => {
     setCardItem(newCard)
@@ -147,18 +175,23 @@ const CardContextProvider = ({
         },
         activities: sortedList,
         attachments,
+        cardIsOpen: openCardModalId === card.id,
         checklists,
         colorCover: cardItem?.colorCover,
         fetchAndUpdateActions,
         fetchAndUpdateAttachments,
         listId,
         listIndex,
+        preview,
+        previewModalIsOpen,
         setActivities,
         setAttachments,
         setChecklists,
         setTasks,
         showCardCover,
         tasks,
+        toggleCardIsOpen,
+        togglePreviewModal,
         updateActionsList,
         updateCardState,
       }}
@@ -183,6 +216,11 @@ export interface ICardContext {
   fetchAndUpdateAttachments: (attachmentId: string) => void
   imageCover?: string
   listId: string
+  previewModalIsOpen: boolean
+  preview?: IPreview
+  togglePreviewModal: (ev?: MouseEvent) => void
+  cardIsOpen: boolean
+  toggleCardIsOpen: (ev?: MouseEvent, id?: string) => void
   listIndex: number
   setActivities: Dispatch<SetStateAction<IAction[]>>
   setAttachments: Dispatch<SetStateAction<IAttachment[]>>

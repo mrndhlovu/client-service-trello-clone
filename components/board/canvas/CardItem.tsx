@@ -1,23 +1,19 @@
-import { useRouter } from "next/router"
-import { MouseEvent, useState } from "react"
+import { useMemo } from "react"
 import { isEmpty } from "lodash"
 import styled, { css } from "styled-components"
 
 import { FiEdit2 } from "react-icons/fi"
-import { AiOutlineClose, AiOutlinePaperClip } from "react-icons/ai"
-import { Button, Modal, ModalOverlay, Badge } from "@chakra-ui/react"
+import { AiOutlinePaperClip } from "react-icons/ai"
+import { Button, Badge } from "@chakra-ui/react"
 import { BsChatDots, BsCheckBox } from "react-icons/bs"
 
-import {
-  useBoard,
-  useCardContext,
-  useListCardsContext,
-} from "../../../lib/providers"
+import { useCardContext, useListCardsContext } from "../../../lib/providers"
 import { calculateCompletedTasks } from "../../../util"
-import { ROUTES } from "../../../util/constants"
 import CardActions from "./cardActions/CardActions"
 import CardModal from "./card/CardModal"
 import EditCardMenu from "./EditCardMenu"
+import CardActionsModal from "./CardActionsModal"
+import PreviewModal from "./card/PreviewModal"
 
 export interface ICardCoverProps {
   colorCover?: string
@@ -59,18 +55,19 @@ const CardCover = styled.div<ICardCoverProps>`
         `};
 `
 
-interface IProps {
+export interface ICardActionProps {
   toggleActionsMenu: () => void
   actionsOpen: boolean
 }
 
-const CardItem = ({ toggleActionsMenu, actionsOpen }: IProps) => {
+const CardItem = ({ toggleActionsMenu, actionsOpen }: ICardActionProps) => {
   const { saveCardChanges } = useListCardsContext()
-  const { boardId } = useBoard()
   const {
+    activities,
     attachments,
     card,
-    tasks,
+    cardId,
+    cardIsOpen,
     colorCover,
     coverSize,
     coverUrl,
@@ -78,16 +75,25 @@ const CardItem = ({ toggleActionsMenu, actionsOpen }: IProps) => {
     imageCover,
     listId,
     showCardCover,
+    tasks,
+    previewModalIsOpen,
+    toggleCardIsOpen,
   } = useCardContext()
 
-  const { query, replace, asPath } = useRouter()
+  const numberOfCardComments = useMemo(
+    () =>
+      activities?.filter(
+        action =>
+          action?.entities?.comment !== undefined &&
+          action?.entities?.card?.id === cardId
+      )?.length,
+    [activities, cardId]
+  )
 
-  const cardModalOpen =
-    query?.openModalId !== undefined && query?.openModalId === card?.id
-
-  const hasComments = !isEmpty(attachments)
+  const hasComments = numberOfCardComments > 0
   const hasTasks = !isEmpty(tasks)
   const hasAttachments = !isEmpty(attachments)
+  const hasBadge = hasComments || hasTasks || hasAttachments
   const [numberOfTasksToComplete, numberOfCompletedTasks] =
     calculateCompletedTasks(tasks)
   const allTasksCompleted = numberOfCompletedTasks === numberOfTasksToComplete
@@ -95,17 +101,6 @@ const CardItem = ({ toggleActionsMenu, actionsOpen }: IProps) => {
   const handleSave = (title: string) => {
     saveCardChanges(card.id, listId, { title })
     toggleActionsMenu()
-  }
-
-  const toggleCardModal = (ev?: MouseEvent) => {
-    if (!ev || cardModalOpen) {
-      replace(`/${ROUTES.board}/${boardId}`, undefined, { shallow: true })
-
-      return
-    }
-
-    ev.preventDefault()
-    replace(`${asPath}/?openModalId=${card?.id}`, undefined, { shallow: true })
   }
 
   return (
@@ -117,13 +112,20 @@ const CardItem = ({ toggleActionsMenu, actionsOpen }: IProps) => {
       )}
 
       {actionsOpen && (
-        <CardActions
-          close={toggleActionsMenu}
-          listId={listId}
-          cardId={card.id}
-        />
+        <>
+          <CardActions
+            close={toggleActionsMenu}
+            listId={listId}
+            cardId={cardId}
+          />
+
+          <CardActionsModal
+            actionsOpen={actionsOpen}
+            toggleActionsMenu={toggleActionsMenu}
+          />
+        </>
       )}
-      <StyledSpan onClick={toggleCardModal}>
+      <StyledSpan id={cardId} onClick={toggleCardIsOpen}>
         {showCardCover && (
           <CardCover
             className="list-card-cover"
@@ -153,47 +155,39 @@ const CardItem = ({ toggleActionsMenu, actionsOpen }: IProps) => {
               <span className="list-card-title">{card?.title}</span>
             )}
           </div>
-          <div className="badges">
-            {hasAttachments && (
-              <div>
-                <span>{attachments?.length}</span>{" "}
-                <AiOutlinePaperClip size={12} />
-              </div>
-            )}
-            {hasComments && (
-              <div>
-                <span> {card?.comments?.length}</span> <BsChatDots size={12} />
-              </div>
-            )}
-            {hasTasks && (
-              <Badge colorScheme={allTasksCompleted ? "whatsapp" : ""}>
-                <div className="tasks">
-                  <BsCheckBox size={12} />
-                  <span>
-                    {" "}
-                    {`${numberOfCompletedTasks}/${numberOfTasksToComplete}`}
-                  </span>{" "}
+          {hasBadge && (
+            <div className="badges">
+              {hasAttachments && (
+                <div>
+                  <span>{attachments?.length}</span>{" "}
+                  <AiOutlinePaperClip size={12} />
                 </div>
-              </Badge>
-            )}
-          </div>
+              )}
+              {hasComments && (
+                <div>
+                  <BsChatDots size={12} />
+                  <span> {numberOfCardComments}</span>
+                </div>
+              )}
+              {hasTasks && (
+                <Badge colorScheme={allTasksCompleted ? "whatsapp" : ""}>
+                  <div className="tasks">
+                    <BsCheckBox size={12} />
+                    <span>
+                      {" "}
+                      {`${numberOfCompletedTasks}/${numberOfTasksToComplete}`}
+                    </span>{" "}
+                  </div>
+                </Badge>
+              )}
+            </div>
+          )}
         </div>
       </StyledSpan>
-      {cardModalOpen && (
-        <CardModal onClose={toggleCardModal} isOpen={cardModalOpen} />
+      {cardIsOpen && (
+        <CardModal onClose={toggleCardIsOpen} isOpen={cardIsOpen} />
       )}
-
-      <Modal size="full" isOpen={actionsOpen} onClose={toggleActionsMenu}>
-        <ModalOverlay
-          onClick={toggleActionsMenu}
-          className="card-editor-overlay"
-        />
-        <AiOutlineClose
-          size={22}
-          className="card-actions-close-btn"
-          onClick={toggleActionsMenu}
-        />
-      </Modal>
+      {previewModalIsOpen && <PreviewModal />}
     </>
   )
 }

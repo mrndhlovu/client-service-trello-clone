@@ -9,6 +9,7 @@ import UserAvatar from "../../../shared/lib/UserAvatar"
 import NextLink from "../../../shared/lib/NextLink"
 import CommentModule from "./CommentModule"
 import StyleActivities from "./StyleActivities"
+import PreviewModal from "./PreviewModal"
 
 export interface IAction {
   entities: { boardId: string; name?: string; [key: string]: any }
@@ -26,35 +27,7 @@ export interface IAction {
 }
 
 const Activities = ({ showActivities }: { showActivities: boolean }) => {
-  const { activities, setActivities } = useCardContext()
-
-  const [preview, setPreview] = useState<
-    { url: string; id: string } | undefined
-  >()
-
-  const modalIsOpen = preview !== undefined
-
-  const togglePreviewModal = (ev?: MouseEvent) => {
-    if (!ev?.currentTarget.id) return setPreview(undefined)
-
-    const [url, previewId] = ev?.currentTarget?.id.split("|")
-    setPreview({ url, id: previewId })
-  }
-
-  const handleDelete = (ev?: MouseEvent) => {
-    const previewId = ev.currentTarget.id
-    clientRequest
-      .deleteAttachment(previewId)
-      .then(() => {
-        setActivities(prev => [
-          ...prev.filter(
-            action => action?.entities?.attachment?.id !== previewId
-          ),
-        ])
-        togglePreviewModal()
-      })
-      .catch(() => {})
-  }
+  const { activities, setActivities, togglePreviewModal } = useCardContext()
 
   const handleDeleteComment = (ev?: MouseEvent) => {
     ev.stopPropagation()
@@ -97,34 +70,6 @@ const Activities = ({ showActivities }: { showActivities: boolean }) => {
                 )}
             </div>
           ))}
-
-          {modalIsOpen && (
-            <Modal isOpen={modalIsOpen} onClose={togglePreviewModal}>
-              <ModalOverlay className="overlay-dark" />
-              <ModalContent className="transparent-bg">
-                <div className="preview-frame">
-                  <img src={preview.url} alt="preview" className="preview" />
-                </div>
-                <div className="preview-detail">
-                  <p className="meta">
-                    <span>
-                      <a href={preview.url} target="_blank">
-                        Open in new tab
-                      </a>
-                    </span>
-                    <span>
-                      <NextLink
-                        id={preview.id}
-                        onClick={handleDelete}
-                        href="#"
-                        linkText="Delete"
-                      />
-                    </span>
-                  </p>
-                </div>
-              </ModalContent>
-            </Modal>
-          )}
         </StyleActivities>
       )}
     </>
