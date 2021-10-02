@@ -1,20 +1,23 @@
 import { useRouter } from "next/router"
 import { MouseEvent, useState } from "react"
+import { isEmpty } from "lodash"
 import styled, { css } from "styled-components"
 
 import { FiEdit2 } from "react-icons/fi"
-import { AiOutlineClose } from "react-icons/ai"
-import { Button, Modal, ModalOverlay } from "@chakra-ui/react"
+import { AiOutlineClose, AiOutlinePaperClip } from "react-icons/ai"
+import { Button, Modal, ModalOverlay, Badge } from "@chakra-ui/react"
+import { BsChatDots, BsCheckBox } from "react-icons/bs"
 
 import {
   useBoard,
   useCardContext,
   useListCardsContext,
 } from "../../../lib/providers"
+import { calculateCompletedTasks } from "../../../util"
+import { ROUTES } from "../../../util/constants"
 import CardActions from "./cardActions/CardActions"
 import CardModal from "./card/CardModal"
 import EditCardMenu from "./EditCardMenu"
-import { ROUTES } from "../../../util/constants"
 
 export interface ICardCoverProps {
   colorCover?: string
@@ -65,19 +68,29 @@ const CardItem = ({ toggleActionsMenu, actionsOpen }: IProps) => {
   const { saveCardChanges } = useListCardsContext()
   const { boardId } = useBoard()
   const {
+    attachments,
     card,
-    imageCover,
-    showCardCover,
+    tasks,
     colorCover,
-    edgeColor,
-    coverUrl,
     coverSize,
+    coverUrl,
+    edgeColor,
+    imageCover,
     listId,
+    showCardCover,
   } = useCardContext()
-  const { query, replace } = useRouter()
-  const { asPath, push } = useRouter()
+
+  const { query, replace, asPath } = useRouter()
+
   const cardModalOpen =
     query?.openModalId !== undefined && query?.openModalId === card?.id
+
+  const hasComments = !isEmpty(attachments)
+  const hasTasks = !isEmpty(tasks)
+  const hasAttachments = !isEmpty(attachments)
+  const [numberOfTasksToComplete, numberOfCompletedTasks] =
+    calculateCompletedTasks(tasks)
+  const allTasksCompleted = numberOfCompletedTasks === numberOfTasksToComplete
 
   const handleSave = (title: string) => {
     saveCardChanges(card.id, listId, { title })
@@ -138,6 +151,30 @@ const CardItem = ({ toggleActionsMenu, actionsOpen }: IProps) => {
               />
             ) : (
               <span className="list-card-title">{card?.title}</span>
+            )}
+          </div>
+          <div className="badges">
+            {hasAttachments && (
+              <div>
+                <span>{attachments?.length}</span>{" "}
+                <AiOutlinePaperClip size={12} />
+              </div>
+            )}
+            {hasComments && (
+              <div>
+                <span> {card?.comments?.length}</span> <BsChatDots size={12} />
+              </div>
+            )}
+            {hasTasks && (
+              <Badge colorScheme={allTasksCompleted ? "whatsapp" : ""}>
+                <div className="tasks">
+                  <BsCheckBox size={12} />
+                  <span>
+                    {" "}
+                    {`${numberOfCompletedTasks}/${numberOfTasksToComplete}`}
+                  </span>{" "}
+                </div>
+              </Badge>
             )}
           </div>
         </div>
