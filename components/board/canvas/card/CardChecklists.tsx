@@ -3,7 +3,6 @@ import { MouseEvent, useEffect, useRef, useState } from "react"
 import { FiCheckSquare } from "react-icons/fi"
 
 import { clientRequest } from "../../../../api"
-import { IChecklist } from "../cardActions/AddChecklist"
 import { useCardContext } from "../../../../lib/providers"
 import { usePrevious } from "../../../../lib/hooks"
 import CardModule from "./CardModule"
@@ -12,9 +11,9 @@ import StyleChecklistTasks from "./StyleChecklistTasks"
 import TaskList from "./TaskList"
 
 const CardChecklists = () => {
-  const { cardId, card, updateCardState } = useCardContext()
+  const { checklists, cardId, card, updateCardState, setChecklists } =
+    useCardContext()
 
-  const [checklists, setChecklists] = useState<IChecklist[]>([])
   const previous = usePrevious({
     listSize: checklists?.length,
   })
@@ -30,20 +29,17 @@ const CardChecklists = () => {
 
     clientRequest
       .deleteChecklist({ checklistId, cardId })
-      .then(() => {
-        updateCardState({
-          ...card,
-          checklists: [
-            ...card.checklists.filter(
-              checklist => checklist.id !== checklistId
-            ),
-          ],
-        })
-      })
+      .then(() =>
+        setChecklists(prev => [
+          ...prev.filter(checklist => checklist.id !== checklistId),
+        ])
+      )
       .catch(() => {})
   }
 
   const updateComplete = (newCompleteState: boolean, id: string) => {
+    console.log(id)
+
     setChecklists(prev => [
       ...prev.map(checklist =>
         checklist.id === id
@@ -91,13 +87,10 @@ const CardChecklists = () => {
               : checklist
           ),
         ])
+        updateCardState({ ...card, checklists: { ...card.checklists } })
       })
       .catch(() => {})
   }
-
-  useEffect(() => {
-    setChecklists(card?.checklists)
-  }, [card?.checklists])
 
   useEffect(() => {
     const getData = () => {

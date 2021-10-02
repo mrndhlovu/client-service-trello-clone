@@ -1,11 +1,4 @@
-import {
-  ChangeEvent,
-  Dispatch,
-  MouseEvent,
-  SetStateAction,
-  useEffect,
-  useState,
-} from "react"
+import { ChangeEvent, MouseEvent, useEffect } from "react"
 import {
   ButtonGroup,
   Checkbox,
@@ -37,13 +30,11 @@ const TaskList = ({
   checklistId,
   complete,
   isNew,
-  taskList = [],
   updateHideChecklist,
   updateComplete,
 }: IProps) => {
-  const { listId } = useCardContext()
+  const { listId, tasks, setTasks } = useCardContext()
   const { boardId, updateBoardState, board } = useBoard()
-  const [tasks, setTasks] = useState<ITaskItem[]>([])
 
   const handleUpdateTaskTitle = (newTitle: string, taskId: string) => {
     const update = { update: { item: newTitle }, taskId }
@@ -104,75 +95,76 @@ const TaskList = ({
       .catch(() => null)
   }
 
-  useEffect(() => {
-    setTasks(taskList)
-  }, [taskList])
-
   return (
     <>
-      <ChecklistProgress completeState={calculateCompleteState(tasks)} />
+      <ChecklistProgress
+        completeState={calculateCompleteState(tasks, checklistId)}
+      />
       <div className="task-list content">
         {!complete &&
-          tasks?.map(task => (
-            <div key={task?.id}>
-              <div className="draggable-task">
-                <div className="checkbox">
-                  <Checkbox
-                    onChange={handleCheck}
-                    defaultChecked={task.state === "complete"}
-                    id={task.id}
-                  />
-                </div>
-                <div className="task-text">
-                  <EditableText
-                    originalText={task?.item}
-                    handleUpdate={(newTitle: string) =>
-                      handleUpdateTaskTitle(newTitle, task.id)
-                    }
-                    saveButtonText="Save"
-                    className="editable-task"
-                    key="editable-task"
-                    placeholder="Update item"
-                  />
+          tasks?.map(
+            task =>
+              task.checklist === checklistId && (
+                <div key={task?.id}>
+                  <div className="draggable-task">
+                    <div className="checkbox">
+                      <Checkbox
+                        onChange={handleCheck}
+                        defaultChecked={task.state === "complete"}
+                        id={task.id}
+                      />
+                    </div>
+                    <div className="task-text">
+                      <EditableText
+                        originalText={task?.item}
+                        handleUpdate={(newTitle: string) =>
+                          handleUpdateTaskTitle(newTitle, task.id)
+                        }
+                        saveButtonText="Save"
+                        className="editable-task"
+                        key="editable-task"
+                        placeholder="Update item"
+                      />
 
-                  <div className="task-controls">
-                    <ButtonGroup>
-                      <UIDropdown
-                        heading="options"
-                        usePortal
-                        toggle={<AiOutlineClockCircle size={15} />}
-                      >
-                        <div />
-                      </UIDropdown>
-
-                      <UIDropdown
-                        usePortal
-                        heading="Item actions"
-                        toggle={<VscEllipsis id={task.id} size={15} />}
-                      >
-                        <MenuItemOption
-                          onClick={handleConvertToCard}
-                          value={task.id}
-                          className="menu-option"
-                        >
-                          Convert to card
-                        </MenuItemOption>
-                        <MenuOptionGroup>
-                          <MenuItemOption
-                            onClick={handleDeleteTask}
-                            value={task.id}
-                            className="menu-option"
+                      <div className="task-controls">
+                        <ButtonGroup>
+                          <UIDropdown
+                            heading="options"
+                            usePortal
+                            toggle={<AiOutlineClockCircle size={15} />}
                           >
-                            Delete
-                          </MenuItemOption>
-                        </MenuOptionGroup>
-                      </UIDropdown>
-                    </ButtonGroup>
+                            <div />
+                          </UIDropdown>
+
+                          <UIDropdown
+                            usePortal
+                            heading="Item actions"
+                            toggle={<VscEllipsis id={task.id} size={15} />}
+                          >
+                            <MenuItemOption
+                              onClick={handleConvertToCard}
+                              value={task.id}
+                              className="menu-option"
+                            >
+                              Convert to card
+                            </MenuItemOption>
+                            <MenuOptionGroup>
+                              <MenuItemOption
+                                onClick={handleDeleteTask}
+                                value={task.id}
+                                className="menu-option"
+                              >
+                                Delete
+                              </MenuItemOption>
+                            </MenuOptionGroup>
+                          </UIDropdown>
+                        </ButtonGroup>
+                      </div>
+                    </div>
                   </div>
                 </div>
-              </div>
-            </div>
-          ))}
+              )
+          )}
 
         {complete && (
           <p className="checklist-complete-text">

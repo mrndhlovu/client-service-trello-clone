@@ -302,6 +302,27 @@ export default styled.div`
         position: relative;
       }
 
+      .badges {
+        display: flex;
+        padding: 5px 0;
+
+        div {
+          margin-right: 10px;
+          font-size: 13px;
+          display: grid;
+          grid-template-columns: 1fr 1fr;
+          position: relative;
+          align-items: center;
+          justify-items: center;
+
+          span {
+            font-size: 11px;
+            letter-spacing: 1px;
+            font-weight: 200;
+          }
+        }
+      }
+
       .card-label {
         float: left;
         font-size: 12px;

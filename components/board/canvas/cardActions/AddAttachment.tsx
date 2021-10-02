@@ -72,13 +72,9 @@ const AddAttachment = () => {
       clientRequest
         .uploadImageCardCover(attachment.data as FormData, cardId)
         .then(res => {
-          const newAttachmentIds = []
-
-          const newAttachments: IAttachment[] = res.data
-          newAttachments.map(item => newAttachmentIds.push(item.id))
           setAttachment({ data: undefined, isFile: false, isImage: false })
           setName("")
-          fetchAndUpdateActions(newAttachmentIds.join("|"))
+          fetchAndUpdateActions(res.data.id)
           setAttachments(prev => [...prev, res.data])
         })
         .catch(() => null)

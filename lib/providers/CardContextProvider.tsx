@@ -1,4 +1,4 @@
-import { useRouter } from "next/router"
+import { merge } from "lodash"
 import {
   createContext,
   Dispatch,
@@ -12,8 +12,13 @@ import {
 import { useBoard, useListContext } from "."
 import { clientRequest } from "../../api"
 import { IAction } from "../../components/board/canvas/card/Activities"
+import {
+  IChecklist,
+  ITaskItem,
+} from "../../components/board/canvas/cardActions/AddChecklist"
 import { IAttachment } from "../../components/board/canvas/cardActions/ChangeCover"
 import { ICardItem } from "../../components/board/canvas/ListItem"
+import { mergeTasks } from "../../util"
 
 interface IProps {
   card: ICardItem
@@ -36,6 +41,10 @@ const CardContextProvider = ({
   const [cardItem, setCardItem] = useState<ICardItem>()
   const [activities, setActivities] = useState<IAction[]>([])
   const [attachments, setAttachments] = useState<IAttachment[]>([])
+  const [tasks, setTasks] = useState<ITaskItem[]>([])
+  const [checklists, setChecklists] = useState<IChecklist[]>([])
+
+  console.log({ tasks, card })
 
   const sortedList = activities?.sort((a, b) => {
     return new Date(b?.createdAt)?.getTime() - new Date(a?.createdAt)?.getTime()
@@ -91,10 +100,6 @@ const CardContextProvider = ({
   }
 
   useEffect(() => {
-    setCardItem(card)
-  }, [card])
-
-  useEffect(() => {
     if (!cardItem?.id) return
     const getData = () => {
       clientRequest
@@ -117,6 +122,14 @@ const CardContextProvider = ({
     getData()
   }, [])
 
+  useEffect(() => {
+    setCardItem(card)
+    setChecklists(card?.checklists)
+    const taskList = mergeTasks(card?.checklists)
+
+    setTasks(taskList)
+  }, [])
+
   return (
     <CardContext.Provider
       value={{
@@ -134,6 +147,7 @@ const CardContextProvider = ({
         },
         activities: sortedList,
         attachments,
+        checklists,
         colorCover: cardItem?.colorCover,
         fetchAndUpdateActions,
         fetchAndUpdateAttachments,
@@ -141,7 +155,10 @@ const CardContextProvider = ({
         listIndex,
         setActivities,
         setAttachments,
+        setChecklists,
+        setTasks,
         showCardCover,
+        tasks,
         updateActionsList,
         updateCardState,
       }}
@@ -157,9 +174,10 @@ export interface ICardContext {
   card: ICardItem
   cardId: string
   cardIndex: number
+  checklists: IChecklist[]
   colorCover?: string
-  coverUrl?: string
   coverSize?: { width: string; height: string }
+  coverUrl?: string
   edgeColor?: string
   fetchAndUpdateActions: (attachmentId: string) => void
   fetchAndUpdateAttachments: (attachmentId: string) => void
@@ -168,7 +186,10 @@ export interface ICardContext {
   listIndex: number
   setActivities: Dispatch<SetStateAction<IAction[]>>
   setAttachments: Dispatch<SetStateAction<IAttachment[]>>
+  setChecklists: Dispatch<SetStateAction<IChecklist[]>>
+  setTasks: Dispatch<SetStateAction<ITaskItem[]>>
   showCardCover: string
+  tasks: ITaskItem[]
   updateActionsList: (data: IAction, options?: { edited: false }) => void
   updateCardState: (card: ICardItem) => void
 }

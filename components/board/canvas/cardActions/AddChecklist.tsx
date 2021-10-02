@@ -24,7 +24,7 @@ export interface IChecklist {
 }
 
 const AddChecklist = () => {
-  const { cardId, card, updateCardState } = useCardContext()
+  const { cardId, setChecklists } = useCardContext()
 
   const [title, setTitle] = useState<string>("Checklist")
 
@@ -37,10 +37,7 @@ const AddChecklist = () => {
     clientRequest
       .createChecklist({ title, cardId })
       .then(res => {
-        updateCardState({
-          ...card,
-          checklists: [...card.checklists, res.data],
-        })
+        setChecklists(prev => [res.data, ...prev])
       })
       .catch(() => {})
       .finally(() => setTitle(""))

@@ -1,9 +1,12 @@
 import { IPlan } from "../components/profile/billing/BillingPlans"
 import { IRequestError } from "../api"
-import { isArray, merge } from "lodash"
+import { isArray, merge, spread, union } from "lodash"
 import { ILabelProps } from "../components/board/canvas/cardActions/CardLabels"
 import { LABEL_DEFAULT_OPTIONS } from "./constants"
-import { ITaskItem } from "../components/board/canvas/cardActions/AddChecklist"
+import {
+  IChecklist,
+  ITaskItem,
+} from "../components/board/canvas/cardActions/AddChecklist"
 import { IActivity } from "../components/board/canvas/card/Activities"
 
 export const getErrorMessage = (data: IRequestError) => {
@@ -135,12 +138,36 @@ export const getPercentage = (progress: number, duration_ms: number) => {
   return ((progress / 60000) * 100) / (duration_ms / 60000)
 }
 
-export const calculateCompleteState = (tasks: ITaskItem[]): number => {
+export const calculateCompleteState = (
+  tasks: ITaskItem[],
+  checklistId: string
+): number => {
   if (tasks.length === 0) return 0
   const tasksTotal = tasks.length
-  const complete = tasks.filter(task => task.state === "complete").length
+  const complete = tasks.filter(
+    task => task.state === "complete" && checklistId === task.checklist
+  ).length
 
   const percentage = (complete * 100) / tasksTotal
 
   return +percentage.toFixed(0)
+}
+
+export const calculateCompletedTasks = (tasks: ITaskItem[]): number[] => {
+  let completedTasks = 0
+
+  tasks.map(task => {
+    if (task.state === "complete") {
+      completedTasks++
+    }
+  })
+
+  return [tasks.length, completedTasks]
+}
+
+export const mergeTasks = (checklists: IChecklist[]): ITaskItem[] => {
+  const result = []
+  checklists.reduce((a, b) => b.tasks.map((c, i) => result.push(c)), [])
+
+  return result
 }
