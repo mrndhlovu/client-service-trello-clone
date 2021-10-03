@@ -10,20 +10,27 @@ import AddAttachment from "../cardActions/AddAttachment"
 import AddChecklist from "../cardActions/AddChecklist"
 import CardLabels from "../cardActions/CardLabels"
 import ChangeCover from "../cardActions/ChangeCover"
+import AddCardDueDate from "./AddCardDueDate"
 
 const AddToCardOptions = () => {
   const { showCardCover, updateActionsList } = useCardContext()
 
   const ADD_TO_CARD_OPTIONS = [
     { title: "Labels", id: 0, icon: <BsTag />, menu: <CardLabels /> },
-    { title: "Dates", id: 1, icon: <AiOutlineClockCircle />, menu: <div /> },
+    {
+      title: "Dates",
+      id: 1,
+      icon: <AiOutlineClockCircle />,
+      menu: <AddCardDueDate />,
+      usePortal: true,
+    },
     { title: "Checklist", id: 2, icon: <BsCheckBox />, menu: <AddChecklist /> },
     {
       title: "Attachment",
       heading: "Attach from",
       id: 3,
       icon: <HiOutlinePaperClip />,
-      menu: <AddAttachment updateActionsList={updateActionsList} />,
+      menu: <AddAttachment />,
     },
     {
       title: "Cover",
@@ -44,6 +51,7 @@ const AddToCardOptions = () => {
             !option?.hidden && (
               <UIDropdown
                 placement={option?.placementAuto ? "auto" : undefined}
+                usePortal={option.usePortal}
                 toggle={
                   <Button
                     key={option.id}

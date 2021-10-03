@@ -3,6 +3,7 @@ import { Input } from "@chakra-ui/input"
 import { isEmpty } from "lodash"
 import { ChangeEvent, MouseEvent, useState } from "react"
 import { FiPaperclip } from "react-icons/fi"
+import { formatDistance } from "date-fns"
 import styled from "styled-components"
 
 import { clientRequest } from "../../../../api"
@@ -108,7 +109,17 @@ const CardAttachments = () => {
                 <span className="name">{attachment?.title}</span>
 
                 <span className="attachment-controls">
-                  <span className="attachment-control"></span>
+                  <span className="attachment-control">
+                    {" "}
+                    {attachment?.updatedAt &&
+                      formatDistance(
+                        new Date(attachment?.updatedAt),
+                        new Date(),
+                        {
+                          addSuffix: true,
+                        }
+                      )}
+                  </span>
 
                   <button
                     id={attachment.id}

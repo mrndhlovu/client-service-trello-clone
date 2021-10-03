@@ -20,7 +20,9 @@ export const useLocalStorage = <T extends string, Y>(
 
     const storedValue = key ? localStorage.getItem(key) : undefined
 
-    return !storedValue ? defaultValue : JSON.parse(storedValue)
+    return !storedValue || storedValue === "undefined"
+      ? defaultValue
+      : JSON.parse(storedValue)
   })
 
   const handleStorage = (newValue: (newValue: any) => void | string) => {
