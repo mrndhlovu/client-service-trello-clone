@@ -9,17 +9,42 @@ import ListCards from "./ListCards"
 
 export interface IListItem {
   cards?: ICardItem[]
-  [key: string]: any
+  title?: string
+  boardId?: string
+  archived?: boolean
+}
+
+interface ICoverImage {
+  image?: string
+  edgeColor?: string
+  active?: boolean
+  url?: string
+  width?: string
+  height?: string
 }
 
 export interface ICardItem {
-  coverUrl?: {
-    image: string
-    edgeColor: string
-    active: boolean
-  }
-  checklists: IChecklist[]
-  [key: string]: any
+  imageCover?: ICoverImage
+  coverUrl?: ICoverImage
+  checklists?: IChecklist[]
+  activities?: string[]
+  archived?: boolean
+  assignees?: string[]
+  attachments?: string[]
+  boardId?: string
+  cardId?: string
+  comments?: string[]
+  colorCover?: string
+  description?: string
+  labels?: string[]
+  listId?: string
+  owners?: string[]
+  shortDesc?: string
+  title?: string
+  due?: string
+  dueComplete?: boolean
+  dueReminder?: number
+  id?: string
 }
 
 const ListItem = () => {

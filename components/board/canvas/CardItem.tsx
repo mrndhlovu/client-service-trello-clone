@@ -3,7 +3,11 @@ import { isEmpty } from "lodash"
 import styled, { css } from "styled-components"
 
 import { FiEdit2 } from "react-icons/fi"
-import { AiOutlinePaperClip } from "react-icons/ai"
+import {
+  AiFillClockCircle,
+  AiOutlineClockCircle,
+  AiOutlinePaperClip,
+} from "react-icons/ai"
 import { Button, Badge } from "@chakra-ui/react"
 import { BsChatDots, BsCheckBox } from "react-icons/bs"
 
@@ -14,6 +18,7 @@ import CardModal from "./card/CardModal"
 import EditCardMenu from "./EditCardMenu"
 import CardActionsModal from "./CardActionsModal"
 import PreviewModal from "./card/PreviewModal"
+import { format } from "date-fns"
 
 export interface ICardCoverProps {
   colorCover?: string
@@ -27,7 +32,17 @@ const CardLabel = styled.span<{ color: string }>`
   background-color: ${props => props.color || "none"};
 `
 
-const StyledSpan = styled.span``
+const StyledContainer = styled.span`
+  .due-date {
+    display: flex;
+    font-weight: 200;
+    font-size: 11px;
+    align-items: center;
+    padding: 2px 0;
+    color: #000;
+    gap: 1px;
+  }
+`
 
 const CardCover = styled.div<ICardCoverProps>`
   ${props =>
@@ -93,7 +108,8 @@ const CardItem = ({ toggleActionsMenu, actionsOpen }: ICardActionProps) => {
   const hasComments = numberOfCardComments > 0
   const hasTasks = !isEmpty(tasks)
   const hasAttachments = !isEmpty(attachments)
-  const hasBadge = hasComments || hasTasks || hasAttachments
+  const hasDueDate = card?.due && card?.due !== undefined
+  const hasBadge = hasComments || hasTasks || hasAttachments || hasDueDate
   const [numberOfTasksToComplete, numberOfCompletedTasks] =
     calculateCompletedTasks(tasks)
   const allTasksCompleted = numberOfCompletedTasks === numberOfTasksToComplete
@@ -125,7 +141,7 @@ const CardItem = ({ toggleActionsMenu, actionsOpen }: ICardActionProps) => {
           />
         </>
       )}
-      <StyledSpan id={cardId} onClick={toggleCardIsOpen}>
+      <StyledContainer id={cardId} onClick={toggleCardIsOpen}>
         {showCardCover && (
           <CardCover
             className="list-card-cover"
@@ -163,12 +179,24 @@ const CardItem = ({ toggleActionsMenu, actionsOpen }: ICardActionProps) => {
                   <AiOutlinePaperClip size={12} />
                 </div>
               )}
+
+              {hasDueDate && (
+                <Badge colorScheme={card?.dueComplete ? "green" : "yellow"}>
+                  {" "}
+                  <span className="due-date">
+                    <AiOutlineClockCircle size={13} />
+                    {format?.(new Date(card?.due), "MMM d")}
+                  </span>
+                </Badge>
+              )}
+
               {hasComments && (
                 <div>
                   <BsChatDots size={12} />
                   <span> {numberOfCardComments}</span>
                 </div>
               )}
+
               {hasTasks && (
                 <Badge colorScheme={allTasksCompleted ? "whatsapp" : ""}>
                   <div className="tasks">
@@ -183,7 +211,7 @@ const CardItem = ({ toggleActionsMenu, actionsOpen }: ICardActionProps) => {
             </div>
           )}
         </div>
-      </StyledSpan>
+      </StyledContainer>
       {cardIsOpen && (
         <CardModal onClose={toggleCardIsOpen} isOpen={cardIsOpen} />
       )}

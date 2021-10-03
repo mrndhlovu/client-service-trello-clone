@@ -128,6 +128,49 @@ export default styled(ModalContent)`
       padding: 8px 12px;
     }
 
+    .card-due-date-module {
+      h6 {
+        color: #5e6c84;
+        display: block;
+        font-size: 12px;
+        font-weight: 500;
+        letter-spacing: 0.04em;
+        line-height: 16px;
+        line-height: 20px;
+        margin: 0 8px 4px 0;
+        overflow: hidden;
+        text-overflow: ellipsis;
+        text-transform: uppercase;
+        white-space: nowrap;
+      }
+
+      .due-date-detail {
+        display: flex;
+        gap: 5px;
+        align-items: baseline;
+      }
+      .module-header,
+      .module-content {
+        margin-left: 36px !important;
+      }
+
+      .module-content {
+        background-color: rgba(9, 30, 66, 0.04);
+        padding: 10px 0 10px 10px;
+        width: 91%;
+      }
+
+      .module-header {
+        margin-bottom: 0;
+        padding-bottom: 0 !important;
+      }
+
+      .badge {
+        font-weight: 200;
+        font-size: 12px;
+      }
+    }
+
     .card-content-column {
       float: left;
       margin: 0;

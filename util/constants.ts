@@ -161,12 +161,12 @@ export const LIST_ACTIONS = {
 export const ALLOWED_IMAGE_OPTIONS = ["png", "jpeg", "jpg", "gif"]
 
 export const DUE_DATE_REMINDERS = [
-  { key: "time:of:due:date", label: "At time of due date" },
-  { key: "5:minute:before", label: "5 minute before" },
-  { key: "10:minute:before", label: "10 minute before" },
-  { key: "15:minute:before", label: "15 minute before" },
-  { key: "1:hour:before", label: "1 Hour before" },
-  { key: "2:hours:before", label: "2 Hours before" },
-  { key: "1:day:before", label: "1 Day before" },
-  { key: "2:days:before", label: "2 Days before" },
+  { key: 0, label: "At time of due date" },
+  { key: 5, label: "5 minute before" },
+  { key: 10, label: "10 minute before" },
+  { key: 15, label: "15 minute before" },
+  { key: 60, label: "1 Hour before" },
+  { key: 120, label: "2 Hours before" },
+  { key: 1440, label: "1 Day before" },
+  { key: 2880, label: "2 Days before" },
 ]

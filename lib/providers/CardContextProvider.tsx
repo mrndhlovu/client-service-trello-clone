@@ -61,15 +61,15 @@ const CardContextProvider = ({
   })
 
   const showCardCover =
-    cardItem?.colorCover ||
-    cardItem?.imageCover?.active ||
-    cardItem?.coverUrl?.active
+    (cardItem?.colorCover ||
+      cardItem?.imageCover?.active ||
+      cardItem?.coverUrl?.active) !== undefined
 
   const imageCover = cardItem?.imageCover?.active
     ? cardItem?.imageCover
     : cardItem?.coverUrl?.active
     ? cardItem?.coverUrl
-    : ""
+    : undefined
 
   const edgeColor = cardItem?.imageCover?.active
     ? cardItem?.imageCover?.edgeColor
@@ -226,7 +226,7 @@ export interface ICardContext {
   setAttachments: Dispatch<SetStateAction<IAttachment[]>>
   setChecklists: Dispatch<SetStateAction<IChecklist[]>>
   setTasks: Dispatch<SetStateAction<ITaskItem[]>>
-  showCardCover: string
+  showCardCover: boolean
   tasks: ITaskItem[]
   updateActionsList: (data: IAction, options?: { edited: false }) => void
   updateCardState: (card: ICardItem) => void

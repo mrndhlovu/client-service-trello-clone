@@ -1,128 +1,32 @@
-import { useState } from "react"
+import { ChangeEvent, useState } from "react"
 import DatePicker from "react-datepicker"
-import styled from "styled-components"
 
 import "react-datepicker/dist/react-datepicker.css"
-import { Input } from "@chakra-ui/input"
+
 import { Select } from "@chakra-ui/select"
 import { Checkbox } from "@chakra-ui/checkbox"
 import { DUE_DATE_REMINDERS } from "../../../../util/constants"
 import { Button, ButtonGroup } from "@chakra-ui/button"
 
-const Container = styled.div`
-  .calendar-styles {
-    width: 100%;
-    border: none;
-
-    .react-datepicker__current-month {
-      color: rgb(23, 43, 77);
-      text-transform: uppercase;
-    }
-
-    .react-datepicker__header {
-      background-color: transparent;
-      font-weight: bold;
-    }
-
-    .react-datepicker__day {
-      max-width: 32px;
-      width: 100%;
-
-      &:hover {
-        background-color: rgb(66, 82, 110);
-        color: #fff;
-        ${props => props.theme.mixins.textHoverEffect()};
-      }
-    }
-
-    .react-datepicker__navigation-icon {
-      width: 3%;
-      color: rgb(107, 119, 140);
-    }
-
-    .react-datepicker__month {
-      margin: 5px 0;
-    }
-
-    .react-datepicker__month,
-    .react-datepicker__month-container,
-    .react-datepicker__month {
-      width: 100% !important;
-    }
-  }
-
-  h6 {
-    display: block;
-    font-size: 12px;
-    font-weight: 700;
-    line-height: 16px;
-    margin-bottom: 4px;
-    color: #0079bf;
-  }
-
-  input {
-    outline: none;
-    border: none;
-    box-sizing: border-box;
-    color: #172b4d;
-    font-size: 14px;
-    line-height: 20px;
-    font-weight: 400;
-    transition-property: background-color, border-color, box-shadow;
-    transition-duration: 85ms;
-    transition-timing-function: ease;
-    border-radius: 3px;
-    margin-left: 8px;
-
-    background-color: #ffffff;
-    box-shadow: inset 0 0 0 2px #0079bf;
-    height: 30px;
-    width: 112px;
-    padding: 0 8px;
-    letter-spacing: 0.8px;
-  }
-
-  .end-date,
-  .start-date {
-    display: flex;
-  }
-
-  .button-group {
-    display: grid;
-    grid-gap: 10px;
-    position: relative;
-    margin-top: 10px;
-
-    button {
-      width: 100%;
-      margin: 0;
-    }
-  }
-`
-
-const StartDate = styled.div`
-  display: grid;
-  max-width: 100%;
-  margin-top: 8px;
-
-  .start-date {
-    display: flex;
-  }
-`
-
-const EndDate = styled.div`
-  display: grid;
-  max-width: 100%;
-  margin-top: 8px;
-  margin-bottom: 15px;
-`
+import { clientRequest } from "../../../../api"
+import { useCardContext } from "../../../../lib/providers"
+import StyleDates, { EndDate, StartDate } from "./StyleDates"
 
 const FUTURE_TIME = new Date(new Date().getTime() + 60 * 60 * 24 * 1000)
 
+const ACTIVE_OPTIONS_INITIAL_STATE = { startDate: false, dueDate: true }
+
 const AddCardDueDate = () => {
+  const { listId, cardId, updateCardState } = useCardContext()
+
   const [startDate, setStartDate] = useState<Date>(new Date())
   const [endDate, setEndDate] = useState<Date>(FUTURE_TIME)
   const [endTime, setEndTime] = useState<Date>(FUTURE_TIME)
+  const [reminder, setReminder] = useState<number>(0)
+  const [active, setActive] = useState<{
+    startDate: boolean
+    dueDate: boolean
+  }>(ACTIVE_OPTIONS_INITIAL_STATE)
 
   const handleStartDate = (date: Date | null) => {
     setStartDate(date)
@@ -136,12 +40,48 @@ const AddCardDueDate = () => {
     setEndTime(date)
   }
 
-  console.log("====================================")
-  console.log({ endDate, endTime })
-  console.log("====================================")
+  const handleReminderUpdate = (ev: ChangeEvent<HTMLSelectElement>) => {
+    setReminder(+ev.target.value)
+  }
+
+  const toggleActiveOptions = (ev: ChangeEvent<HTMLInputElement>) => {
+    setActive(prev => ({
+      ...prev,
+      [ev.currentTarget.id]: !prev[ev.currentTarget.id],
+    }))
+  }
+
+  const handleUpdateCardDates = () => {
+    if (!endTime) return
+    const update = {
+      start: startDate,
+      due: endDate,
+      dueReminder: reminder,
+      dueComplete: false,
+    }
+
+    clientRequest
+      .updateCard(update, { cardId, listId })
+      .then(res => updateCardState(res.data))
+      .catch(err => {})
+  }
+
+  const handleRemoveCardDates = () => {
+    const update = {
+      start: "",
+      due: "",
+      dueReminder: -1,
+      dueComplete: false,
+    }
+
+    clientRequest
+      .updateCard(update, { cardId, listId })
+      .then(res => updateCardState(res.data))
+      .catch(() => null)
+  }
 
   return (
-    <Container>
+    <StyleDates>
       <DatePicker
         calendarClassName="calendar-styles"
         inline
@@ -152,12 +92,17 @@ const AddCardDueDate = () => {
       <StartDate>
         <h6>Start date</h6>
         <span className="start-date">
-          <Checkbox />
+          <Checkbox
+            id="startDate"
+            checked={active.startDate}
+            onChange={toggleActiveOptions}
+          />
           <DatePicker
             selected={startDate}
             onChange={handleStartDate}
             dateFormat="dd/MM/yyyy"
             showTimeSelectOnly
+            disabled={!active.startDate}
           />
         </span>
       </StartDate>
@@ -165,12 +110,19 @@ const AddCardDueDate = () => {
       <EndDate>
         <h6>Due date</h6>
         <div className="end-date">
-          <Checkbox />
+          <Checkbox
+            id="dueDate"
+            isChecked={active.dueDate}
+            checked={active.dueDate}
+            onChange={toggleActiveOptions}
+          />
           <DatePicker
             selected={endDate}
             onChange={handleEndDate}
             dateFormat="dd/MM/yyyy"
             showTimeSelectOnly
+            disabled={!active.dueDate}
+            autoFocus
           />
 
           <DatePicker
@@ -178,28 +130,42 @@ const AddCardDueDate = () => {
             onChange={handleEndTime}
             dateFormat="hh:mm aa"
             showTimeSelectOnly
+            disabled={!active.dueDate}
+            autoFocus
           />
         </div>
       </EndDate>
 
       <div>
         <h6 className="reminder">Set due date reminder</h6>
-        <Select size="sm" placeholder="1 Day before">
+        <Select
+          onChange={handleReminderUpdate}
+          defaultValue={reminder}
+          size="sm"
+          placeholder="1 Day before"
+        >
           {DUE_DATE_REMINDERS.map(option => (
-            <option defaultValue={option.key}>{option.label}</option>
+            <option value={option.key} defaultValue={option.key}>
+              {option.label}
+            </option>
           ))}
         </Select>
       </div>
 
       <ButtonGroup className="button-group">
-        <Button colorScheme="blue" isFullWidth size="sm">
+        <Button
+          onClick={handleUpdateCardDates}
+          colorScheme="blue"
+          isFullWidth
+          size="sm"
+        >
           Save
         </Button>
-        <Button isFullWidth size="sm">
+        <Button onClick={handleRemoveCardDates} isFullWidth size="sm">
           Remove
         </Button>
       </ButtonGroup>
-    </Container>
+    </StyleDates>
   )
 }
 
