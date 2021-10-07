@@ -4,15 +4,20 @@ import { ChangeEvent, useState } from "react"
 import { AiOutlineClose } from "react-icons/ai"
 import { GrTextAlignFull } from "react-icons/gr"
 
-import { useCardContext, useListCardsContext } from "../../../../lib/providers"
+import {
+  useCardContext,
+  useListItemContext,
+  useListsContext,
+} from "../../../../lib/providers"
 import CardModule from "./CardModule"
 
 const CardDescription = () => {
   const { card, cardId } = useCardContext()
+  const { listId } = useListItemContext()
+  const { saveCardChanges } = useListsContext()
 
   const [editing, setEditing] = useState<boolean>(false)
   const [description, setDescription] = useState<string>("")
-  const { saveCardChanges, listId } = useListCardsContext()
 
   const handleSave = () => {
     if (!description) return

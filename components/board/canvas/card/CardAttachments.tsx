@@ -9,7 +9,7 @@ import styled from "styled-components"
 import { clientRequest } from "../../../../api"
 import { ICardCoverProps } from "../CardItem"
 import { UIDropdown } from "../../../shared"
-import { useCardContext } from "../../../../lib/providers"
+import { useBoard, useCardContext } from "../../../../lib/providers"
 import CardModule from "./CardModule"
 import NextLink from "../../../shared/lib/NextLink"
 
@@ -38,11 +38,15 @@ const ImageAttachment = styled.div<ICardCoverProps>`
 `
 
 const CardAttachments = () => {
-  const { attachments, setAttachments, togglePreviewModal } = useCardContext()
+  const { togglePreviewModal, cardId } = useCardContext()
+  const { attachments, setAttachments } = useBoard()
 
   const [title, setTitle] = useState<string>("")
 
   const hasAttachments = !isEmpty(attachments)
+  const cardAttachments = attachments.filter(
+    attachment => attachment.cardId === cardId
+  )
 
   const handlePreviewClick = (ev: MouseEvent) => {}
 
@@ -85,7 +89,7 @@ const CardAttachments = () => {
       </div>
       <div className="attachments module-content">
         <ul>
-          {attachments?.map((attachment, index) => (
+          {cardAttachments?.map((attachment, index) => (
             <div key={index} className="attachment-item">
               <div className="preview">
                 {attachment?.resourceType === "image" ? (

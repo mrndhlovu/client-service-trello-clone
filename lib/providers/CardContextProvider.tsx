@@ -1,3 +1,4 @@
+import { isEmpty } from "lodash"
 import {
   createContext,
   Dispatch,
@@ -9,14 +10,12 @@ import {
   useState,
   MouseEvent,
 } from "react"
-import { useBoard, useListContext } from "."
-import { clientRequest } from "../../api"
-import { IAction } from "../../components/board/canvas/card/Activities"
+import { useBoard, useListsContext } from "."
+
 import {
   IChecklist,
   ITaskItem,
 } from "../../components/board/canvas/cardActions/AddChecklist"
-import { IAttachment } from "../../components/board/canvas/cardActions/ChangeCover"
 import { ICardItem } from "../../components/board/canvas/ListItem"
 import { mergeTasks } from "../../util"
 import { useLocalStorage } from "../hooks"
@@ -41,24 +40,22 @@ const CardContextProvider = ({
   listId,
   listIndex,
 }: IProps) => {
-  const { updateCardsState } = useListContext()
-  const { boardId } = useBoard()
+  const { updateCardsState } = useListsContext()
+  const { attachments } = useBoard()
 
-  const [activities, setActivities] = useState<IAction[]>([])
-  const [attachments, setAttachments] = useState<IAttachment[]>([])
   const [cardItem, setCardItem] = useState<ICardItem>()
   const [checklists, setChecklists] = useState<IChecklist[]>([])
   const [preview, setPreview] = useState<IPreview | undefined>()
   const [tasks, setTasks] = useState<ITaskItem[]>([])
 
+  const hasAttachments = !isEmpty(
+    attachments.find(attachment => attachment.cardId === card?.id)
+  )
+
   const [openCardModalId, setOpenCardModalId] = useLocalStorage(
     "CARD_OPEN_ID",
     ""
   )
-
-  const sortedList = activities?.sort((a, b) => {
-    return new Date(b?.createdAt)?.getTime() - new Date(a?.createdAt)?.getTime()
-  })
 
   const showCardCover =
     (cardItem?.colorCover ||
@@ -98,58 +95,6 @@ const CardContextProvider = ({
     updateCardsState(newCard)
   }, [])
 
-  const updateActionsList = (data: IAction, options?: { edited: false }) => {
-    if (options?.edited) {
-      setActivities(prev => [
-        ...prev.map(item => (item.id === data.id ? data : item)),
-      ])
-      return
-    }
-
-    setActivities(prev => [...prev, data])
-  }
-
-  const fetchAndUpdateActions = (attachmentIds: string) => {
-    clientRequest
-      .getActionByAttachmentId(boardId, attachmentIds)
-      .then(res => {
-        setActivities(prev => [...prev, ...res.data])
-      })
-      .catch(() => null)
-  }
-
-  const fetchAndUpdateAttachments = (attachmentId: string) => {
-    clientRequest
-      .getActionByAttachmentId(boardId, attachmentId)
-      .then(res => {
-        updateActionsList(res.data)
-      })
-      .catch(() => null)
-  }
-
-  useEffect(() => {
-    if (!cardItem?.id) return
-    const getData = () => {
-      clientRequest
-        .getCardAttachments(cardItem?.id)
-        .then(res => setAttachments(res.data))
-        .catch(() => {})
-    }
-
-    getData()
-  }, [cardItem?.id])
-
-  useEffect(() => {
-    const getData = () => {
-      clientRequest
-        .getActions(boardId)
-        .then(res => setActivities(res.data))
-        .catch(() => {})
-    }
-
-    getData()
-  }, [])
-
   useEffect(() => {
     setCardItem(card)
     setChecklists(card?.checklists)
@@ -173,27 +118,21 @@ const CardContextProvider = ({
           width: imageCover?.width,
           height: imageCover?.height || "200",
         },
-        activities: sortedList,
-        attachments,
         cardIsOpen: openCardModalId === card.id,
         checklists,
         colorCover: cardItem?.colorCover,
-        fetchAndUpdateActions,
-        fetchAndUpdateAttachments,
         listId,
         listIndex,
         preview,
         previewModalIsOpen,
-        setActivities,
-        setAttachments,
         setChecklists,
         setTasks,
         showCardCover,
         tasks,
         toggleCardIsOpen,
         togglePreviewModal,
-        updateActionsList,
         updateCardState,
+        hasAttachments,
       }}
     >
       {children}
@@ -202,8 +141,6 @@ const CardContextProvider = ({
 }
 
 export interface ICardContext {
-  activities: IAction[]
-  attachments: IAttachment[]
   card: ICardItem
   cardId: string
   cardIndex: number
@@ -212,23 +149,19 @@ export interface ICardContext {
   coverSize?: { width: string; height: string }
   coverUrl?: string
   edgeColor?: string
-  fetchAndUpdateActions: (attachmentId: string) => void
-  fetchAndUpdateAttachments: (attachmentId: string) => void
   imageCover?: string
   listId: string
+  hasAttachments: boolean
   previewModalIsOpen: boolean
   preview?: IPreview
   togglePreviewModal: (ev?: MouseEvent) => void
   cardIsOpen: boolean
   toggleCardIsOpen: (ev?: MouseEvent, id?: string) => void
   listIndex: number
-  setActivities: Dispatch<SetStateAction<IAction[]>>
-  setAttachments: Dispatch<SetStateAction<IAttachment[]>>
   setChecklists: Dispatch<SetStateAction<IChecklist[]>>
   setTasks: Dispatch<SetStateAction<ITaskItem[]>>
   showCardCover: boolean
   tasks: ITaskItem[]
-  updateActionsList: (data: IAction, options?: { edited: false }) => void
   updateCardState: (card: ICardItem) => void
 }
 

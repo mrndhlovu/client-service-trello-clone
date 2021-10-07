@@ -6,7 +6,7 @@ import { DRAG_TYPES } from "../../../util/constants"
 import {
   ICardDraggingProps,
   useCardContext,
-  useListContext,
+  useListsContext,
 } from "../../../lib/providers"
 import CardItem from "../canvas/CardItem"
 
@@ -45,7 +45,7 @@ const getClass = (isDragging: boolean, actionsOpen?: boolean) => {
 }
 
 const DraggableCard = typedMemo(() => {
-  const { saveCardDndChanges, moveCard } = useListContext()
+  const { saveCardDndChanges, moveCard } = useListsContext()
   const { cardId, cardIndex, listIndex, listId } = useCardContext()
 
   const ref = useRef<HTMLDivElement>(null)

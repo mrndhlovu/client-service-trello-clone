@@ -6,7 +6,7 @@ import { IoIosArrowBack } from "react-icons/io"
 
 import { LIST_ACTIONS } from "../../../../util/constants"
 import { UIDropdown } from "../../../shared"
-import { useListCardsContext, useListContext } from "../../../../lib/providers"
+import { useListItemContext, useListsContext } from "../../../../lib/providers"
 import ListActionStyles from "./ListActionStyles"
 import MoveList from "../moveDialog/MoveListSettings"
 
@@ -23,8 +23,8 @@ interface IListActions {
 }
 
 const ListActions = () => {
-  const { saveListChanges } = useListContext()
-  const { listId } = useListCardsContext()
+  const { saveListChanges } = useListsContext()
+  const { listId } = useListItemContext()
 
   const [activeMenu, setActiveMenu] = useState<IListActions>(LIST_ACTIONS.menu)
 

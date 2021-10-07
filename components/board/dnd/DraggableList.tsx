@@ -3,7 +3,7 @@ import { DropTargetMonitor, useDrag, useDrop } from "react-dnd"
 import { XYCoord } from "dnd-core"
 
 import { DRAG_TYPES } from "../../../util/constants"
-import { IListDraggingProps, useListContext } from "../../../lib/providers"
+import { IListDraggingProps, useListsContext } from "../../../lib/providers"
 
 export interface DragItemProps {
   listId: string
@@ -23,7 +23,7 @@ export interface IListDndItem {
 const typedMemo: <T>(Component: T) => T = memo
 
 const DraggableList = typedMemo(({ children, listId, listIndex }) => {
-  const { saveListDndChanges, moveList } = useListContext()
+  const { saveListDndChanges, moveList } = useListsContext()
   const ref = useRef<HTMLDivElement>(null)
 
   const [{ isDragging }, drag] = useDrag({

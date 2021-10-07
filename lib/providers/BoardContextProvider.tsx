@@ -1,6 +1,8 @@
 import {
   createContext,
+  Dispatch,
   ReactNode,
+  SetStateAction,
   useCallback,
   useContext,
   useEffect,
@@ -14,6 +16,8 @@ import { IBoard } from "./HomeContextProvider"
 import { ICardItem, IListItem } from "../../components/board/canvas/ListItem"
 import { ROUTES } from "../../util/constants"
 import { useGlobalState } from "."
+import { IAttachment } from "../../components/board/canvas/cardActions/ChangeCover"
+import { IAction } from "../../components/board/canvas/card/Activities"
 
 interface IProps {
   board?: IBoard
@@ -29,12 +33,18 @@ const BoardContextProvider = ({ children, board }: IProps) => {
   const router = useRouter()
 
   const [activeBoard, setActiveBoard] = useState<IProps["board"]>()
+  const [attachments, setAttachments] = useState<IAttachment[]>([])
+  const [activities, setActivities] = useState<IAction[]>([])
   const [drawerOpen, setDrawerOpen] = useState<boolean>(false)
 
   const isStarred = Boolean(activeBoard?.prefs?.starred === "true")
 
   const imageCover = board.activeBg === "image" ? board?.prefs.image : ""
   const colorCover = board?.prefs?.color
+
+  const sortedActionsList = activities?.sort((a, b) => {
+    return new Date(b?.createdAt)?.getTime() - new Date(a?.createdAt)?.getTime()
+  })
 
   const saveBoardChanges = useCallback(
     async (update: IBoard): Promise<IBoard | void | undefined> => {
@@ -112,30 +122,91 @@ const BoardContextProvider = ({ children, board }: IProps) => {
       })
   }
 
+  const fetchAndUpdateAttachments = (attachmentId: string) => {
+    clientRequest
+      .getActionByAttachmentId(board.id, attachmentId)
+      .then(res => {
+        updateActionsList(res.data)
+      })
+      .catch(() => null)
+  }
+
+  const updateActionsList = (data: IAction, options?: { edited: false }) => {
+    if (options?.edited) {
+      setActivities(prev => [
+        ...prev.map(item => (item.id === data.id ? data : item)),
+      ])
+      return
+    }
+
+    setActivities(prev => [...prev, data])
+  }
+
+  const fetchAndUpdateActions = (attachmentIds: string) => {
+    clientRequest
+      .getActionByAttachmentId(board.id, attachmentIds)
+      .then(res => {
+        setActivities(prev => [...prev, ...res.data])
+      })
+      .catch(() => null)
+  }
+
   const toggleDrawerMenu = () => setDrawerOpen(prev => !prev)
 
   useEffect(() => {
     setActiveBoard(board)
   }, [])
 
+  useEffect(() => {
+    if (!board?.id) return
+    const getData = async () => {
+      const boardPromises = [
+        clientRequest
+          .getAttachments(board?.id)
+          .then(res => res.data)
+          .catch(res => undefined),
+        clientRequest
+          .getActions(board.id)
+          .then(res => res.data)
+          .catch(res => undefined),
+      ]
+
+      const response = await Promise.all(boardPromises)
+
+      if (!response) return
+
+      setAttachments(response?.[0])
+      setActivities(response?.[1])
+    }
+
+    getData()
+  }, [board?.id])
+
   return (
     <BoardContext.Provider
       value={{
+        activities: sortedActionsList,
+        attachments,
         board: activeBoard,
-        drawerOpen,
-        isStarred,
-        handleDeleteBoard,
-        handleStarBoard,
-        toggleDrawerMenu,
+        boardId: board.id,
         closeBoard,
-        setActiveBoard,
+        colorCover,
+        drawerOpen,
+        fetchAndUpdateActions,
+        fetchAndUpdateAttachments,
         findCardsByListId,
         findListById,
-        saveBoardChanges,
-        boardId: board.id,
-        updateBoardState,
+        handleDeleteBoard,
+        handleStarBoard,
         imageCover,
-        colorCover,
+        isStarred,
+        saveBoardChanges,
+        setActiveBoard,
+        setActivities,
+        setAttachments,
+        toggleDrawerMenu,
+        updateActionsList,
+        updateBoardState,
       }}
     >
       {children}
@@ -144,22 +215,29 @@ const BoardContextProvider = ({ children, board }: IProps) => {
 }
 
 interface IBoardContext {
-  handleStarBoard: (board?: IBoard) => void
-  saveBoardChanges: (board?: IBoard) => Promise<IBoard | void>
-  boards?: IBoard[]
+  activities: IAction[]
+  attachments: IAttachment[]
   board?: IBoard
-  handleDeleteBoard: () => void
-  findCardsByListId: (listId: string) => [IBoard["cards"]?, boolean?]
-  findListById: (listId: string) => [IListItem?, boolean?]
-  imageCover: string
+  boardId: string
+  boards?: IBoard[]
+  closeBoard: () => void
   colorCover: string
   drawerOpen: boolean
+  fetchAndUpdateActions: (attachmentId: string) => void
+  fetchAndUpdateAttachments: (attachmentId: string) => void
+  findCardsByListId: (listId: string) => [IBoard["cards"]?, boolean?]
+  findListById: (listId: string) => [IListItem?, boolean?]
+  handleDeleteBoard: () => void
+  handleStarBoard: (board?: IBoard) => void
+  imageCover: string
   isStarred: boolean
-  toggleDrawerMenu: () => void
-  closeBoard: () => void
+  saveBoardChanges: (board?: IBoard) => Promise<IBoard | void>
   setActiveBoard: (board?: IBoard) => void
+  setActivities: Dispatch<SetStateAction<IAction[]>>
+  setAttachments: Dispatch<SetStateAction<IAttachment[]>>
+  toggleDrawerMenu: () => void
+  updateActionsList: (data: IAction, options?: { edited: false }) => void
   updateBoardState: (board?: IBoard) => void
-  boardId: string
 }
 
 export const BoardContext = createContext<IBoardContext>({} as IBoardContext)

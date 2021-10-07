@@ -5,11 +5,11 @@ import { MdContentCopy } from "react-icons/md"
 import { VscArchive } from "react-icons/vsc"
 
 import { UIDropdown } from "../../../shared"
-import { useCardContext, useListCardsContext } from "../../../../lib/providers"
+import { useCardContext, useListItemContext } from "../../../../lib/providers"
 import MoveCardOption from "../moveDialog/MoveCardSettings"
 
 const ModalCardActions = () => {
-  const { saveCardChanges } = useListCardsContext()
+  const { saveCardChanges } = useListItemContext()
   const { cardId, listId } = useCardContext()
 
   const handleArchiveCard = (ev: MouseEvent) => {
@@ -26,13 +26,13 @@ const ModalCardActions = () => {
       menu: <MoveCardOption />,
     },
 
-    { title: "Copy", id: 1, icon: <MdContentCopy />, menu: <div /> },
-    {
-      title: "Make template",
-      id: 2,
-      icon: <HiOutlineTemplate />,
-      menu: <div />,
-    },
+    // { title: "Copy", id: 1, icon: <MdContentCopy />, menu: <div /> },
+    // {
+    //   title: "Make template",
+    //   id: 2,
+    //   icon: <HiOutlineTemplate />,
+    //   menu: <div />,
+    // },
     {
       title: "Archive",
       id: 3,

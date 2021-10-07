@@ -468,7 +468,7 @@ export default styled(ModalContent)`
       .buttons-list {
         button {
           width: 100%;
-          justify-content: end;
+          justify-content: start;
           margin-top: 5px;
         }
       }

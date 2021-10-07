@@ -7,8 +7,7 @@ import styled from "styled-components"
 import { clientRequest } from "../../../../api"
 import {
   useCardContext,
-  useListCardsContext,
-  useListContext,
+  useListsContext,
   useGlobalState,
 } from "../../../../lib/providers"
 import { LABEL_DEFAULT_OPTIONS } from "../../../../util/constants"
@@ -17,11 +16,13 @@ import CardActionStyles from "./StyleCardAction"
 
 export interface IAttachment {
   [key: string]: any
-  url: string
-  edgeColor: string
-  height: string
-  width: string
   active?: boolean
+  boardId?: string
+  edgeColor?: string
+  height?: string
+  width?: string
+  url: string
+  id: string
 }
 
 const StyledLi = styled.li<{ bgColor: string }>`
@@ -55,10 +56,9 @@ const AttachmentImage = styled.div<{ image: IAttachment }>`
 `
 
 const ChangeCover = () => {
-  const { cardId, card } = useCardContext()
+  const { cardId, card, listId } = useCardContext()
   const { notify } = useGlobalState()
-  const { listId, saveCardChanges } = useListCardsContext()
-  const { updateCardsState } = useListContext()
+  const { updateCardsState, saveCardChanges } = useListsContext()
 
   const imageRef = useRef<HTMLInputElement>()
 
@@ -191,7 +191,7 @@ const ChangeCover = () => {
                 onClick={handleSelectedCardColor}
                 id={label.color}
               >
-                <span className="card-label-color"></span>
+                <span className="card-label-color" />
               </StyledLi>
             ))}
           </ul>

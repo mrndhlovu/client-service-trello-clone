@@ -14,16 +14,6 @@ import {
 import { ChangeBgWrapper } from "./DrawerStyles"
 import UnSplashImages, { ImageTile } from "./UnSplashImages"
 
-interface IAttachment {
-  active?: boolean
-  boardId?: string
-  edgeColor?: string
-  height?: string
-  width?: string
-  url: string
-  id: string
-}
-
 const StyleImageTile = styled(ImageTile)``
 
 const ColorOption = styled.div<{ bgColor: string }>`
@@ -36,10 +26,20 @@ const ColorOption = styled.div<{ bgColor: string }>`
 
 const ChangeBackground = ({ handleMenuChange, openMenu }) => {
   const inputRef = useRef<HTMLInputElement>()
-  const { saveBoardChanges, setActiveBoard, boardId, board } = useBoard()
+  const {
+    saveBoardChanges,
+    setActiveBoard,
+    attachments,
+    setAttachments,
+    boardId,
+    board,
+    drawerOpen,
+  } = useBoard()
   const { notify } = useGlobalState()
 
-  const [boardImages, setBoardImages] = useState<IAttachment[]>([])
+  const boardImages = attachments.filter(
+    attachment => attachment.resourceType === "image"
+  )
 
   const handleSelectedColor = async (ev: MouseEvent) => {
     const updatedBoard = await saveBoardChanges({
@@ -80,7 +80,7 @@ const ChangeBackground = ({ handleMenuChange, openMenu }) => {
     clientRequest
       .uploadBoardBgImage(formData, boardId)
       .then(res => {
-        setBoardImages(prev => [...prev, res.data])
+        setAttachments(prev => [...prev, res.data])
         setActiveBoard((prev: IBoard) => ({
           ...prev,
           prefs: { ...prev.prefs, image: res.data.url },
@@ -120,17 +120,6 @@ const ChangeBackground = ({ handleMenuChange, openMenu }) => {
       prefs: { ...prev.prefs, image: response.prefs.image },
     }))
   }
-
-  useEffect(() => {
-    const getData = () => {
-      clientRequest
-        .getBoardImageAttachments(boardId)
-        .then(res => setBoardImages(res.data))
-        .catch(err => {})
-    }
-
-    getData()
-  }, [])
 
   return (
     <ChangeBgWrapper colors={COLORS_IMAGE} photos={PHOTOS_IMAGE}>

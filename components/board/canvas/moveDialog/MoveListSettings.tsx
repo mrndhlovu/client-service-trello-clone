@@ -5,8 +5,8 @@ import {
   IBoard,
   useBoard,
   useGlobalState,
-  useListCardsContext,
-  useListContext,
+  useListItemContext,
+  useListsContext,
 } from "../../../../lib/providers"
 import MoveDialogStyles from "./MoveDialogStyles"
 import MoveSetting from "./MoveSetting"
@@ -25,9 +25,9 @@ const MoveListSettings = ({ onClose }: IProps) => {
   const { boardId, board } = useBoard()
   const { boards, updateBoardsState } = useGlobalState()
 
-  const { listId, listIndex } = useListCardsContext()
+  const { listId, listIndex } = useListItemContext()
   const { moveList, saveListDndChanges, removeListFromSource } =
-    useListContext()
+    useListsContext()
 
   const [boardOptions, setBoardOptions] = useState<IBoard[]>([])
   const [targetedBoard, setTargetedBoard] = useState<IBoard | undefined>()

@@ -12,7 +12,7 @@ import { LABEL_DEFAULT_OPTIONS } from "../../../../util/constants"
 import {
   useCardContext,
   useGlobalState,
-  useListCardsContext,
+  useListItemContext,
 } from "../../../../lib/providers"
 import CardActionStyles from "./StyleCardAction"
 
@@ -38,8 +38,8 @@ const StyledLi = styled.li<{ bgColor: string; checked: boolean }>`
 `
 
 const CardLabels = ({ showCancelButton }: IProps) => {
-  const { card, cardId } = useCardContext()
-  const { saveCardChanges, listId } = useListCardsContext()
+  const { card, cardId, updateCardState } = useCardContext()
+  const { saveCardChanges, listId } = useListItemContext()
   const { notify } = useGlobalState()
   const inputRef = useRef<HTMLInputElement | null>()
 
@@ -136,7 +136,9 @@ const CardLabels = ({ showCancelButton }: IProps) => {
     const getData = () => {
       clientRequest
         .getUserCardLabels()
-        .then(res => setSavedLabels(res.data))
+        .then(res => {
+          setSavedLabels(res.data)
+        })
         .catch(err =>
           notify({
             description: err.message,
@@ -219,7 +221,7 @@ const CardLabels = ({ showCancelButton }: IProps) => {
                 className="item"
                 key={index}
                 bgColor={label.color}
-                checked={card.labels.includes(label.color)}
+                checked={card?.labels?.includes(label.color)}
               >
                 <span className="label-color">
                   <span className="saved-label-name">{label.name}</span>

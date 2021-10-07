@@ -3,7 +3,7 @@ import { MouseEvent } from "react"
 import { AiFillSwitcher, AiOutlineIdcard, AiOutlineTag } from "react-icons/ai"
 import { CgCreditCard } from "react-icons/cg"
 
-import { useCardContext, useListCardsContext } from "../../../../lib/providers"
+import { useCardContext, useListItemContext } from "../../../../lib/providers"
 import { UIDropdown } from "../../../shared"
 import CardLabels from "./CardLabels"
 import ChangeCover from "./ChangeCover"
@@ -15,7 +15,7 @@ interface IProps {
 }
 
 const CardActions = ({ listId, cardId, close }: IProps) => {
-  const { saveCardChanges } = useListCardsContext()
+  const { saveCardChanges } = useListItemContext()
   const { toggleCardIsOpen } = useCardContext()
 
   const handleArchiveCard = (ev: MouseEvent) => {

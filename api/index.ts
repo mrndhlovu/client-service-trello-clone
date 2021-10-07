@@ -191,7 +191,7 @@ class ApiRequest extends AxiosConfig {
     return await this.http.get(`${END_POINTS.boards}/${boardId}`)
   }
 
-  async getBoardImageAttachments(boardId: string) {
+  async getAttachments(boardId: string) {
     return await this.http.get(`${END_POINTS.boards}/${boardId}/attachments`)
   }
 

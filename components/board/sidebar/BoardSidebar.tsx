@@ -97,7 +97,7 @@ const BoardDrawer = () => {
     setOpenMenu(sideBarOptions[ev.currentTarget.id])
   }
 
-  return (
+  return drawerOpen ? (
     <DrawerStyles>
       <Drawer isOpen={drawerOpen} placement="right" onClose={toggleDrawerMenu}>
         <StyledDrawerContent className="drawer">
@@ -150,7 +150,7 @@ const BoardDrawer = () => {
         </StyledDrawerContent>
       </Drawer>
     </DrawerStyles>
-  )
+  ) : null
 }
 
 export default BoardDrawer

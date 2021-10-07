@@ -4,7 +4,11 @@ import { IoMdCard } from "react-icons/io"
 import { CgCreditCard } from "react-icons/cg"
 import styled, { css } from "styled-components"
 
-import { useCardContext, useListCardsContext } from "../../../../lib/providers"
+import {
+  useCardContext,
+  useListItemContext,
+  useListsContext,
+} from "../../../../lib/providers"
 import { ICardCoverProps } from "../CardItem"
 import { UIDropdown } from "../../../shared"
 import ChangeCover from "../cardActions/ChangeCover"
@@ -53,7 +57,8 @@ const CardHeader = ({ onClose }) => {
     coverUrl,
     listId,
   } = useCardContext()
-  const { saveCardChanges, list } = useListCardsContext()
+  const { saveCardChanges } = useListsContext()
+  const { list } = useListItemContext()
 
   const handleUpdateTitle = (newTitle: string) => {
     saveCardChanges(cardId, listId, { title: newTitle })

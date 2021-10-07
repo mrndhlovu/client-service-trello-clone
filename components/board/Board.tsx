@@ -1,7 +1,7 @@
 import styled from "styled-components"
 
 import {
-  ListContextProvider,
+  ListsContextProvider,
   SpotifyContextProvider,
   useBoard,
 } from "../../lib/providers"
@@ -44,9 +44,9 @@ const Board = () => {
         <SpotifyContextProvider>
           <Content>
             <BoardHeader />
-            <ListContextProvider>
+            <ListsContextProvider>
               <BoardCanvas />
-            </ListContextProvider>
+            </ListsContextProvider>
             <BoardDrawer />
           </Content>
         </SpotifyContextProvider>

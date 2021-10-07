@@ -1,15 +1,12 @@
-import { MouseEvent, useEffect, useState } from "react"
+import { MouseEvent } from "react"
 import { formatDistance } from "date-fns"
-import { Modal, ModalContent, ModalOverlay } from "@chakra-ui/modal"
 
 import { clientRequest } from "../../../../api"
 import { FormattedAction } from "../../../shared"
 import { useBoard, useCardContext } from "../../../../lib/providers"
-import UserAvatar from "../../../shared/lib/UserAvatar"
-import NextLink from "../../../shared/lib/NextLink"
 import CommentModule from "./CommentModule"
 import StyleActivities from "./StyleActivities"
-import PreviewModal from "./PreviewModal"
+import UserAvatar from "../../../shared/lib/UserAvatar"
 
 export interface IAction {
   entities: { boardId: string; name?: string; [key: string]: any }
@@ -27,7 +24,8 @@ export interface IAction {
 }
 
 const Activities = ({ showActivities }: { showActivities: boolean }) => {
-  const { activities, setActivities, togglePreviewModal } = useCardContext()
+  const { togglePreviewModal } = useCardContext()
+  const { activities, setActivities } = useBoard()
 
   const handleDeleteComment = (ev?: MouseEvent) => {
     ev.stopPropagation()

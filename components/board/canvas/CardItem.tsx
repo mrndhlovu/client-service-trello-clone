@@ -11,7 +11,12 @@ import {
 import { Button, Badge } from "@chakra-ui/react"
 import { BsChatDots, BsCheckBox } from "react-icons/bs"
 
-import { useCardContext, useListCardsContext } from "../../../lib/providers"
+import {
+  useBoard,
+  useCardContext,
+  useListItemContext,
+  useListsContext,
+} from "../../../lib/providers"
 import { calculateCompletedTasks } from "../../../util"
 import CardActions from "./cardActions/CardActions"
 import CardModal from "./card/CardModal"
@@ -76,10 +81,9 @@ export interface ICardActionProps {
 }
 
 const CardItem = ({ toggleActionsMenu, actionsOpen }: ICardActionProps) => {
-  const { saveCardChanges } = useListCardsContext()
+  const { saveCardChanges } = useListsContext()
+  const { activities, attachments } = useBoard()
   const {
-    activities,
-    attachments,
     card,
     cardId,
     cardIsOpen,
@@ -92,6 +96,7 @@ const CardItem = ({ toggleActionsMenu, actionsOpen }: ICardActionProps) => {
     showCardCover,
     tasks,
     previewModalIsOpen,
+    hasAttachments,
     toggleCardIsOpen,
   } = useCardContext()
 
@@ -100,14 +105,13 @@ const CardItem = ({ toggleActionsMenu, actionsOpen }: ICardActionProps) => {
       activities?.filter(
         action =>
           action?.entities?.comment !== undefined &&
-          action?.entities?.card?.id === cardId
+          action?.entities?.cardId === cardId
       )?.length,
     [activities, cardId]
   )
 
   const hasComments = numberOfCardComments > 0
   const hasTasks = !isEmpty(tasks)
-  const hasAttachments = !isEmpty(attachments)
   const hasDueDate = card?.due && card?.due !== undefined
   const hasBadge = hasComments || hasTasks || hasAttachments || hasDueDate
   const [numberOfTasksToComplete, numberOfCompletedTasks] =
@@ -156,7 +160,7 @@ const CardItem = ({ toggleActionsMenu, actionsOpen }: ICardActionProps) => {
         <div className={`list-card ${actionsOpen ? "edit-open" : ""}`}>
           <div className="list-card-details">
             <div className="list-card-labels">
-              {card?.labels.map((label: string, index: number) => (
+              {card?.labels?.map((label: string, index: number) => (
                 <CardLabel className="card-label " color={label} key={index} />
               ))}
             </div>

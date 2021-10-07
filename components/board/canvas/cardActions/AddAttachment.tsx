@@ -5,12 +5,13 @@ import { Menu, MenuItemOption } from "@chakra-ui/menu"
 import { ChangeEvent, useRef, useState } from "react"
 
 import { clientRequest } from "../../../../api"
-import { useCardContext } from "../../../../lib/providers"
+import { useBoard, useCardContext } from "../../../../lib/providers"
 import { IAttachment } from "./ChangeCover"
 import StyleAddAttachment from "./StyleAddAttachment"
 
 const AddAttachment = () => {
-  const { cardId, fetchAndUpdateActions, setAttachments } = useCardContext()
+  const { cardId } = useCardContext()
+  const { fetchAndUpdateActions, setAttachments } = useBoard()
   const [name, setName] = useState<string>("")
   const [attachment, setAttachment] = useState<{
     data: string | FormData | undefined

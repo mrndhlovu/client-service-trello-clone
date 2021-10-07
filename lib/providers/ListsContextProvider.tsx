@@ -10,7 +10,7 @@ import update from "immutability-helper"
 
 import { clientRequest } from "../../api"
 import { IBoard } from "./HomeContextProvider"
-import { ICardDraggingProps } from "./ListCardsContextProvider"
+import { ICardDraggingProps } from "./ListItemContextProvider"
 import { ICardItem, IListItem } from "../../components/board/canvas/ListItem"
 import { useBoard } from "./BoardContextProvider"
 import { useGlobalState } from "."
@@ -23,14 +23,14 @@ interface IUpdateStateOptions {
   isNew?: boolean
 }
 
-const ListContextProvider = ({ children }: IProps) => {
+const ListsContextProvider = ({ children }: IProps) => {
   const { board, boardId, setActiveBoard } = useBoard()
-  const { notify, boards } = useGlobalState()
+  const { notify } = useGlobalState()
 
   const dragRef = useRef<ICardItem | null>(null)
 
   const updateListsState = (
-    update: IListItem,
+    update: IListItem | IListItem[],
     options?: IUpdateStateOptions
   ) => {
     if (options?.isNew) {
@@ -203,6 +203,21 @@ const ListContextProvider = ({ children }: IProps) => {
     [board?.lists, updateListsState]
   )
 
+  const saveCardChanges = useCallback(
+    async (cardId: string, listId: string, update: { [key: string]: any }) => {
+      await clientRequest
+        .updateCard(update, { listId, cardId })
+        .then(res => updateCardsState(res.data))
+        .catch(err =>
+          notify({
+            description: err.message,
+            placement: "top",
+          })
+        )
+    },
+    [notify, updateCardsState]
+  )
+
   return (
     <ListContext.Provider
       value={{
@@ -210,6 +225,7 @@ const ListContextProvider = ({ children }: IProps) => {
         moveCard,
         moveList,
         saveCardDndChanges,
+        saveCardChanges,
         saveListChanges,
         saveListDndChanges,
         switchCardList,
@@ -248,10 +264,15 @@ export interface IListContextProps {
   moveCard: (dragCardId: string, hoverCardId: string) => void
   removeCardFromSource: (cardId: string) => void
   removeListFromSource: (listId: string) => void
+  saveCardChanges: (
+    cardId: string,
+    listId: string,
+    update: { [key: string]: any }
+  ) => void
 }
 
 export const ListContext = createContext({} as IListContextProps)
 
-export const useListContext = () => useContext(ListContext)
+export const useListsContext = () => useContext(ListContext)
 
-export { ListContextProvider }
+export { ListsContextProvider }

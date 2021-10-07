@@ -2,16 +2,16 @@ import { HTML5Backend } from "react-dnd-html5-backend"
 import { DndProvider } from "react-dnd"
 
 import {
-  ListCardsContextProvider,
+  ListItemContextProvider,
   useBoard,
-  useListContext,
+  useListsContext,
 } from "../../../lib/providers"
 import AddList from "./AddList"
 import BoardCanvasStyles from "./StyleBoardCanvas"
 import ListItem from "./ListItem"
 
 const BoardCanvas = () => {
-  const { hasBoardList } = useListContext()
+  const { hasBoardList } = useListsContext()
   const { board } = useBoard()
 
   return (
@@ -21,14 +21,14 @@ const BoardCanvas = () => {
           {board?.lists?.map(
             (listItem, index) =>
               !listItem.archived && (
-                <ListCardsContextProvider
+                <ListItemContextProvider
                   list={listItem}
                   listId={listItem.id}
                   listIndex={index}
                   key={listItem.id}
                 >
                   <ListItem />
-                </ListCardsContextProvider>
+                </ListItemContextProvider>
               )
           )}
           <AddList

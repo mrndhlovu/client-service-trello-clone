@@ -46,8 +46,8 @@ export default styled.div`
       padding: 2px 4px 0;
       z-index: 1;
 
-      & button {
-        justify-content: end;
+      & > button {
+        justify-content: start;
       }
 
       .edit-title-button {
@@ -105,7 +105,8 @@ export default styled.div`
       button {
         border-radius: 3px;
         font-weight: lighter;
-        justify-content: end;
+
+        justify-content: start;
       }
     }
 

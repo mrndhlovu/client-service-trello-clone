@@ -1,5 +1,5 @@
 import { IChecklist } from "./cardActions/AddChecklist"
-import { useListCardsContext, useListContext } from "../../../lib/providers"
+import { useListItemContext, useListsContext } from "../../../lib/providers"
 import AddCard from "./AddCard"
 import DraggableList from "../dnd/DraggableList"
 import EditableTitle from "../EditableTitle"
@@ -12,6 +12,7 @@ export interface IListItem {
   title?: string
   boardId?: string
   archived?: boolean
+  id?: string
 }
 
 interface ICoverImage {
@@ -48,8 +49,8 @@ export interface ICardItem {
 }
 
 const ListItem = () => {
-  const { saveListChanges } = useListContext()
-  const { list, listId, listIndex } = useListCardsContext()
+  const { saveListChanges } = useListsContext()
+  const { list, listId, listIndex } = useListItemContext()
 
   const handleUpdateTitle = (title: string) => {
     saveListChanges(listId, { title })

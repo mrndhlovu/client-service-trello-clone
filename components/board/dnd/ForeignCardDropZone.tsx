@@ -3,10 +3,10 @@ import { useDrop } from "react-dnd"
 
 import { DRAG_TYPES } from "../../../util/constants"
 import { ICardDndItem } from "./DraggableCard"
-import { ICardDraggingProps, useListContext } from "../../../lib/providers"
+import { ICardDraggingProps, useListsContext } from "../../../lib/providers"
 
 const ForeignCardDropZone = ({ children, listId, listIndex }) => {
-  const { saveCardDndChanges, switchCardList } = useListContext()
+  const { saveCardDndChanges, switchCardList } = useListsContext()
 
   const ref = useRef<HTMLDivElement>(null)
 

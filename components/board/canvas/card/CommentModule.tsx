@@ -1,4 +1,4 @@
-import { useCardContext } from "../../../../lib/providers"
+import { useBoard } from "../../../../lib/providers"
 import UserAvatar from "../../../shared/lib/UserAvatar"
 
 import CommentItem from "./CommentItem"
@@ -9,7 +9,7 @@ interface IProps {
 }
 
 const CommentModule = ({ defaultValue, initials }: IProps) => {
-  const { updateActionsList } = useCardContext()
+  const { updateActionsList } = useBoard()
 
   return (
     <div className="mod-comment">

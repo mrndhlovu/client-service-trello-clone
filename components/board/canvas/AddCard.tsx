@@ -6,14 +6,14 @@ import { clientRequest } from "../../../api"
 import {
   useBoard,
   useGlobalState,
-  useListCardsContext,
-  useListContext,
+  useListItemContext,
+  useListsContext,
 } from "../../../lib/providers"
 
 const AddCard = () => {
   const { boardId, findCardsByListId } = useBoard()
-  const { updateCardsState } = useListContext()
-  const { listId } = useListCardsContext()
+  const { updateCardsState } = useListsContext()
+  const { listId } = useListItemContext()
   const { notify } = useGlobalState()
 
   const [editing, setEditing] = useState<boolean>(false)
