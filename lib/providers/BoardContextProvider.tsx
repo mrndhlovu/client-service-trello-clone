@@ -9,7 +9,7 @@ import {
   useState,
 } from "react"
 import { useRouter } from "next/router"
-import { isEmpty } from "lodash"
+import { isEmpty, omit } from "lodash"
 
 import { clientRequest } from "../../api"
 import { IBoard } from "./HomeContextProvider"
@@ -28,6 +28,18 @@ interface IUpdateStateOptions {
   isNew?: boolean
 }
 
+interface IPagination {
+  hasNextPage: boolean
+  hasPrevPage: boolean
+  limit: number
+  nextPage: number | null
+  page: number | null
+  pagingCounter: number | null
+  prevPage: number | null
+  totalDocs: number | null
+  totalPages: number | null
+}
+
 const BoardContextProvider = ({ children, board }: IProps) => {
   const { notify, rehydrateBoardsList } = useGlobalState()
   const router = useRouter()
@@ -36,6 +48,7 @@ const BoardContextProvider = ({ children, board }: IProps) => {
   const [attachments, setAttachments] = useState<IAttachment[]>([])
   const [activities, setActivities] = useState<IAction[]>([])
   const [drawerOpen, setDrawerOpen] = useState<boolean>(false)
+  const [pagination, setPagination] = useState<IPagination>({} as IPagination)
 
   const isStarred = Boolean(activeBoard?.prefs?.starred === "true")
 
@@ -151,6 +164,20 @@ const BoardContextProvider = ({ children, board }: IProps) => {
       .catch(() => null)
   }
 
+  const loadMoreActions = () => {
+    if (!pagination.hasNextPage) return
+    const queryString = `?limit=10&page=${pagination.nextPage}`
+
+    clientRequest
+      .getActions(board.id, queryString)
+      .then(res => {
+        setActivities(prev => [...prev, ...res.data?.docs])
+        const paginationProps = omit(res.data, ["docs"]) as IPagination
+        setPagination(paginationProps)
+      })
+      .catch(err => {})
+  }
+
   const toggleDrawerMenu = () => setDrawerOpen(prev => !prev)
 
   useEffect(() => {
@@ -160,13 +187,14 @@ const BoardContextProvider = ({ children, board }: IProps) => {
   useEffect(() => {
     if (!board?.id) return
     const getData = async () => {
+      const queryString = `?limit=10&page=0`
       const boardPromises = [
         clientRequest
           .getAttachments(board?.id)
           .then(res => res.data)
           .catch(res => undefined),
         clientRequest
-          .getActions(board.id)
+          .getActions(board.id, queryString)
           .then(res => res.data)
           .catch(res => undefined),
       ]
@@ -176,7 +204,10 @@ const BoardContextProvider = ({ children, board }: IProps) => {
       if (!response) return
 
       setAttachments(response?.[0])
-      setActivities(response?.[1])
+      setActivities(response?.[1]?.docs)
+
+      const paginationProps = omit(response?.[1], ["docs"]) as IPagination
+      setPagination(paginationProps)
     }
 
     getData()
@@ -207,6 +238,8 @@ const BoardContextProvider = ({ children, board }: IProps) => {
         toggleDrawerMenu,
         updateActionsList,
         updateBoardState,
+        pagination,
+        loadMoreActions,
       }}
     >
       {children}
@@ -236,8 +269,10 @@ interface IBoardContext {
   setActivities: Dispatch<SetStateAction<IAction[]>>
   setAttachments: Dispatch<SetStateAction<IAttachment[]>>
   toggleDrawerMenu: () => void
-  updateActionsList: (data: IAction, options?: { edited: false }) => void
+  updateActionsList: (data: IAction, options?: { edited: boolean }) => void
   updateBoardState: (board?: IBoard) => void
+  pagination: IPagination
+  loadMoreActions: () => void
 }
 
 export const BoardContext = createContext<IBoardContext>({} as IBoardContext)

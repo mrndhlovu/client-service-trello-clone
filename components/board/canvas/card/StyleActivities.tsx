@@ -24,6 +24,12 @@ export default styled.div`
     position: relative;
   }
 
+  .user-avatar {
+    position: absolute;
+    left: -37px;
+    position: absolute;
+  }
+
   .preview-frame {
     padding: 48px 24px 112px;
     height: auto;
@@ -78,5 +84,18 @@ export default styled.div`
   }
   a {
     text-decoration: underline;
+  }
+
+  .link-btn.actions {
+    border-radius: 3px;
+    clear: both;
+    color: #5e6c84;
+    display: block;
+    margin-top: 16px;
+    padding: 16px 16px 16px 20px;
+
+    &:hover {
+      background-color: #dfe1e6;
+    }
   }
 `

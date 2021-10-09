@@ -10,12 +10,10 @@ import NextLink from "./NextLink"
 const FormattedAction = <T extends IAction>({
   action,
   openPreviewModal,
-  handleDeleteComment,
   updateActionsList,
 }: {
   action: T
   openPreviewModal: (ev: MouseEvent) => void
-  handleDeleteComment: (ev: MouseEvent) => void
   updateActionsList?: (data: IAction, options?: { edited: boolean }) => void
 }) => {
   const name =
@@ -58,8 +56,6 @@ const FormattedAction = <T extends IAction>({
           <CommentItem
             commentId={action.id}
             defaultValue={action.entities?.comment.text}
-            handleDeleteComment={handleDeleteComment}
-            updateActionsList={updateActionsList}
           />
         )
 
@@ -96,8 +92,6 @@ const FormattedAction = <T extends IAction>({
               link={action?.entities?.attachment?.url}
               defaultValue={action?.entities?.comment?.text}
               isLink
-              handleDeleteComment={handleDeleteComment}
-              updateActionsList={updateActionsList}
             />
           )
         }

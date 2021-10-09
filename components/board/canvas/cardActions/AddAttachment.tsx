@@ -9,6 +9,12 @@ import { useBoard, useCardContext } from "../../../../lib/providers"
 import { IAttachment } from "./ChangeCover"
 import StyleAddAttachment from "./StyleAddAttachment"
 
+const ATTACHMENT_INITIAL_STATE = {
+  data: undefined,
+  isFile: false,
+  isImage: false,
+}
+
 const AddAttachment = () => {
   const { cardId } = useCardContext()
   const { fetchAndUpdateActions, setAttachments } = useBoard()
@@ -17,9 +23,7 @@ const AddAttachment = () => {
     data: string | FormData | undefined
     isFile?: boolean
     isImage?: boolean
-  }>({
-    data: undefined,
-  })
+  }>(ATTACHMENT_INITIAL_STATE)
   const inputRef = useRef<HTMLInputElement>()
 
   const handleClick = () => {
@@ -50,7 +54,7 @@ const AddAttachment = () => {
   }
 
   const handleAttach = () => {
-    if (attachment.isFile && !attachment.isImage) {
+    if (attachment?.isFile && !attachment.isImage) {
       clientRequest
         .uploadAttachment(attachment.data as FormData, cardId)
         .then(res => {
@@ -59,7 +63,7 @@ const AddAttachment = () => {
           const newAttachments: IAttachment[] = res.data
           newAttachments.map(item => newAttachmentIds.push(item.id))
 
-          setAttachment({ data: undefined, isFile: false, isImage: false })
+          setAttachment(ATTACHMENT_INITIAL_STATE)
           setName("")
           fetchAndUpdateActions(newAttachmentIds.join("|"))
 
@@ -74,7 +78,7 @@ const AddAttachment = () => {
       clientRequest
         .uploadImageCardCover(attachment.data as FormData, cardId)
         .then(res => {
-          setAttachment({ data: undefined, isFile: false, isImage: false })
+          setAttachment(ATTACHMENT_INITIAL_STATE)
           setName("")
           fetchAndUpdateActions(res.data.id)
           setAttachments(prev => [...prev, res.data])
@@ -88,14 +92,9 @@ const AddAttachment = () => {
     clientRequest
       .addLinkAttachment({ link: attachment.data as string, name }, cardId)
       .then(res => {
-        const newAttachmentIds = []
-
-        const newAttachments: IAttachment[] = res.data
-        newAttachments.map(item => newAttachmentIds.push(item.id))
-
-        setAttachment({ data: undefined, isFile: false, isImage: false })
+        setAttachment(ATTACHMENT_INITIAL_STATE)
         setName("")
-        fetchAndUpdateActions(newAttachmentIds.join("|"))
+        fetchAndUpdateActions(res.data.id)
 
         setAttachments(prev => [...prev, res.data])
       })

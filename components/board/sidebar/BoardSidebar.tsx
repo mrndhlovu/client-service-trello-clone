@@ -9,6 +9,7 @@ import { useBoard, useAuth } from "../../../lib/providers"
 import ChangeBackground from "./ChangeBackground"
 import DrawerStyles, { StyledUl } from "./DrawerStyles"
 import SideBarHeader from "./SideBarHeader"
+import Activities from "../canvas/card/Activities"
 
 interface OpenMenuOptions {
   [key: string]: {
@@ -74,6 +75,11 @@ const StyledDrawerContent = styled(DrawerContent)`
     padding: 0 10px;
     height: 100%;
     position: relative;
+    overflow: auto;
+  }
+
+  .mod-preview-type {
+    margin-left: 36px;
   }
 
   .divider {
@@ -142,10 +148,14 @@ const BoardDrawer = () => {
               </StyledUl>
             )}
 
-            <ChangeBackground
-              openMenu={openMenu.key}
-              handleMenuChange={handleMenuChange}
-            />
+            <Activities showCommentOption={false} showActivities />
+
+            {openMenu.key === "changeColor" && (
+              <ChangeBackground
+                openMenu={openMenu.key}
+                handleMenuChange={handleMenuChange}
+              />
+            )}
           </div>
         </StyledDrawerContent>
       </Drawer>

@@ -9,7 +9,6 @@ import { GrEmoji } from "react-icons/gr"
 import { AiOutlineClose } from "react-icons/ai"
 
 import { clientRequest } from "../../../../api"
-import { IAction } from "./Activities"
 import { UIDropdown } from "../../../shared"
 import { useAuth, useBoard, useCardContext } from "../../../../lib/providers"
 
@@ -18,19 +17,15 @@ interface IProps {
   commentId?: string
   link?: string
   isLink?: boolean
-  handleDeleteComment?: (ev: MouseEvent) => void
-  updateActionsList?: (data: IAction, options?: { edited: boolean }) => void
 }
 
 const CommentItem = ({
   defaultValue,
   commentId,
   link,
-  handleDeleteComment,
-  updateActionsList,
   isLink = false,
 }: IProps) => {
-  const { boardId } = useBoard()
+  const { boardId, setActivities, updateActionsList } = useBoard()
   const { cardId } = useCardContext()
   const { user } = useAuth()
   const inputRef = useRef<HTMLTextAreaElement>()
@@ -55,6 +50,20 @@ const CommentItem = ({
     if (!ev?.target?.value) return
 
     setComment(ev?.target?.value)
+  }
+
+  const handleDeleteComment = (ev?: MouseEvent) => {
+    ev.stopPropagation()
+    const commentId = ev.currentTarget.id
+
+    clientRequest
+      .deleteComment(commentId)
+      .then(() => {
+        setActivities(prev => [
+          ...prev.filter(action => action?.id !== commentId),
+        ])
+      })
+      .catch(() => {})
   }
 
   const onEmojiClick = (emoji?: any, ev?: MouseEvent) => {

@@ -1,6 +1,6 @@
 import { MouseEvent } from "react"
 import { Button, Input, Divider } from "@chakra-ui/react"
-import { useEffect, useState } from "react"
+import { useState } from "react"
 import { ChangeEvent, useRef } from "react"
 import styled from "styled-components"
 
@@ -9,6 +9,7 @@ import {
   useCardContext,
   useListsContext,
   useGlobalState,
+  useBoard,
 } from "../../../../lib/providers"
 import { LABEL_DEFAULT_OPTIONS } from "../../../../util/constants"
 import UnSplashImages from "../../sidebar/UnSplashImages"
@@ -59,12 +60,15 @@ const ChangeCover = () => {
   const { cardId, card, listId } = useCardContext()
   const { notify } = useGlobalState()
   const { updateCardsState, saveCardChanges } = useListsContext()
-
+  const { attachments, setAttachments } = useBoard()
   const imageRef = useRef<HTMLInputElement>()
 
   const [isLoading, setIsLoading] = useState<boolean>(false)
-  const [attachments, setAttachments] = useState<IAttachment[]>([])
   const [search, setSearch] = useState<boolean>(false)
+
+  const imageAttachments = attachments.filter(
+    attachment => attachment.resourceType === "image"
+  )
 
   const handleSelectedCardColor = (ev: MouseEvent) => {
     const colorCover = ev.currentTarget.id
@@ -132,23 +136,6 @@ const ChangeCover = () => {
     saveCardChanges(cardId, listId, { imageCover: "" })
   }
 
-  useEffect(() => {
-    const getData = () => {
-      clientRequest
-        .getCardAttachments(cardId)
-        .then(res => setAttachments(res.data))
-        .catch(err =>
-          notify({
-            description: err.message,
-            placement: "top",
-            status: "error",
-          })
-        )
-    }
-
-    getData()
-  }, [])
-
   return (
     <CardActionStyles>
       {search ? (
@@ -197,7 +184,7 @@ const ChangeCover = () => {
           </ul>
           <h4>Attachments</h4>
           <li className="attachment-list">
-            {attachments.map(attachment => (
+            {imageAttachments.map(attachment => (
               <a href="#" key={attachment.id}>
                 <AttachmentImage
                   id={attachment.id}

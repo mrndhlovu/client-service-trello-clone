@@ -18,10 +18,7 @@ const CommentModule = ({ defaultValue, initials }: IProps) => {
           <UserAvatar initials={initials} />
         </div>
       )}
-      <CommentItem
-        defaultValue={defaultValue}
-        updateActionsList={updateActionsList}
-      />
+      <CommentItem defaultValue={defaultValue} />
     </div>
   )
 }

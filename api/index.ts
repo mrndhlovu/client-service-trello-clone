@@ -295,8 +295,10 @@ class ApiRequest extends AxiosConfig {
     return await this.http.get(`${END_POINTS.accounts}/power-ups`)
   }
 
-  async getActions(boardId: string) {
-    return await this.http.get(`${END_POINTS.accounts}/${boardId}/actions`)
+  async getActions(boardId: string, queryString: string) {
+    return await this.http.get(
+      `${END_POINTS.accounts}/${boardId}/actions${queryString}`
+    )
   }
 
   async getActionByAttachmentId(boardId: string, attachmentIds: string) {

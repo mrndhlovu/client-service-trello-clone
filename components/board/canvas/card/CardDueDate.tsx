@@ -24,7 +24,7 @@ const CardDueDate = () => {
 
   return hasDueDate ? (
     <div className="card-due-date-module">
-      <CardModule className="card-due-date" title={<h6>Due Date</h6>} />
+      <CardModule className="card-due-date" title="Due Date" />
 
       <div className="due-date-detail module-content">
         <Checkbox
@@ -38,7 +38,7 @@ const CardDueDate = () => {
             Complete
           </Badge>
         )}
-        <UIDropdown heading="Dates" toggle={<IoIosArrowDown />}>
+        <UIDropdown heading="Dates" usePortal toggle={<IoIosArrowDown />}>
           <AddCardDueDate />
         </UIDropdown>
       </div>

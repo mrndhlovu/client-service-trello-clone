@@ -23,38 +23,29 @@ export interface IAction {
   id: string
 }
 
-const Activities = ({ showActivities }: { showActivities: boolean }) => {
+const Activities = ({
+  showActivities,
+  showCommentOption = true,
+}: {
+  showActivities: boolean
+  showCommentOption?: boolean
+}) => {
   const { togglePreviewModal } = useCardContext()
-  const { activities, setActivities } = useBoard()
-
-  const handleDeleteComment = (ev?: MouseEvent) => {
-    ev.stopPropagation()
-    const commentId = ev.currentTarget.id
-
-    clientRequest
-      .deleteComment(commentId)
-      .then(() => {
-        setActivities(prev => [
-          ...prev.filter(action => action?.id !== commentId),
-        ])
-      })
-      .catch(() => {})
-  }
+  const { activities, pagination, loadMoreActions } = useBoard()
 
   return (
     <>
-      <CommentModule />
+      {showCommentOption && <CommentModule />}
 
       {showActivities && (
         <StyleActivities>
-          {activities.map((action, index) => (
+          {activities?.map((action, index) => (
             <div className="mod-preview-type" key={index}>
               <div className="user-avatar">
                 <UserAvatar initials={action?.initials} />
               </div>
               <FormattedAction
                 openPreviewModal={togglePreviewModal}
-                handleDeleteComment={handleDeleteComment}
                 action={action}
               />
               {action?.type !== "comment" &&
@@ -68,6 +59,12 @@ const Activities = ({ showActivities }: { showActivities: boolean }) => {
                 )}
             </div>
           ))}
+
+          {pagination.hasNextPage && (
+            <button onClick={loadMoreActions} className="link-btn actions">
+              Load more actions
+            </button>
+          )}
         </StyleActivities>
       )}
     </>

@@ -129,11 +129,11 @@ export default styled(ModalContent)`
     }
 
     .card-due-date-module {
-      h6 {
+      h3 {
         color: #5e6c84;
         display: block;
-        font-size: 12px;
-        font-weight: 500;
+        font-size: 12px !important;
+        font-weight: 500 !important;
         letter-spacing: 0.04em;
         line-height: 16px;
         line-height: 20px;
@@ -149,15 +149,22 @@ export default styled(ModalContent)`
         gap: 5px;
         align-items: baseline;
       }
-      .module-header,
-      .module-content {
+      .module-header {
         margin-left: 36px !important;
       }
 
       .module-content {
+        margin-left: 66px !important;
         background-color: rgba(9, 30, 66, 0.04);
-        padding: 10px 0 10px 10px;
-        width: 91%;
+        padding: 7px;
+        width: max-content;
+        border-radius: 3px;
+        position: relative;
+
+        label {
+          position: absolute;
+          left: -27px;
+        }
       }
 
       .module-header {
@@ -409,7 +416,7 @@ export default styled(ModalContent)`
         resize: none;
         width: 100%;
         font-size: 13px;
-        padding: 8px 7px;
+        padding: 7px 7px;
         transition: min-height 0.2s linear;
       }
 
