@@ -170,3 +170,5 @@ export const DUE_DATE_REMINDERS = [
   { key: 1440, label: "1 Day before" },
   { key: 2880, label: "2 Days before" },
 ]
+
+export const WORKSPACE_TYPES = ["Education", "IT", "Other"]

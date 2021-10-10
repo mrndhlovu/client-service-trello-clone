@@ -5,6 +5,7 @@ import axios, {
   AxiosResponse,
 } from "axios"
 import { ILabelProps } from "../components/board/canvas/cardActions/CardLabels"
+import { IWorkspace } from "../components/header/CreateWorkspaceModal"
 
 import {
   ICardDetails,
@@ -38,6 +39,7 @@ export interface INewBoardData {
     image?: string
     color?: string
   }
+  workspaceId?: string
 }
 
 export interface IRequestError {
@@ -464,6 +466,15 @@ class ApiRequest extends AxiosConfig {
     return await this.http.delete(
       `${END_POINTS.accounts}/${commentId}/del-comment`
     )
+  }
+
+  //Workspace
+  async createWorkspace(data: IWorkspace) {
+    return await this.http.post(`${END_POINTS.boards}/new-workspace`, data)
+  }
+
+  async getWorkspaces() {
+    return await this.http.get(`${END_POINTS.boards}/workspaces`)
   }
 }
 

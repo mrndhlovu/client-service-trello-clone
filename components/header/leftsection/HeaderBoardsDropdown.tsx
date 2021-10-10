@@ -8,9 +8,9 @@ import HeaderBoardGroup from "./HeaderBoardGroup"
 const HeaderBoardsDropdown = () => {
   const { boards } = useGlobalState()
   const { user } = useAuth()
-  const starredBoards = boards.filter(board => board.prefs.starred === "true")
+  const starredBoards = boards?.filter(board => board.prefs.starred === "true")
   const viewedRecentBoards = boards
-    .filter(board => user.viewedRecent.includes(board.id))
+    ?.filter(board => user.viewedRecent.includes(board.id))
     .reverse()
 
   return (

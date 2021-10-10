@@ -1,13 +1,14 @@
+import { isEmpty } from "lodash"
 import { useAuth, useGlobalState } from "../../lib/providers"
 import BoardsGroup from "./BoardsGroup"
 
 const BoardList = () => {
-  const { boards } = useGlobalState()
+  const { boards, workspaces } = useGlobalState()
   const { user } = useAuth()
 
-  const starredBoards = boards.filter(board => board.prefs.starred === "true")
+  const starredBoards = boards?.filter(board => board.prefs.starred === "true")
   const viewedRecentBoards = boards
-    .filter(board => user.viewedRecent.includes(board.id))
+    ?.filter(board => user.viewedRecent.includes(board.id))
     .reverse()
 
   return (
@@ -25,11 +26,29 @@ const BoardList = () => {
         category="recent"
       />
 
+      <h5 className="home-boards-group-text">YOUR WORKSPACES</h5>
+
       <BoardsGroup
-        heading="YOUR WORKSPACES"
-        boards={boards}
+        heading="Default workspace"
+        boards={boards?.filter(
+          board =>
+            board?.workspaces.includes("default") || isEmpty(board.workspaces)
+        )}
         category="workspaces"
       />
+
+      {workspaces?.map(workspace => {
+        return (
+          <BoardsGroup
+            heading={`${workspace.name} workspace`}
+            boards={boards?.filter(board =>
+              board.workspaces.includes(workspace?.id)
+            )}
+            category="workspaces"
+            workspaceId={workspace.id}
+          />
+        )
+      })}
     </>
   )
 }

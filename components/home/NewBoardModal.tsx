@@ -1,4 +1,4 @@
-import { ChangeEvent, useState } from "react"
+import { ChangeEvent, useEffect, useState, MouseEvent } from "react"
 import router from "next/router"
 import Link from "next/link"
 import { FiCheck, FiX } from "react-icons/fi"
@@ -22,7 +22,13 @@ interface IBgOptions {
   color?: string
 }
 
-const NewBoardModal = ({ toggleModal, openModal }) => {
+interface IProps {
+  toggleModal: (ev?: MouseEvent) => void
+  openModal: boolean
+  workspaceId?: string
+}
+
+const NewBoardModal = ({ toggleModal, openModal, workspaceId }: IProps) => {
   const { notify } = useGlobalState()
   const [activeBgOption, setActiveBgOption] = useState<IBgOptions>(
     NEW_BOARD_BG_OPTIONS[0]
@@ -44,6 +50,7 @@ const NewBoardModal = ({ toggleModal, openModal }) => {
           image: activeBgOption?.image,
           color: activeBgOption?.color || "#838c91",
         },
+        workspaceId,
       })
       .then(res => {
         router.push(`/${ROUTES.board}/${res?.data?.id}`)
@@ -56,6 +63,12 @@ const NewBoardModal = ({ toggleModal, openModal }) => {
   }
 
   const handleSelectedColor = (newOption: any) => setActiveBgOption(newOption)
+
+  useEffect(() => {
+    return () => {
+      toggleModal()
+    }
+  }, [toggleModal])
 
   return (
     <StyledModal onClose={toggleModal} isOpen={openModal}>

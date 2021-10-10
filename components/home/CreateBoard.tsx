@@ -66,7 +66,7 @@ const CreateBoardTile = styled.li`
   }
 `
 
-const CreateBoard = () => {
+const CreateBoard = ({ workspaceId }: { workspaceId?: string }) => {
   const [openModal, setOpenModal] = useState<boolean>(false)
 
   const toggleModal = useCallback(() => setOpenModal(prev => !prev), [])
@@ -91,7 +91,11 @@ const CreateBoard = () => {
         </div>
       </CreateBoardTile>
       {openModal && (
-        <NewBoardModal openModal={openModal} toggleModal={toggleModal} />
+        <NewBoardModal
+          workspaceId={workspaceId}
+          openModal={openModal}
+          toggleModal={toggleModal}
+        />
       )}
     </>
   )

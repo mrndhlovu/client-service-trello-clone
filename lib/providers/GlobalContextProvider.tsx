@@ -1,9 +1,16 @@
-import { createContext, useCallback, useContext, useState } from "react"
+import {
+  createContext,
+  Dispatch,
+  SetStateAction,
+  useCallback,
+  useContext,
+  useState,
+} from "react"
 import { useToast } from "@chakra-ui/react"
 
 import { checkStringIncludes } from "../../util"
 import { clientRequest } from "../../api"
-import { IBoard, useAuth } from "."
+import { IBoard, useAuth, Workspace } from "."
 import { useLocalStorage } from "../hooks"
 
 export type IUIRequestError = string[]
@@ -33,6 +40,7 @@ const GlobalContextProvider = ({ children }) => {
     darkMode: false,
   })
   const [boards, setBoards] = useState<IBoard[]>([])
+  const [workspaces, setWorkspaces] = useState<Workspace[]>([])
 
   const handleModeChange = () => {
     return setTheme((prev: IThemeMode) => {
@@ -76,8 +84,9 @@ const GlobalContextProvider = ({ children }) => {
     return saveBoardChanges(update, board.id)
   }, [])
 
-  const updateBoardsState = useCallback(newBoards => {
-    setBoards(newBoards)
+  const updateBoardsState = useCallback(data => {
+    setBoards(data.boards)
+    setWorkspaces(data.workspaces)
   }, [])
 
   const notify = useCallback(
@@ -111,12 +120,14 @@ const GlobalContextProvider = ({ children }) => {
     <GlobalContext.Provider
       value={{
         boards,
+        workspaces,
         darkMode: theme?.darkMode,
         handleModeChange,
         handleStarBoard,
         notify,
         rehydrateBoardsList,
         updateBoardsState,
+        setWorkspaces,
       }}
     >
       {children}
@@ -130,8 +141,13 @@ interface IDefaultGlobalState {
   handleModeChange: () => void
   handleStarBoard: (board?: IBoard) => void
   notify: (option: IToastProps) => void
-  updateBoardsState: (boards: IBoard[]) => void
+  workspaces: Workspace[]
+  updateBoardsState: (boards: {
+    boards?: IBoard[]
+    workspaces?: Workspace[]
+  }) => void
   rehydrateBoardsList: (board: IBoard) => void
+  setWorkspaces: Dispatch<SetStateAction<Workspace[]>>
 }
 
 export const GlobalContext = createContext<IDefaultGlobalState>(

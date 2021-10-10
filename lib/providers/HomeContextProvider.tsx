@@ -17,18 +17,27 @@ export interface IBoard {
   [key: string]: any
 }
 
+export interface Workspace {
+  boards: string[]
+  createdAt: string
+  id: string
+  name: string
+  owner: string
+  updatedAt: string
+  category: string
+}
+
 interface IProps {
-  boardList?: IBoard[]
+  data?: { boards: IBoard[]; workspaces: Workspace[] }
   children: ReactNode
 }
 
-const HomeContextProvider = ({ children, boardList }: IProps) => {
+const HomeContextProvider = ({ children, data }: IProps) => {
   const { updateBoardsState } = useGlobalState()
 
   useEffect(() => {
-    if (!boardList) return
-    updateBoardsState(boardList)
-  }, [boardList, updateBoardsState])
+    updateBoardsState(data)
+  }, [])
 
   return <HomeContext.Provider value={{}}>{children}</HomeContext.Provider>
 }

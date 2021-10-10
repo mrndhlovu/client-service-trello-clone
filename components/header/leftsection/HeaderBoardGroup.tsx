@@ -45,7 +45,7 @@ const HeaderBoardGroup = ({ boards, heading, icon, category }: IProps) => {
         <div className="group-header-icon">{getIcon()}</div>
         <h5 className="group-text">{heading}</h5>
       </div>
-      {boards.map((board, index) => {
+      {boards?.map((board, index) => {
         const imageCover = board.activeBg === "image" ? board?.prefs.image : ""
         const colorCover = board?.prefs?.color
         const isStarred = Boolean(board?.prefs?.starred === "true")

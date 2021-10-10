@@ -17,6 +17,7 @@ interface IProps {
   icon?: "star" | "clock"
   boards: IBoard[]
   category: "starred" | "workspaces" | "recent"
+  workspaceId?: string
 }
 
 const ListWrapper = styled.ul`
@@ -132,7 +133,13 @@ export const Tile = styled.li<ITileProps>`
   }
 `
 
-const BoardsGroup = ({ heading, icon, boards, category }: IProps) => {
+const BoardsGroup = ({
+  heading,
+  icon,
+  boards,
+  category,
+  workspaceId,
+}: IProps) => {
   const router = useRouter()
   const { handleStarBoard } = useGlobalState()
 
@@ -161,7 +168,11 @@ const BoardsGroup = ({ heading, icon, boards, category }: IProps) => {
         return <AiOutlineClockCircle size={22} />
 
       default:
-        return null
+        return (
+          <div className="home-group-workspace-icon">
+            <span>{heading.split("")?.[0]}</span>
+          </div>
+        )
     }
   }
 
@@ -169,6 +180,7 @@ const BoardsGroup = ({ heading, icon, boards, category }: IProps) => {
     <div className="home-boards-group">
       <div className="home-group-header">
         <div className="home-group-header-icon">{getIcon()}</div>
+
         <h5 className="home-boards-group-text">{heading}</h5>
       </div>
 
@@ -206,7 +218,7 @@ const BoardsGroup = ({ heading, icon, boards, category }: IProps) => {
           )
         })}
 
-        {category === "workspaces" && <CreateBoard />}
+        {category === "workspaces" && <CreateBoard workspaceId={workspaceId} />}
       </ListWrapper>
     </div>
   ) : null
