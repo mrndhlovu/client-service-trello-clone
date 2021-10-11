@@ -70,9 +70,11 @@ const CreateBoardTile = styled.li`
 const CreateBoard = ({
   workspaceId,
   numberOfBoards,
+  isDefault,
 }: {
   workspaceId?: string
   numberOfBoards: number
+  isDefault: boolean
 }) => {
   const { user } = useAuth()
   const { notify } = useGlobalState()
@@ -105,7 +107,7 @@ const CreateBoard = ({
             <span className="create-board-title">Create new board</span>
           </p>
 
-          {isOnFreePlan && !hasReachedNewBoardLimit && (
+          {isOnFreePlan && !hasReachedNewBoardLimit && isDefault && (
             <>
               <p>
                 <span className="create-board-remaining">

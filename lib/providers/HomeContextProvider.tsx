@@ -25,6 +25,7 @@ export interface Workspace {
   owner: string
   updatedAt: string
   category: string
+  iconColor: string
 }
 
 interface IProps {

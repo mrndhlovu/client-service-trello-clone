@@ -19,22 +19,6 @@ export default styled(Box)`
       padding-bottom: 26px;
     }
 
-    &-group-workspace-icon {
-      width: 15px;
-      height: 15px;
-      background: linear-gradient(#b22865, #cd5a91);
-      padding: 10px;
-      position: relative;
-      border-radius: 3px;
-      padding-top: 11px;
-
-      span {
-        color: #fff;
-        font-weight: 700;
-        ${props => props.theme.styles.absoluteCenter};
-      }
-    }
-
     &-group-header {
       ${props => props.theme.mixins.flex(undefined, "start", "center")};
       margin-bottom: 10px;

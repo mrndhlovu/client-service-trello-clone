@@ -1,4 +1,3 @@
-import { isEmpty } from "lodash"
 import { useAuth, useGlobalState } from "../../lib/providers"
 import BoardsGroup from "./BoardsGroup"
 
@@ -37,6 +36,8 @@ const BoardList = () => {
             )}
             category="workspaces"
             workspaceId={workspace.id}
+            iconColor={workspace?.iconColor}
+            isDefault={workspace.category === "default"}
           />
         )
       })}

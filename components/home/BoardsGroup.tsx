@@ -1,4 +1,4 @@
-import { ReactNode, MouseEvent } from "react"
+import { MouseEvent } from "react"
 import { useRouter } from "next/router"
 import styled, { css } from "styled-components"
 
@@ -18,6 +18,8 @@ interface IProps {
   boards: IBoard[]
   category: "starred" | "workspaces" | "recent"
   workspaceId?: string
+  iconColor?: string
+  isDefault?: boolean
 }
 
 const ListWrapper = styled.ul`
@@ -25,6 +27,25 @@ const ListWrapper = styled.ul`
   flex-wrap: wrap;
   width: 100%;
   padding-left: 0;
+`
+
+const TitleIcon = styled.div<{
+  iconColor: string
+}>`
+  width: 30px;
+  height: 30px;
+  background: ${props => props.iconColor};
+  padding: 10px;
+  position: relative;
+  border-radius: 3px;
+  padding-top: 11px;
+
+  span {
+    color: #fff;
+    font-weight: 700;
+    font-size: 20px;
+    ${props => props.theme.styles.absoluteCenter};
+  }
 `
 
 export const Tile = styled.li<ITileProps>`
@@ -139,6 +160,8 @@ const BoardsGroup = ({
   boards,
   category,
   workspaceId,
+  iconColor,
+  isDefault,
 }: IProps) => {
   const router = useRouter()
   const { handleStarBoard } = useGlobalState()
@@ -169,9 +192,12 @@ const BoardsGroup = ({
 
       default:
         return (
-          <div className="home-group-workspace-icon">
+          <TitleIcon
+            iconColor={iconColor}
+            className="home-group-workspace-icon"
+          >
             <span>{heading.split("")?.[0]}</span>
-          </div>
+          </TitleIcon>
         )
     }
   }
@@ -222,6 +248,7 @@ const BoardsGroup = ({
           <CreateBoard
             numberOfBoards={boards.length}
             workspaceId={workspaceId}
+            isDefault={isDefault}
           />
         )}
       </ListWrapper>
