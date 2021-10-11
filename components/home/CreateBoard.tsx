@@ -1,4 +1,4 @@
-import { useCallback } from "react"
+import { useCallback, useMemo } from "react"
 import { useState } from "react"
 import { GrCircleQuestion } from "react-icons/gr"
 import styled from "styled-components"
@@ -7,6 +7,7 @@ import { Tooltip } from "@chakra-ui/react"
 
 import { upgradeToolTipText } from "../../util/copy"
 import NewBoardModal from "./NewBoardModal"
+import { useAuth, useGlobalState } from "../../lib/providers"
 
 const CreateBoardTile = styled.li`
   width: 23.5%;
@@ -66,12 +67,35 @@ const CreateBoardTile = styled.li`
   }
 `
 
-const CreateBoard = ({ workspaceId }: { workspaceId?: string }) => {
+const CreateBoard = ({
+  workspaceId,
+  numberOfBoards,
+}: {
+  workspaceId?: string
+  numberOfBoards: number
+}) => {
+  const { user } = useAuth()
+  const { notify } = useGlobalState()
+
   const [openModal, setOpenModal] = useState<boolean>(false)
 
-  const toggleModal = useCallback(() => setOpenModal(prev => !prev), [])
+  const hasReachedNewBoardLimit = numberOfBoards === 10
+  const isOnFreePlan = user.account.plan === "free"
+  const toolTipLabel = useMemo(
+    () => upgradeToolTipText(numberOfBoards),
+    [numberOfBoards]
+  )
 
-  const toolTipLabel = upgradeToolTipText(8)
+  const toggleModal = useCallback(() => {
+    if (hasReachedNewBoardLimit) {
+      return notify({
+        title: "Basic plan limit, Please upgrade",
+        description: upgradeToolTipText(10),
+        placement: "top",
+      })
+    }
+    setOpenModal(prev => !prev)
+  }, [hasReachedNewBoardLimit, notify])
 
   return (
     <>
@@ -80,14 +104,21 @@ const CreateBoard = ({ workspaceId }: { workspaceId?: string }) => {
           <p>
             <span className="create-board-title">Create new board</span>
           </p>
-          <p>
-            <span className="create-board-remaining">2 remaining</span>
-          </p>
-          <Tooltip hasArrow placement="top" label={toolTipLabel}>
-            <div className="tooltip">
-              <GrCircleQuestion size={15} />
-            </div>
-          </Tooltip>
+
+          {isOnFreePlan && !hasReachedNewBoardLimit && (
+            <>
+              <p>
+                <span className="create-board-remaining">
+                  {10 - numberOfBoards} remaining
+                </span>
+              </p>
+              <Tooltip hasArrow placement="top" label={toolTipLabel}>
+                <div className="tooltip">
+                  <GrCircleQuestion size={15} />
+                </div>
+              </Tooltip>
+            </>
+          )}
         </div>
       </CreateBoardTile>
       {openModal && (

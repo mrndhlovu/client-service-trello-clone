@@ -1,5 +1,5 @@
 import { ChangeEvent, useEffect, useState, MouseEvent } from "react"
-import router from "next/router"
+import { useRouter } from "next/router"
 import Link from "next/link"
 import { FiCheck, FiX } from "react-icons/fi"
 import {
@@ -14,7 +14,8 @@ import {
 import { clientRequest } from "../../api"
 import { NEW_BOARD_BG_OPTIONS, ROUTES } from "../../util/constants"
 import { useGlobalState } from "../../lib/providers"
-import NewBoardStyles, { BoardBgOption, StyledModal } from "./NewBoardStyles"
+import { usePrevious } from "../../lib/hooks"
+import StyleNewBoard, { BoardBgOption, StyledModal } from "./StyleNewBoard"
 
 interface IBgOptions {
   key: number
@@ -30,6 +31,9 @@ interface IProps {
 
 const NewBoardModal = ({ toggleModal, openModal, workspaceId }: IProps) => {
   const { notify } = useGlobalState()
+  const router = useRouter()
+  const previous = usePrevious({ path: router.pathname })
+
   const [activeBgOption, setActiveBgOption] = useState<IBgOptions>(
     NEW_BOARD_BG_OPTIONS[0]
   )
@@ -65,17 +69,18 @@ const NewBoardModal = ({ toggleModal, openModal, workspaceId }: IProps) => {
   const handleSelectedColor = (newOption: any) => setActiveBgOption(newOption)
 
   useEffect(() => {
+    if (!previous?.path || previous?.path === router.pathname) return
     return () => {
       toggleModal()
     }
-  }, [toggleModal])
+  }, [toggleModal, previous?.path, router.pathname])
 
   return (
     <StyledModal onClose={toggleModal} isOpen={openModal}>
       <ModalOverlay className="new-board-overlay" />
       <ModalContent className="create-modal-content">
         <ModalBody>
-          <NewBoardStyles
+          <StyleNewBoard
             image={activeBgOption.image}
             color={activeBgOption.color}
             className="board-bg-wrapper d-flex justify-content-between"
@@ -84,7 +89,6 @@ const NewBoardModal = ({ toggleModal, openModal, workspaceId }: IProps) => {
               <Input
                 value={title}
                 onChange={handleChange}
-                autoFocus
                 placeholder="Add board title"
                 name="title"
                 required
@@ -115,7 +119,7 @@ const NewBoardModal = ({ toggleModal, openModal, workspaceId }: IProps) => {
                 ))}
               </ul>
             </div>
-          </NewBoardStyles>
+          </StyleNewBoard>
         </ModalBody>
 
         <ModalFooter className="new-board-modal-footer" justifyContent="end">

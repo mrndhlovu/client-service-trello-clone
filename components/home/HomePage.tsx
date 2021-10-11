@@ -1,14 +1,14 @@
 import SidebarLayout from "../layout/sidebar/SidebarLayout"
 
 import BoardList from "./BoardList"
-import HomeStyles from "./HomeStyles"
+import StyleHomePage from "./StyleHomePage"
 
 const HomePage = () => {
   return (
     <SidebarLayout>
-      <HomeStyles>
+      <StyleHomePage>
         <BoardList />
-      </HomeStyles>
+      </StyleHomePage>
     </SidebarLayout>
   )
 }

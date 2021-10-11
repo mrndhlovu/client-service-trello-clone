@@ -8,6 +8,7 @@ interface IProps {
   children: ReactNode
   className?: string
   heading?: string
+  closeOnSelect?: boolean
   placement?:
     | "top"
     | "right"
@@ -95,9 +96,10 @@ const UIDropdown = ({
   heading,
   placement = "bottom",
   usePortal = false,
+  closeOnSelect = false,
 }: IProps) => {
   return (
-    <StyledMenu placement={placement}>
+    <StyledMenu closeOnSelect={closeOnSelect} placement={placement}>
       <MenuButton className={`dropdown ${className || ""}`}>
         {toggle}
       </MenuButton>

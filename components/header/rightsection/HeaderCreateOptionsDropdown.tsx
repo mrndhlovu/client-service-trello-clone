@@ -42,6 +42,8 @@ const Container = styled.div`
 const HeaderCreateOptionsDropdown = () => {
   const [modalIsOpen, setModalIsOpen] = useState<string | undefined>()
 
+  const closeDialogOnSelect = modalIsOpen === "workspace"
+
   const toggleActiveModal = (ev: MouseEvent) =>
     setModalIsOpen(ev?.currentTarget?.id)
 
@@ -75,6 +77,7 @@ const HeaderCreateOptionsDropdown = () => {
     <Container>
       <UIDropdown
         heading="Create"
+        closeOnSelect={closeDialogOnSelect}
         toggle={
           <span>
             <HeaderButton>

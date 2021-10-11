@@ -51,6 +51,7 @@ const CreateWorkspaceModal = ({ toggleModal, openModal }) => {
         setWorkspaces(prev => [...prev, res.data])
         setWorkspace(INITIAL_STATE)
         router.push(ROUTES.home)
+        toggleModal()
       })
       .catch(err => {})
   }

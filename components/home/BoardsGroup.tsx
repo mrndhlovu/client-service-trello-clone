@@ -218,7 +218,12 @@ const BoardsGroup = ({
           )
         })}
 
-        {category === "workspaces" && <CreateBoard workspaceId={workspaceId} />}
+        {category === "workspaces" && (
+          <CreateBoard
+            numberOfBoards={boards.length}
+            workspaceId={workspaceId}
+          />
+        )}
       </ListWrapper>
     </div>
   ) : null

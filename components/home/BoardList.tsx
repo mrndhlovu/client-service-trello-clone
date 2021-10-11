@@ -28,15 +28,6 @@ const BoardList = () => {
 
       <h5 className="home-boards-group-text">YOUR WORKSPACES</h5>
 
-      <BoardsGroup
-        heading="Default workspace"
-        boards={boards?.filter(
-          board =>
-            board?.workspaces.includes("default") || isEmpty(board.workspaces)
-        )}
-        category="workspaces"
-      />
-
       {workspaces?.map(workspace => {
         return (
           <BoardsGroup

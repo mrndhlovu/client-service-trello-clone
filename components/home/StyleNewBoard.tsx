@@ -38,7 +38,7 @@ export default styled.div<IStyledModalProps>`
     background-repeat: no-repeat;
     background-position: center center;
     padding: 10px;
-    border-radius: 3px;
+    border-radius: 2px;
     width: 295px;
     height: 96px;
     position: relative;
@@ -46,16 +46,20 @@ export default styled.div<IStyledModalProps>`
 
     input {
       border: none !important;
-      background-color: #fff !important;
+      background: transparent !important;
       box-shadow: none;
       color: #fff;
       font-size: 15px;
-      font-weight: 600;
+      font-weight: 700;
       left: -8px;
       padding: 0px 8px;
       position: relative;
       width: calc(100% - 18px - 16px);
       height: 33px;
+
+      &:hover {
+        background: rgba(255, 255, 255, 0.15) !important;
+      }
     }
 
     .icon-wrapper {
