@@ -6,6 +6,8 @@ import { AiOutlineClockCircle, AiOutlineStar } from "react-icons/ai"
 
 import CreateBoard from "./CreateBoard"
 import { IBoard, useGlobalState } from "../../lib/providers"
+import { Button, ButtonGroup } from "@chakra-ui/button"
+import { ROUTES, WORKSPACE_TAB_OPTIONS } from "../../util/constants"
 
 interface ITileProps {
   imageCover?: string
@@ -29,7 +31,7 @@ const ListWrapper = styled.ul`
   padding-left: 0;
 `
 
-const TitleIcon = styled.div<{
+export const TitleIcon = styled.div<{
   iconColor: string
 }>`
   width: 30px;
@@ -205,9 +207,29 @@ const BoardsGroup = ({
   return canShowBoardGroup ? (
     <div className="home-boards-group">
       <div className="home-group-header">
-        <div className="home-group-header-icon">{getIcon()}</div>
+        <div className="home-group-header-icon">
+          <span>{getIcon()}</span>
+          <h5 className="home-boards-group-text">{heading}</h5>
+        </div>
 
-        <h5 className="home-boards-group-text">{heading}</h5>
+        {workspaceId !== undefined && (
+          <ButtonGroup>
+            {WORKSPACE_TAB_OPTIONS.map(
+              option =>
+                !option?.disableButton && (
+                  <Button
+                    as="a"
+                    href={`/${ROUTES.workspace}/${workspaceId}/${option.key}`}
+                    colorScheme="gray"
+                    size="sm"
+                    id={option.key}
+                  >
+                    {option.title}
+                  </Button>
+                )
+            )}
+          </ButtonGroup>
+        )}
       </div>
 
       <ListWrapper className="d-flex justify-content-flex-start">

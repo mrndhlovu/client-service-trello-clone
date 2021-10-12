@@ -51,8 +51,8 @@ const StripeContextProvider = ({ children, data }: IProps) => {
     <StripeContext.Provider
       value={{
         createSubscription,
-        products: data.products,
-        invoices: data.invoices,
+        products: data?.products,
+        invoices: data?.invoices,
       }}
     >
       <Elements stripe={stripePromise}>{children}</Elements>

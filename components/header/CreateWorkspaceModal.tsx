@@ -16,12 +16,7 @@ import { clientRequest } from "../../api"
 import { ROUTES, WORKSPACE_TYPES } from "../../util/constants"
 import StyleCreateWorkspace from "./StyleCreateWorkspace"
 import { useGlobalState } from "../../lib/providers"
-
-export interface IWorkspace {
-  name: string
-  category: string
-  description: string
-}
+import { IUpdateWorkspace } from "../workspaces"
 
 const INITIAL_STATE = {
   name: "",
@@ -33,7 +28,7 @@ const CreateWorkspaceModal = ({ toggleModal, openModal }) => {
   const router = useRouter()
   const { setWorkspaces } = useGlobalState()
 
-  const [workspace, setWorkspace] = useState<IWorkspace>(INITIAL_STATE)
+  const [workspace, setWorkspace] = useState<IUpdateWorkspace>(INITIAL_STATE)
 
   const handleChange = (
     ev: ChangeEvent<HTMLInputElement | HTMLSelectElement | HTMLTextAreaElement>
@@ -46,7 +41,7 @@ const CreateWorkspaceModal = ({ toggleModal, openModal }) => {
 
     if (!workspace.name || !workspace.category) return
     clientRequest
-      .createWorkspace(workspace)
+      .createWorkspace({ ...workspace, visibility: "private" })
       .then(res => {
         setWorkspaces(prev => [...prev, res.data])
         setWorkspace(INITIAL_STATE)
@@ -84,7 +79,7 @@ const CreateWorkspaceModal = ({ toggleModal, openModal }) => {
                 <option>Choose...</option>
 
                 {WORKSPACE_TYPES.map(type => (
-                  <option key={type}>{type}</option>
+                  <option key={type.key}>{type.name}</option>
                 ))}
               </Select>
             </label>

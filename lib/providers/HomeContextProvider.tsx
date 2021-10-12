@@ -26,6 +26,9 @@ export interface Workspace {
   updatedAt: string
   category: string
   iconColor: string
+  description?: string
+  shortname?: string
+  visibility?: "public" | "private"
 }
 
 interface IProps {

@@ -13,6 +13,7 @@ export const ROUTES = {
   settings: "settings",
   signup: "auth/signup",
   verify: "auth/verify",
+  workspace: "workspace",
 }
 
 export const APP_NAME = "Trello Clone"
@@ -79,6 +80,28 @@ export const PROFILE_TAB_OPTIONS = [
   { key: "cards", title: "Cards", id: 2 },
   { key: "settings", title: "Settings", id: 3 },
   { key: "billing", title: "Upgrade Plans", id: 4 },
+]
+
+export const WORKSPACE_TAB_OPTIONS = [
+  { key: "boards", title: "Boards", id: 0 },
+  { key: "members", title: "Members", id: 1 },
+  { key: "settings", title: "Settings", id: 2 },
+  { key: "edit", title: "Edit Workspace details", id: 3, disableButton: true },
+]
+
+export const WORKSPACE_VISIBILITY_OPTIONS = [
+  {
+    key: "private",
+    title: "Private",
+    description:
+      "This Workspace is public. It's visible to anyone with the link and will show up in search engines like Google. Only those invited to the Workspace can add and edit Workspace boards.",
+  },
+  {
+    key: "public",
+    title: "Public",
+    description:
+      "This Workspace is private. It's not indexed or visible to those outside the Workspace.",
+  },
 ]
 
 export const PROFILE_SETTINGS_OPTIONS = [
@@ -171,4 +194,8 @@ export const DUE_DATE_REMINDERS = [
   { key: 2880, label: "2 Days before" },
 ]
 
-export const WORKSPACE_TYPES = ["Education", "IT", "Other"]
+export const WORKSPACE_TYPES = [
+  { name: "Education", key: "education" },
+  { name: "IT", key: "it" },
+  { name: "Other", key: "other" },
+]

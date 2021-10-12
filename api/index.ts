@@ -5,7 +5,7 @@ import axios, {
   AxiosResponse,
 } from "axios"
 import { ILabelProps } from "../components/board/canvas/cardActions/CardLabels"
-import { IWorkspace } from "../components/header/CreateWorkspaceModal"
+import { IUpdateWorkspace } from "../components/workspaces"
 
 import {
   ICardDetails,
@@ -469,12 +469,31 @@ class ApiRequest extends AxiosConfig {
   }
 
   //Workspace
-  async createWorkspace(data: IWorkspace) {
+  async createWorkspace(data: IUpdateWorkspace) {
     return await this.http.post(`${END_POINTS.boards}/new-workspace`, data)
   }
 
   async getWorkspaces() {
     return await this.http.get(`${END_POINTS.boards}/workspaces`)
+  }
+
+  async getWorkspaceById(workspaceId: string) {
+    return await this.http.get(
+      `${END_POINTS.boards}/workspace?workspaceId=${workspaceId}`
+    )
+  }
+
+  async updateWorkspace(data: IUpdateWorkspace, workspaceId: string) {
+    return await this.http.patch(
+      `${END_POINTS.boards}/${workspaceId}/update-workspace`,
+      data
+    )
+  }
+
+  async deleteWorkspace(workspaceId: string) {
+    return await this.http.delete(
+      `${END_POINTS.boards}/${workspaceId}/del-workspace`
+    )
   }
 }
 

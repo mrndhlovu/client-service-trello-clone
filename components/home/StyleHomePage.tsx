@@ -8,10 +8,11 @@ export default styled(Box)`
     font-size: 15px;
     color: ${props => props.theme.colors.body};
     font-weight: 600;
+    margin-bottom: 15px;
   }
 
   .home-boards-group-text {
-    margin-bottom: 10px;
+    margin-bottom: 0;
   }
 
   .home {
@@ -26,6 +27,10 @@ export default styled(Box)`
 
       .home-group-header-icon {
         margin-right: 15px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        gap: 10px;
       }
     }
   }

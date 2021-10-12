@@ -25,7 +25,7 @@ const BoardList = () => {
         category="recent"
       />
 
-      <h5 className="home-boards-group-text">YOUR WORKSPACES</h5>
+      <h5>YOUR WORKSPACES</h5>
 
       {workspaces?.map(workspace => {
         return (
