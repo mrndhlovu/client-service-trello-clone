@@ -1,8 +1,8 @@
-import Link from "next/link"
 import { useRouter } from "next/router"
 
 import { AiOutlineHome } from "react-icons/ai"
 
+import { NextLink } from "../shared"
 import { ROUTES } from "../../util/constants"
 import HeaderAppListDropdown from "./leftsection/HeaderAppListDropdown"
 import HeaderAuthDropdown from "./rightsection/HeaderAuthDropdown"
@@ -25,13 +25,11 @@ const Header = () => {
           <div className="header-left-icon-wrapper">
             <HeaderAppListDropdown />
 
-            <Link href={ROUTES.home}>
-              <a>
-                <HeaderButton>
-                  <AiOutlineHome />
-                </HeaderButton>
-              </a>
-            </Link>
+            <NextLink href={ROUTES.home}>
+              <HeaderButton>
+                <AiOutlineHome />
+              </HeaderButton>
+            </NextLink>
 
             <HeaderBoardsDropdown />
             <HeaderSearchDropdown />

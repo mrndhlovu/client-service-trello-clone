@@ -23,7 +23,7 @@ interface IProps {
 
 const MoveListSettings = ({ onClose }: IProps) => {
   const { boardId, board } = useBoard()
-  const { boards, updateBoardsState } = useGlobalState()
+  const { boards, updateInitialState } = useGlobalState()
 
   const { listId, listIndex } = useListItemContext()
   const { moveList, saveListDndChanges, removeListFromSource } =
@@ -103,7 +103,7 @@ const MoveListSettings = ({ onClose }: IProps) => {
       })
     }
 
-    updateBoardsState([])
+    // updateInitialState([])
     setTargetedBoard(undefined)
     setSelected({ boardId: undefined, position: 0, listId: undefined })
     setBoardOptions([])

@@ -37,10 +37,10 @@ interface IProps {
 }
 
 const HomeContextProvider = ({ children, data }: IProps) => {
-  const { updateBoardsState } = useGlobalState()
+  const { updateInitialState } = useGlobalState()
 
   useEffect(() => {
-    updateBoardsState(data)
+    updateInitialState(data)
   }, [])
 
   return <HomeContext.Provider value={{}}>{children}</HomeContext.Provider>

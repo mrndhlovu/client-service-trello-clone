@@ -1,16 +1,6 @@
 import styled from "styled-components"
 
 export default styled.div`
-  position: sticky;
-  top: 0;
-  color: #172b4d;
-  font-size: 14px;
-  line-height: 20px;
-  font-weight: 400;
-  height: 100%;
-  max-width: 240px;
-  width: 100%;
-
   .sb {
     position: sticky;
     top: 0;
@@ -39,7 +29,7 @@ export default styled.div`
         background-color: transparent;
         border-radius: 4px;
         box-shadow: none;
-        font-weight: bold;
+        font-weight: 600;
         margin: 0;
         min-height: 20px;
         overflow: hidden;
@@ -48,8 +38,8 @@ export default styled.div`
         transition-property: background-color, border-color, box-shadow;
         transition-duration: 85ms;
         transition-timing-function: ease;
-        color: ${props => props.theme.colors.bgDark};
-        font-size: 13.5px;
+        color: currentColor;
+        font-size: 12px;
       }
 
       &:hover {
@@ -79,14 +69,32 @@ export default styled.div`
     }
 
     .sb-secondary {
-      ul {
-        margin: 0;
-        padding: 0;
-        margin-bottom: 12px;
-        color: #172b4d;
-        font-size: 14px;
-        line-height: 20px;
-        font-weight: 400;
+      margin: 0;
+      padding: 0;
+      margin-bottom: 12px;
+      color: #172b4d;
+      font-size: 14px;
+      line-height: 20px;
+      font-weight: 400;
+
+      li {
+        list-style: none;
+      }
+
+      .workspace-header {
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        margin: 0 2px 6px 10px;
+
+        button {
+          background-color: transparent;
+          background: transparent;
+
+          &:hover {
+            background: #eee;
+          }
+        }
       }
 
       .toggle {
@@ -99,7 +107,7 @@ export default styled.div`
         margin: 0;
         min-height: 20px;
         overflow: hidden;
-        padding: 6px 8px 6px 0;
+        padding: 6px;
         text-decoration: none;
         transition-property: background-color, border-color, box-shadow;
         transition-duration: 85ms;
@@ -110,6 +118,11 @@ export default styled.div`
         &:hover {
           background-color: #dbdee2;
         }
+      }
+
+      .accordion-item {
+        border: none;
+        padding: 0 5px;
       }
 
       .toggle-content {
@@ -124,17 +137,16 @@ export default styled.div`
         .toggle-button-icon {
           width: 15px;
           height: 15px;
-          background: linear-gradient(#b22865, #cd5a91);
-          margin: 0 10px;
-          padding: 10px;
-          position: relative;
-          border-radius: 3px;
-          padding-top: 11px;
+          margin-right: 10px;
 
           span {
             color: #fff;
-            ${props => props.theme.styles.absoluteCenter};
+            font-size: 12px;
           }
+        }
+
+        strong {
+          font-size: 13px;
         }
 
         .redirect-icon {

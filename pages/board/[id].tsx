@@ -17,7 +17,7 @@ interface IProps {
 }
 
 const index = ({ data }: IProps) => {
-  const { updateBoardsState, boards } = useGlobalState()
+  const { updateInitialState, boards } = useGlobalState()
   const hasBoards = !isEmpty(boards)
 
   useEffect(() => {
@@ -26,11 +26,11 @@ const index = ({ data }: IProps) => {
     const getData = () => {
       clientRequest
         .getBoards()
-        .then(res => updateBoardsState(res?.data))
+        .then(res => updateInitialState(res?.data))
         .catch(() => null)
     }
     getData()
-  }, [hasBoards, updateBoardsState])
+  }, [hasBoards, updateInitialState])
 
   return data ? (
     <BoardContextProvider board={data}>

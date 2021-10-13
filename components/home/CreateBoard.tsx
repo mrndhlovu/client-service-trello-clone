@@ -82,7 +82,7 @@ const CreateBoard = ({
   const [openModal, setOpenModal] = useState<boolean>(false)
 
   const hasReachedNewBoardLimit = numberOfBoards === 10
-  const isOnFreePlan = user.account.plan === "free"
+  const isOnFreePlan = user?.account?.plan === "free"
   const toolTipLabel = useMemo(
     () => upgradeToolTipText(numberOfBoards),
     [numberOfBoards]

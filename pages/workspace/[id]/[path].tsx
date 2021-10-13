@@ -11,13 +11,14 @@ import { withAuthComponent, withAuthSsp } from "../../../lib/hocs"
 import { Workspace } from "../../../lib/providers"
 import ApiRequest from "../../../api"
 import UserWorkspaceLayout from "../../../components/layout/UserWorkspaceLayout"
+import BoardLists from "../../../components/workspaces/BoardLists"
 
 const index = ({ data }: { data: Workspace }) => {
   return (
     <UserWorkspaceLayout workspace={data}>
       <TabPanels>
         <TabPanel>
-          <p>Profile and visibility</p>
+          <BoardLists workspace={data} />
         </TabPanel>
 
         <TabPanel>

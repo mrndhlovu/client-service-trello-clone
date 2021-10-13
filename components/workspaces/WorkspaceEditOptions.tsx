@@ -25,10 +25,12 @@ const WorkspaceEditOptions = ({ workspace }: { workspace: Workspace }) => {
     shortname: workspace.shortname || "",
   }
 
-  const { setWorkspaces } = useGlobalState()
+  const { setWorkspaces, boards } = useGlobalState()
 
   const [editedWorkspace, setEditedWorkspace] =
     useState<IUpdateWorkspace>(INITIAL_STATE)
+
+  const isDefaultCategory = workspace?.category === "default"
 
   const handleChange = (
     ev: ChangeEvent<HTMLInputElement | HTMLSelectElement | HTMLTextAreaElement>
@@ -71,7 +73,7 @@ const WorkspaceEditOptions = ({ workspace }: { workspace: Workspace }) => {
             onChange={handleChange}
             size="sm"
             name="category"
-            disabled={workspace?.category === "default"}
+            disabled={isDefaultCategory}
           >
             <option>Choose...</option>
 

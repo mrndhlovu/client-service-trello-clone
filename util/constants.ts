@@ -19,32 +19,8 @@ export const ROUTES = {
 export const APP_NAME = "Trello Clone"
 
 export const HOME_SIDEBAR_PRIMARY = [
-  { key: "boards", title: "Boards", link: "/" },
+  { key: "boards", title: "Home", link: "/" },
   { key: "templates", title: "Templates", link: "/templates" },
-  { key: "home", title: "Home", link: "/" },
-]
-
-export const HOME_SIDEBAR_WORKSPACE_MENU: IWorkspaceLink[] = [
-  {
-    key: "workspace-boards",
-    title: "Boards",
-    link: "/userworkspace-boards",
-  },
-  {
-    key: "workspace-table",
-    title: "Workspace table",
-    link: "/userworkspace-table",
-  },
-  {
-    key: "workspace-members",
-    title: "Members",
-    link: "/userworkspace-members",
-  },
-  {
-    key: "workspace-account",
-    title: "Settings",
-    link: "/userworkspace-account",
-  },
 ]
 
 export const NEW_BOARD_BG_OPTIONS = [
@@ -198,4 +174,5 @@ export const WORKSPACE_TYPES = [
   { name: "Education", key: "education" },
   { name: "IT", key: "it" },
   { name: "Other", key: "other" },
+  { name: "Default", key: "default" },
 ]

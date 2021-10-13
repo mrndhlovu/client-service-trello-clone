@@ -35,6 +35,19 @@ const reset = css`
     resize: vertical;
   }
 
+  .next-link-btn {
+    background-color: #091e420a;
+    border: none;
+    border-radius: 3px;
+    box-shadow: none;
+    display: inline-block;
+    margin-bottom: 8px;
+    margin-left: 8px;
+    padding: 6px 12px 6px 6px;
+    position: relative;
+    text-decoration: none;
+  }
+
   .chakra-modal__overlay,
   .chakra-modal__content-container {
     z-index: 1;

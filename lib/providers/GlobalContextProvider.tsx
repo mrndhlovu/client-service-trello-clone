@@ -4,6 +4,7 @@ import {
   SetStateAction,
   useCallback,
   useContext,
+  useEffect,
   useState,
 } from "react"
 import { useToast } from "@chakra-ui/react"
@@ -12,6 +13,7 @@ import { checkStringIncludes } from "../../util"
 import { clientRequest } from "../../api"
 import { IBoard, useAuth, Workspace } from "."
 import { useLocalStorage } from "../hooks"
+import { useRouter } from "next/router"
 
 export type IUIRequestError = string[]
 
@@ -33,14 +35,17 @@ export interface IThemeMode {
 }
 
 const GlobalContextProvider = ({ children }) => {
-  const { refreshToken } = useAuth()
-
+  const { refreshToken, isAuthenticated } = useAuth()
+  const { pathname } = useRouter()
   const toast = useToast()
   const [theme, setTheme] = useLocalStorage<string, IThemeMode>("theme", {
     darkMode: false,
   })
   const [boards, setBoards] = useState<IBoard[]>([])
   const [workspaces, setWorkspaces] = useState<Workspace[]>([])
+
+  const refetchBoardsAndWorkspaces =
+    workspaces.length === 0 && pathname !== "/" && isAuthenticated
 
   const handleModeChange = () => {
     return setTheme((prev: IThemeMode) => {
@@ -84,7 +89,7 @@ const GlobalContextProvider = ({ children }) => {
     return saveBoardChanges(update, board.id)
   }, [])
 
-  const updateBoardsState = useCallback(data => {
+  const updateInitialState = useCallback(data => {
     setBoards(data.boards)
     setWorkspaces(data.workspaces)
   }, [])
@@ -116,6 +121,28 @@ const GlobalContextProvider = ({ children }) => {
     [toast]
   )
 
+  useEffect(() => {
+    if (!refetchBoardsAndWorkspaces) return
+    ;(async () => {
+      const promises = [
+        clientRequest
+          .getBoards()
+          .then(res => res?.data)
+          .catch(() => null),
+
+        clientRequest
+          .getWorkspaces()
+          .then(res => res?.data)
+          .catch(() => null),
+      ]
+
+      const data = await Promise.all(promises)
+
+      setBoards(data?.[0])
+      setWorkspaces(data?.[1])
+    })()
+  }, [refetchBoardsAndWorkspaces])
+
   return (
     <GlobalContext.Provider
       value={{
@@ -126,7 +153,7 @@ const GlobalContextProvider = ({ children }) => {
         handleStarBoard,
         notify,
         rehydrateBoardsList,
-        updateBoardsState,
+        updateInitialState,
         setWorkspaces,
       }}
     >
@@ -142,7 +169,7 @@ interface IDefaultGlobalState {
   handleStarBoard: (board?: IBoard) => void
   notify: (option: IToastProps) => void
   workspaces: Workspace[]
-  updateBoardsState: (boards: {
+  updateInitialState: (boards: {
     boards?: IBoard[]
     workspaces?: Workspace[]
   }) => void

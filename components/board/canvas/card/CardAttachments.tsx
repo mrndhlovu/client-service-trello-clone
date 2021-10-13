@@ -8,10 +8,9 @@ import styled from "styled-components"
 
 import { clientRequest } from "../../../../api"
 import { ICardCoverProps } from "../CardItem"
-import { UIDropdown } from "../../../shared"
+import { UIDropdown, NextLink } from "../../../shared"
 import { useBoard, useCardContext } from "../../../../lib/providers"
 import CardModule from "./CardModule"
-import NextLink from "../../../shared/lib/NextLink"
 
 const ImageAttachment = styled.div<ICardCoverProps>`
   background-image: url("${props => props?.imageCover}");
@@ -103,10 +102,11 @@ const CardAttachments = () => {
                 ) : (
                   <NextLink
                     id={attachment.id}
-                    linkText={attachment?.resourceType}
                     onClick={handlePreviewClick}
                     href="#"
-                  />
+                  >
+                    {attachment?.resourceType}
+                  </NextLink>
                 )}
               </div>
               <p className="attachment-detail">

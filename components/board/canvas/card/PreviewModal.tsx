@@ -2,12 +2,12 @@ import { Modal, ModalContent, ModalOverlay } from "@chakra-ui/modal"
 import { MouseEvent } from "react"
 
 import { clientRequest } from "../../../../api"
-import { useCardContext } from "../../../../lib/providers"
-import NextLink from "../../../shared/lib/NextLink"
+import { useBoard, useCardContext } from "../../../../lib/providers"
+import { NextLink } from "../../../shared"
 
 const PreviewModal = () => {
-  const { setActivities, preview, togglePreviewModal, previewModalIsOpen } =
-    useCardContext()
+  const { preview, togglePreviewModal, previewModalIsOpen } = useCardContext()
+  const { setActivities } = useBoard()
 
   const handleAttachmentDelete = (ev?: MouseEvent) => {
     const previewId = ev.currentTarget.id
@@ -43,8 +43,9 @@ const PreviewModal = () => {
                 id={preview.id}
                 onClick={handleAttachmentDelete}
                 href="#"
-                linkText="Delete"
-              />
+              >
+                Delete
+              </NextLink>
             </span>
           </p>
         </div>

@@ -8,6 +8,7 @@ import CreateBoard from "./CreateBoard"
 import { IBoard, useGlobalState } from "../../lib/providers"
 import { Button, ButtonGroup } from "@chakra-ui/button"
 import { ROUTES, WORKSPACE_TAB_OPTIONS } from "../../util/constants"
+import { NextLink } from "../shared"
 
 interface ITileProps {
   imageCover?: string
@@ -22,6 +23,7 @@ interface IProps {
   workspaceId?: string
   iconColor?: string
   isDefault?: boolean
+  disableHeader?: boolean
 }
 
 const ListWrapper = styled.ul`
@@ -164,6 +166,7 @@ const BoardsGroup = ({
   workspaceId,
   iconColor,
   isDefault,
+  disableHeader = false,
 }: IProps) => {
   const router = useRouter()
   const { handleStarBoard } = useGlobalState()
@@ -206,31 +209,31 @@ const BoardsGroup = ({
 
   return canShowBoardGroup ? (
     <div className="home-boards-group">
-      <div className="home-group-header">
-        <div className="home-group-header-icon">
-          <span>{getIcon()}</span>
-          <h5 className="home-boards-group-text">{heading}</h5>
-        </div>
+      {!disableHeader && (
+        <div className="home-group-header">
+          <div className="home-group-header-icon">
+            <span>{getIcon()}</span>
+            <h5 className="home-boards-group-text">{heading}</h5>
+          </div>
 
-        {workspaceId !== undefined && (
-          <ButtonGroup>
-            {WORKSPACE_TAB_OPTIONS.map(
-              option =>
-                !option?.disableButton && (
-                  <Button
-                    as="a"
-                    href={`/${ROUTES.workspace}/${workspaceId}/${option.key}`}
-                    colorScheme="gray"
-                    size="sm"
-                    id={option.key}
-                  >
-                    {option.title}
-                  </Button>
-                )
-            )}
-          </ButtonGroup>
-        )}
-      </div>
+          {workspaceId !== undefined && (
+            <ButtonGroup>
+              {WORKSPACE_TAB_OPTIONS.map(
+                option =>
+                  !option?.disableButton && (
+                    <NextLink
+                      href={`${ROUTES.workspace}/${workspaceId}/${option.key}`}
+                      id={option.key}
+                      className="next-link-btn"
+                    >
+                      {option.title}
+                    </NextLink>
+                  )
+              )}
+            </ButtonGroup>
+          )}
+        </div>
+      )}
 
       <ListWrapper className="d-flex justify-content-flex-start">
         {boards?.map(board => {
@@ -244,9 +247,9 @@ const BoardsGroup = ({
               colorCover={colorCover}
               imageCover={imageCover}
             >
-              <button
-                id={`/board/${board?.id}`}
-                onClick={handleClick}
+              <NextLink
+                id={`board/${board?.id}`}
+                href={`board/${board?.id}`}
                 className="home-boards-tile-details"
               >
                 <div className="home-boards-tile-title">{board?.title}</div>
@@ -261,7 +264,7 @@ const BoardsGroup = ({
                     />
                   </div>
                 </div>
-              </button>
+              </NextLink>
             </Tile>
           )
         })}

@@ -1,24 +1,26 @@
 import Link from "next/link"
-import { MouseEvent } from "react"
+import { MouseEvent, ReactNode } from "react"
 
 const NextLink = ({
+  className,
   href,
-  linkText,
-  onClick,
   id,
+  children,
+  onClick,
 }: {
-  onClick?: (ev: MouseEvent) => void
+  className?: string
   href?: string
-  linkText: string
   id?: string
+  children: string | ReactNode
+  onClick?: (ev: MouseEvent) => void
 }) => {
   return (
     <Link href={href}>
-      <a id={id} onClick={onClick}>
-        {linkText}
+      <a className={className} id={id} onClick={onClick}>
+        {children}
       </a>
     </Link>
   )
 }
 
-export default NextLink
+export { NextLink }

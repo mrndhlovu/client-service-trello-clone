@@ -4,17 +4,15 @@ import { MouseEvent } from "react"
 import { ALLOWED_IMAGE_OPTIONS } from "../../../util/constants"
 
 import { IAction } from "../../board/canvas/card/Activities"
+import { NextLink } from "./NextLink"
 import CommentItem from "../../board/canvas/card/CommentItem"
-import NextLink from "./NextLink"
 
 const FormattedAction = <T extends IAction>({
   action,
   openPreviewModal,
-  updateActionsList,
 }: {
   action: T
   openPreviewModal: (ev: MouseEvent) => void
-  updateActionsList?: (data: IAction, options?: { edited: boolean }) => void
 }) => {
   const name =
     action.memberCreator?.fullName || `@${action.memberCreator.username}`
@@ -40,10 +38,9 @@ const FormattedAction = <T extends IAction>({
           <span>
             {" "}
             added{" "}
-            <NextLink
-              href={getHref(action?.entities)}
-              linkText={action.entities?.card.name}
-            />{" "}
+            <NextLink href={getHref(action?.entities)}>
+              {action.entities?.card.name}
+            </NextLink>{" "}
             card to {action?.entities?.list?.name} list.
           </span>
         )
@@ -101,12 +98,9 @@ const FormattedAction = <T extends IAction>({
             {" "}
             attached{" "}
             {isImage && (
-              <NextLink
-                href="#"
-                linkText={action?.entities?.attachment?.name}
-                onClick={openPreviewModal}
-                id={previewId}
-              />
+              <NextLink href="#" onClick={openPreviewModal} id={previewId}>
+                {action?.entities?.attachment?.name}
+              </NextLink>
             )}
             {!isImage && action?.entities?.attachment?.type !== "link" && (
               <a href={action?.entities?.attachment?.url} download>
@@ -116,12 +110,9 @@ const FormattedAction = <T extends IAction>({
             {action?.entities?.card?.name && (
               <>
                 to{" "}
-                <NextLink
-                  onClick={openPreviewModal}
-                  href="#"
-                  id={previewId}
-                  linkText={action?.entities?.card?.name}
-                />
+                <NextLink onClick={openPreviewModal} href="#" id={previewId}>
+                  {action?.entities?.card?.name}
+                </NextLink>
               </>
             )}
             {isImage && (
@@ -141,10 +132,9 @@ const FormattedAction = <T extends IAction>({
           <span>
             {" "}
             moved{" "}
-            <NextLink
-              href={getHref(action?.entities)}
-              linkText={action?.entities?.card?.name}
-            />{" "}
+            <NextLink href={getHref(action?.entities)}>
+              {action?.entities?.card?.name}
+            </NextLink>{" "}
             down.
           </span>
         )
@@ -154,10 +144,9 @@ const FormattedAction = <T extends IAction>({
           <span>
             {" "}
             moved{" "}
-            <NextLink
-              href={getHref(action?.entities)}
-              linkText={action?.entities?.card?.name}
-            />{" "}
+            <NextLink href={getHref(action?.entities)}>
+              {action?.entities?.card?.name}
+            </NextLink>{" "}
             up.
           </span>
         )
@@ -167,10 +156,9 @@ const FormattedAction = <T extends IAction>({
           <span>
             {" "}
             moved{" "}
-            <NextLink
-              href={getHref(action?.entities)}
-              linkText={action?.entities?.card?.name}
-            />{" "}
+            <NextLink href={getHref(action?.entities)}>
+              {action?.entities?.card?.name}
+            </NextLink>{" "}
             from {action?.entities?.list?.name} to{" "}
             {action?.entities?.targetList?.name}.
           </span>
@@ -181,16 +169,14 @@ const FormattedAction = <T extends IAction>({
           <span>
             {" "}
             transferred{" "}
-            <NextLink
-              href={getHref(action?.entities)}
-              linkText={action?.entities?.card?.name}
-            />{" "}
+            <NextLink href={getHref(action?.entities)}>
+              {action?.entities?.card?.name}
+            </NextLink>{" "}
             from {action?.entities?.list?.name} to{" "}
             {action?.entities?.targetList?.name} on{" "}
-            <NextLink
-              href={getHref(action?.entities, true)}
-              linkText={action?.entities?.targetBoard?.name}
-            />{" "}
+            <NextLink href={getHref(action?.entities, true)}>
+              {action?.entities?.targetBoard?.name}
+            </NextLink>{" "}
             board .
           </span>
         )
@@ -200,15 +186,13 @@ const FormattedAction = <T extends IAction>({
           <span>
             {" "}
             transferred {action?.entities?.list?.name} from{" "}
-            <NextLink
-              href={getHref(action?.entities, true)}
-              linkText={action?.entities?.name}
-            />{" "}
+            <NextLink href={getHref(action?.entities, true)}>
+              {action?.entities?.name}
+            </NextLink>{" "}
             to{" "}
-            <NextLink
-              href={getHref(action?.entities?.targetBoard, true)}
-              linkText={action?.entities?.targetBoard?.name}
-            />{" "}
+            <NextLink href={getHref(action?.entities?.targetBoard, true)}>
+              {action?.entities?.targetBoard?.name}
+            </NextLink>{" "}
             board .
           </span>
         )
@@ -218,10 +202,9 @@ const FormattedAction = <T extends IAction>({
           <span>
             {" "}
             added a checklist on{" "}
-            <NextLink
-              href={getHref(action?.entities)}
-              linkText={action?.entities?.card?.name}
-            />{" "}
+            <NextLink href={getHref(action?.entities)}>
+              {action?.entities?.card?.name}
+            </NextLink>{" "}
             card.
           </span>
         )
