@@ -468,6 +468,12 @@ class ApiRequest extends AxiosConfig {
     )
   }
 
+  // Templates
+
+  async getTemplates() {
+    return await this.http.get(`${END_POINTS.boards}/templates`)
+  }
+
   //Workspace
   async createWorkspace(data: IUpdateWorkspace) {
     return await this.http.post(`${END_POINTS.boards}/new-workspace`, data)

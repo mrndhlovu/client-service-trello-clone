@@ -145,7 +145,7 @@ export const Tile = styled.li<ITileProps>`
 
   a {
     height: 100%;
-    z-index: 1;
+    z-index: 0;
   }
 
   @media ${props => props.theme.device.mobileLg} {
@@ -249,7 +249,7 @@ const BoardsGroup = ({
             >
               <NextLink
                 id={`board/${board?.id}`}
-                href={`board/${board?.id}`}
+                href={`/board/${board?.id}`}
                 className="home-boards-tile-details"
               >
                 <div className="home-boards-tile-title">{board?.title}</div>

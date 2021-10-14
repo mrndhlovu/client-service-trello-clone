@@ -4,11 +4,13 @@ import styled from "styled-components"
 import { FiPlus } from "react-icons/fi"
 import { CgTrello } from "react-icons/cg"
 import { BsPeople } from "react-icons/bs"
+import { IoIosArrowBack } from "react-icons/io"
 
 import { UIDropdown } from "../../shared"
 import HeaderButton from "../HeaderButton"
 import NewBoardModal from "../../home/NewBoardModal"
 import CreateWorkspaceModal from "../CreateWorkspaceModal"
+import TopTemplates from "./TopTemplates"
 
 const Container = styled.div`
   p {
@@ -37,12 +39,20 @@ const Container = styled.div`
       background-color: #eee;
     }
   }
+
+  .back-btn {
+    position: absolute;
+    left: 10px;
+    top: 12px;
+  }
 `
 
 const HeaderCreateOptionsDropdown = () => {
   const [modalIsOpen, setModalIsOpen] = useState<string | undefined>()
 
   const closeDialogOnSelect = modalIsOpen === "workspace"
+
+  const handleBack = () => setModalIsOpen(undefined)
 
   const toggleActiveModal = (ev: MouseEvent) =>
     setModalIsOpen(ev?.currentTarget?.id)
@@ -86,23 +96,34 @@ const HeaderCreateOptionsDropdown = () => {
           </span>
         }
       >
-        {CREATE_RESOURCE_OPTIONS.map(option => (
-          <button
-            key={option.id}
-            id={option.id}
-            onClick={toggleActiveModal}
-            className="content link-btn"
-          >
-            <div className="action-header">
-              {option.icon}
+        {modalIsOpen === "template" ? (
+          <>
+            <IoIosArrowBack
+              size={18}
+              onClick={handleBack}
+              className="back-btn"
+            />
+            <TopTemplates />
+          </>
+        ) : (
+          CREATE_RESOURCE_OPTIONS.map(option => (
+            <button
+              key={option.id}
+              id={option.id}
+              onClick={toggleActiveModal}
+              className="content link-btn"
+            >
+              <div className="action-header">
+                {option.icon}
 
-              <span>{option.title}</span>
-            </div>
-            <div>
-              <p>{option.description}</p>
-            </div>
-          </button>
-        ))}
+                <span>{option.title}</span>
+              </div>
+              <div>
+                <p>{option.description}</p>
+              </div>
+            </button>
+          ))
+        )}
       </UIDropdown>
       {modalIsOpen === "create-board" && (
         <NewBoardModal
