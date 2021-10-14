@@ -155,6 +155,7 @@ const GlobalContextProvider = ({ children }) => {
         rehydrateBoardsList,
         updateInitialState,
         setWorkspaces,
+        setBoards,
       }}
     >
       {children}
@@ -175,6 +176,7 @@ interface IDefaultGlobalState {
   }) => void
   rehydrateBoardsList: (board: IBoard) => void
   setWorkspaces: Dispatch<SetStateAction<Workspace[]>>
+  setBoards: Dispatch<SetStateAction<IBoard[]>>
 }
 
 export const GlobalContext = createContext<IDefaultGlobalState>(

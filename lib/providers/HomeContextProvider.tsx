@@ -9,6 +9,7 @@ export interface IBoard {
   title?: string
   id?: string
   activeBg?: "image" | "color"
+  lastViewed?: string
   prefs?: {
     color?: string
     image?: string

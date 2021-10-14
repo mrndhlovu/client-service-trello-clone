@@ -24,7 +24,7 @@ interface IProps {
 
 const MoveCardSettings = ({ onClose }: IProps) => {
   const { findCardsByListId, boardId } = useBoard()
-  const { boards, updateInitialState } = useGlobalState()
+  const { boards, setBoards } = useGlobalState()
   const { cardId, cardIndex, listId } = useCardContext()
   const { moveCard, saveCardDndChanges, switchCardList, removeCardFromSource } =
     useListsContext()
@@ -134,7 +134,7 @@ const MoveCardSettings = ({ onClose }: IProps) => {
       })
     }
 
-    // updateInitialState([])
+    setBoards([])
     setTargetedList(undefined)
     setSelected({ boardId: undefined, cardPosition: 0, listId: undefined })
     setBoardOptions([])

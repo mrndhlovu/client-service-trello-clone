@@ -174,14 +174,9 @@ const BoardsGroup = ({
   const canShowBoardGroup =
     boards?.length > 0 || category === "workspaces" || category === "recent"
 
-  const handleClick = (ev: MouseEvent) => {
-    ev.stopPropagation()
-
-    router.push(ev.currentTarget.id)
-  }
-
   const handleStarClick = (ev: MouseEvent) => {
     ev.stopPropagation()
+    ev.preventDefault()
 
     const board = boards.find(board => board.id === ev.currentTarget.id)
     handleStarBoard(board)
