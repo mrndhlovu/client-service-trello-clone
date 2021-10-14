@@ -44,7 +44,7 @@ export default styled.div`
       overflow-x: hidden;
       overflow-y: auto;
       padding: 2px 4px 0;
-      z-index: 1;
+      z-index: 0;
 
       & > button {
         justify-content: start;

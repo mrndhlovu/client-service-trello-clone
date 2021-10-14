@@ -33,9 +33,11 @@ const ChangeBackground = ({ handleMenuChange, openMenu }) => {
     setAttachments,
     boardId,
     board,
-    drawerOpen,
   } = useBoard()
   const { notify } = useGlobalState()
+
+  const menuIsActive =
+    openMenu === "colors" || openMenu === "photo" || openMenu === "changeColor"
 
   const boardImages = attachments.filter(
     attachment => attachment.resourceType === "image"
@@ -121,7 +123,7 @@ const ChangeBackground = ({ handleMenuChange, openMenu }) => {
     }))
   }
 
-  return (
+  return menuIsActive ? (
     <ChangeBgWrapper colors={COLORS_IMAGE} photos={PHOTOS_IMAGE}>
       {openMenu === "changeColor" && (
         <>
@@ -186,7 +188,7 @@ const ChangeBackground = ({ handleMenuChange, openMenu }) => {
         </div>
       )}
     </ChangeBgWrapper>
-  )
+  ) : null
 }
 
 export default ChangeBackground

@@ -1,6 +1,6 @@
 import { MouseEvent, ReactNode, useState } from "react"
 import { useRouter } from "next/router"
-import { Divider, Drawer, DrawerContent } from "@chakra-ui/react"
+import { Divider, Drawer, DrawerContent, Button } from "@chakra-ui/react"
 import { IoIosRocket } from "react-icons/io"
 import styled from "styled-components"
 
@@ -10,6 +10,7 @@ import ChangeBackground from "./ChangeBackground"
 import DrawerStyles, { StyledUl } from "./DrawerStyles"
 import SideBarHeader from "./SideBarHeader"
 import Activities from "../canvas/card/Activities"
+import { UIDropdown } from "../../shared"
 
 interface OpenMenuOptions {
   [key: string]: {
@@ -137,25 +138,40 @@ const BoardDrawer = () => {
                     </li>
                   ))}
                 <Divider className="divider" />
-                <li id="closeBoard" onClick={handleMenuChange} key="closeBoard">
+                <li id="closeBoard" key="closeBoard">
                   <span className="button-icon" />
-                  <div>
-                    <span>Close board</span>
-                    <br />
-                  </div>
+                  <UIDropdown
+                    heading="Close board"
+                    usePortal
+                    toggle={
+                      <div>
+                        <span>Close board</span>
+                        <br />
+                      </div>
+                    }
+                  >
+                    <Button
+                      size="sm"
+                      onClick={closeBoard}
+                      isFullWidth
+                      colorScheme="red"
+                    >
+                      Yes close this board
+                    </Button>
+                  </UIDropdown>
                 </li>
                 <Divider className="divider" />
               </StyledUl>
             )}
 
-            <Activities showCommentOption={false} showActivities />
-
-            {openMenu.key === "changeColor" && (
-              <ChangeBackground
-                openMenu={openMenu.key}
-                handleMenuChange={handleMenuChange}
-              />
+            {openMenu.key === "main" && (
+              <Activities showCommentOption={false} showActivities />
             )}
+
+            <ChangeBackground
+              openMenu={openMenu.key}
+              handleMenuChange={handleMenuChange}
+            />
           </div>
         </StyledDrawerContent>
       </Drawer>

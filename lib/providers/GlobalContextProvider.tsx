@@ -45,7 +45,7 @@ const GlobalContextProvider = ({ children }) => {
   const [workspaces, setWorkspaces] = useState<Workspace[]>([])
 
   const refetchBoardsAndWorkspaces =
-    workspaces.length === 0 && pathname !== "/" && isAuthenticated
+    workspaces?.length === 0 && pathname !== "/" && isAuthenticated
 
   const handleModeChange = () => {
     return setTheme((prev: IThemeMode) => {

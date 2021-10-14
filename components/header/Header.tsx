@@ -9,7 +9,6 @@ import HeaderAuthDropdown from "./rightsection/HeaderAuthDropdown"
 import HeaderBoardsDropdown from "./leftsection/HeaderBoardsDropdown"
 import HeaderButton from "./HeaderButton"
 import HeaderCreateOptionsDropdown from "./rightsection/HeaderCreateOptionsDropdown"
-import HeaderInformationDropdown from "./rightsection/HeaderInformationDropdown"
 import HeaderNotificationsDropdown from "./rightsection/HeaderNotificationsDropdown"
 import HeaderSearchDropdown from "./leftsection/HeaderSearchDropdown"
 import HeaderStyles from "./Styles"
@@ -41,7 +40,7 @@ const Header = () => {
         <div className="header-right-content">
           <div className="header-right-icon-wrapper">
             <HeaderCreateOptionsDropdown />
-            <HeaderInformationDropdown />
+
             <HeaderNotificationsDropdown />
             <HeaderAuthDropdown />
           </div>

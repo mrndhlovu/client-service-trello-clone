@@ -18,6 +18,7 @@ import { ROUTES } from "../../util/constants"
 import { useGlobalState } from "."
 import { IAttachment } from "../../components/board/canvas/cardActions/ChangeCover"
 import { IAction } from "../../components/board/canvas/card/Activities"
+import { usePrevious } from "../hooks"
 
 interface IProps {
   board?: IBoard
@@ -44,6 +45,7 @@ const BoardContextProvider = ({ children, board }: IProps) => {
   const { notify, rehydrateBoardsList } = useGlobalState()
   const router = useRouter()
 
+  const previous = usePrevious({ pathname: router.asPath })
   const [activeBoard, setActiveBoard] = useState<IProps["board"]>()
   const [attachments, setAttachments] = useState<IAttachment[]>([])
   const [activities, setActivities] = useState<IAction[]>([])
@@ -51,6 +53,7 @@ const BoardContextProvider = ({ children, board }: IProps) => {
   const [pagination, setPagination] = useState<IPagination>({} as IPagination)
 
   const isStarred = Boolean(activeBoard?.prefs?.starred === "true")
+  const boardIdChanged = previous?.pathname !== router.asPath
 
   const imageCover = board.activeBg === "image" ? board?.prefs.image : ""
   const colorCover = board?.prefs?.color
@@ -212,6 +215,18 @@ const BoardContextProvider = ({ children, board }: IProps) => {
 
     getData()
   }, [board?.id])
+
+  useEffect(() => {
+    if (!boardIdChanged) return
+    ;(async () => {
+      clientRequest
+        .getBoardById(board.id)
+        .then(res => {
+          setActiveBoard(res.data)
+        })
+        .catch(err => {})
+    })()
+  }, [boardIdChanged, board.id])
 
   return (
     <BoardContext.Provider
