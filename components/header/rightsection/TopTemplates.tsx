@@ -26,10 +26,7 @@ interface ITemplate {
 }
 
 const Container = styled.div`
-<<<<<<< HEAD
   background-color: #fff;
-=======
->>>>>>> 2f2358ab069e4acaa69d0f946234e0865ff2c24f
   .temp-header,
   .template-detail-header {
     display: flex;
@@ -95,7 +92,6 @@ const BackgroundIcon = styled.div<TemplateIconProps>`
   background-color: ${props => props.bgColor};
   border-radius: 3px;
 
-<<<<<<< HEAD
   ${props => {
     if (props?.bgImage) {
       return css<TemplateIconProps>`
@@ -113,22 +109,6 @@ const BackgroundIcon = styled.div<TemplateIconProps>`
       `
     }
   }};
-=======
-  ${props =>
-    props?.bgImage
-      ? css<TemplateIconProps>`
-          background-size: cover;
-          background-image: url("${props => props?.bgImage}");
-          background-position: center center;
-          transition: opacity 85ms;
-          background-repeat: no-repeat;
-          transition: opacity 85ms;
-        `
-      : css<TemplateIconProps>`
-          background-size: initial;
-          background-position: left center;
-        `};
->>>>>>> 2f2358ab069e4acaa69d0f946234e0865ff2c24f
 `
 
 const INITIAL_STATE = {
@@ -180,14 +160,10 @@ const TopTemplates = () => {
       .createNewBoard(data)
       .then(res => {
         router.push(`/${ROUTES.board}/${res?.data?.id}`)
-<<<<<<< HEAD
 
         setTimeout(() => {
           setSelectedTemplate(undefined)
         }, 4000)
-=======
-        setIsLoading(false)
->>>>>>> 2f2358ab069e4acaa69d0f946234e0865ff2c24f
       })
       .catch(err => {
         setIsLoading(false)
@@ -203,15 +179,12 @@ const TopTemplates = () => {
     })()
   }, [])
 
-<<<<<<< HEAD
   useEffect(() => {
     if (!selectedTemplate) {
       setIsLoading(false)
     }
   }, [selectedTemplate])
 
-=======
->>>>>>> 2f2358ab069e4acaa69d0f946234e0865ff2c24f
   return (
     <Container>
       {selectedTemplate ? (
