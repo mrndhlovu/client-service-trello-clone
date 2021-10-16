@@ -14,14 +14,16 @@ import HeaderNotificationsDropdown from "./rightsection/HeaderNotificationsDropd
 import HeaderSearchDropdown from "./leftsection/HeaderSearchDropdown"
 import HeaderStyles from "./Styles"
 import HeaderStarredDropdown from "./leftsection/HeaderStarredDropdown"
+import { useAuth } from "../../lib/providers"
 
 const Header = () => {
+  const { isAuthenticated } = useAuth()
   const router = useRouter()
   const isTransParent =
     Boolean(router.asPath.indexOf("board") !== -1) &&
     Boolean(router.asPath.indexOf("workspace") === -1)
 
-  return (
+  return isAuthenticated ? (
     <HeaderStyles isTransParent={isTransParent}>
       <div className="header">
         <div className="header-left-content">
@@ -53,7 +55,7 @@ const Header = () => {
         </div>
       </div>
     </HeaderStyles>
-  )
+  ) : null
 }
 
 export default Header

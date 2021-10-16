@@ -1,6 +1,7 @@
 import {
   createContext,
   Dispatch,
+  MouseEvent,
   SetStateAction,
   useCallback,
   useContext,
@@ -14,6 +15,7 @@ import { clientRequest } from "../../api"
 import { IBoard, useAuth, Workspace } from "."
 import { useLocalStorage } from "../hooks"
 import { useRouter } from "next/router"
+import { ROUTES } from "../../util/constants"
 
 export type IUIRequestError = string[]
 
@@ -21,6 +23,7 @@ export interface IToastProps {
   title?: string
   description: string | string[]
   status?: "info" | "warning" | "success" | "error"
+  duration?: number
   placement?:
     | "top-right"
     | "top"
@@ -34,15 +37,27 @@ export interface IThemeMode {
   darkMode: boolean
 }
 
+export interface ITemplate {
+  name: string
+  bgColor: string
+  bgImage?: string
+  category: string
+  description: string
+  visibility: string
+  lists: [{ name: string }]
+  id: string
+}
+
 const GlobalContextProvider = ({ children }) => {
   const { refreshToken, isAuthenticated } = useAuth()
-  const { pathname } = useRouter()
+  const { pathname, push } = useRouter()
   const toast = useToast()
   const [theme, setTheme] = useLocalStorage<string, IThemeMode>("theme", {
     darkMode: false,
   })
   const [boards, setBoards] = useState<IBoard[]>([])
   const [workspaces, setWorkspaces] = useState<Workspace[]>([])
+  const [templates, setTemplates] = useState<ITemplate[]>([])
 
   const refetchBoardsAndWorkspaces =
     workspaces?.length === 0 && pathname !== "/" && isAuthenticated
@@ -81,6 +96,34 @@ const GlobalContextProvider = ({ children }) => {
     []
   )
 
+  const handleUseTemplate = (ev: MouseEvent) => {
+    ev.preventDefault()
+
+    notify({ description: "Processing...", duration: 6000 })
+
+    const selectedTemplate = templates.find(
+      item => item.id === ev.currentTarget.id
+    )
+
+    const data = {
+      title: selectedTemplate.name,
+      workspaceId: workspaces?.[0]?.id,
+      activeBg: selectedTemplate?.bgImage ? "image" : "color",
+      prefs: {
+        color: selectedTemplate?.bgColor,
+        image: selectedTemplate?.bgImage,
+      },
+      templateLists: selectedTemplate.lists,
+    }
+
+    clientRequest
+      .createNewBoard(data)
+      .then(res => {
+        push(`/${ROUTES.board}/${res?.data?.id}`)
+      })
+      .catch(err => {})
+  }
+
   const handleStarBoard = useCallback((board?: IBoard) => {
     const update = {
       "prefs.starred": !Boolean(board?.prefs!?.starred === "true"),
@@ -92,6 +135,7 @@ const GlobalContextProvider = ({ children }) => {
   const updateInitialState = useCallback(data => {
     setBoards(data.boards)
     setWorkspaces(data.workspaces)
+    setTemplates(data.templates)
   }, [])
 
   const notify = useCallback(
@@ -99,7 +143,7 @@ const GlobalContextProvider = ({ children }) => {
       const data = {
         title: msg.title,
         status: msg.status || "success",
-        duration: 9000,
+        duration: msg.duration,
         isClosable: true,
         position: msg.placement || "top-right",
       }
@@ -134,12 +178,18 @@ const GlobalContextProvider = ({ children }) => {
           .getWorkspaces()
           .then(res => res?.data)
           .catch(() => null),
+
+        clientRequest
+          .getTemplates()
+          .then(res => res?.data)
+          .catch(() => null),
       ]
 
       const data = await Promise.all(promises)
 
       setBoards(data?.[0])
       setWorkspaces(data?.[1])
+      setTemplates(data?.[2])
     })()
   }, [refetchBoardsAndWorkspaces])
 
@@ -156,6 +206,8 @@ const GlobalContextProvider = ({ children }) => {
         updateInitialState,
         setWorkspaces,
         setBoards,
+        templates,
+        handleUseTemplate,
       }}
     >
       {children}
@@ -177,6 +229,8 @@ interface IDefaultGlobalState {
   rehydrateBoardsList: (board: IBoard) => void
   setWorkspaces: Dispatch<SetStateAction<Workspace[]>>
   setBoards: Dispatch<SetStateAction<IBoard[]>>
+  templates: ITemplate[]
+  handleUseTemplate: (ev: MouseEvent) => void
 }
 
 export const GlobalContext = createContext<IDefaultGlobalState>(

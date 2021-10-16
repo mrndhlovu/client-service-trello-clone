@@ -14,6 +14,7 @@ export const ROUTES = {
   signup: "auth/signup",
   verify: "auth/verify",
   workspace: "workspace",
+  templates: "templates",
 }
 
 export const APP_NAME = "Trello Clone"
@@ -175,4 +176,41 @@ export const WORKSPACE_TYPES = [
   { name: "IT", key: "it" },
   { name: "Other", key: "other" },
   { name: "Default", key: "default" },
+]
+
+export const TEMPLATE_CATEGORIES = [
+  { key: "business", description: "Business" },
+  { key: "design", description: "Design" },
+  { key: "education", description: "Education" },
+  { key: "engineering", description: "Engineering" },
+  { key: "marketing", description: "Marketing" },
+  { key: "operations-hr", description: "HR & Operations" },
+  { key: "personal", description: "Personal" },
+  { key: "productivity", description: "Productivity" },
+  { key: "product-management", description: "Product Management" },
+  { key: "project-management", description: "Project Management" },
+  { key: "remote-work", description: "Remote Work" },
+  { key: "sales", description: "Sales" },
+  { key: "support", description: "Support" },
+  { key: "team-management", description: "Team Management" },
+]
+
+export const CATEGORY_OPTIONS = [
+  "business",
+  "design",
+  "education",
+  "engineering",
+  "marketing",
+]
+
+export const TOP_TEMPLATE_OPTIONS = [
+  "Business Plan",
+  "Design Project Template",
+  "Lesson Planning",
+  "Agile Sprint Board",
+  "Kanban Template",
+  "Agile Marketing",
+  "Job Hunt",
+  "Find Your Passion in Life",
+  "Daily Task Management",
 ]

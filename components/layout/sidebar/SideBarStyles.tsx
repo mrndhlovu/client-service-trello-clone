@@ -21,10 +21,11 @@ export default styled.div`
       }
     }
 
+    .template-list-item,
     .sb-link-item {
       margin-bottom: 4px;
       list-style: none;
-
+      button,
       a {
         ${props => props.theme.mixins.flex(undefined, "flex-start")};
         align-items: center;
@@ -57,16 +58,29 @@ export default styled.div`
       &-text {
         width: min-content;
       }
+
+      button {
+        height: 100%;
+        width: 100%;
+        display: inline-block;
+        text-align: left;
+        font-weight: 200;
+        margin-left: 30px;
+      }
+    }
+    .template-list-item.active,
+    .sb-link-item.active {
+      background-color: #e4f0f6;
+      color: #0079bf;
+
+      &:hover {
+        background-color: #e4f0f6;
+      }
     }
 
-    .sb-link-item.active {
-      a {
-        background-color: #e4f0f6;
-        color: #0079bf;
-
-        &:hover {
-          background-color: #e4f0f6;
-        }
+    .template-list-item.active.sub-item {
+      &:hover {
+        opacity: 0.7;
       }
     }
   }

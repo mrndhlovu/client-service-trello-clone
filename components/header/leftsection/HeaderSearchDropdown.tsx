@@ -99,7 +99,7 @@ const HeaderSearchDropdown = () => {
         {!!searchQuery && <Search data={searchHits} />}
         {!searchQuery && (
           <HeaderBoardStyles>
-            <div className="search-content-header">Recent views</div>
+            <div className="search-content-header">Recent boards</div>
             <HeaderBoardGroup boards={viewedRecentBoards} category="recent" />
           </HeaderBoardStyles>
         )}

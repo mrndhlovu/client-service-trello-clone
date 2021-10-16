@@ -1,28 +1,18 @@
 import { ChangeEvent, FormEvent, MouseEvent, useEffect, useState } from "react"
 import styled, { css } from "styled-components"
-
+import { Input } from "@chakra-ui/input"
+import { Select } from "@chakra-ui/select"
+import { ROUTES, TOP_TEMPLATE_OPTIONS } from "../../../util/constants"
+import { Button } from "@chakra-ui/button"
+import { useRouter } from "next/router"
 import { AiOutlineMinus, AiOutlinePlus } from "react-icons/ai"
 
 import { clientRequest } from "../../../api"
-import { useGlobalState } from "../../../lib/providers"
-import { Input } from "@chakra-ui/input"
-import { Select } from "@chakra-ui/select"
-import { ROUTES } from "../../../util/constants"
-import { Button } from "@chakra-ui/button"
-import { useRouter } from "next/router"
+import { ITemplate, useGlobalState } from "../../../lib/providers"
 
 interface TemplateIconProps {
   bgColor?: string
   bgImage?: string
-}
-
-interface ITemplate {
-  name: string
-  id: string
-  bgColor: string
-  desc: string
-  bgImage: string
-  lists?: [{ name: string }]
 }
 
 const Container = styled.div`
@@ -89,6 +79,7 @@ const Container = styled.div`
 const BackgroundIcon = styled.div<TemplateIconProps>`
   height: 30px;
   width: 30px;
+  min-width: 30px;
   background-color: ${props => props.bgColor};
   border-radius: 3px;
 
@@ -117,10 +108,9 @@ const INITIAL_STATE = {
 }
 
 const TopTemplates = () => {
-  const { workspaces } = useGlobalState()
+  const { workspaces, templates } = useGlobalState()
   const router = useRouter()
 
-  const [templates, setTemplates] = useState<ITemplate[]>([])
   const [optionsOpen, setOptionsOpen] = useState<boolean>(true)
   const [isLoading, setIsLoading] = useState<boolean>(false)
   const [selectedTemplate, setSelectedTemplate] = useState<
@@ -130,6 +120,7 @@ const TopTemplates = () => {
     title: string
     workspace: string
   }>(INITIAL_STATE)
+
   const toggleIsOpen = () => setOptionsOpen(prev => !prev)
 
   const handleSelectedTemplated = (ev: MouseEvent) => {
@@ -171,15 +162,6 @@ const TopTemplates = () => {
   }
 
   useEffect(() => {
-    ;(() => {
-      clientRequest
-        .getTemplates()
-        .then(res => setTemplates(res.data))
-        .catch(err => {})
-    })()
-  }, [])
-
-  useEffect(() => {
     if (!selectedTemplate) {
       setIsLoading(false)
     }
@@ -196,7 +178,7 @@ const TopTemplates = () => {
             />
             <div>{selectedTemplate?.name}</div>
           </div>
-          <p>{selectedTemplate?.desc}</p>
+          <p>{selectedTemplate?.description}</p>
           <form onSubmit={handleCreate}>
             <label htmlFor="name">
               Board title
@@ -248,15 +230,17 @@ const TopTemplates = () => {
           </div>
           {optionsOpen && (
             <ul>
-              {templates.map((template, index) => (
-                <li id={`${index}`} onClick={handleSelectedTemplated}>
-                  <BackgroundIcon
-                    bgColor={template?.bgColor}
-                    bgImage={template?.bgImage}
-                  />
-                  <div>{template?.name}</div>
-                </li>
-              ))}
+              {templates
+                ?.filter(item => TOP_TEMPLATE_OPTIONS?.includes(item.name))
+                .map((template, index) => (
+                  <li id={`${index}`} onClick={handleSelectedTemplated}>
+                    <BackgroundIcon
+                      bgColor={template?.bgColor}
+                      bgImage={template?.bgImage}
+                    />
+                    <div>{template?.name}</div>
+                  </li>
+                ))}
             </ul>
           )}
         </>
