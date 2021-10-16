@@ -7,7 +7,7 @@ import {
   IChecklist,
   ITaskItem,
 } from "../components/board/canvas/cardActions/AddChecklist"
-import { IActivity } from "../components/board/canvas/card/Activities"
+import { SearchResponse } from "react-instantsearch-dom"
 
 export const getErrorMessage = (data: IRequestError) => {
   let message: string | string[]
@@ -170,4 +170,26 @@ export const mergeTasks = (checklists: IChecklist[]): ITaskItem[] => {
   checklists.reduce((a, b) => b.tasks.map((c, i) => result.push(c)), [])
 
   return result
+}
+
+export const getSortedSearch = (data: SearchResponse) => {
+  const cards = []
+  const workspaces = []
+  const boards = []
+
+  data?.map(item => {
+    if (item.type === "card") {
+      cards.push(item)
+    }
+
+    if (item.type === "board") {
+      boards.push(item)
+    }
+
+    if (item.type === "workspace") {
+      workspaces.push(item)
+    }
+  })
+
+  return { cards, boards, workspaces }
 }

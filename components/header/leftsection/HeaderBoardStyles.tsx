@@ -7,10 +7,21 @@ interface IBoardCoverProps {
 }
 
 export default styled.div`
-  min-height: 300px;
+  min-height: 100px;
 
   .board-group {
     overflow-anchor: none;
+  }
+
+  .popover-content {
+    padding: 10px;
+    width: max-content;
+    min-height: 100px;
+  }
+
+  .workspace-header {
+    justify-content: start;
+    gap: 10px;
   }
 
   .group {

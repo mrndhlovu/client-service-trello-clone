@@ -35,6 +35,10 @@ const reset = css`
     resize: vertical;
   }
 
+  *:focus {
+    box-shadow: none !important;
+  }
+
   .next-link-btn {
     background-color: #091e420a;
     border: none;
@@ -202,6 +206,122 @@ const reset = css`
 
   .clearfix:after {
     clear: both;
+  }
+
+  .sb-secondary {
+    margin: 0;
+    padding: 0;
+    margin-bottom: 12px;
+    color: #172b4d;
+    font-size: 14px;
+    line-height: 20px;
+    font-weight: 400;
+
+    li {
+      list-style: none;
+    }
+
+    .workspace-header {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      margin: 0 2px 6px 10px;
+
+      button {
+        background-color: transparent;
+        background: transparent;
+
+        &:hover {
+          background: #eee;
+        }
+      }
+    }
+
+    .toggle {
+      align-items: center;
+      background-color: transparent;
+      border-radius: 4px;
+      box-shadow: none;
+      display: flex;
+      font-weight: bold;
+      margin: 0;
+      min-height: 20px;
+      overflow: hidden;
+      padding: 6px;
+      text-decoration: none;
+      transition-property: background-color, border-color, box-shadow;
+      transition-duration: 85ms;
+      transition-timing-function: ease;
+      border: none;
+      width: 100%;
+
+      &:hover {
+        background-color: #dbdee2;
+      }
+    }
+
+    .accordion-item {
+      border: none;
+      padding: 0 5px;
+    }
+
+    .toggle-content {
+      ${props => props.theme.mixins.flex(undefined, "space-between")};
+      color: #172b4d;
+      width: 100%;
+
+      & > div:first-child {
+        display: flex;
+      }
+
+      .toggle-button-icon {
+        width: 15px;
+        height: 15px;
+        margin-right: 10px;
+
+        span {
+          color: #fff;
+          font-size: 12px;
+        }
+      }
+
+      strong {
+        font-size: 13px;
+      }
+
+      .redirect-icon {
+        display: none;
+      }
+
+      &:hover {
+        .redirect-icon {
+          display: block;
+        }
+      }
+    }
+
+    .sb-link-item {
+      padding: 0 8px 0 0;
+      text-decoration: none;
+      align-items: center;
+      background-color: transparent;
+      border-radius: 4px;
+      transition-property: background-color, border-color, box-shadow;
+      transition-duration: 85ms;
+      transition-timing-function: ease;
+      color: ${props => props.theme.colors.border};
+
+      &:hover {
+        background-color: #dbdee27a;
+      }
+    }
+
+    .button-text {
+      display: flex;
+      align-items: center;
+      font-size: 12.5px;
+      font-weight: 300;
+    }
   }
 
   @media only screen and (min-width: 35em) {

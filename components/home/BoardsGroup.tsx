@@ -16,10 +16,10 @@ interface ITileProps {
 }
 
 interface IProps {
-  heading: string
+  heading?: string
   icon?: "star" | "clock"
   boards: IBoard[]
-  category: "starred" | "workspaces" | "recent"
+  category?: "starred" | "workspaces" | "recent"
   workspaceId?: string
   iconColor?: string
   isDefault?: boolean
@@ -196,7 +196,7 @@ const BoardsGroup = ({
             iconColor={iconColor}
             className="home-group-workspace-icon"
           >
-            <span>{heading.split("")?.[0]}</span>
+            <span>{heading?.split("")?.[0]}</span>
           </TitleIcon>
         )
     }
@@ -220,6 +220,7 @@ const BoardsGroup = ({
                       href={`${ROUTES.workspace}/${workspaceId}/${option.key}`}
                       id={option.key}
                       className="next-link-btn"
+                      key={option.key}
                     >
                       {option.title}
                     </NextLink>

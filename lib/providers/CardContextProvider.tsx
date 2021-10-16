@@ -118,7 +118,7 @@ const CardContextProvider = ({
           width: imageCover?.width,
           height: imageCover?.height || "200",
         },
-        cardIsOpen: openCardModalId === card.id,
+        cardIsOpen: openCardModalId === card?.id,
         checklists,
         colorCover: cardItem?.colorCover,
         listId,

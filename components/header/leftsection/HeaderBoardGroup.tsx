@@ -3,7 +3,7 @@ import { MouseEvent } from "react"
 import { AiOutlineClockCircle, AiOutlineStar } from "react-icons/ai"
 import { FiStar } from "react-icons/fi"
 
-import { IBoard, useBoard, useGlobalState } from "../../../lib/providers"
+import { IBoard, useGlobalState } from "../../../lib/providers"
 import { BoardItem } from "./HeaderBoardStyles"
 
 interface IProps {

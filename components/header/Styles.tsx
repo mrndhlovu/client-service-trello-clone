@@ -261,4 +261,22 @@ export default styled.header<IHeaderStyles>`
       }
     }
   }
+  .popover-content {
+    width: 100%;
+    min-height: 100px;
+    max-width: calc(30vw + 300px);
+    min-width: calc(30vw + 300px);
+  }
+
+  .search-content-header {
+    color: #5e6c84;
+    font-size: 11px;
+    font-weight: 600;
+    line-height: 16px;
+    margin-top: 16px;
+    font-weight: 500;
+    letter-spacing: 0.04em;
+    margin: 3px 0 8px;
+    text-transform: uppercase;
+  }
 `

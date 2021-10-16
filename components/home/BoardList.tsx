@@ -34,7 +34,7 @@ const BoardList = () => {
       <h5>YOUR WORKSPACES</h5>
 
       {workspaces
-        .sort((a, b) => {
+        ?.sort((a, b) => {
           const dateA = new Date(a.createdAt).getTime()
           const dateB = new Date(b.createdAt).getTime()
 
@@ -51,6 +51,7 @@ const BoardList = () => {
               workspaceId={workspace.id}
               iconColor={workspace?.iconColor}
               isDefault={workspace.category === "default"}
+              key={workspace.id}
             />
           )
         })}

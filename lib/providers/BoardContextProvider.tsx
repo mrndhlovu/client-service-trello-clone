@@ -130,7 +130,7 @@ const BoardContextProvider = ({ children, board }: IProps) => {
 
   const closeBoard = async () => {
     await clientRequest
-      .updateBoard({ archived: "true" }, activeBoard.id)
+      .deleteBoard(activeBoard.id)
 
       .then(() => router.push(ROUTES.home))
       .catch(err => {

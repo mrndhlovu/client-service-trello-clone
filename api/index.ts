@@ -501,6 +501,12 @@ class ApiRequest extends AxiosConfig {
       `${END_POINTS.boards}/${workspaceId}/del-workspace`
     )
   }
+
+  async search(query: string) {
+    return await this.http.get(
+      `${END_POINTS.boards}/search?searchQuery=${query}`
+    )
+  }
 }
 
 export const clientRequest = new ApiRequest()

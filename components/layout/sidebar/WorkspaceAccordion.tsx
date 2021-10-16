@@ -9,11 +9,11 @@ import {
 import { BsChevronDown, BsChevronUp } from "react-icons/bs"
 import { AiOutlineRight } from "react-icons/ai"
 
-import { ROUTES, WORKSPACE_TAB_OPTIONS } from "../../../util/constants"
 import { NextLink } from "../../shared"
+import { ROUTES, WORKSPACE_TAB_OPTIONS } from "../../../util/constants"
+import { TitleIcon } from "../../home/BoardsGroup"
 import { Workspace } from "../../../lib/providers"
 import TabIcon from "./TabIcon"
-import { TitleIcon } from "../../home/BoardsGroup"
 
 const WorkspaceAccordion = ({ workspace }: { workspace: Workspace }) => {
   const [isOpen, setIsOpen] = useState<boolean>(false)
@@ -49,19 +49,17 @@ const WorkspaceAccordion = ({ workspace }: { workspace: Workspace }) => {
                   <NextLink
                     href={`${ROUTES.workspace}/${workspace.id}/${option.key}`}
                   >
-                    <a>
-                      <div className="toggle-content d-flex justify-content-between">
-                        <div className="button-text">
-                          <span className="sb-link-item-icon">
-                            <TabIcon icon={option.key} />
-                          </span>
-                          <span>{option.title}</span>
-                        </div>
-                        <div className="redirect-icon">
-                          <AiOutlineRight />
-                        </div>
+                    <div className="toggle-content d-flex justify-content-between">
+                      <div className="button-text">
+                        <span className="sb-link-item-icon">
+                          <TabIcon icon={option.key} />
+                        </span>
+                        <span>{option.title}</span>
                       </div>
-                    </a>
+                      <div className="redirect-icon">
+                        <AiOutlineRight />
+                      </div>
+                    </div>
                   </NextLink>
                 </li>
               ))}

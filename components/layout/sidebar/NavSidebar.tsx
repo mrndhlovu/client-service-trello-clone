@@ -9,12 +9,16 @@ import { useGlobalState } from "../../../lib/providers"
 import SideBarStyles from "./SideBarStyles"
 import TabIcon from "./TabIcon"
 import WorkspaceAccordion from "./WorkspaceAccordion"
+import CreateWorkspaceModal from "../../header/CreateWorkspaceModal"
 
 const NavSidebar = () => {
   const { darkMode, workspaces } = useGlobalState()
   const { pathname } = useRouter()
 
+  const [modalIsOpen, setModalIsOpen] = useState<boolean>(false)
   const [active, setActive] = useState<string>("/boards")
+
+  const toggleModal = () => setModalIsOpen(prev => !prev)
 
   useEffect(() => {
     setActive(pathname)
@@ -46,16 +50,22 @@ const NavSidebar = () => {
           <div className="workspace-header">
             <div>Workspaces</div>
             <div>
-              <Button className="link-btn" size="xs">
+              <Button onClick={toggleModal} className="link-btn" size="xs">
                 <AiOutlinePlus size={16} />
               </Button>
             </div>
           </div>
-          {workspaces.map(workspace => (
+          {workspaces?.map(workspace => (
             <WorkspaceAccordion key={workspace.id} workspace={workspace} />
           ))}
         </ul>
       </nav>
+      {modalIsOpen && (
+        <CreateWorkspaceModal
+          toggleModal={toggleModal}
+          openModal={modalIsOpen}
+        />
+      )}
     </SideBarStyles>
   )
 }

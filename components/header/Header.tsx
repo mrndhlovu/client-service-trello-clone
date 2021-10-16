@@ -6,16 +6,20 @@ import { NextLink } from "../shared"
 import { ROUTES } from "../../util/constants"
 import HeaderAppListDropdown from "./leftsection/HeaderAppListDropdown"
 import HeaderAuthDropdown from "./rightsection/HeaderAuthDropdown"
-import HeaderBoardsDropdown from "./leftsection/HeaderBoardsDropdown"
+import HeaderWorkspaceDropdown from "./leftsection/HeaderWorkspaceDropdown"
+import HeaderViewedRecentDropdown from "./leftsection/HeaderViewedRecentDropdown"
 import HeaderButton from "./HeaderButton"
 import HeaderCreateOptionsDropdown from "./rightsection/HeaderCreateOptionsDropdown"
 import HeaderNotificationsDropdown from "./rightsection/HeaderNotificationsDropdown"
 import HeaderSearchDropdown from "./leftsection/HeaderSearchDropdown"
 import HeaderStyles from "./Styles"
+import HeaderStarredDropdown from "./leftsection/HeaderStarredDropdown"
 
 const Header = () => {
   const router = useRouter()
-  const isTransParent = Boolean(router.asPath.indexOf("board") !== -1)
+  const isTransParent =
+    Boolean(router.asPath.indexOf("board") !== -1) &&
+    Boolean(router.asPath.indexOf("workspace") === -1)
 
   return (
     <HeaderStyles isTransParent={isTransParent}>
@@ -30,7 +34,9 @@ const Header = () => {
               </HeaderButton>
             </NextLink>
 
-            <HeaderBoardsDropdown />
+            <HeaderWorkspaceDropdown />
+            <HeaderViewedRecentDropdown />
+            <HeaderStarredDropdown />
             <HeaderSearchDropdown />
           </div>
         </div>
