@@ -24,6 +24,11 @@ export const getServerSideProps = withAuthSsp(
       .then(res => res?.data)
       .catch(() => null)
 
+    const notifications = await ssRequest
+      .getNotifications()
+      .then(res => res?.data)
+      .catch(() => null)
+
     const templates = await ssRequest
       .getTemplates()
       .then(res => res?.data)
@@ -34,7 +39,7 @@ export const getServerSideProps = withAuthSsp(
       .then(res => res?.data)
       .catch(() => null)
 
-    const response = { boards, workspaces, templates }
+    const response = { boards, workspaces, templates, notifications }
 
     return response
   },

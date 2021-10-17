@@ -261,6 +261,11 @@ export default styled.header<IHeaderStyles>`
       }
     }
   }
+
+  .header-button.notifications.active {
+    background-color: #c53030;
+  }
+
   .popover-content {
     width: 100%;
     min-height: 100px;

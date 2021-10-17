@@ -70,16 +70,24 @@ const CreateWorkspaceModal = ({ toggleModal, openModal }) => {
                 size="sm"
                 name="name"
                 placeholder="Study"
+                autoComplete="off"
               />
             </label>
 
             <label htmlFor="category">
               Workspace type
-              <Select onChange={handleChange} size="sm" name="category">
-                <option>Choose...</option>
+              <Select
+                autoCorrect="off"
+                onChange={handleChange}
+                size="sm"
+                name="category"
+              >
+                <option value="default">Choose...</option>
 
                 {WORKSPACE_TYPES.map(type => (
-                  <option key={type.key}>{type.name}</option>
+                  <option value={type.key} key={type.key}>
+                    {type.name}
+                  </option>
                 ))}
               </Select>
             </label>
@@ -100,6 +108,7 @@ const CreateWorkspaceModal = ({ toggleModal, openModal }) => {
             form="create-workspace-form"
             isFullWidth
             type="submit"
+            size="sm"
           >
             Continue
           </Button>

@@ -48,6 +48,17 @@ export interface ITemplate {
   id: string
 }
 
+export interface INotification {
+  body: string
+  isRead: boolean
+  isVerified: boolean
+  subject: string
+  title: string
+  id: string
+  createdAt: string
+  archived: boolean
+}
+
 const GlobalContextProvider = ({ children }) => {
   const { refreshToken, isAuthenticated } = useAuth()
   const { pathname, push } = useRouter()
@@ -58,6 +69,7 @@ const GlobalContextProvider = ({ children }) => {
   const [boards, setBoards] = useState<IBoard[]>([])
   const [workspaces, setWorkspaces] = useState<Workspace[]>([])
   const [templates, setTemplates] = useState<ITemplate[]>([])
+  const [notifications, setNotifications] = useState<INotification[]>([])
 
   const refetchBoardsAndWorkspaces =
     workspaces?.length === 0 && pathname !== "/" && isAuthenticated
@@ -136,6 +148,7 @@ const GlobalContextProvider = ({ children }) => {
     setBoards(data.boards)
     setWorkspaces(data.workspaces)
     setTemplates(data.templates)
+    setNotifications(data.notifications)
   }, [])
 
   const notify = useCallback(
@@ -183,6 +196,11 @@ const GlobalContextProvider = ({ children }) => {
           .getTemplates()
           .then(res => res?.data)
           .catch(() => null),
+
+        clientRequest
+          .getNotifications()
+          .then(res => res?.data)
+          .catch(() => null),
       ]
 
       const data = await Promise.all(promises)
@@ -190,6 +208,7 @@ const GlobalContextProvider = ({ children }) => {
       setBoards(data?.[0])
       setWorkspaces(data?.[1])
       setTemplates(data?.[2])
+      setNotifications(data?.[3])
     })()
   }, [refetchBoardsAndWorkspaces])
 
@@ -208,6 +227,8 @@ const GlobalContextProvider = ({ children }) => {
         setBoards,
         templates,
         handleUseTemplate,
+        notifications,
+        setNotifications,
       }}
     >
       {children}
@@ -231,6 +252,8 @@ interface IDefaultGlobalState {
   setBoards: Dispatch<SetStateAction<IBoard[]>>
   templates: ITemplate[]
   handleUseTemplate: (ev: MouseEvent) => void
+  notifications: INotification[]
+  setNotifications: Dispatch<SetStateAction<INotification[]>>
 }
 
 export const GlobalContext = createContext<IDefaultGlobalState>(

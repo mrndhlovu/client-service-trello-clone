@@ -15,6 +15,7 @@ export const ROUTES = {
   verify: "auth/verify",
   workspace: "workspace",
   templates: "templates",
+  notification: "notification",
 }
 
 export const APP_NAME = "Trello Clone"
@@ -172,10 +173,14 @@ export const DUE_DATE_REMINDERS = [
 ]
 
 export const WORKSPACE_TYPES = [
-  { name: "Education", key: "education" },
-  { name: "IT", key: "it" },
-  { name: "Other", key: "other" },
-  { name: "Default", key: "default" },
+  { key: "engineering", name: "Engineering-IT" },
+  { key: "sales", name: "Sales CRM" },
+  { key: "marketing", name: "Marketing" },
+  { key: "education", name: "Education" },
+  { key: "operations", name: "Operations" },
+  { key: "business", name: "Small Business" },
+  { key: "hr", name: "Human Resources" },
+  { key: "default", name: "Other" },
 ]
 
 export const TEMPLATE_CATEGORIES = [

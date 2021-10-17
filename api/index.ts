@@ -468,6 +468,22 @@ class ApiRequest extends AxiosConfig {
     )
   }
 
+  // Notifications
+
+  async getNotifications() {
+    return await this.http.get(`${END_POINTS.accounts}/notifications`)
+  }
+
+  async updateNotification(
+    notificationId: string,
+    data: { isRead?: boolean; archived?: boolean }
+  ) {
+    return await this.http.patch(
+      `${END_POINTS.accounts}/${notificationId}/update-notification`,
+      data
+    )
+  }
+
   // Templates
 
   async getTemplates() {

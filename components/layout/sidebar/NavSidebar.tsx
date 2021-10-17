@@ -17,7 +17,7 @@ import CreateWorkspaceModal from "../../header/CreateWorkspaceModal"
 
 const NavSidebar = () => {
   const { darkMode, workspaces } = useGlobalState()
-  const { push, asPath, pathname } = useRouter()
+  const { push, asPath } = useRouter()
 
   const [modalIsOpen, setModalIsOpen] = useState<boolean>(false)
   const [active, setActive] = useState<string | undefined>("/boards")
