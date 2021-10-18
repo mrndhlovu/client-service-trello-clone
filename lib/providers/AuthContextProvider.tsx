@@ -159,9 +159,7 @@ const AuthContextProvider = ({ children }) => {
 
     await clientRequest
       .logoutUser()
-      .then(() => {
-        return router.replace(router.pathname, `/${ROUTES.login}`)
-      })
+      .then(() => rehydrateUser())
       .catch(error => {
         setAuthError(error.message)
         rehydrateUser()

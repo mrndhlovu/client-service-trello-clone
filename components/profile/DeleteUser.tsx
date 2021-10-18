@@ -1,15 +1,13 @@
 import { useState } from "react"
-import router from "next/router"
 
 import { Button } from "@chakra-ui/react"
 
 import { clientRequest, IPasswordConfirmation } from "../../api"
-import { ROUTES } from "../../util/constants"
 import { useAuth } from "../../lib/providers"
 import PasswordConfirmation from "../auth/PasswordConfirmation"
 
 const DeleteUser = () => {
-  const { verifyUserPassword } = useAuth()
+  const { verifyUserPassword, rehydrateUser } = useAuth()
 
   const [showPasswordConfirmation, setShowPasswordConfirmation] =
     useState<boolean>(false)
@@ -21,7 +19,7 @@ const DeleteUser = () => {
 
     clientRequest
       .deleteUser()
-      .then(() => router.push(`/${ROUTES.login}`))
+      .then(() => rehydrateUser())
       .catch(err => {})
   }
 

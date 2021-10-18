@@ -58,7 +58,7 @@ const AddCard = () => {
               size="sm"
               autoFocus
             />
-            <div className="c-flex card">
+            <div className="list-control card">
               <Button size="sm" colorScheme="blue" onClick={handleSave}>
                 Add card
               </Button>

@@ -47,8 +47,8 @@ const AddList = ({ isFirst, newListPosition }: IProps) => {
   return (
     <div className="list-wrapper">
       <div className="create-list">
-        <div className="create-list-content">
-          {editing ? (
+        {editing ? (
+          <div className="create-list-content">
             <div className="create-list-wrapper">
               <Input
                 placeholder="Add list title..."
@@ -57,7 +57,7 @@ const AddList = ({ isFirst, newListPosition }: IProps) => {
                 size="sm"
                 autoFocus
               />
-              <div className="c-flex">
+              <div className="list-control">
                 <Button size="sm" colorScheme="blue" onClick={handleSave}>
                   Add list
                 </Button>
@@ -68,17 +68,17 @@ const AddList = ({ isFirst, newListPosition }: IProps) => {
                 />
               </div>
             </div>
-          ) : (
-            <Button
-              onClick={toggleAddInput}
-              className="create-button"
-              leftIcon={<AiOutlinePlus size={18} />}
-              size="md"
-            >
-              {isFirst ? "Add a list" : "Add another list"}
-            </Button>
-          )}
-        </div>
+          </div>
+        ) : (
+          <Button
+            onClick={toggleAddInput}
+            className="create-button"
+            leftIcon={<AiOutlinePlus size={18} />}
+            size="md"
+          >
+            {isFirst ? "Add a list" : "Add another list"}
+          </Button>
+        )}
       </div>
     </div>
   )

@@ -108,6 +108,13 @@ const GlobalContextProvider = ({ children }) => {
     []
   )
 
+  const rehydrateNotifications = () => {
+    clientRequest
+      .getNotifications()
+      .then(res => setNotifications(prev => [...prev, ...res?.data]))
+      .catch(() => null)
+  }
+
   const handleUseTemplate = (ev: MouseEvent) => {
     ev.preventDefault()
 
@@ -208,7 +215,14 @@ const GlobalContextProvider = ({ children }) => {
       setBoards(data?.[0])
       setWorkspaces(data?.[1])
       setTemplates(data?.[2])
-      setNotifications(data?.[3])
+      setNotifications(
+        data?.[3]?.sort((a, b) => {
+          const dateA = new Date(a.createdAt).getTime()
+          const dateB = new Date(b.createdAt).getTime()
+
+          return dateA > dateB ? 1 : -1
+        })
+      )
     })()
   }, [refetchBoardsAndWorkspaces])
 
@@ -229,6 +243,7 @@ const GlobalContextProvider = ({ children }) => {
         handleUseTemplate,
         notifications,
         setNotifications,
+        rehydrateNotifications,
       }}
     >
       {children}
@@ -253,6 +268,7 @@ interface IDefaultGlobalState {
   templates: ITemplate[]
   handleUseTemplate: (ev: MouseEvent) => void
   notifications: INotification[]
+  rehydrateNotifications: () => void
   setNotifications: Dispatch<SetStateAction<INotification[]>>
 }
 

@@ -1,4 +1,5 @@
 import { formatDistance } from "date-fns"
+import { isEmpty } from "lodash"
 import { MouseEvent, useState } from "react"
 import { FiBell } from "react-icons/fi"
 import styled from "styled-components"
@@ -46,7 +47,8 @@ const NotificationItem = styled.div<{ isHighlighted: boolean }>`
 const HeaderNotificationsDropdown = () => {
   const { notifications, setNotifications } = useGlobalState()
 
-  const hasNotification = notifications.some(item => !item.isRead)
+  const hasNotification = !isEmpty(notifications)
+  const hasUnReadNotifications = notifications?.some(item => !item.isRead)
   const [selectedMessage, setSelectedMessage] = useState<
     INotification | undefined
   >()
@@ -94,9 +96,16 @@ const HeaderNotificationsDropdown = () => {
     if (!ev) {
       return setSelectedMessage(undefined)
     }
-    setSelectedMessage(
-      notifications.find(item => ev.currentTarget?.id === item.id)
+
+    const notification = notifications.find(
+      item => item.id === ev.currentTarget?.id
     )
+
+    if (!notification.isRead) {
+      toggleReadStatus(ev)
+    }
+
+    setSelectedMessage({ ...notification, isRead: true })
   }
 
   return (
@@ -105,7 +114,7 @@ const HeaderNotificationsDropdown = () => {
       toggle={
         <HeaderButton
           className={`header-button notifications ${
-            hasNotification ? "active" : ""
+            hasUnReadNotifications ? "active" : ""
           }`}
         >
           <FiBell />
@@ -147,12 +156,13 @@ const HeaderNotificationsDropdown = () => {
                 className="link-btn"
                 id={item.id}
               >
-                Read
+                Open
               </button>
             </div>
           </div>
         </NotificationItem>
       ))}
+      {!hasNotification && <p>No new notifications</p>}
       {!!selectedMessage && (
         <NotificationModal
           isOpen={!!selectedMessage}

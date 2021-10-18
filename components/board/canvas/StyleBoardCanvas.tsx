@@ -23,6 +23,8 @@ export default styled.div`
       vertical-align: top;
       white-space: nowrap;
       width: 272px;
+      min-width: 272px;
+      max-width: 272px;
       position: relative;
 
       .foreign-card-dnd-zone {
@@ -171,7 +173,7 @@ export default styled.div`
     .create-card-wrapper,
     .create-list-wrapper {
       background-color: #ebecf0;
-      ${props => props.theme.mixins.flex("column", "space-evenly", "end")};
+      ${props => props.theme.mixins.flex("column", "space-evenly", "start")};
       gap: 7px;
       padding: 0 4px;
       border-radius: 3px;
@@ -182,8 +184,8 @@ export default styled.div`
       color: ${props => props.theme.colors.border};
     }
 
-    .c-flex {
-      ${props => props.theme.mixins.flex("row", "end")};
+    .list-control {
+      ${props => props.theme.mixins.flex("row", "start")};
       gap: 4px;
 
       svg {
