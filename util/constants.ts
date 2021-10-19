@@ -180,7 +180,6 @@ export const WORKSPACE_TYPES = [
   { key: "operations", name: "Operations" },
   { key: "business", name: "Small Business" },
   { key: "hr", name: "Human Resources" },
-  { key: "default", name: "Other" },
 ]
 
 export const TEMPLATE_CATEGORIES = [

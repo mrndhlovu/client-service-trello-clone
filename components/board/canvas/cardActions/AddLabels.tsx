@@ -9,11 +9,7 @@ import styled from "styled-components"
 import { clientRequest } from "../../../../api"
 import { getLabelOptions } from "../../../../util"
 import { LABEL_DEFAULT_OPTIONS } from "../../../../util/constants"
-import {
-  useCardContext,
-  useGlobalState,
-  useListItemContext,
-} from "../../../../lib/providers"
+import { useGlobalState, useCardContext } from "../../../../lib/providers"
 import CardActionStyles from "./StyleCardAction"
 
 export interface ILabelProps {
@@ -25,6 +21,8 @@ export interface ILabelProps {
 
 interface IProps {
   showCancelButton?: boolean
+  cardId: string
+  listId: string
 }
 
 const StyledLi = styled.li<{ bgColor: string; checked: boolean }>`
@@ -37,9 +35,8 @@ const StyledLi = styled.li<{ bgColor: string; checked: boolean }>`
   }
 `
 
-const CardLabels = ({ showCancelButton }: IProps) => {
-  const { card, cardId, updateCardState } = useCardContext()
-  const { saveCardChanges, listId } = useListItemContext()
+const AddLabels = ({ showCancelButton, cardId, listId }: IProps) => {
+  const { card, saveCardChanges } = useCardContext()
   const { notify } = useGlobalState()
   const inputRef = useRef<HTMLInputElement | null>()
 
@@ -255,4 +252,4 @@ const CardLabels = ({ showCancelButton }: IProps) => {
   )
 }
 
-export default CardLabels
+export default AddLabels

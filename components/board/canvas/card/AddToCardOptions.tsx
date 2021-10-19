@@ -5,18 +5,24 @@ import { HiOutlinePaperClip } from "react-icons/hi"
 import { IoMdCard } from "react-icons/io"
 
 import { UIDropdown } from "../../../shared"
-import { useCardContext } from "../../../../lib/providers"
+import { useBoard, useCardContext } from "../../../../lib/providers"
 import AddAttachment from "../cardActions/AddAttachment"
 import AddChecklist from "../cardActions/AddChecklist"
-import CardLabels from "../cardActions/CardLabels"
+import AddLabels from "../cardActions/AddLabels"
 import ChangeCover from "../cardActions/ChangeCover"
 import AddCardDueDate from "./AddCardDueDate"
 
 const AddToCardOptions = () => {
-  const { showCardCover, updateActionsList } = useCardContext()
+  const { showCardCover, cardId, listId } = useCardContext()
+  const { updateActionsList } = useBoard()
 
   const ADD_TO_CARD_OPTIONS = [
-    { title: "Labels", id: 0, icon: <BsTag />, menu: <CardLabels /> },
+    {
+      title: "Labels",
+      id: 0,
+      icon: <BsTag />,
+      menu: <AddLabels listId={listId} cardId={cardId} />,
+    },
     {
       title: "Dates",
       id: 1,

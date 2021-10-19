@@ -5,7 +5,7 @@ import styled from "styled-components"
 
 import { useCardContext } from "../../../../lib/providers"
 import { UIDropdown } from "../../../shared"
-import CardLabels from "../cardActions/CardLabels"
+import AddLabels from "../cardActions/AddLabels"
 import CardModule from "./CardModule"
 
 const StyledSpan = styled.span<{ bgColor: string }>`
@@ -23,8 +23,8 @@ const StyledSpan = styled.span<{ bgColor: string }>`
   width: auto;
 `
 
-const CardLabelModule = () => {
-  const { card } = useCardContext()
+const CardLabels = () => {
+  const { card, listId, cardId } = useCardContext()
   const hasLabels = !isEmpty(card?.labels)
 
   return hasLabels ? (
@@ -45,11 +45,11 @@ const CardLabelModule = () => {
             </Button>
           }
         >
-          <CardLabels showCancelButton />
+          <AddLabels showCancelButton listId={listId} cardId={cardId} />
         </UIDropdown>
       </div>
     </div>
   ) : null
 }
 
-export default CardLabelModule
+export default CardLabels

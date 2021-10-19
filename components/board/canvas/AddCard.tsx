@@ -12,7 +12,7 @@ import {
 
 const AddCard = () => {
   const { boardId, findCardsByListId } = useBoard()
-  const { updateCardsState } = useListsContext()
+  const { updateCardsStateOnBoard } = useListsContext()
   const { listId } = useListItemContext()
   const { notify } = useGlobalState()
 
@@ -31,7 +31,7 @@ const AddCard = () => {
     await clientRequest
       .createCard({ title, position: nextCardPosition }, { boardId, listId })
       .then(res => {
-        updateCardsState(res.data, { isNew: true })
+        updateCardsStateOnBoard(res.data, { isNew: true })
         setTitle("")
         toggleAddInput()
       })

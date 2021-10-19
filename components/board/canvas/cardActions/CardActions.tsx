@@ -3,9 +3,9 @@ import { MouseEvent } from "react"
 import { AiFillSwitcher, AiOutlineIdcard, AiOutlineTag } from "react-icons/ai"
 import { CgCreditCard } from "react-icons/cg"
 
-import { useCardContext, useListItemContext } from "../../../../lib/providers"
+import { useCardContext, useListsContext } from "../../../../lib/providers"
 import { UIDropdown } from "../../../shared"
-import CardLabels from "./CardLabels"
+import AddLabels from "./AddLabels"
 import ChangeCover from "./ChangeCover"
 
 interface IProps {
@@ -15,11 +15,12 @@ interface IProps {
 }
 
 const CardActions = ({ listId, cardId, close }: IProps) => {
-  const { saveCardChanges } = useListItemContext()
-  const { toggleCardIsOpen } = useCardContext()
+  const {} = useListsContext()
+  const { toggleCardIsOpen, saveCardChanges } = useCardContext()
 
   const handleArchiveCard = (ev: MouseEvent) => {
     ev.preventDefault()
+
     saveCardChanges(cardId, listId, { archived: true })
     close()
   }
@@ -47,7 +48,7 @@ const CardActions = ({ listId, cardId, close }: IProps) => {
       key: "edit-labels",
       title: "Edit labels",
       icon: <AiOutlineTag />,
-      content: <CardLabels />,
+      content: <AddLabels listId={listId} cardId={cardId} />,
     },
 
     {

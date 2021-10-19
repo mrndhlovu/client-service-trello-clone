@@ -8,7 +8,7 @@ import CardChecklists from "./CardChecklists"
 import CardDescription from "./CardDescription"
 import CardDueDate from "./CardDueDate"
 import CardHeader from "./CardHeader"
-import CardLabelModule from "./CardLabelModule"
+import CardLabels from "./CardLabels"
 import ModalCardActions from "./ModalCardActions"
 import StyleModal from "./StyleModal"
 
@@ -26,7 +26,7 @@ const CardModal = ({ isOpen, onClose }: IProps) => {
         <ModalBody className="card-modal-detail">
           <div className="card-content-column">
             <CardDueDate />
-            <CardLabelModule />
+            <CardLabels />
             <CardDescription />
             <CardAttachments />
             <CardChecklists />
@@ -34,7 +34,7 @@ const CardModal = ({ isOpen, onClose }: IProps) => {
           </div>
           <div className="card-sidebar">
             <AddToCardOptions />
-            <ModalCardActions />
+            <ModalCardActions close={onClose} />
           </div>
         </ModalBody>
       </StyleModal>

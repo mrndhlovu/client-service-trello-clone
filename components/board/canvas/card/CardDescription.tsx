@@ -12,16 +12,17 @@ import {
 import CardModule from "./CardModule"
 
 const CardDescription = () => {
-  const { card, cardId } = useCardContext()
+  const { card, cardId, saveCardChanges } = useCardContext()
   const { listId } = useListItemContext()
-  const { saveCardChanges } = useListsContext()
 
   const [editing, setEditing] = useState<boolean>(false)
   const [description, setDescription] = useState<string>("")
 
   const handleSave = () => {
     if (!description) return
+
     saveCardChanges(cardId, listId, { description })
+
     toggleEditOption()
   }
 

@@ -9,7 +9,7 @@ import {
   useState,
 } from "react"
 import { useRouter } from "next/router"
-import { isEmpty, omit } from "lodash"
+import { isArray, isEmpty, omit } from "lodash"
 
 import { clientRequest } from "../../api"
 import { IBoard } from "./HomeContextProvider"
@@ -181,6 +181,58 @@ const BoardContextProvider = ({ children, board }: IProps) => {
       .catch(err => {})
   }
 
+  const updateCardsStateOnBoard = (
+    update: ICardItem | ICardItem[],
+    options?: IUpdateStateOptions
+  ) => {
+    if (options?.isNew) {
+      return setActiveBoard((prev: IBoard) => ({
+        ...prev,
+        cards: [...prev.cards, update],
+      }))
+    }
+
+    if (isArray(update)) {
+      return setActiveBoard((prev: IBoard) => ({
+        ...prev,
+        cards: update,
+      }))
+    }
+
+    setActiveBoard((prev: IBoard) => ({
+      ...prev,
+      cards: prev.cards.map((card: ICardItem) =>
+        card.id === update.id ? update : card
+      ),
+    }))
+  }
+
+  const updateListsStateOnBoard = (
+    update: IListItem | IListItem[],
+    options?: IUpdateStateOptions
+  ) => {
+    if (options?.isNew) {
+      return setActiveBoard((prev: IBoard) => ({
+        ...prev,
+        lists: [...prev.lists, update],
+      }))
+    }
+
+    if (isArray(update)) {
+      return setActiveBoard((prev: IBoard) => ({
+        ...prev,
+        lists: [...update],
+      }))
+    }
+
+    setActiveBoard((prev: IBoard) => ({
+      ...prev,
+      lists: prev.lists.map((list: ICardItem) =>
+        list.id === update.id ? update : list
+      ),
+    }))
+  }
+
   const toggleDrawerMenu = () => setDrawerOpen(prev => !prev)
 
   useEffect(() => {
@@ -255,6 +307,8 @@ const BoardContextProvider = ({ children, board }: IProps) => {
         updateBoardState,
         pagination,
         loadMoreActions,
+        updateCardsStateOnBoard,
+        updateListsStateOnBoard,
       }}
     >
       {children}
@@ -279,6 +333,8 @@ interface IBoardContext {
   handleStarBoard: (board?: IBoard) => void
   imageCover: string
   isStarred: boolean
+  loadMoreActions: () => void
+  pagination: IPagination
   saveBoardChanges: (board?: IBoard) => Promise<IBoard | void>
   setActiveBoard: (board?: IBoard) => void
   setActivities: Dispatch<SetStateAction<IAction[]>>
@@ -286,8 +342,14 @@ interface IBoardContext {
   toggleDrawerMenu: () => void
   updateActionsList: (data: IAction, options?: { edited: boolean }) => void
   updateBoardState: (board?: IBoard) => void
-  pagination: IPagination
-  loadMoreActions: () => void
+  updateCardsStateOnBoard: (
+    card: ICardItem | ICardItem[],
+    options?: IUpdateStateOptions
+  ) => void
+  updateListsStateOnBoard: (
+    newListItem: IListItem | IListItem[],
+    options?: IUpdateStateOptions
+  ) => void
 }
 
 export const BoardContext = createContext<IBoardContext>({} as IBoardContext)

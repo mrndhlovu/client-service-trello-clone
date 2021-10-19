@@ -3,18 +3,13 @@ import { isEmpty } from "lodash"
 import styled, { css } from "styled-components"
 
 import { FiEdit2 } from "react-icons/fi"
-import {
-  AiFillClockCircle,
-  AiOutlineClockCircle,
-  AiOutlinePaperClip,
-} from "react-icons/ai"
+import { AiOutlineClockCircle, AiOutlinePaperClip } from "react-icons/ai"
 import { Button, Badge } from "@chakra-ui/react"
 import { BsChatDots, BsCheckBox } from "react-icons/bs"
 
 import {
   useBoard,
   useCardContext,
-  useListItemContext,
   useListsContext,
 } from "../../../lib/providers"
 import { calculateCompletedTasks } from "../../../util"
@@ -81,7 +76,6 @@ export interface ICardActionProps {
 }
 
 const CardItem = ({ toggleActionsMenu, actionsOpen }: ICardActionProps) => {
-  const { saveCardChanges } = useListsContext()
   const { activities, attachments } = useBoard()
   const {
     card,
@@ -97,7 +91,9 @@ const CardItem = ({ toggleActionsMenu, actionsOpen }: ICardActionProps) => {
     tasks,
     previewModalIsOpen,
     hasAttachments,
+    updateCardState,
     toggleCardIsOpen,
+    saveCardChanges,
   } = useCardContext()
 
   const numberOfCardComments = useMemo(

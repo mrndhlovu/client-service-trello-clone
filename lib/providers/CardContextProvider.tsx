@@ -10,8 +10,9 @@ import {
   useState,
   MouseEvent,
 } from "react"
-import { useBoard, useListsContext } from "."
 
+import { useBoard, useGlobalState } from "."
+import { clientRequest } from "../../api"
 import {
   IChecklist,
   ITaskItem,
@@ -40,8 +41,8 @@ const CardContextProvider = ({
   listId,
   listIndex,
 }: IProps) => {
-  const { updateCardsState } = useListsContext()
-  const { attachments } = useBoard()
+  const { attachments, updateCardsStateOnBoard } = useBoard()
+  const { notify } = useGlobalState()
 
   const [cardItem, setCardItem] = useState<ICardItem>()
   const [checklists, setChecklists] = useState<IChecklist[]>([])
@@ -90,10 +91,23 @@ const CardContextProvider = ({
     setPreview({ url, id: previewId })
   }
 
-  const updateCardState = useCallback((newCard: ICardItem) => {
-    setCardItem(newCard)
-    updateCardsState(newCard)
-  }, [])
+  const updateCardState = useCallback(
+    (newCard: ICardItem) => {
+      setCardItem(newCard)
+      updateCardsStateOnBoard(newCard)
+    },
+    [updateCardsStateOnBoard]
+  )
+
+  const saveCardChanges = useCallback(
+    async (cardId: string, listId: string, update: { [key: string]: any }) => {
+      clientRequest
+        .updateCard(update, { listId, cardId })
+        .then(res => updateCardState(res.data))
+        .catch(err => {})
+    },
+    [notify, updateCardsStateOnBoard]
+  )
 
   useEffect(() => {
     setCardItem(card)
@@ -133,6 +147,7 @@ const CardContextProvider = ({
         togglePreviewModal,
         updateCardState,
         hasAttachments,
+        saveCardChanges,
       }}
     >
       {children}
@@ -163,6 +178,11 @@ export interface ICardContext {
   showCardCover: boolean
   tasks: ITaskItem[]
   updateCardState: (card: ICardItem) => void
+  saveCardChanges: (
+    cardId: string,
+    listId: string,
+    update: { [key: string]: any }
+  ) => void
 }
 
 export const CardContext = createContext<ICardContext>({} as ICardContext)

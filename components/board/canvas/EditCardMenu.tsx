@@ -20,12 +20,6 @@ const EditCardMenu = ({ title, close, save }: IProps) => {
     }
   }
 
-  const handleClose = (ev: MouseEvent) => {
-    ev.preventDefault()
-
-    close()
-  }
-
   return (
     <div className="card-editor">
       <div className="card-editor-content">

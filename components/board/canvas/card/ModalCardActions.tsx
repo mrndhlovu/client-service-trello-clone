@@ -1,19 +1,19 @@
 import { Button } from "@chakra-ui/button"
 import { MouseEvent } from "react"
-import { HiOutlineArrowRight, HiOutlineTemplate } from "react-icons/hi"
-import { MdContentCopy } from "react-icons/md"
+import { HiOutlineArrowRight } from "react-icons/hi"
 import { VscArchive } from "react-icons/vsc"
 
 import { UIDropdown } from "../../../shared"
-import { useCardContext, useListItemContext } from "../../../../lib/providers"
+import { useCardContext } from "../../../../lib/providers"
 import MoveCardOption from "../moveDialog/MoveCardSettings"
 
-const ModalCardActions = () => {
-  const { saveCardChanges } = useListItemContext()
-  const { cardId, listId } = useCardContext()
+const ModalCardActions = ({ close }: { close: () => void }) => {
+  const { cardId, listId, updateCardState, card, saveCardChanges } =
+    useCardContext()
 
   const handleArchiveCard = (ev: MouseEvent) => {
     ev.preventDefault()
+    updateCardState({ ...card, archived: true })
     saveCardChanges(cardId, listId, { archived: true })
     close()
   }

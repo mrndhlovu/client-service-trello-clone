@@ -31,7 +31,7 @@ const NavSidebar = () => {
   }
 
   useEffect(() => {
-    setActive(asPath.split("/")?.[1] || "boards")
+    setActive(asPath?.split("/")?.[asPath?.split("/").length - 1] || "boards")
   }, [asPath])
 
   return (
@@ -42,7 +42,7 @@ const NavSidebar = () => {
             {HOME_SIDEBAR_PRIMARY.map(option => (
               <li
                 className={`sb-link-item  ${
-                  option.key.indexOf(active) !== -1 ? "active" : ""
+                  active === option.key ? "active" : ""
                 }`}
                 key={option.key}
               >
@@ -61,7 +61,7 @@ const NavSidebar = () => {
               {TEMPLATE_CATEGORIES.map(item => (
                 <li
                   className={`template-list-item ${
-                    asPath.indexOf(item.key) !== -1 ? "active sub-item" : ""
+                    active === item.key ? "active sub-item" : ""
                   }`}
                   key={item.key}
                 >

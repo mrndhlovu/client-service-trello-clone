@@ -56,8 +56,9 @@ const CardHeader = ({ onClose }) => {
     coverSize,
     coverUrl,
     listId,
+    saveCardChanges,
   } = useCardContext()
-  const { saveCardChanges } = useListsContext()
+
   const { list } = useListItemContext()
 
   const handleUpdateTitle = (newTitle: string) => {

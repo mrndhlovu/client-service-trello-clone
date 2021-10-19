@@ -7,7 +7,6 @@ import styled from "styled-components"
 import { clientRequest } from "../../../../api"
 import {
   useCardContext,
-  useListsContext,
   useGlobalState,
   useBoard,
 } from "../../../../lib/providers"
@@ -57,10 +56,9 @@ const AttachmentImage = styled.div<{ image: IAttachment }>`
 `
 
 const ChangeCover = () => {
-  const { cardId, card, listId } = useCardContext()
+  const { cardId, card, listId, saveCardChanges } = useCardContext()
   const { notify } = useGlobalState()
-  const { updateCardsState, saveCardChanges } = useListsContext()
-  const { attachments, setAttachments } = useBoard()
+  const { attachments, setAttachments, updateCardsStateOnBoard } = useBoard()
   const imageRef = useRef<HTMLInputElement>()
 
   const [isLoading, setIsLoading] = useState<boolean>(false)
@@ -103,7 +101,7 @@ const ChangeCover = () => {
       .uploadImageCardCover(formData, cardId)
       .then(res => {
         setAttachments(prev => [...prev, res.data])
-        updateCardsState({ ...card, imageCover: res.data })
+        updateCardsStateOnBoard({ ...card, imageCover: res.data })
       })
       .catch(err => {
         notify({

@@ -39,7 +39,12 @@ const CreateWorkspaceModal = ({ toggleModal, openModal }) => {
   const handleContinue = (ev: FormEvent<HTMLFormElement>) => {
     ev.preventDefault()
 
-    if (!workspace.name || !workspace.category) return
+    if (
+      !workspace.name ||
+      !workspace.category ||
+      workspace.category === "default"
+    )
+      return
     clientRequest
       .createWorkspace({ ...workspace, visibility: "private" })
       .then(res => {
@@ -81,8 +86,11 @@ const CreateWorkspaceModal = ({ toggleModal, openModal }) => {
                 onChange={handleChange}
                 size="sm"
                 name="category"
+                defaultValue="default"
               >
-                <option value="default">Choose...</option>
+                <option disabled value="default">
+                  Choose...
+                </option>
 
                 {WORKSPACE_TYPES.map(type => (
                   <option value={type.key} key={type.key}>

@@ -20,8 +20,8 @@ const EditableTitle = ({ handleUpdate, title, as = "button" }: IProps) => {
     toggleEditTitle()
   }
 
-  const handleChangeTitle = (ev: ChangeEvent<HTMLElement>) => {
-    setNewBoardTitle((ev.target as any).value)
+  const handleChangeTitle = (ev: ChangeEvent<HTMLInputElement>) => {
+    setNewBoardTitle(ev.target.value)
   }
 
   return (
