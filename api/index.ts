@@ -4,7 +4,7 @@ import axios, {
   AxiosRequestConfig,
   AxiosResponse,
 } from "axios"
-import { ILabelProps } from "../components/board/canvas/cardActions/CardLabels"
+import { ILabelProps } from "../components/board/canvas/cardActions/AddLabels"
 import { IUpdateWorkspace } from "../components/workspaces"
 
 import {

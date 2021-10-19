@@ -9,6 +9,7 @@ import { AiOutlineMinus, AiOutlinePlus } from "react-icons/ai"
 
 import { clientRequest } from "../../../api"
 import { ITemplate, useGlobalState } from "../../../lib/providers"
+import SelectWorkspace from "./SelectWorkspace"
 
 interface TemplateIconProps {
   bgColor?: string
@@ -41,20 +42,6 @@ const Container = styled.div`
       margin: 12px auto 24px;
       max-height: 200px;
       overflow: auto;
-    }
-
-    label {
-      display: block;
-      font-size: 12px;
-      font-weight: 700;
-      line-height: 16px;
-      margin-bottom: 4px;
-      margin-top: 24px;
-      color: #091e42;
-    }
-
-    form button {
-      margin-top: 15px;
     }
   }
 
@@ -108,7 +95,7 @@ const INITIAL_STATE = {
 }
 
 const TopTemplates = () => {
-  const { workspaces, templates } = useGlobalState()
+  const { templates } = useGlobalState()
   const router = useRouter()
 
   const [optionsOpen, setOptionsOpen] = useState<boolean>(true)
@@ -116,7 +103,7 @@ const TopTemplates = () => {
   const [selectedTemplate, setSelectedTemplate] = useState<
     ITemplate | undefined
   >()
-  const [board, setBoard] = useState<{
+  const [template, setTemplate] = useState<{
     title: string
     workspace: string
   }>(INITIAL_STATE)
@@ -124,21 +111,20 @@ const TopTemplates = () => {
   const toggleIsOpen = () => setOptionsOpen(prev => !prev)
 
   const handleSelectedTemplated = (ev: MouseEvent) => {
-    setSelectedTemplate(templates[+ev.currentTarget.id])
+    setSelectedTemplate(templates.find(item => item.id === ev.currentTarget.id))
   }
 
   const handleChange = (
     ev: ChangeEvent<HTMLInputElement | HTMLSelectElement | HTMLTextAreaElement>
   ) => {
-    setBoard(prev => ({ ...prev, [ev.target.name]: ev.target.value }))
+    setTemplate(prev => ({ ...prev, [ev.target.name]: ev.target.value }))
   }
 
-  const handleCreate = (ev: FormEvent<HTMLFormElement>) => {
-    ev.preventDefault()
+  const handleCreate = () => {
     setIsLoading(true)
     const data = {
-      title: board?.title || selectedTemplate.name,
-      workspaceId: board.workspace ? board.workspace : workspaces?.[0]?.id,
+      title: template?.title || selectedTemplate.name,
+      workspaceId: template.workspace,
       activeBg: selectedTemplate?.bgImage ? "image" : "color",
       prefs: {
         color: selectedTemplate?.bgColor,
@@ -179,42 +165,13 @@ const TopTemplates = () => {
             <div>{selectedTemplate?.name}</div>
           </div>
           <p>{selectedTemplate?.description}</p>
-          <form onSubmit={handleCreate}>
-            <label htmlFor="name">
-              Board title
-              <Input
-                onChange={handleChange}
-                size="sm"
-                name="title"
-                defaultValue={selectedTemplate.name}
-              />
-            </label>
-            <label>
-              Workspace
-              <Select
-                defaultValue="default"
-                onChange={handleChange}
-                size="sm"
-                name="workspace"
-              >
-                {workspaces?.map(workspace => (
-                  <option value={workspace.id} key={workspace.id}>
-                    {workspace.name}
-                  </option>
-                ))}
-              </Select>
-            </label>
-
-            <Button
-              isLoading={isLoading}
-              isFullWidth
-              colorScheme="blue"
-              type="submit"
-              size="sm"
-            >
-              Create
-            </Button>
-          </form>
+          <SelectWorkspace
+            selectedTemplate={selectedTemplate}
+            handleChange={handleChange}
+            handleCreate={handleCreate}
+            isLoading={isLoading}
+            disabled={!template.workspace}
+          />
         </div>
       ) : (
         <>
@@ -232,8 +189,8 @@ const TopTemplates = () => {
             <ul>
               {templates
                 ?.filter(item => TOP_TEMPLATE_OPTIONS?.includes(item.name))
-                .map((template, index) => (
-                  <li id={`${index}`} onClick={handleSelectedTemplated}>
+                .map(template => (
+                  <li id={template.id} onClick={handleSelectedTemplated}>
                     <BackgroundIcon
                       bgColor={template?.bgColor}
                       bgImage={template?.bgImage}

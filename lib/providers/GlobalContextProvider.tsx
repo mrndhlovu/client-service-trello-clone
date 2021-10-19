@@ -115,34 +115,6 @@ const GlobalContextProvider = ({ children }) => {
       .catch(() => null)
   }
 
-  const handleUseTemplate = (ev: MouseEvent) => {
-    ev.preventDefault()
-
-    notify({ description: "Processing...", duration: 6000 })
-
-    const selectedTemplate = templates.find(
-      item => item.id === ev.currentTarget.id
-    )
-
-    const data = {
-      title: selectedTemplate.name,
-      workspaceId: workspaces?.[0]?.id,
-      activeBg: selectedTemplate?.bgImage ? "image" : "color",
-      prefs: {
-        color: selectedTemplate?.bgColor,
-        image: selectedTemplate?.bgImage,
-      },
-      templateLists: selectedTemplate.lists,
-    }
-
-    clientRequest
-      .createNewBoard(data)
-      .then(res => {
-        push(`/${ROUTES.board}/${res?.data?.id}`)
-      })
-      .catch(err => {})
-  }
-
   const handleStarBoard = useCallback((board?: IBoard) => {
     const update = {
       "prefs.starred": !Boolean(board?.prefs!?.starred === "true"),
@@ -240,7 +212,7 @@ const GlobalContextProvider = ({ children }) => {
         setWorkspaces,
         setBoards,
         templates,
-        handleUseTemplate,
+
         notifications,
         setNotifications,
         rehydrateNotifications,
@@ -266,7 +238,7 @@ interface IDefaultGlobalState {
   setWorkspaces: Dispatch<SetStateAction<Workspace[]>>
   setBoards: Dispatch<SetStateAction<IBoard[]>>
   templates: ITemplate[]
-  handleUseTemplate: (ev: MouseEvent) => void
+
   notifications: INotification[]
   rehydrateNotifications: () => void
   setNotifications: Dispatch<SetStateAction<INotification[]>>

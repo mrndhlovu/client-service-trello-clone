@@ -1,21 +1,33 @@
+import { useState, MouseEvent } from "react"
 import { useRouter } from "next/router"
 
 import { withAuthComponent, withAuthSsp } from "../../../lib/hocs"
 import SidebarLayout from "../../../components/layout/sidebar/SidebarLayout"
-import { useGlobalState } from "../../../lib/providers"
+import { ITemplate, useGlobalState } from "../../../lib/providers"
 import {
   BackgroundImage,
   TemplateCategory,
 } from "../../../components/home/Templates"
+import SelectWorkspaceModal from "../../../components/home/SelectWorkspaceModal"
 
 const index = () => {
-  const { templates, handleUseTemplate } = useGlobalState()
+  const { templates } = useGlobalState()
   const { asPath } = useRouter()
+
+  const [selectedTemplate, setSelectedTemplate] = useState<
+    ITemplate | undefined
+  >()
 
   const category = asPath.split("/")?.[2]
   const filteredCategories = templates?.filter(
     item => item?.category === category
   )
+
+  const toggleModal = (ev?: MouseEvent) => {
+    const template = templates.find(item => item.id === ev.currentTarget.id)
+
+    setSelectedTemplate(template)
+  }
 
   return (
     <SidebarLayout>
@@ -33,7 +45,7 @@ const index = () => {
                 <button
                   className="link-btn"
                   id={template?.id}
-                  onClick={handleUseTemplate}
+                  onClick={toggleModal}
                 >
                   Use Template
                 </button>
@@ -48,6 +60,13 @@ const index = () => {
           ))}
         </div>
       </TemplateCategory>
+      {!!selectedTemplate && (
+        <SelectWorkspaceModal
+          selectedTemplate={selectedTemplate}
+          onClose={toggleModal}
+          isOpen={!!selectedTemplate}
+        />
+      )}
     </SidebarLayout>
   )
 }

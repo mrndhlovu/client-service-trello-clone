@@ -1,7 +1,7 @@
 import { IPlan } from "../components/profile/billing/BillingPlans"
 import { IRequestError } from "../api"
 import { isArray, merge, spread, union } from "lodash"
-import { ILabelProps } from "../components/board/canvas/cardActions/CardLabels"
+import { ILabelProps } from "../components/board/canvas/cardActions/AddLabels"
 import { LABEL_DEFAULT_OPTIONS } from "./constants"
 import {
   IChecklist,

@@ -1,9 +1,13 @@
-import { useGlobalState } from "../../lib/providers"
+import { ITemplate, useGlobalState } from "../../lib/providers"
 import styled from "styled-components"
 import { Button } from "@chakra-ui/button"
 
 import { CATEGORY_OPTIONS, ROUTES } from "../../util/constants"
 import { NextLink } from "../shared"
+import CreateWorkspaceModal from "../header/CreateWorkspaceModal"
+import SelectWorkspaceModal from "./SelectWorkspaceModal"
+import { MouseEvent, useState } from "react"
+import { template } from "lodash"
 
 const Container = styled.div`
   margin-bottom: 50px;
@@ -94,7 +98,17 @@ export const BackgroundImage = styled.div<{ bgColor: string }>`
 `
 
 const Templates = () => {
-  const { templates, handleUseTemplate } = useGlobalState()
+  const { templates } = useGlobalState()
+
+  const [selectedTemplate, setSelectedTemplate] = useState<
+    ITemplate | undefined
+  >()
+
+  const toggleModal = (ev?: MouseEvent) => {
+    const template = templates.find(item => item.id === ev.currentTarget.id)
+
+    setSelectedTemplate(template)
+  }
 
   return (
     <Container>
@@ -115,7 +129,7 @@ const Templates = () => {
                     <button
                       className="link-btn"
                       id={template?.id}
-                      onClick={handleUseTemplate}
+                      onClick={toggleModal}
                     >
                       Use Template
                     </button>
@@ -134,6 +148,13 @@ const Templates = () => {
           </NextLink>
         </TemplateCategory>
       ))}
+      {!!selectedTemplate && (
+        <SelectWorkspaceModal
+          selectedTemplate={selectedTemplate}
+          onClose={toggleModal}
+          isOpen={!!selectedTemplate}
+        />
+      )}
     </Container>
   )
 }
